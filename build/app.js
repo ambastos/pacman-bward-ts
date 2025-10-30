@@ -2451,7 +2451,7 @@ class GameEngine {
   start() {
     if (!this.started) {
       this.started = true;
-
+      this.fpsDisplay.style.visibility = 'visible'
       this.frameId = requestAnimationFrame((firstTimestamp) => {
         this.draw(1, []);
         this.running = true;
@@ -3061,6 +3061,7 @@ class SoundManager {
    * Special method for eating dots. The dots should alternate between two
    * sound effects, but not too quickly.
    */
+
   playDotSound() {
     this.queuedDotSound = true;
 
@@ -3076,6 +3077,7 @@ class SoundManager {
       this.dotPlayer.play();
     }
   }
+
 
   /**
    * Deletes the dotSound player and plays another dot sound if needed
