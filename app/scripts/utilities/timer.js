@@ -49,7 +49,8 @@ class Timer {
     }
   }
 }
-
+global.window.Timer = Timer
 // removeIf(production)
-module.exports = Timer;
+//module.exports = Timer;
+export default Timer
 // endRemoveIf(production)

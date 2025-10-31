@@ -1,6 +1,9 @@
-const assert = require('assert');
-const sinon = require('sinon');
-const GameCoordinator = require('../scripts/core/gameCoordinator');
+// const assert = require('assert');
+// const sinon = require('sinon');
+// const GameCoordinator = require('../scripts/core/gameCoordinator');
+import assert from 'assert'
+import sinon from 'sinon'
+import GameCoordinator from '../scripts/core/gameCoordinator.js';
 
 let comp;
 const mazeArray = [

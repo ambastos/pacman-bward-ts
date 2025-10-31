@@ -1,5 +1,7 @@
-const assert = require('assert');
-const CharacterUtil = require('../scripts/utilities/characterUtil');
+//const assert = require('assert');
+//const CharacterUtil = require('../scripts/utilities/characterUtil');
+import assert from 'assert'
+import CharacterUtil from '../scripts/utilities/characterUtil.js'
 
 let characterUtil;
 const oldPosition = { top: 0, left: 0 };

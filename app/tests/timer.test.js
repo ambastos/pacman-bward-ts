@@ -1,6 +1,9 @@
-const assert = require('assert');
-const sinon = require('sinon');
-const Timer = require('../scripts/utilities/timer');
+// const assert = require('assert');
+// const sinon = require('sinon');
+// const Timer = require('../scripts/utilities/timer');
+import assert from 'assert'
+import sinon from 'sinon'
+import Timer from '../scripts/utilities/timer.js';
 
 let comp;
 let clock;

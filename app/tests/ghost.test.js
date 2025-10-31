@@ -1,7 +1,11 @@
-const assert = require('assert');
-const sinon = require('sinon');
-const Ghost = require('../scripts/characters/ghost');
-const CharacterUtil = require('../scripts/utilities/characterUtil');
+// const assert = require('assert');
+// const sinon = require('sinon');
+// const Ghost = require('../scripts/characters/ghost');
+// const CharacterUtil = require('../scripts/utilities/characterUtil');
+import assert from 'assert'
+import sinon from 'sinon'
+import Ghost from '../scripts/characters/ghost.js';
+import CharacterUtil from '../scripts/utilities/characterUtil.js';
 
 const scaledTileSize = 8;
 const mazeArray = [

@@ -1,6 +1,9 @@
-const assert = require('assert');
-const sinon = require('sinon');
-const GameEngine = require('../scripts/core/gameEngine');
+// const assert = require('assert');
+// const sinon = require('sinon');
+// const GameEngine = require('../scripts/core/gameEngine');
+import assert from 'assert'
+import sinon from 'sinon'
+import GameEngine from '../scripts/core/gameEngine.js';
 
 let gameEngine;
 const maxFps = 120;

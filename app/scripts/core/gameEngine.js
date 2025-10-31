@@ -154,7 +154,8 @@ class GameEngine {
     this.engineCycle(timestamp);
   }
 }
-
+global.window.GameEngine = GameEngine
 // removeIf(production)
-module.exports = GameEngine;
+//module.exports = GameEngine;
+export default GameEngine
 // endRemoveIf(production)

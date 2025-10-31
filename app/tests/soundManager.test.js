@@ -1,6 +1,9 @@
-const assert = require('assert');
-const sinon = require('sinon');
-const SoundManager = require('../scripts/utilities/soundManager');
+// const assert = require('assert');
+// const sinon = require('sinon');
+// const SoundManager = require('../scripts/utilities/soundManager');
+import assert from 'assert'
+import sinon from 'sinon'
+import SoundManager from '../scripts/utilities/soundManager.js';
 
 let comp;
 

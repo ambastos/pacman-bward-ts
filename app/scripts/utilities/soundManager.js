@@ -141,7 +141,8 @@ class SoundManager {
     }
   }
 }
-
+global.window.SoundManager = SoundManager
 // removeIf(production)
-module.exports = SoundManager;
+//module.exports = SoundManager;
+export default SoundManager
 // endRemoveIf(production)

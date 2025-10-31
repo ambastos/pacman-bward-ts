@@ -262,7 +262,8 @@ class Pacman {
     }
   }
 }
-
+global.window.Pacman = Pacman
 // removeIf(production)
-module.exports = Pacman;
+//module.exports = Pacman;
+export default Pacman
 // endRemoveIf(production)

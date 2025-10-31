@@ -1,7 +1,11 @@
-const assert = require('assert');
-const sinon = require('sinon');
-const Pacman = require('../scripts/characters/pacman');
-const CharacterUtil = require('../scripts/utilities/characterUtil');
+// const assert = require('assert');
+// const sinon = require('sinon');
+// const Pacman = require('../scripts/characters/pacman');
+// const CharacterUtil = require('../scripts/utilities/characterUtil');
+import assert from 'assert'
+import sinon from 'sinon'
+import Pacman from '../scripts/characters/pacman.js';
+import CharacterUtil from '../scripts/utilities/characterUtil.js';
 
 const scaledTileSize = 8;
 

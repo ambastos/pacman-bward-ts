@@ -1,0 +1,8 @@
+import './app/scripts/core/gameCoordinator.js'
+import './app/scripts/core/gameEngine.js'
+import './app/scripts/characters/ghost.js'
+import './app/scripts/characters/pacman.js'
+import './app/scripts/pickups/pickup.js'
+import './app/scripts/utilities/characterUtil.js'
+import './app/scripts/utilities/soundManager.js'
+import './app/scripts/utilities/timer.js'

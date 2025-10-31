@@ -274,7 +274,10 @@ class CharacterUtil {
     return updatedProperties;
   }
 }
-
+global.window.CharacterUtil = CharacterUtil
 // removeIf(production)
-module.exports = CharacterUtil;
+// if (typeof module != undefined)
+//   module.exports = CharacterUtil;
+//if (typeof export != undefined)
+  export default CharacterUtil
 // endRemoveIf(production)

@@ -197,7 +197,8 @@ class Pickup {
     }
   }
 }
-
+global.window.Pickup = Pickup
 // removeIf(production)
-module.exports = Pickup;
+//module.exports = Pickup;
+export default Pickup
 // endRemoveIf(production)

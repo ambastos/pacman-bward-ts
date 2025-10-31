@@ -1,5 +1,9 @@
+//import path from 'path'
 class GameCoordinator {
   constructor() {
+    console.log("called constructor")
+  //  console.log(path.dirname)
+    //alert("Game Coordinator")  
     this.gameUi = document.getElementById('game-ui');
     this.rowTop = document.getElementById('row-top');
     this.mazeDiv = document.getElementById('maze');
@@ -1257,6 +1261,10 @@ class GameCoordinator {
   }
 }
 
+global.window.GameCoordinator = GameCoordinator
 // removeIf(production)
-module.exports = GameCoordinator;
+//module.exports = GameCoordinator;
+// endRemoveIf(production)
+// removeIf(production)
+export default GameCoordinator
 // endRemoveIf(production)

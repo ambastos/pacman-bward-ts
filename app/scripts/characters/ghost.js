@@ -840,7 +840,10 @@ class Ghost {
     }
   }
 }
-
+global.window.Ghost = Ghost
 // removeIf(production)
-module.exports = Ghost;
+//module.exports = Ghost;
 // endRemoveIf(production)
+//removeIf(production)
+export default Ghost
+//endRemoveIf(production)

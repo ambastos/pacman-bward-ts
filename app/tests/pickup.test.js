@@ -1,6 +1,9 @@
-const assert = require('assert');
-const sinon = require('sinon');
-const Pickup = require('../scripts/pickups/pickup');
+// const assert = require('assert');
+// const sinon = require('sinon');
+// const Pickup = require('../scripts/pickups/pickup');
+import assert from 'assert'
+import sinon from 'sinon'
+import Pickup from '../scripts/pickups/pickup.js';
 
 let pickup;
 let pacman;
