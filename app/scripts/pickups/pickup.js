@@ -197,7 +197,9 @@ class Pickup {
     }
   }
 }
-global.window.Pickup = Pickup
+//Just to avoid problems with NYC coverage test
+if (!process.env.NYC_PROCESS_ID) 
+  global.window.Pickup = Pickup
 // removeIf(production)
 //module.exports = Pickup;
 export default Pickup

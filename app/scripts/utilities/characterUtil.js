@@ -274,10 +274,12 @@ class CharacterUtil {
     return updatedProperties;
   }
 }
-global.window.CharacterUtil = CharacterUtil
+//Just to avoid problems with NYC coverage test
+if (!process.env.NYC_PROCESS_ID) 
+    global.window.CharacterUtil = CharacterUtil
+  
 // removeIf(production)
 // if (typeof module != undefined)
 //   module.exports = CharacterUtil;
-//if (typeof export != undefined)
   export default CharacterUtil
 // endRemoveIf(production)

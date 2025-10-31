@@ -49,7 +49,9 @@ class Timer {
     }
   }
 }
-global.window.Timer = Timer
+//Just to avoid problems with NYC coverage test
+if (!process.env.NYC_PROCESS_ID) 
+  global.window.Timer = Timer
 // removeIf(production)
 //module.exports = Timer;
 export default Timer

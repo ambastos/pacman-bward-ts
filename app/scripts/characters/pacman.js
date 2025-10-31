@@ -262,7 +262,9 @@ class Pacman {
     }
   }
 }
-global.window.Pacman = Pacman
+//Just to avoid problems with NYC coverage test
+if (!process.env.NYC_PROCESS_ID) 
+  global.window.Pacman = Pacman
 // removeIf(production)
 //module.exports = Pacman;
 export default Pacman

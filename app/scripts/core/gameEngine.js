@@ -154,7 +154,9 @@ class GameEngine {
     this.engineCycle(timestamp);
   }
 }
-global.window.GameEngine = GameEngine
+//Just to avoid problems with NYC coverage test
+if (!process.env.NYC_PROCESS_ID) 
+  global.window.GameEngine = GameEngine
 // removeIf(production)
 //module.exports = GameEngine;
 export default GameEngine

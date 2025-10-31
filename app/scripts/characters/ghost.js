@@ -840,7 +840,9 @@ class Ghost {
     }
   }
 }
-global.window.Ghost = Ghost
+//Just to avoid problems with NYC coverage test
+if (!process.env.NYC_PROCESS_ID) 
+  global.window.Ghost = Ghost
 // removeIf(production)
 //module.exports = Ghost;
 // endRemoveIf(production)

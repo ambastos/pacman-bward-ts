@@ -1260,8 +1260,9 @@ class GameCoordinator {
     }
   }
 }
-
-global.window.GameCoordinator = GameCoordinator
+//Just to avoid problems with NYC coverage test
+if (!process.env.NYC_PROCESS_ID) 
+  global.window.GameCoordinator = GameCoordinator
 // removeIf(production)
 //module.exports = GameCoordinator;
 // endRemoveIf(production)
