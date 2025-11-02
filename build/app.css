@@ -33,7 +33,7 @@ body {
   position: absolute;
   right: 10px;
   top: 10px;
-  visibility: hidden;
+  visibility: visible;
 }
 
 .preload-div {
@@ -122,6 +122,15 @@ body {
 .game-ui .bottom .fruit-display {
   display: flex;
   flex-direction: row-reverse;
+}
+
+.row-top-view {
+  position: absolute;
+}
+
+.row-bottom-view {
+  top: 500px;
+  position: absolute;
 }
 
 @media (orientation: landscape) {
@@ -440,6 +449,10 @@ body {
   height: 100%;
   position: absolute;
   width: 100%;
+}
+
+.view {
+  position: absolute;
 }
 .pacman {
   margin: 0;

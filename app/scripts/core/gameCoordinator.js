@@ -1,11 +1,20 @@
+import { Application, Assets, Sprite, Texture, Container, Text } from "pixi.js";
+import * as PIXI from 'pixi.js'
+import AssetsManager from "./assetsManager";
+global.window.Assets = Assets
 //import path from 'path'
-class GameCoordinator {
+const options = {
+    transparent: false,
+    resolution: 1,
+    antialias: false,      
+}
+
+class GameCoordinator extends Application{
   constructor() {
-    console.log("called constructor")
-  //  console.log(path.dirname)
-    //alert("Game Coordinator")  
+    super(options)
+    
     this.gameUi = document.getElementById('game-ui');
-    this.rowTop = document.getElementById('row-top');
+    this.rowTop = document.getElementById('row-top');    
     this.mazeDiv = document.getElementById('maze');
     this.mazeImg = document.getElementById('maze-img');
     this.mazeCover = document.getElementById('maze-cover');
@@ -20,6 +29,7 @@ class GameCoordinator {
     this.leftCover = document.getElementById('left-cover');
     this.rightCover = document.getElementById('right-cover');
     this.pausedText = document.getElementById('paused-text');
+    
     this.bottomRow = document.getElementById('bottom-row');
     this.movementButtons = document.getElementById('movement-buttons');
 
@@ -58,12 +68,17 @@ class GameCoordinator {
     ];
 
     this.maxFps = 120;
-    this.tileSize = 8;
+    this.tileSize = 8; 
     this.scale = this.determineScale(1);
-    this.scaledTileSize = this.tileSize * this.scale;
+    //this.scaledTileSize = this.tileSize * this.scale;
+    this.scaledTileSize = this.tileSize * 1;
+    this.height = this.scaledTileSize * 31
+    this.width = this.scaledTileSize * 28
+    window.PIXI = PIXI
+
     this.firstGame = true;
 
-    this.movementKeys = {
+    this.movementKeys = { 
       // WASD
       87: 'up',
       83: 'down',
@@ -200,7 +215,7 @@ class GameCoordinator {
    * There is probably a better way to read all of these file names.
    */
   preloadAssets() {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       const loadingContainer = document.getElementById('loading-container');
       const loadingPacman = document.getElementById('loading-pacman');
       const loadingDotMask = document.getElementById('loading-dot-mask');
@@ -288,7 +303,7 @@ class GameCoordinator {
         `${imgBase}text/1600.svg`,
         `${imgBase}text/2000.svg`,
         `${imgBase}text/3000.svg`,
-        `${imgBase}text/5000.svg`,
+        `${imgBase}text/5000.svg`, 
 
         // Maze
         `${imgBase}maze/maze_blue.svg`,
@@ -296,12 +311,14 @@ class GameCoordinator {
         // Misc
         'app/style/graphics/extra_life.png',
       ];
+      this.am = new AssetsManager(this)
+      await this.am.load()
 
       const audioBase = 'app/style/audio/';
       const audioSources = [
         `${audioBase}game_start.mp3`,
         `${audioBase}pause.mp3`,
-        `${audioBase}pause_beat.mp3`,
+        `${audioBase}pause_beat.mp3`, 
         `${audioBase}siren_1.mp3`,
         `${audioBase}siren_2.mp3`,
         `${audioBase}siren_3.mp3`,
@@ -309,11 +326,15 @@ class GameCoordinator {
         `${audioBase}extra_life.mp3`,
         `${audioBase}eyes.mp3`,
         `${audioBase}eat_ghost.mp3`,
-        `${audioBase}death.mp3`,
+        `${audioBase}death.mp3`, 
         `${audioBase}fruit.mp3`,
         `${audioBase}dot_1.mp3`,
         `${audioBase}dot_2.mp3`,
       ];
+
+      //the maze background sprite
+      this.mazeSprite = new Sprite(Texture.from("maze_blue"))
+      this.stage.addChild(this.mazeSprite)
 
       const totalSources = imgSources.length + audioSources.length;
       this.remainingSources = totalSources;
@@ -415,51 +436,40 @@ class GameCoordinator {
       }, 500);
 
       this.pacman = new Pacman(
-        this.scaledTileSize,
-        this.mazeArray,
+        this,
         new CharacterUtil(),
       );
       this.blinky = new Ghost(
-        this.scaledTileSize,
-        this.mazeArray,
-        this.pacman,
+        this,
         'blinky',
         this.level,
         new CharacterUtil(),
       );
       this.pinky = new Ghost(
-        this.scaledTileSize,
-        this.mazeArray,
-        this.pacman,
+        this,
         'pinky',
         this.level,
         new CharacterUtil(),
       );
       this.inky = new Ghost(
-        this.scaledTileSize,
-        this.mazeArray,
-        this.pacman,
+        this,
         'inky',
         this.level,
         new CharacterUtil(),
         this.blinky,
       );
       this.clyde = new Ghost(
-        this.scaledTileSize,
-        this.mazeArray,
-        this.pacman,
+        this,
         'clyde',
         this.level,
         new CharacterUtil(),
       );
       this.fruit = new Pickup(
         'fruit',
-        this.scaledTileSize,
         13.5,
-        17,
-        this.pacman,
-        this.mazeDiv,
+        17,        
         100,
+        this
       );
     }
 
@@ -478,8 +488,18 @@ class GameCoordinator {
     this.eyeGhosts = 0;
 
     if (this.firstGame) {
+      //add dots,  pacman, ghosts sprites to the stage
       this.drawMaze(this.mazeArray, this.entityList);
+      this.pickups.forEach(p=>{
+          this.stage.addChild(p.sprite)
+      })
+      this.stage.addChild(this.pacman.sprite)
+      this.stage.addChild(this.pacman.spriteArrow)
+      this.ghosts.forEach(g=>{
+        this.stage.addChild(g.sprite)
+      })
       this.soundManager = new SoundManager();
+      this.createUi()
       this.setUiDimensions();
     } else {
       this.pacman.reset();
@@ -513,7 +533,7 @@ class GameCoordinator {
   init() {
     this.registerEventListeners();
 
-    this.gameEngine = new GameEngine(this.maxFps, this.entityList);
+    this.gameEngine = new GameEngine(this, this.maxFps, this.entityList);
     this.gameEngine.start();
   }
 
@@ -525,25 +545,27 @@ class GameCoordinator {
   drawMaze(mazeArray, entityList) {
     this.pickups = [this.fruit];
 
-    this.mazeDiv.style.height = `${this.scaledTileSize * 31}px`;
-    this.mazeDiv.style.width = `${this.scaledTileSize * 28}px`;
-    this.gameUi.style.width = `${this.scaledTileSize * 28}px`;
+    //sprite
+    // this.mazeSprite.width = this.width
+    // this.mazeSprite.height = this.height
+
+    this.mazeDiv.style.height = `${this.height}px`;
+    this.mazeDiv.style.width = `${this.width}px`;
+    this.gameUi.style.width = `${this.width}px`;
     this.bottomRow.style.minHeight = `${this.scaledTileSize * 2}px`;
     this.dotContainer = document.getElementById('dot-container');
 
     mazeArray.forEach((row, rowIndex) => {
-      row.forEach((block, columnIndex) => {
+      row.forEach((block, columnIndex) => {        
         if (block === 'o' || block === 'O') {
           const type = block === 'o' ? 'pacdot' : 'powerPellet';
           const points = block === 'o' ? 10 : 50;
           const dot = new Pickup(
-            type,
-            this.scaledTileSize,
+            type,            
             columnIndex,
-            rowIndex,
-            this.pacman,
-            this.dotContainer,
+            rowIndex,            
             points,
+            this
           );
 
           entityList.push(dot);
@@ -554,9 +576,63 @@ class GameCoordinator {
     });
   }
 
+  createUi() {
+    this.renderTop = new PIXI.Renderer({
+//      view: document.createElement("canvas"),
+      width: this.width,
+      height: this.height * 0.116666
+    })
+    this.renderTop.view.classList.add("row-top-view")
+    this.renderBottom = new PIXI.Renderer({
+  //    view: document.createElement("canvas"),
+      width: this.width,
+      height: this.height * 0.116666
+    })
+    this.renderBottom.view.classList.add("row-bottom-view")
+
+    this.rowTopMainContainer = new Container()                                                      
+    this.rowTopContainer = new Container()   
+    this.rowTopMainContainer.addChild(this.rowTopContainer) 
+
+    this.bottomRowMainContainer = new Container()
+    this.bottomRowContainer = new Container()
+    this.bottomRowMainContainer.addChild(this.bottomRowContainer)
+
+    document.body.appendChild(this.renderTop.view)
+    document.body.appendChild(this.renderBottom.view)
+    let text = new Text("1UP", {
+      fontFamily: "Press Start 2P, sans-serif",
+      fontSize: 48,
+      color: "0xffffff"
+    })
+    this.rowTopContainer.addChild(text)
+
+     //canvas view
+    this.view.width = this.tileSize * 28
+    this.view.height = this.tileSize * 31
+    this.mazeDiv.appendChild(this.view)
+    //this.mazeImg.style.visibility = "hidden"
+    //For while
+    this.view.classList.add("view") 
+    this.view.style.left = (this.width + 20) + "px"
+  }
+
   setUiDimensions() {
     this.gameUi.style.fontSize = `${this.scaledTileSize}px`;
     this.rowTop.style.marginBottom = `${this.scaledTileSize}px`;
+    this.gameUi.style.scale = this.scale
+
+    this.rowTopContainer.width = this.width 
+    this.rowTopContainer.height = this.height * 0.11666
+    this.rowTopContainer.scale.set(this.scale)
+  }
+
+  render() {
+    super.render()
+    if (this.renderTop)
+      this.renderTop.render(this.rowTopMainContainer)
+    if (this.renderBottom)
+      this.renderBottom.render(this.bottomRowMainContainer)
   }
 
   /**
@@ -1000,21 +1076,28 @@ class GameCoordinator {
         const ghostRef = ghost;
         ghostRef.display = false;
       });
-
+      this.mazeSprite.texture = Texture.from("maze_white")
       this.mazeImg.src = `${imgBase}maze_white.svg`;
       new Timer(() => {
+        this.mazeSprite.texture = Texture.from("maze_blue")
         this.mazeImg.src = `${imgBase}maze_blue.svg`;
         new Timer(() => {
+          this.mazeSprite.texture = Texture.from("maze_white")
           this.mazeImg.src = `${imgBase}maze_white.svg`;
           new Timer(() => {
+            this.mazeSprite.texture = Texture.from("maze_blue")
             this.mazeImg.src = `${imgBase}maze_blue.svg`;
             new Timer(() => {
+              this.mazeSprite.texture = Texture.from("maze_white")
               this.mazeImg.src = `${imgBase}maze_white.svg`;
               new Timer(() => {
+                this.mazeSprite.texture = Texture.from("maze_blue")
                 this.mazeImg.src = `${imgBase}maze_blue.svg`;
-                new Timer(() => {
-                  this.mazeCover.style.visibility = 'visible';
+                new Timer(() => {                  
+                  this.mazeCover.visible = false
+                  this.mazeCover.style.visibility = 'visible';                  
                   new Timer(() => {
+                    this.mazeCover.visible = true
                     this.mazeCover.style.visibility = 'hidden';
                     this.level += 1;
                     this.allowKeyPresses = true;
@@ -1193,19 +1276,24 @@ class GameCoordinator {
   displayText(position, amount, duration, width, height) {
     const pointsDiv = document.createElement('div');
 
+    const textSp = new Sprite(this.am.getTexture(amount))
+    textSp.position.set(position.left, position.top)
+
     pointsDiv.style.position = 'absolute';
     pointsDiv.style.backgroundSize = `${width}px`;
     pointsDiv.style.backgroundImage = 'url(app/style/graphics/'
         + `spriteSheets/text/${amount}.svg`;
     pointsDiv.style.width = `${width}px`;
-    pointsDiv.style.height = `${height || width}px`;
+    pointsDiv.style.height = `${height || width}px`; 
     pointsDiv.style.top = `${position.top}px`;
     pointsDiv.style.left = `${position.left}px`;
     pointsDiv.style.zIndex = 2;
 
+    this.stage.addChild(textSp)
     this.mazeDiv.appendChild(pointsDiv);
 
     new Timer(() => {
+      this.stage.removeChild(textSp)
       this.mazeDiv.removeChild(pointsDiv);
     }, duration);
   }

@@ -1,8 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "test": "nyc --check-coverage --lines 100 --functions 100 --branches 100 mocha app/tests",
-    "coverage": "nyc report --reporter=text-lcov | node ./node_modules/coveralls/bin/coveralls.js",
+    "test": "NODE_OPTIONS=--no-experimental-require-module nyc --check-coverage --lines 100 --functions 100 --branches 100 mocha app/tests",
+    "coverage": "NODE_OPTIONS=--no-experimental-require-module nyc report --reporter=text-lcov | node ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint .",
     "serve": "nodemon --exec npx http-server"
   },
@@ -34,6 +34,7 @@
     "minimist": "^1.2.8",
     "mkdirp": "^0.5.5",
     "opener": "^1.5.1",
+    "pixi.js": "^7.4.3",
     "portfinder": "^1.0.28",
     "qs": "^6.5.2",
     "requires-port": "^1.0.0",

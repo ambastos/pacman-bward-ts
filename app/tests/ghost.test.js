@@ -16,6 +16,7 @@ const mazeArray = [
 
 let pacman;
 let comp;
+let game 
 
 beforeEach(() => {
   global.document = {
@@ -32,9 +33,13 @@ beforeEach(() => {
       left: 100,
     },
   };
+  game = {
+    scaledTileSize: 16,
+    pacman: pacman,
+  }
 
-  comp = new Ghost(scaledTileSize, undefined, pacman, undefined, 1,
-    new CharacterUtil());
+  comp = new Ghost(game, undefined, 1,
+    new CharacterUtil(), undefined);
 });
 
 describe('ghost', () => {

@@ -247,11 +247,13 @@ class CharacterUtil {
       msSinceLastSprite,
       animationTarget,
       backgroundOffsetPixels,
+      frame,
     } = character;
     const updatedProperties = {
       msSinceLastSprite,
       animationTarget,
       backgroundOffsetPixels,
+      frame,
     };
 
     const ready = (character.msSinceLastSprite > character.msBetweenSprites)
@@ -263,7 +265,9 @@ class CharacterUtil {
         < (character.measurement * (character.spriteFrames - 1))
       ) {
         updatedProperties.backgroundOffsetPixels += character.measurement;
+        updatedProperties.frame +=1
       } else if (character.loopAnimation) {
+        updatedProperties.frame =0
         updatedProperties.backgroundOffsetPixels = 0;
       }
 

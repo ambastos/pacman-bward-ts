@@ -1,15 +1,18 @@
+import { Container, Rectangle, RenderTexture, Sprite, Texture } from "pixi.js";
+
 class Ghost {
-  constructor(
-    scaledTileSize, mazeArray, pacman, name, level, characterUtil, blinky,
+  constructor(gameCoordinator, name, level, characterUtil, blinky
   ) {
-    this.scaledTileSize = scaledTileSize;
-    this.mazeArray = mazeArray;
-    this.pacman = pacman;
+    this.gameCoordinator = gameCoordinator
+    this.scaledTileSize = gameCoordinator.scaledTileSize;
+    this.mazeArray = gameCoordinator.mazeArray;
+    this.pacman = gameCoordinator.pacman;
     this.name = name;
     this.level = level;
     this.characterUtil = characterUtil;
     this.blinky = blinky;
     this.animationTarget = document.getElementById(name);
+    this.sprite = null
 
     this.reset();
   }
@@ -97,6 +100,8 @@ class Ghost {
     this.animate = true;
     this.msBetweenSprites = 250;
     this.msSinceLastSprite = 0;
+
+    this.frame = 0
     this.spriteFrames = 2;
     this.backgroundOffsetPixels = 0;
     this.animationTarget.style.backgroundPosition = '0px 0px';
@@ -168,25 +173,94 @@ class Ghost {
    * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
    */
   setSpriteSheet(name, direction, mode) {
-    let emotion = '';
+
+    this.animationTarget.style.visibility = "hidden"
+
+    this.emotion = '';
     if (this.defaultSpeed !== this.slowSpeed) {
-      emotion = (this.defaultSpeed === this.mediumSpeed)
+      this.emotion = (this.defaultSpeed === this.mediumSpeed)
         ? '_annoyed' : '_angry';
     }
 
     if (mode === 'scared') {
+      this.frame = 0
+      let scared = this.scaredColor == "blue" ? "scared" : "scaredWhite"
+      this.setSprite(this.name, this.direction,scared,this.frame)
       this.animationTarget.style.backgroundImage = 'url(app/style/graphics/'
         + `spriteSheets/characters/ghosts/scared_${this.scaredColor}.svg)`;
     } else if (mode === 'eyes') {
+      this.frame = 0
+      this.setSprite(this.name, this.direction,"eyes",this.frame)
       this.animationTarget.style.backgroundImage = 'url(app/style/graphics/'
-        + `spriteSheets/characters/ghosts/eyes_${direction}.svg)`;
+        + `spriteSheets/characters/ghosts/eyes_${direction}.svg)`;        
     } else {
+      this.setSprite(this.name, this.direction,this.emotion,this.frame)
       this.animationTarget.style.backgroundImage = 'url(app/style/graphics/'
         + `spriteSheets/characters/ghosts/${name}/${name}_${direction}`
-        + `${emotion}.svg)`;
+        + `${this.emotion}.svg)`;
     }
   }
 
+  getTexture(name, direction, emotion, frameX ) {
+    let frameY, fx = frameX ? frameX : 0
+    switch (name) {
+      case "blinky":
+        frameY = 0
+        break;
+      case "pinky":
+        frameY = 12
+        break;
+      case "inky":
+        frameY = 16
+        break;
+      case "clyde":
+        frameY = 20
+        break;            
+    }
+
+    switch (emotion) {
+      case "_angry":
+        frameY += 4   
+        break;
+      case "_angry":
+        frameY += 8   
+        break;
+      case "eyes":
+        frameY = 24 
+        break 
+      case "scared":
+        frameY = 28
+        break;
+      case "scaredWhite":
+        frameY = 29
+        break;        
+    }
+    if (emotion != "scared" && emotion != "scaredWhite") {
+      switch (direction) {
+        case "left":
+          frameY+=0
+          break;
+        case "right":
+          frameY+=1
+          break;
+        case "up":
+          frameY+=2
+          break;
+        case "down":
+          frameY+=3
+          break;
+      }
+    }
+    let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale    
+    return this.gameCoordinator.am.getTexture("ghosts", frameX, frameY, w, w)
+  }
+  setSprite(name, direction, emotion, frameX) {
+      const texture = this.getTexture(name, direction, emotion,frameX)
+      if (!this.sprite)
+        this.sprite = new Sprite(texture)
+      else
+        this.sprite.texture = texture
+  }
   /**
    * Checks to see if the ghost is currently in the 'tunnels' on the outer edges of the maze
    * @param {({x: number, y: number})} gridPosition - The current x-y position on the 2D Maze Array
@@ -712,7 +786,7 @@ class Ghost {
       }
       this.mode = 'scared';
       this.scaredColor = 'blue';
-      this.setSpriteSheet(this.name, this.direction, this.mode);
+      this.setSpriteSheet("scared", this.direction, this.mode);
     }
   }
 
@@ -813,6 +887,10 @@ class Ghost {
     const newLeft = this.characterUtil.calculateNewDrawValue(
       interp, 'left', this.oldPosition, this.position,
     );
+
+    this.sprite.position.set(newLeft, newTop)
+    this.sprite.visible = this.display
+
     this.animationTarget.style.top = `${newTop}px`;
     this.animationTarget.style.left = `${newLeft}px`;
 
@@ -823,6 +901,16 @@ class Ghost {
     const updatedProperties = this.characterUtil.advanceSpriteSheet(this);
     this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
     this.animationTarget = updatedProperties.animationTarget;
+
+    this.frame = updatedProperties.frame
+
+    let emotion = this.emotion
+    let scared = this.scaredColor == "blue" ? "scared" : "scaredWhite"
+    if (this.mode == "scared")
+      emotion = scared
+    else if (this.mode == 'eyes')
+      emotion = 'eyes'
+    this.setSprite(this.name, this.direction, emotion, updatedProperties.frame)
     this.backgroundOffsetPixels = updatedProperties.backgroundOffsetPixels;
   }
 

@@ -30,7 +30,7 @@ body {
   position: absolute;
   right: 10px;
   top: 10px;
-  visibility: hidden;
+  visibility: visible;
 }
 
 .preload-div {
@@ -131,6 +131,14 @@ body {
   }
 }
 
+.row-top-view {
+  position: absolute;
+}
+
+.row-bottom-view {
+  top: 500px;
+  position: absolute;
+}
 @media (orientation: landscape) {
   .game-ui {
     height: 100%;

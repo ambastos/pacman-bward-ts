@@ -1,10 +1,15 @@
+import { Container, Rectangle, RenderTexture, Sprite, Texture } from "pixi.js";
+
 class Pacman {
-  constructor(scaledTileSize, mazeArray, characterUtil) {
-    this.scaledTileSize = scaledTileSize;
-    this.mazeArray = mazeArray;
+  constructor(gameCoordinator, characterUtil) {
+    this.gameCoordinator = gameCoordinator
+    this.scaledTileSize = gameCoordinator.scaledTileSize;
+    this.mazeArray = gameCoordinator.mazeArray;
     this.characterUtil = characterUtil;
     this.animationTarget = document.getElementById('pacman');
-    this.pacmanArrow = document.getElementById('pacman-arrow');
+    this.pacmanArrow = document.getElementById('pacman-arrow');    
+    this.sprite = null
+    this.spriteArrow = null
 
     this.reset();
   }
@@ -18,6 +23,7 @@ class Pacman {
     this.setStyleMeasurements(this.scaledTileSize, this.spriteFrames);
     this.setDefaultPosition(this.scaledTileSize);
     this.setSpriteSheet(this.direction);
+    
     this.pacmanArrow.style.backgroundImage = 'url(app/style/graphics/'
       + `spriteSheets/characters/pacman/arrow_${this.direction}.svg)`;
   }
@@ -44,6 +50,7 @@ class Pacman {
     this.msBetweenSprites = 50;
     this.msSinceLastSprite = 0;
     this.spriteFrames = 4;
+    this.frame = 0
     this.backgroundOffsetPixels = 0;
     this.animationTarget.style.backgroundPosition = '0px 0px';
   }
@@ -55,6 +62,9 @@ class Pacman {
    */
   setStyleMeasurements(scaledTileSize, spriteFrames) {
     this.measurement = scaledTileSize * 2;
+
+    let frameX = scaledTileSize / spriteFrames
+    this.setSprite(this.direction, frameX)
 
     this.animationTarget.style.height = `${this.measurement}px`;
     this.animationTarget.style.width = `${this.measurement}px`;
@@ -96,16 +106,82 @@ class Pacman {
    * Chooses a movement Spritesheet depending upon direction
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
    */
-  setSpriteSheet(direction) {
+  setSpriteSheet(direction) {    
+    this.death = false
+    this.setSprite(direction, 0)
+    this.animationTarget.style.visibility = 'hidden'
     this.animationTarget.style.backgroundImage = 'url(app/style/graphics/'
       + `spriteSheets/characters/pacman/pacman_${direction}.svg)`;
   }
 
+  getArrowTexture(direction, death) {
+    let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale * 2   
+    let frameX
+    switch (direction) {
+      case 'left':
+        frameX = 0
+        break    
+      case 'right':
+        frameX = 1
+        break            
+      case 'up':
+        frameX = 2
+        break                
+      case 'down':
+        frameX = 3
+        break                      
+      }
+      if (death)
+        return null
+      return this.gameCoordinator.am.getTexture("pacman", 
+        frameX, 0, w, w)
+  }
+  getTexture(direction, frameX, death) {
+    let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale    
+    let frameY
+    switch (direction) {
+      case 'left':
+        frameY = 2
+        break    
+      case 'right':
+        frameY = 3
+        break            
+      case 'up':
+        frameY = 4
+        break                
+      case 'down':
+        frameY = 5
+        break                      
+      }
+      if (death)
+        frameY = 6
+      return this.gameCoordinator.am.getTexture("pacman", 
+        frameX, frameY, w, w)
+  }
+  setSprite(direction, frameX, death) {    
+    const texture = this.getTexture(direction, frameX, death)    
+    if (!this.sprite)
+      this.sprite = new Sprite(texture)
+    else
+      this.sprite.texture = texture
+    
+    const textureArrow = this.getArrowTexture(direction, death)
+    if (!this.spriteArrow) 
+      this.spriteArrow = new Sprite(textureArrow)
+    else 
+      this.spriteArrow.texture = textureArrow
+    
+  }
   prepDeathAnimation() {
     this.loopAnimation = false;
     this.msBetweenSprites = 125;
     this.spriteFrames = 12;
     this.specialAnimation = true;
+
+    this.frame = 0
+    this.death = true
+    this.setSprite(this.direction, this.frame,  this.death)
+
     this.backgroundOffsetPixels = 0;
     const bgSize = this.measurement * this.spriteFrames;
     this.animationTarget.style.backgroundSize = `${bgSize}px`;
@@ -217,6 +293,11 @@ class Pacman {
     this.animationTarget.style.top = `${newTop}px`;
     this.animationTarget.style.left = `${newLeft}px`;
 
+    this.sprite.position.set(newLeft, newTop)  
+    const arrowLeft = newLeft-this.gameCoordinator.tileSize
+    const arrowTop = newTop-this.gameCoordinator.tileSize
+    this.spriteArrow.position.set(arrowLeft, arrowTop)
+
     this.animationTarget.style.visibility = this.display
       ? this.characterUtil.checkForStutter(this.position, this.oldPosition)
       : 'hidden';
@@ -227,6 +308,9 @@ class Pacman {
     const updatedProperties = this.characterUtil.advanceSpriteSheet(this);
     this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
     this.animationTarget = updatedProperties.animationTarget;
+
+    this.frame = updatedProperties.frame
+    this.setSprite(this.direction, updatedProperties.frame, this.death)
     this.backgroundOffsetPixels = updatedProperties.backgroundOffsetPixels;
   }
 

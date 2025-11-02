@@ -1,5 +1,6 @@
 class GameEngine {
-  constructor(maxFps, entityList) {
+  constructor(gameCoordinator, maxFps, entityList) {
+    this.gameCoordinator = gameCoordinator
     this.fpsDisplay = document.getElementById('fps-display');
     this.elapsedMs = 0;
     this.lastFrameTimeMs = 0;
@@ -46,6 +47,7 @@ class GameEngine {
    * @param {Array} entityList - List of entities to be used throughout the game
    */
   draw(interp, entityList) {
+    this.gameCoordinator.render()
     entityList.forEach((entity) => {
       if (typeof entity.draw === 'function') {
         entity.draw(interp);
@@ -139,8 +141,10 @@ class GameEngine {
     this.lastFrameTimeMs = timestamp;
     this.updateFpsDisplay(timestamp);
     this.processFrames();
-    this.draw(this.elapsedMs / this.timestep, this.entityList);
-
+    this.draw(this.elapsedMs / this.timestep, this.entityList);    
+    //for debuging popurses
+   
+    
     this.frameId = requestAnimationFrame((nextTimestamp) => {
       this.mainLoop(nextTimestamp);
     });

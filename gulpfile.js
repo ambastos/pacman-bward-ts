@@ -30,6 +30,9 @@ function scripts(cb) {
       files.push(path.join(basedir, f))
     }
   })
+
+  gulp.src("app/scripts/libraries/**/*.js")  
+  .pipe(gulp.dest("build/libraries"))
   
   const r = browserify(files)
   .transform(babelify, {presets:['@babel/preset-env']})
@@ -43,12 +46,13 @@ function scripts(cb) {
   .pipe(source('app.js'))
   .pipe(gulp.dest('./build'))
   .pipe(buffer())
-  cb()
+  cb() 
+
 }
 
 function watch() {
   gulp.watch('app/style/**/*.scss', styles);
-  gulp.watch('app/scripts/**/*.js', scriptsWithEsBuild);
+  gulp.watch('app/scripts/**/*.js', scripts);
 }
 
 const buildFiles = gulp.parallel(styles, scripts);

@@ -1,11 +1,15 @@
+import { Container, RenderTexture, Sprite, Texture } from "pixi.js";
+
 class Pickup {
-  constructor(type, scaledTileSize, column, row, pacman, mazeDiv, points) {
+  constructor(type, column, row, points, gameCoordinator) {
+    this.gameCoordinator = gameCoordinator
     this.type = type;
-    this.pacman = pacman;
-    this.mazeDiv = mazeDiv;
+    this.pacman = gameCoordinator.pacman;
+    this.mazeDiv = gameCoordinator.mazeDiv;
     this.points = points;
     this.nearPacman = false;
-
+    this.sprites = null
+    
     this.fruitImages = {
       100: 'cherry',
       300: 'strawberry',
@@ -17,15 +21,17 @@ class Pickup {
       5000: 'key',
     };
 
-    this.setStyleMeasurements(type, scaledTileSize, column, row, points);
+    this.setStyleMeasurements(type, gameCoordinator.scaledTileSize, column, row, points);
   }
 
   /**
    * Resets the pickup's visibility
    */
   reset() {
+    this.sprite.visible = (this.type === 'fruit') ? false : true
     this.animationTarget.style.visibility = (this.type === 'fruit')
       ? 'hidden' : 'visible';
+
   }
 
   /**
@@ -59,6 +65,11 @@ class Pickup {
     this.animationTarget = document.createElement('div');
     this.animationTarget.style.position = 'absolute';
     this.animationTarget.style.backgroundSize = `${this.size}px`;
+
+    this.setSprite(type)
+    this.sprite.visible = false
+    this.sprite.position.set(this.x, this.y)
+
     this.animationTarget.style.backgroundImage = this.determineImage(
       type, points,
     );
@@ -67,7 +78,8 @@ class Pickup {
     this.animationTarget.style.top = `${this.y}px`;
     this.animationTarget.style.left = `${this.x}px`;
     this.mazeDiv.appendChild(this.animationTarget);
-
+    this.animationTarget.style.visibility = "hidden"
+    
     if (type === 'powerPellet') {
       this.animationTarget.classList.add('power-pellet');
     }
@@ -93,6 +105,57 @@ class Pickup {
     return `url(app/style/graphics/spriteSheets/pickups/${image}.svg)`;
   }
 
+  getTexture(type) {
+    let frameY = 0
+    let frameX = 0
+    let spWidth = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale
+    switch (type) {
+      case "pacdot":
+        frameY = 0
+        spWidth = 2
+        break;
+      case "powerPellet":
+        frameY = 1
+        spWidth = 8
+        break;
+      case "fruit":  
+      case "cherry":
+        frameY = 2
+        break
+      case "strawberry":
+        frameY = 3
+        break
+      case "orange":
+        frameY = 4
+        break
+      case "apple":
+        frameY = 5
+        break
+      case "melon":
+        frameY = 6
+        break
+      case "galaxian":
+        frameY = 7
+        break
+      case "bell":
+        frameY = 8
+        break
+      case "key":
+        frameY = 9
+        break        
+      default:
+          break;
+        }
+      let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale      
+      return this.gameCoordinator.am.getTexture("pickups",frameX, frameY,w,w,spWidth, spWidth)
+  }
+  setSprite(type) {
+    const texture = this.getTexture(type)
+    if(!this.sprite)
+      this.sprite = new Sprite(texture)
+    else
+      this.sprite.texture = texture
+  }
   /**
    * Shows a bonus fruit, resetting its point value and image
    * @param {number} points
@@ -102,13 +165,18 @@ class Pickup {
     this.animationTarget.style.backgroundImage = this.determineImage(
       this.type, points,
     );
+
+    this.sprite.visible = true
     this.animationTarget.style.visibility = 'visible';
+
+
   }
 
   /**
    * Makes the fruit invisible (happens if Pacman was too slow)
    */
   hideFruit() {
+    this.sprite.visible = false
     this.animationTarget.style.visibility = 'hidden';
   }
 
@@ -137,7 +205,8 @@ class Pickup {
    * @param {Boolean} debugging - Flag to change the appearance of pickups for testing
    */
   checkPacmanProximity(maxDistance, pacmanCenter, debugging) {
-    if (this.animationTarget.style.visibility !== 'hidden') {
+    if (this.sprite.visible) {
+    //if (this.animationTarget.style.visibility !== 'hidden') {
       const distance = Math.sqrt(
         ((this.center.x - pacmanCenter.x) ** 2)
         + ((this.center.y - pacmanCenter.y) ** 2),
@@ -146,6 +215,8 @@ class Pickup {
       this.nearPacman = (distance <= maxDistance);
 
       if (debugging) {
+        this.sprite.tint = this.nearPacman
+           ? '0x00ff00' : '0xff0000';
         this.animationTarget.style.background = this.nearPacman
           ? 'lime' : 'red';
       }
@@ -157,8 +228,9 @@ class Pickup {
    * @returns {Boolean}
    */
   shouldCheckForCollision() {
-    return this.animationTarget.style.visibility !== 'hidden'
-      && this.nearPacman;
+    return this.sprite.visible && this.nearPacman
+    //return this.animationTarget.style.visibility !== 'hidden'
+       && this.nearPacman;
   }
 
   /**
@@ -179,6 +251,7 @@ class Pickup {
           size: this.pacman.measurement,
         },
       )) {
+        this.sprite.visible = false
         this.animationTarget.style.visibility = 'hidden';
         window.dispatchEvent(new CustomEvent('awardPoints', {
           detail: {

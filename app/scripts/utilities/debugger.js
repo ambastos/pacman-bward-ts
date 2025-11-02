@@ -1,3 +1,5 @@
+import { autoDetectRenderer, Container, Renderer } from "pixi.js"
+
 class Debugger {
     constructor(gameCoordinator) {
         this.gc = gameCoordinator
@@ -8,7 +10,7 @@ class Debugger {
         this.pacmanImmortal = false
         this.printMazeGrid = false
         this.createCanvas()
-        this.handleInput() 
+        this.handleInput()  
         this.configInfoPanel()
         window.dbg = this
     }
@@ -58,8 +60,32 @@ class Debugger {
         canvas.height(this.overflowMask.height())
         this.canvas.width = this.overflowMask.width()
         this.canvas.height = this.overflowMask.height()
+
+        
+        // let canvasP = document.createElement('canvas')
+        // canvasP.width = 400
+        // canvasP.height = 300
+        // document.body.appendChild(canvasP)
+        // $(canvasP).css("position", "absolute")
+        // .css("top", "0px").css("left", "0px")
+        
+        // this.renderer = new Renderer({
+        //      width: 400,
+        //      height: 500, 
+        //      antialias: false, transparent: false, 
+        //      resolution: 1, view: canvasP
+        // })
+        // this.container1 = new Container()
+        // this.mainContainer = new Container() 
+        // this.mainContainer.addChild(this.container1)
     }
-    
+    // renderObject(pixiObject) {
+    //     this.container1.addChild(pixiObject)        
+    // }
+    // render() {
+    //     this.renderer.render(this.mainContainer)
+    // }
+
     moveInUnits(direction, units) {
         const elapsedMs = this.gc.gameEngine.elapsedMs
         let position = this.gc.pacman.position
@@ -317,3 +343,6 @@ class Debugger {
         infoPanel.info.direction = pacman.direction
     }
 }
+
+if (!process.env.NYC_PROCESS_ID) 
+    global.window.Debugger = Debugger
