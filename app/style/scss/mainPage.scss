@@ -133,10 +133,13 @@ body {
 
 .row-top-view {
   position: absolute;
-}
+  left:910px;
+  top: 20px; 
+} 
 
 .row-bottom-view {
-  top: 500px;
+  left: 910px;
+  top: 600px;
   position: absolute;
 }
 @media (orientation: landscape) {

@@ -65,6 +65,7 @@ class Pacman {
 
     let frameX = scaledTileSize / spriteFrames
     this.setSprite(this.direction, frameX)
+    this.setArrowSprite(this.direction, frameX)
 
     this.animationTarget.style.height = `${this.measurement}px`;
     this.animationTarget.style.width = `${this.measurement}px`;
@@ -109,6 +110,8 @@ class Pacman {
   setSpriteSheet(direction) {    
     this.death = false
     this.setSprite(direction, 0)
+    this.setArrowSprite(direction, 0)
+    
     this.animationTarget.style.visibility = 'hidden'
     this.animationTarget.style.backgroundImage = 'url(app/style/graphics/'
       + `spriteSheets/characters/pacman/pacman_${direction}.svg)`;
@@ -165,6 +168,8 @@ class Pacman {
     else
       this.sprite.texture = texture
     
+  }
+  setArrowSprite(direction, frameX, death) {    
     const textureArrow = this.getArrowTexture(direction, death)
     if (!this.spriteArrow) 
       this.spriteArrow = new Sprite(textureArrow)
@@ -181,6 +186,8 @@ class Pacman {
     this.frame = 0
     this.death = true
     this.setSprite(this.direction, this.frame,  this.death)
+    this.spriteArrow.visible = false
+    //this.setArrowSprite(this.direction, this.frame,  this.death)
 
     this.backgroundOffsetPixels = 0;
     const bgSize = this.measurement * this.spriteFrames;
@@ -198,6 +205,8 @@ class Pacman {
    */
   changeDirection(newDirection, startMoving) {
     this.desiredDirection = newDirection;
+
+    this.setArrowSprite(this.desiredDirection, 0)
     this.pacmanArrow.style.backgroundImage = 'url(app/style/graphics/'
       + `spriteSheets/characters/pacman/arrow_${this.desiredDirection}.svg)`;
 
@@ -311,6 +320,9 @@ class Pacman {
 
     this.frame = updatedProperties.frame
     this.setSprite(this.direction, updatedProperties.frame, this.death)
+    this.sprite.visible = this.display
+    this.spriteArrow.visible = this.display
+
     this.backgroundOffsetPixels = updatedProperties.backgroundOffsetPixels;
   }
 

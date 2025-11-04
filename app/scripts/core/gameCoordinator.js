@@ -1,18 +1,23 @@
-import { Application, Assets, Sprite, Texture, Container, Text } from "pixi.js";
+import { Application, BaseTexture, Sprite, Texture, Container, Text,
+  SCALE_MODES
+ } from "pixi.js";
 import * as PIXI from 'pixi.js'
-import AssetsManager from "./assetsManager";
-global.window.Assets = Assets
+import AssetsManager from "./assetsManager.js";
+import Mod from "../mods/mod.js";
+import EmptyMod from "../mods/empty-mod.js";
+//global.window.Assets = Assets
 //import path from 'path'
 const options = {
     transparent: false,
     resolution: 1,
     antialias: false,      
 }
-
-class GameCoordinator extends Application{
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST
+class GameCoordinator {
   constructor() {
-    super(options)
-    
+    //super(options)
+    this.mod = new EmptyMod()
     this.gameUi = document.getElementById('game-ui');
     this.rowTop = document.getElementById('row-top');    
     this.mazeDiv = document.getElementById('maze');
@@ -77,7 +82,7 @@ class GameCoordinator extends Application{
     window.PIXI = PIXI
 
     this.firstGame = true;
-
+    this.createUi()
     this.movementKeys = { 
       // WASD
       87: 'up',
@@ -125,6 +130,15 @@ class GameCoordinator extends Application{
     link.onload = this.preloadAssets.bind(this);
 
     head.appendChild(link);
+    
+  }
+
+  /**
+   * Included to accpet a new mod to the game
+   * @param {Mod} mod
+   */
+  setMod(mod) {
+    this.mod = mod 
   }
 
   /**
@@ -311,8 +325,10 @@ class GameCoordinator extends Application{
         // Misc
         'app/style/graphics/extra_life.png',
       ];
+
       this.am = new AssetsManager(this)
       await this.am.load()
+
 
       const audioBase = 'app/style/audio/';
       const audioSources = [
@@ -349,6 +365,8 @@ class GameCoordinator extends Application{
         .then(() => {
           loadingContainer.style.opacity = 0;
           resolve();
+
+          //initialize the current mod
 
           setTimeout(() => {
             loadingContainer.remove();
@@ -430,7 +448,7 @@ class GameCoordinator extends Application{
     this.cutscene = true;
     this.highScore = localStorage.getItem('highScore');
 
-    if (this.firstGame) {
+    if (this.firstGame) {      
       setInterval(() => {
         this.collisionDetectionLoop();
       }, 500);
@@ -487,7 +505,8 @@ class GameCoordinator extends Application{
     this.scaredGhosts = [];
     this.eyeGhosts = 0;
 
-    if (this.firstGame) {
+    if (this.firstGame) {      
+
       //add dots,  pacman, ghosts sprites to the stage
       this.drawMaze(this.mazeArray, this.entityList);
       this.pickups.forEach(p=>{
@@ -498,8 +517,7 @@ class GameCoordinator extends Application{
       this.ghosts.forEach(g=>{
         this.stage.addChild(g.sprite)
       })
-      this.soundManager = new SoundManager();
-      this.createUi()
+      this.soundManager = new SoundManager();      
       this.setUiDimensions();
     } else {
       this.pacman.reset();
@@ -517,7 +535,8 @@ class GameCoordinator extends Application{
 
     this.pointsDisplay.innerHTML = '00';
     this.highScoreDisplay.innerHTML = this.highScore || '00';
-    this.clearDisplay(this.fruitDisplay);
+    this.clearDisplay2(this.fruitDisplay);
+    this.clearDisplay("fruitsDisplay")
 
     const volumePreference = parseInt(
       localStorage.getItem('volumePreference') || 1,
@@ -525,6 +544,9 @@ class GameCoordinator extends Application{
     );
     this.setSoundButtonIcon(volumePreference);
     this.soundManager.setMasterVolume(volumePreference);
+
+    //initialize the current mod values    
+    this.mod.initialize()
   }
 
   /**
@@ -579,42 +601,74 @@ class GameCoordinator extends Application{
   createUi() {
     this.renderTop = new PIXI.Renderer({
 //      view: document.createElement("canvas"),
+      backgroundColor: 0x0000ff,
       width: this.width,
-      height: this.height * 0.116666
+      height: this.height * 0.23
     })
     this.renderTop.view.classList.add("row-top-view")
     this.renderBottom = new PIXI.Renderer({
   //    view: document.createElement("canvas"),
+      backgroundColor: 0x0000ff,
       width: this.width,
-      height: this.height * 0.116666
+      height: this.height * 0.23 
     })
     this.renderBottom.view.classList.add("row-bottom-view")
 
     this.rowTopMainContainer = new Container()                                                      
     this.rowTopContainer = new Container()   
     this.rowTopMainContainer.addChild(this.rowTopContainer) 
-
+ 
     this.bottomRowMainContainer = new Container()
+
     this.bottomRowContainer = new Container()
+    const livesDisplay = new Container()
+    livesDisplay.name = "livesDisplay"
+    this.bottomRowContainer.addChild(livesDisplay)
+    const fruitsDisplay = new Container() 
+    fruitsDisplay.name = "fruitsDisplay"
+    this.fruitDisplay.x = this.bottomRowContainer.width
+    this.bottomRowContainer.addChild(fruitsDisplay)
     this.bottomRowMainContainer.addChild(this.bottomRowContainer)
 
+    this.rowTop.appendChild(this.renderTop.view)
     document.body.appendChild(this.renderTop.view)
+    //this.bottomRow.appendChild(this.renderBottom.view)
     document.body.appendChild(this.renderBottom.view)
     let text = new Text("1UP", {
-      fontFamily: "Press Start 2P, sans-serif",
-      fontSize: 48,
-      color: "0xffffff"
+      fontFamily: "Press Start 2P",
+      fontSize: 24,
+      fill: "0xffffff",
     })
+    text.scale.set(0.333)
     this.rowTopContainer.addChild(text)
 
-     //canvas view
-    this.view.width = this.tileSize * 28
-    this.view.height = this.tileSize * 31
-    this.mazeDiv.appendChild(this.view)
+     //canvas view     
+    this.view = document.createElement("canvas")
+    this.view.width = (this.tileSize * 28) * this.scale
+    this.view.height = (this.tileSize * 31) * this.scale
+    document.body.appendChild(this.view)
+    //this.mazeDiv.appendChild(this.view)
     //this.mazeImg.style.visibility = "hidden"
     //For while
+    
+    // this.view.width = this.width * this.scale
+    // this.view.height = this.height * this.scale
+
     this.view.classList.add("view") 
-    this.view.style.left = (this.width + 20) + "px"
+    this.view.style.top = "70px"
+    this.view.style.left = "900px" //(this.width + 20) + "px"
+
+    this.stage = new Container()
+    this.stage.scale.set(this.scale)
+    const opts = {
+      view: this.view, 
+      width: this.view.width,
+      height: this.view.height
+    }
+    for (let opt in options ) 
+      opts[opt] = options[opt]
+    
+    this.renderer = new PIXI.Renderer(opts)
   }
 
   setUiDimensions() {
@@ -622,13 +676,24 @@ class GameCoordinator extends Application{
     this.rowTop.style.marginBottom = `${this.scaledTileSize}px`;
     this.gameUi.style.scale = this.scale
 
+
     this.rowTopContainer.width = this.width 
-    this.rowTopContainer.height = this.height * 0.11666
+    this.rowTopContainer.height = this.height * 0.23
     this.rowTopContainer.scale.set(this.scale)
+
+    this.bottomRowContainer.width = this.width 
+    this.bottomRowContainer.height = this.height * 0.23
+    this.bottomRowContainer.scale.set(this.scale)
+    //just for whilte
+    this.renderTop.view.style.left = "910px"
+    this.renderTop.view.style.top = "50px"
+    this.renderBottom.view.style.left = "910px"
+    this.renderBottom.view.style.top = "570px"
   }
 
   render() {
-    super.render()
+    //super.render()
+    this.renderer.render(this.stage)
     if (this.renderTop)
       this.renderTop.render(this.rowTopMainContainer)
     if (this.renderBottom)
@@ -679,6 +744,10 @@ class GameCoordinator extends Application{
     this.updateExtraLivesDisplay();
 
     new Timer(() => {
+
+      //for mods. start the mod 
+      this.mod.start() 
+
       this.allowPause = true;
       this.cutscene = false;
       this.soundManager.setCutscene(this.cutscene);
@@ -703,23 +772,34 @@ class GameCoordinator extends Application{
    * Clears out all children nodes from a given display element
    * @param {String} display
    */
-  clearDisplay(display) {
+  clearDisplay2(display) {
     while (display.firstChild) {
-      display.removeChild(display.firstChild);
+      display.removeChild(display.firstChild);      
     }
+  }
+  clearDisplay(displayName) {
+    const display = this.bottomRowContainer.getChildByName(displayName)
+    if (display) display.children.length = 0
   }
 
   /**
    * Displays extra life images equal to the number of remaining lives
    */
   updateExtraLivesDisplay() {
-    this.clearDisplay(this.extraLivesDisplay);
+    this.clearDisplay2(this.extraLivesDisplay);   
+    this.clearDisplay("livesDisplay") 
 
+    const livesDisplay = this.bottomRowContainer.getChildByName("livesDisplay")
+    let tx = this.am.getTexture("extra_life")
     for (let i = 0; i < this.lives; i += 1) {
       const extraLifePic = document.createElement('img');
       extraLifePic.setAttribute('src', 'app/style/graphics/extra_life.svg');
       extraLifePic.style.height = `${this.scaledTileSize * 2}px`;
       this.extraLivesDisplay.appendChild(extraLifePic);
+      
+      let extraLifeSprite = new Sprite(tx)
+      extraLifeSprite.x = extraLifeSprite.width * i
+      livesDisplay.addChild(extraLifeSprite)
     }
   }
 
@@ -727,7 +807,7 @@ class GameCoordinator extends Application{
    * Displays a rolling log of the seven most-recently eaten fruit
    * @param {String} rawImageSource
    */
-  updateFruitDisplay(rawImageSource) {
+  updateFruitDisplay2(rawImageSource) {
     const parsedSource = rawImageSource.slice(
       rawImageSource.indexOf('(') + 1,
       rawImageSource.indexOf(')'),
@@ -741,6 +821,16 @@ class GameCoordinator extends Application{
     fruitPic.setAttribute('src', parsedSource);
     fruitPic.style.height = `${this.scaledTileSize * 2}px`;
     this.fruitDisplay.appendChild(fruitPic);
+  }
+  updateFruitsDisplay(points) {
+    const name = this.fruit.getFruitName(points)
+    const fruitsDisplay = this.bottomRowContainer.getChildByName("fruitsDisplay")
+    if (fruitsDisplay.length ==7) {
+      const first = fruitsDisplay.getChildAt(0)
+      if (first) fruitsDisplay.removeChild(first)
+    }
+    const fruitSp = new Sprite(this.am.getTexture(name))
+    fruitsDisplay.addChild(fruitSp)
   }
 
   /**
@@ -897,9 +987,11 @@ class GameCoordinator extends Application{
 
       this.displayText({ left, top }, e.detail.points, 2000, width, height);
       this.soundManager.play('fruit');
-      this.updateFruitDisplay(
-        this.fruit.determineImage('fruit', e.detail.points),
+      this.updateFruitDisplay2(
+        this.fruit.determineImage2('fruit', e.detail.points),
       );
+
+      this.updateFruitsDisplay(e.detail.points)
     }
   }
 
@@ -962,6 +1054,10 @@ class GameCoordinator extends Application{
     localStorage.setItem('highScore', this.highScore);
 
     new Timer(() => {
+
+      //for mods
+      this.mod.stop()
+
       this.displayText(
         {
           left: this.scaledTileSize * 9,
@@ -1058,6 +1154,9 @@ class GameCoordinator extends Application{
     this.soundManager.setCutscene(this.cutscene);
     this.allowKeyPresses = false;
     this.soundManager.stopAmbience();
+
+    //stop the current mod
+    this.mod.stop()
 
     this.entityList.forEach((entity) => {
       const entityRef = entity;

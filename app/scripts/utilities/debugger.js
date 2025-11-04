@@ -40,6 +40,8 @@ class Debugger {
                 dbg.moveEntities() 
             else if (event.key == 'u')    
                 dbg.notifyPacmanMovement()
+            else if (event.key.toLowerCase() == 'f')    
+                dbg.startWave()
             // if (event.key !=  'HanjaMode') {
             //     alert(event.key)
             // }
@@ -285,6 +287,12 @@ class Debugger {
             this.gc.pacman['update']['changed'] = true
         }
     }
+    startWave() {
+        console.log("Key f pressed")
+        if (this.gc.mod.flood)  {
+            this.gc.mod.flood.generateWave(0)
+        }
+    }
     _notify(functionName) {
         const pacman = this.gc.pacman
         const gridPosition  = pacman.characterUtil.determineGridPosition(
@@ -346,3 +354,7 @@ class Debugger {
 
 if (!process.env.NYC_PROCESS_ID) 
     global.window.Debugger = Debugger
+
+//removeIf(production)
+export default Debugger
+//endRemoveIf

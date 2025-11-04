@@ -4,9 +4,6 @@ class AssetsManager {
     constructor(gameCoordinator) {
         this.gameCoordinator = gameCoordinator
         this.textures = new Map()
-        
-        BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST
-        BaseTexture.defaultOptions.resolution = 1
     }
     async load() {
         const imgBase = 'app/style/graphics/spriteSheets/';        

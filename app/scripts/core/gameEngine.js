@@ -47,7 +47,8 @@ class GameEngine {
    * @param {Array} entityList - List of entities to be used throughout the game
    */
   draw(interp, entityList) {
-    this.gameCoordinator.render()
+    this.gameCoordinator.render()    
+    this.gameCoordinator.mod.draw()
     entityList.forEach((entity) => {
       if (typeof entity.draw === 'function') {
         entity.draw(interp);
@@ -61,6 +62,7 @@ class GameEngine {
    * @param {Array} entityList - List of entities to be used throughout the game
    */
   update(elapsedMs, entityList) {
+    this.gameCoordinator.mod.update(elapsedMs)
     entityList.forEach((entity) => {
       if (typeof entity.update === 'function') {
         entity.update(elapsedMs);

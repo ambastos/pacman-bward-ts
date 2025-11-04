@@ -70,7 +70,7 @@ class Pickup {
     this.sprite.visible = false
     this.sprite.position.set(this.x, this.y)
 
-    this.animationTarget.style.backgroundImage = this.determineImage(
+    this.animationTarget.style.backgroundImage = this.determineImage2(
       type, points,
     );
     this.animationTarget.style.height = `${this.size}px`;
@@ -93,7 +93,7 @@ class Pickup {
    * @param {Number} points
    * @returns {String}
    */
-  determineImage(type, points) {
+  determineImage2(type, points) {
     let image = '';
 
     if (type === 'fruit') {
@@ -103,6 +103,9 @@ class Pickup {
     }
 
     return `url(app/style/graphics/spriteSheets/pickups/${image}.svg)`;
+  }
+  getFruitName(points) {
+    return this.fruitImages[points]
   }
 
   getTexture(type) {
@@ -162,14 +165,14 @@ class Pickup {
    */
   showFruit(points) {
     this.points = points;
-    this.animationTarget.style.backgroundImage = this.determineImage(
+    this.animationTarget.style.backgroundImage = this.determineImage2(
       this.type, points,
     );
 
+    const tx = this.gameCoordinator.am.getTexture(this.getFruitName(points))
+    this.sprite.texture = tx
     this.sprite.visible = true
     this.animationTarget.style.visibility = 'visible';
-
-
   }
 
   /**
