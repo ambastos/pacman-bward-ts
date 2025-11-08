@@ -999,7 +999,10 @@ class GameCoordinator {
    * Animates Pacman's death, subtracts a life, and resets character positions if
    * the player has remaining lives.
    */
-  deathSequence() {
+  /**
+   * Changed to suport events details values to change the behavior of this method 
+   */
+  deathSequence(event) {
     this.allowPause = false;
     this.cutscene = true;
     this.soundManager.setCutscene(this.cutscene);
@@ -1027,6 +1030,9 @@ class GameCoordinator {
       if (this.lives > 0) {
         this.lives -= 1;
 
+      let callbackAfter = (event?.detail?.callbackAfter)
+      if (callbackAfter)
+          callbackAfter()
         new Timer(() => {
           this.mazeCover.style.visibility = 'visible';
           new Timer(() => {
@@ -1037,8 +1043,10 @@ class GameCoordinator {
               ghost.reset();
             });
             this.fruit.hideFruit();
-
-            this.startGameplay();
+            let shouldRestart =  (event?.detail?.restart) === undefined ?  true : (event.detail.restart)
+            
+            if (shouldRestart )
+              this.startGameplay();            
           }, 500);
         }, 2250);
       } else {

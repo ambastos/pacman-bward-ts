@@ -1,7 +1,7 @@
 //import Flood from '../../../../flood-pacman-bward/app/scripts/flood.js'
 //import Flood from 'flood-pacman-bward''
 import Mod from '../mod.js'
-import Flood from './mods/flood/app/scripts/flood.js'
+import Flood from './mods/flood/app/scripts/core/flood.js'
 
 class FloodModImp extends Mod{
     flood
