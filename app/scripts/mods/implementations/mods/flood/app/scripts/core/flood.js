@@ -45,38 +45,48 @@ class Flood extends Mod{
         this.#registerListeners()
     }
     #registerListeners() {
+        this.emitter = this.gc.emitter
        this.#changePacmanDeathSequence() 
     }  
     #changePacmanDeathSequence() {
-        const deathSequence = this.gc.deathSequence 
-        const _this = this        
-        const deathSquence2 = function(){ 
-            const wave = _this.factory.wave
+        this.gc.emitter.removeAllListeners("pacman-death")
+        const _this = this 
+        this.gc.emitter.on("pacman-death", ()=>{
+             const wave = _this.factory.wave
             if (wave && wave.started) {
-                //deathSequence.bind(_this.gc)()
-                deathSequence.bind(_this.gc)({
+                const detail = {
                     detail: {
                         restart:false,
                         callbackAfter: ()=>{ 
                             _this.changeState(States.CANCEL_STATE)                            
                         }
                     }
-                })
-                // window.dispatchEvent(new CustomEvent("deathSequence",{
-                //     detail: {
-                //         restart:false,
-                //         callbackAfter: ()=>{ 
-                //             _this.stop()
-                //         }
-                //     }
-                // }))
-                //this.animator.play("endFlood")                
+                }
+                this.gc.deathSequence(detail)                         
             }else {
-                deathSequence.bind(_this.gc)()
+                this.pacman.onDeath()
             }
-        }.bind(this.gc)
-        this.gc.deathSequence = deathSquence2
-        this.gc.deathSquence2 = deathSequence
+        })
+        // const deathSequence = this.gc.deathSequence 
+        // const _this = this        
+        // const deathSquence2 = function(){ 
+        //     const wave = _this.factory.wave
+        //     if (wave && wave.started) {
+        //         //deathSequence.bind(_this.gc)()
+        //         deathSequence.bind(_this.gc)({
+        //             detail: {
+        //                 restart:false,
+        //                 callbackAfter: ()=>{ 
+        //                     _this.changeState(States.CANCEL_STATE)                            
+        //                 }
+        //             }
+        //         })                              
+        //     }else {
+        //         deathSequence.bind(_this.gc)()
+        //     }
+        // }.bind(this.gc)
+        // this.gc.deathSequence = deathSquence2
+        // this.gc.deathSquence2 = deathSequence
     }  
     #endFloodAnimation() {
         
@@ -123,6 +133,9 @@ class Flood extends Mod{
         this.changeState(States.IDLE_STATE)
         this.state.generateWave(timeToStartMS)
     }
+    reset() {
+
+    }
     resetEntitiesBreathing() {
         this.#resetEntity(this.pacman)        
     }
@@ -163,7 +176,8 @@ class Flood extends Mod{
     killEntity(entity) {
         const breath = entity[breathNamespace]
         if (entity instanceof Pacman ) {
-            window.dispatchEvent(new Event('deathSequence'));
+           // window.dispatchEvent(new Event('deathSequence'));
+            this.emitter.emit("pacman-death")
             breath.stop()
             breath.reset() 
             //this.terminateWave()

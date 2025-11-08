@@ -2,13 +2,18 @@
  * Module class to pacmam-bward game
  */
 class Mod {
+    emitter 
     started = false
     paused = false
+    initialized = false
     constructor(gameCoordinator) {
         this.gc = gameCoordinator
     }
     initialize() {
-        
+        this.initialized = true
+    }
+    reset() {
+
     }
     start() {
         this.started = true

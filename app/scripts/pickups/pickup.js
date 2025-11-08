@@ -1,8 +1,9 @@
 import { Container, RenderTexture, Sprite, Texture } from "pixi.js";
+import Entity from "../characters/entity.js";
 
-class Pickup {
+class Pickup extends Entity {
   constructor(type, column, row, points, gameCoordinator) {
-    this.gameCoordinator = gameCoordinator
+    super(gameCoordinator, "pickup", null)
     this.type = type;
     this.pacman = gameCoordinator.pacman;
     this.mazeDiv = gameCoordinator.mazeDiv;
@@ -256,6 +257,7 @@ class Pickup {
       )) {
         this.sprite.visible = false
         this.animationTarget.style.visibility = 'hidden';
+        this.emitter.emit("item-taken", this)
         window.dispatchEvent(new CustomEvent('awardPoints', {
           detail: {
             points: this.points,

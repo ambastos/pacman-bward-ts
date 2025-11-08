@@ -1,12 +1,10 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-(function (process,global){(function (){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var _pixi = require("pixi.js");
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -15,6 +13,96 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
+}
+function _classCallCheck(a, n) {
+  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
+}
+function _defineProperties(e, r) {
+  for (var t = 0; t < r.length; t++) {
+    var o = r[t];
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
+  }
+}
+function _createClass(e, r, t) {
+  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
+    writable: !1
+  }), e;
+}
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : i + "";
+}
+function _toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
+var Entity = /*#__PURE__*/function () {
+  function Entity(gameCoordinator, name, characterUtil) {
+    _classCallCheck(this, Entity);
+    _defineProperty(this, "name", void 0);
+    _defineProperty(this, "emitter", void 0);
+    _defineProperty(this, "gameCoordinator", void 0);
+    this.gameCoordinator = gameCoordinator;
+    this.name = name;
+    this.characterUtil = characterUtil;
+    this.emitter = this.gameCoordinator.emitter;
+  }
+  return _createClass(Entity, [{
+    key: "registerEventListeners",
+    value: function registerEventListeners() {}
+  }, {
+    key: "onReset",
+    value: function onReset() {}
+  }, {
+    key: "onDeath",
+    value: function onDeath() {}
+  }, {
+    key: "update",
+    value: function update(elapsedMs) {}
+  }, {
+    key: "draw",
+    value: function draw(interp) {}
+  }]);
+}();
+var _default = exports["default"] = Entity;
+
+},{}],2:[function(require,module,exports){
+(function (process,global){(function (){
+"use strict";
+
+function _typeof(o) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, _typeof(o);
+}
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+var _entity = _interopRequireDefault(require("./entity.js"));
+function _interopRequireDefault(e) {
+  return e && e.__esModule ? e : {
+    "default": e
+  };
 }
 function _slicedToArray(r, e) {
   return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
@@ -92,26 +180,71 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
-var Ghost = /*#__PURE__*/function () {
+function _callSuper(t, o, e) {
+  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+}
+function _possibleConstructorReturn(t, e) {
+  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
+  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
+  return _assertThisInitialized(t);
+}
+function _assertThisInitialized(e) {
+  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  return e;
+}
+function _isNativeReflectConstruct() {
+  try {
+    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+  } catch (t) {}
+  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
+    return !!t;
+  })();
+}
+function _getPrototypeOf(t) {
+  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
+    return t.__proto__ || Object.getPrototypeOf(t);
+  }, _getPrototypeOf(t);
+}
+function _inherits(t, e) {
+  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
+  t.prototype = Object.create(e && e.prototype, {
+    constructor: {
+      value: t,
+      writable: !0,
+      configurable: !0
+    }
+  }), Object.defineProperty(t, "prototype", {
+    writable: !1
+  }), e && _setPrototypeOf(t, e);
+}
+function _setPrototypeOf(t, e) {
+  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
+    return t.__proto__ = e, t;
+  }, _setPrototypeOf(t, e);
+}
+var Ghost = /*#__PURE__*/function (_Entity) {
   function Ghost(gameCoordinator, name, level, characterUtil, blinky) {
+    var _this;
     _classCallCheck(this, Ghost);
-    this.gameCoordinator = gameCoordinator;
-    this.scaledTileSize = gameCoordinator.scaledTileSize;
-    this.mazeArray = gameCoordinator.mazeArray;
-    this.pacman = gameCoordinator.pacman;
-    this.name = name;
-    this.level = level;
-    this.characterUtil = characterUtil;
-    this.blinky = blinky;
-    this.animationTarget = document.getElementById(name);
-    this.sprite = null;
-    this.reset();
+    _this = _callSuper(this, Ghost, [gameCoordinator, name, characterUtil]);
+    _this.scaledTileSize = gameCoordinator.scaledTileSize;
+    _this.mazeArray = gameCoordinator.mazeArray;
+    _this.pacman = gameCoordinator.pacman;
+    _this.name = name;
+    _this.level = level;
+    _this.characterUtil = characterUtil;
+    _this.blinky = blinky;
+    _this.animationTarget = document.getElementById(name);
+    _this.sprite = null;
+    _this.reset();
+    return _this;
   }
 
   /**
    * Rests the character to its default state
    * @param {Boolean} fullGameReset
    */
+  _inherits(Ghost, _Entity);
   return _createClass(Ghost, [{
     key: "reset",
     value: function reset(fullGameReset) {
@@ -126,7 +259,11 @@ var Ghost = /*#__PURE__*/function () {
       this.setDefaultPosition(this.scaledTileSize, this.name);
       this.setSpriteSheet(this.name, this.direction, this.mode);
     }
-
+  }, {
+    key: "registerEventListeners",
+    value: function registerEventListeners() {
+      this.emitter.on("ghost-eaten-" + this.name, this.onEaten);
+    }
     /**
      * Sets the default mode and idleMode behavior
      */
@@ -578,12 +715,12 @@ var Ghost = /*#__PURE__*/function () {
   }, {
     key: "determineBestMove",
     value: function determineBestMove(name, possibleMoves, gridPosition, pacmanGridPosition, mode) {
-      var _this = this;
+      var _this2 = this;
       var bestDistance = mode === 'scared' ? 0 : Infinity;
       var bestMove;
       var target = this.getTarget(name, gridPosition, pacmanGridPosition, mode);
       Object.keys(possibleMoves).forEach(function (move) {
-        var distance = _this.calculateDistance(possibleMoves[move], target);
+        var distance = _this2.calculateDistance(possibleMoves[move], target);
         var betterMove = mode === 'scared' ? distance > bestDistance : distance < bestDistance;
         if (betterMove) {
           bestDistance = distance;
@@ -886,14 +1023,18 @@ var Ghost = /*#__PURE__*/function () {
     value: function checkCollision(position, pacman) {
       if (this.calculateDistance(position, pacman) < 1 && this.mode !== 'eyes' && this.allowCollision) {
         if (this.mode === 'scared') {
-          window.dispatchEvent(new CustomEvent('eatGhost', {
-            detail: {
-              ghost: this
-            }
-          }));
+          this.emitter.emit("ghost-eaten-" + this.name, {
+            ghost: this
+          });
+          // window.dispatchEvent(new CustomEvent('eatGhost', {
+          //   detail: {
+          //     ghost: this,
+          //   },
+          // }));
           this.mode = 'eyes';
         } else {
-          window.dispatchEvent(new Event('deathSequence'));
+          this.emitter.emit("pacman-death");
+          //window.dispatchEvent(new Event('deathSequence'));
         }
       }
     }
@@ -921,7 +1062,13 @@ var Ghost = /*#__PURE__*/function () {
       }
       return this.defaultSpeed;
     }
-
+  }, {
+    key: "onEaten",
+    value: function onEaten(detail) {
+      window.dispatchEvent(new CustomEvent('eatGhost', {
+        detail: detail
+      }));
+    }
     /**
      * Updates the css position, hides if there is a stutter, and animates the spritesheet
      * @param {number} interp - The animation accuracy as a percentage
@@ -962,7 +1109,7 @@ var Ghost = /*#__PURE__*/function () {
       }
     }
   }]);
-}(); //Just to avoid problems with NYC coverage test
+}(_entity["default"]); //Just to avoid problems with NYC coverage test
 if (!process.env.NYC_PROCESS_ID) global.window.Ghost = Ghost;
 // removeIf(production)
 //module.exports = Ghost;
@@ -971,15 +1118,10 @@ if (!process.env.NYC_PROCESS_ID) global.window.Ghost = Ghost;
 var _default = exports["default"] = Ghost; //endRemoveIf(production)
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":444,"pixi.js":443}],2:[function(require,module,exports){
+},{"./entity.js":1,"_process":445,"pixi.js":444}],3:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -988,6 +1130,17 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
+}
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+var _entity = _interopRequireDefault(require("./entity.js"));
+function _interopRequireDefault(e) {
+  return e && e.__esModule ? e : {
+    "default": e
+  };
 }
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
@@ -1017,23 +1170,68 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
-var Pacman = /*#__PURE__*/function () {
+function _callSuper(t, o, e) {
+  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+}
+function _possibleConstructorReturn(t, e) {
+  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
+  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
+  return _assertThisInitialized(t);
+}
+function _assertThisInitialized(e) {
+  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  return e;
+}
+function _isNativeReflectConstruct() {
+  try {
+    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+  } catch (t) {}
+  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
+    return !!t;
+  })();
+}
+function _getPrototypeOf(t) {
+  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
+    return t.__proto__ || Object.getPrototypeOf(t);
+  }, _getPrototypeOf(t);
+}
+function _inherits(t, e) {
+  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
+  t.prototype = Object.create(e && e.prototype, {
+    constructor: {
+      value: t,
+      writable: !0,
+      configurable: !0
+    }
+  }), Object.defineProperty(t, "prototype", {
+    writable: !1
+  }), e && _setPrototypeOf(t, e);
+}
+function _setPrototypeOf(t, e) {
+  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
+    return t.__proto__ = e, t;
+  }, _setPrototypeOf(t, e);
+}
+var Pacman = /*#__PURE__*/function (_Entity) {
   function Pacman(gameCoordinator, characterUtil) {
+    var _this;
     _classCallCheck(this, Pacman);
-    this.gameCoordinator = gameCoordinator;
-    this.scaledTileSize = gameCoordinator.scaledTileSize;
-    this.mazeArray = gameCoordinator.mazeArray;
-    this.characterUtil = characterUtil;
-    this.animationTarget = document.getElementById('pacman');
-    this.pacmanArrow = document.getElementById('pacman-arrow');
-    this.sprite = null;
-    this.spriteArrow = null;
-    this.reset();
+    _this = _callSuper(this, Pacman, [gameCoordinator, "pacman", characterUtil]);
+    _this.scaledTileSize = gameCoordinator.scaledTileSize;
+    _this.mazeArray = gameCoordinator.mazeArray;
+    _this.characterUtil = characterUtil;
+    _this.animationTarget = document.getElementById('pacman');
+    _this.pacmanArrow = document.getElementById('pacman-arrow');
+    _this.sprite = null;
+    _this.spriteArrow = null;
+    _this.reset();
+    return _this;
   }
 
   /**
    * Rests the character to its default state
    */
+  _inherits(Pacman, _Entity);
   return _createClass(Pacman, [{
     key: "reset",
     value: function reset() {
@@ -1044,7 +1242,12 @@ var Pacman = /*#__PURE__*/function () {
       this.setSpriteSheet(this.direction);
       this.pacmanArrow.style.backgroundImage = 'url(app/style/graphics/' + "spriteSheets/characters/pacman/arrow_".concat(this.direction, ".svg)");
     }
-
+  }, {
+    key: "registerEventListeners",
+    value: function registerEventListeners() {
+      this.emitter.on("pacman-reset", this.onReset);
+      this.emitter.on("pacman-death", this.onDeath);
+    }
     /**
      * Sets various properties related to Pacman's movement
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -1286,7 +1489,13 @@ var Pacman = /*#__PURE__*/function () {
       }
       return alternate.newPosition;
     }
-
+    /**
+     */
+  }, {
+    key: "onDeath",
+    value: function onDeath() {
+      window.dispatchEvent(new Event('deathSequence'));
+    }
     /**
      * Updates the css position, hides if there is a stutter, and animates the spritesheet
      * @param {number} interp - The animation accuracy as a percentage
@@ -1337,14 +1546,14 @@ var Pacman = /*#__PURE__*/function () {
       }
     }
   }]);
-}(); //Just to avoid problems with NYC coverage test
+}(_entity["default"]); //Just to avoid problems with NYC coverage test
 if (!process.env.NYC_PROCESS_ID) global.window.Pacman = Pacman;
 // removeIf(production)
 //module.exports = Pacman;
 var _default = exports["default"] = Pacman; // endRemoveIf(production)
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":444,"pixi.js":443}],3:[function(require,module,exports){
+},{"./entity.js":1,"_process":445,"pixi.js":444}],4:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -1840,7 +2049,9 @@ var AssetsManager = /*#__PURE__*/function () {
               });
               imageAliases = ["maze_blue", "maze_white", "arrow_down", "arrow_left", "arrow_right", "arrow_up", "pacman_death", "pacman_error", "pacman_down", "pacman_left", "pacman_right", "pacman_up", "blinky_down_angry", "blinky_down_annoyed", "blinky_down", "blinky_left_angry", "blinky_left_annoyed", "blinky_left", "blinky_right_angry", "blinky_right_annoyed", "blinky_right", "blinky_up_angry", "blinky_up_annoyed", "blinky_up", "clyde_down", "clyde_left", "clyde_right", "clyde_up", "inky_down", "inky_left", "inky_right", "inky_up", "pinky_down", "pinky_left", "pinky_right", "pinky_up", "eyes_down", "eyes_left", "eyes_right", "eyes_up", "scared_blue", "scared_white", "pacdot", "powerPellet", "apple", "bell", "cherry", "galaxian", "key", "melon", "orange", "strawberry", "ready", "game_over", "100", "200", "300", "400", "500", "700", "800", "1000", "1600", "2000", "3000", "5000", "extra_life"];
               _context.n = 1;
-              return _pixi.Assets.load(imageAliases);
+              return _pixi.Assets.load(imageAliases, function (progress) {
+                //console.log("loading assets", progress)
+              });
             case 1:
               //put the audios here:      
 
@@ -2084,7 +2295,7 @@ function _createPickupsSprite() {
 }
 var _default = exports["default"] = AssetsManager; //endRemoveIf
 
-},{"pixi.js":443}],4:[function(require,module,exports){
+},{"pixi.js":444}],5:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 
@@ -2097,6 +2308,8 @@ var PIXI = _pixi;
 var _assetsManager = _interopRequireDefault(require("./assetsManager.js"));
 var _mod = _interopRequireDefault(require("../mods/mod.js"));
 var _emptyMod = _interopRequireDefault(require("../mods/empty-mod.js"));
+var _mazeManager = _interopRequireDefault(require("./mazeManager.js"));
+var _events = _interopRequireDefault(require("events"));
 function _interopRequireDefault(e) {
   return e && e.__esModule ? e : {
     "default": e
@@ -2302,7 +2515,6 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 _pixi.BaseTexture.defaultOptions.scaleMode = _pixi.SCALE_MODES.NEAREST;
 var GameCoordinator = /*#__PURE__*/function () {
   function GameCoordinator() {
-    var _this = this;
     _classCallCheck(this, GameCoordinator);
     //super(options)
     this.mod = new _emptyMod["default"]();
@@ -2324,7 +2536,8 @@ var GameCoordinator = /*#__PURE__*/function () {
     this.pausedText = document.getElementById('paused-text');
     this.bottomRow = document.getElementById('bottom-row');
     this.movementButtons = document.getElementById('movement-buttons');
-    this.mazeArray = [['XXXXXXXXXXXXXXXXXXXXXXXXXXXX'], ['XooooooooooooXXooooooooooooX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XOXXXXoXXXXXoXXoXXXXXoXXXXOX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XooooooooooooooooooooooooooX'], ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'], ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'], ['XooooooXXooooXXooooXXooooooX'], ['XXXXXXoXXXXX XX XXXXXoXXXXXX'], ['XXXXXXoXXXXX XX XXXXXoXXXXXX'], ['XXXXXXoXX          XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX X      X XXoXXXXXX'], ['      o   X      X   o      '], ['XXXXXXoXX X      X XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX          XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XooooooooooooXXooooooooooooX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XOooXXooooooo  oooooooXXooOX'], ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'], ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'], ['XooooooXXooooXXooooXXooooooX'], ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'], ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'], ['XooooooooooooooooooooooooooX'], ['XXXXXXXXXXXXXXXXXXXXXXXXXXXX']];
+    this.mazeManager = new _mazeManager["default"]();
+    this.mazeArray = this.mazeManager.get("maze1");
     this.maxFps = 120;
     this.tileSize = 8;
     this.scale = this.determineScale(1);
@@ -2357,9 +2570,6 @@ var GameCoordinator = /*#__PURE__*/function () {
       7: 3000,
       8: 5000
     };
-    this.mazeArray.forEach(function (row, rowIndex) {
-      _this.mazeArray[rowIndex] = row[0].split('');
-    });
     this.gameStartButton.addEventListener('click', this.startButtonClick.bind(this));
     this.pauseButton.addEventListener('click', this.handlePauseKey.bind(this));
     this.soundButton.addEventListener('click', this.soundButtonClick.bind(this));
@@ -2409,13 +2619,13 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "startButtonClick",
     value: function startButtonClick() {
-      var _this2 = this;
+      var _this = this;
       this.leftCover.style.left = '-50%';
       this.rightCover.style.right = '-50%';
       this.mainMenu.style.opacity = 0;
       this.gameStartButton.disabled = true;
       setTimeout(function () {
-        _this2.mainMenu.style.visibility = 'hidden';
+        _this.mainMenu.style.visibility = 'hidden';
       }, 1000);
       this.reset();
       if (this.firstGame) {
@@ -2469,7 +2679,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "preloadAssets",
     value: function preloadAssets() {
-      var _this3 = this;
+      var _this2 = this;
       return new Promise(/*#__PURE__*/function () {
         var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(resolve) {
           var loadingContainer, loadingPacman, loadingDotMask, imgBase, imgSources, audioBase, audioSources, totalSources;
@@ -2505,19 +2715,19 @@ var GameCoordinator = /*#__PURE__*/function () {
                 "".concat(imgBase, "maze/maze_blue.svg"),
                 // Misc
                 'app/style/graphics/extra_life.png'];
-                _this3.am = new _assetsManager["default"](_this3);
+                _this2.am = new _assetsManager["default"](_this2);
                 _context.n = 1;
-                return _this3.am.load();
+                return _this2.am.load();
               case 1:
                 audioBase = 'app/style/audio/';
                 audioSources = ["".concat(audioBase, "game_start.mp3"), "".concat(audioBase, "pause.mp3"), "".concat(audioBase, "pause_beat.mp3"), "".concat(audioBase, "siren_1.mp3"), "".concat(audioBase, "siren_2.mp3"), "".concat(audioBase, "siren_3.mp3"), "".concat(audioBase, "power_up.mp3"), "".concat(audioBase, "extra_life.mp3"), "".concat(audioBase, "eyes.mp3"), "".concat(audioBase, "eat_ghost.mp3"), "".concat(audioBase, "death.mp3"), "".concat(audioBase, "fruit.mp3"), "".concat(audioBase, "dot_1.mp3"), "".concat(audioBase, "dot_2.mp3")]; //the maze background sprite
-                _this3.mazeSprite = new _pixi.Sprite(_pixi.Texture.from("maze_blue"));
-                _this3.stage.addChild(_this3.mazeSprite);
+                _this2.mazeSprite = new _pixi.Sprite(_pixi.Texture.from("maze_blue"));
+                _this2.stage.addChild(_this2.mazeSprite);
                 totalSources = imgSources.length + audioSources.length;
-                _this3.remainingSources = totalSources;
+                _this2.remainingSources = totalSources;
                 loadingPacman.style.left = '0';
                 loadingDotMask.style.width = '0';
-                Promise.all([_this3.createElements(imgSources, 'img', totalSources, _this3), _this3.createElements(audioSources, 'audio', totalSources, _this3)]).then(function () {
+                Promise.all([_this2.createElements(imgSources, 'img', totalSources, _this2), _this2.createElements(audioSources, 'audio', totalSources, _this2)]).then(function () {
                   loadingContainer.style.opacity = 0;
                   resolve();
 
@@ -2525,10 +2735,10 @@ var GameCoordinator = /*#__PURE__*/function () {
 
                   setTimeout(function () {
                     loadingContainer.remove();
-                    _this3.mainMenu.style.opacity = 1;
-                    _this3.mainMenu.style.visibility = 'visible';
+                    _this2.mainMenu.style.opacity = 1;
+                    _this2.mainMenu.style.visibility = 'visible';
                   }, 1500);
-                })["catch"](_this3.displayErrorMessage);
+                })["catch"](_this2.displayErrorMessage);
               case 2:
                 return _context.a(2);
             }
@@ -2593,7 +2803,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "reset",
     value: function reset() {
-      var _this4 = this;
+      var _this3 = this;
       this.activeTimers = [];
       this.points = 0;
       this.level = 1;
@@ -2607,7 +2817,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.highScore = localStorage.getItem('highScore');
       if (this.firstGame) {
         setInterval(function () {
-          _this4.collisionDetectionLoop();
+          _this3.collisionDetectionLoop();
         }, 500);
         this.pacman = new Pacman(this, new CharacterUtil());
         this.blinky = new Ghost(this, 'blinky', this.level, new CharacterUtil());
@@ -2624,12 +2834,12 @@ var GameCoordinator = /*#__PURE__*/function () {
         //add dots,  pacman, ghosts sprites to the stage
         this.drawMaze(this.mazeArray, this.entityList);
         this.pickups.forEach(function (p) {
-          _this4.stage.addChild(p.sprite);
+          _this3.stage.addChild(p.sprite);
         });
         this.stage.addChild(this.pacman.sprite);
         this.stage.addChild(this.pacman.spriteArrow);
         this.ghosts.forEach(function (g) {
-          _this4.stage.addChild(g.sprite);
+          _this3.stage.addChild(g.sprite);
         });
         this.soundManager = new SoundManager();
         this.setUiDimensions();
@@ -2640,9 +2850,9 @@ var GameCoordinator = /*#__PURE__*/function () {
         });
         this.pickups.forEach(function (pickup) {
           if (pickup.type !== 'fruit') {
-            _this4.remainingDots += 1;
+            _this3.remainingDots += 1;
             pickup.reset();
-            _this4.entityList.push(pickup);
+            _this3.entityList.push(pickup);
           }
         });
       }
@@ -2653,9 +2863,6 @@ var GameCoordinator = /*#__PURE__*/function () {
       var volumePreference = parseInt(localStorage.getItem('volumePreference') || 1, 10);
       this.setSoundButtonIcon(volumePreference);
       this.soundManager.setMasterVolume(volumePreference);
-
-      //initialize the current mod values    
-      this.mod.initialize();
     }
 
     /**
@@ -2664,7 +2871,9 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "init",
     value: function init() {
+      //initialize the current mod values    
       this.registerEventListeners();
+      this.mod.initialize();
       this.gameEngine = new GameEngine(this, this.maxFps, this.entityList);
       this.gameEngine.start();
     }
@@ -2677,7 +2886,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "drawMaze",
     value: function drawMaze(mazeArray, entityList) {
-      var _this5 = this;
+      var _this4 = this;
       this.pickups = [this.fruit];
 
       //sprite
@@ -2694,10 +2903,10 @@ var GameCoordinator = /*#__PURE__*/function () {
           if (block === 'o' || block === 'O') {
             var type = block === 'o' ? 'pacdot' : 'powerPellet';
             var points = block === 'o' ? 10 : 50;
-            var dot = new Pickup(type, columnIndex, rowIndex, points, _this5);
+            var dot = new Pickup(type, columnIndex, rowIndex, points, _this4);
             entityList.push(dot);
-            _this5.pickups.push(dot);
-            _this5.remainingDots += 1;
+            _this4.pickups.push(dot);
+            _this4.remainingDots += 1;
           }
         });
       });
@@ -2826,7 +3035,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "startGameplay",
     value: function startGameplay(initialStart) {
-      var _this6 = this;
+      var _this5 = this;
       if (initialStart) {
         this.soundManager.play('game_start');
       }
@@ -2845,20 +3054,21 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.updateExtraLivesDisplay();
       new Timer(function () {
         //for mods. start the mod 
-        _this6.mod.start();
-        _this6.allowPause = true;
-        _this6.cutscene = false;
-        _this6.soundManager.setCutscene(_this6.cutscene);
-        _this6.soundManager.setAmbience(_this6.determineSiren(_this6.remainingDots));
-        _this6.allowPacmanMovement = true;
-        _this6.pacman.moving = true;
-        _this6.ghosts.forEach(function (ghost) {
+        _this5.mod.start();
+        _this5.allowPause = true;
+        _this5.cutscene = false;
+        _this5.soundManager.setCutscene(_this5.cutscene);
+        _this5.soundManager.setAmbience(_this5.determineSiren(_this5.remainingDots));
+        _this5.allowPacmanMovement = true;
+        _this5.pacman.moving = true;
+        _this5.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.moving = true;
         });
-        _this6.ghostCycle('scatter');
-        _this6.idleGhosts = [_this6.pinky, _this6.inky, _this6.clyde];
-        _this6.releaseGhost();
+        _this5.ghostCycle('scatter');
+        _this5.idleGhosts = [_this5.pinky, _this5.inky, _this5.clyde];
+        _this5.releaseGhost();
+        _this5.emitter.emit("post-start");
       }, duration);
     }
 
@@ -2937,14 +3147,14 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "ghostCycle",
     value: function ghostCycle(mode) {
-      var _this7 = this;
+      var _this6 = this;
       var delay = mode === 'scatter' ? 7000 : 20000;
       var nextMode = mode === 'scatter' ? 'chase' : 'scatter';
       this.ghostCycleTimer = new Timer(function () {
-        _this7.ghosts.forEach(function (ghost) {
+        _this6.ghosts.forEach(function (ghost) {
           ghost.changeMode(nextMode);
         });
-        _this7.ghostCycle(nextMode);
+        _this6.ghostCycle(nextMode);
       }, delay);
     }
 
@@ -2954,12 +3164,12 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "releaseGhost",
     value: function releaseGhost() {
-      var _this8 = this;
+      var _this7 = this;
       if (this.idleGhosts.length > 0) {
         var delay = Math.max((8 - (this.level - 1) * 4) * 1000, 0);
         this.endIdleTimer = new Timer(function () {
-          _this8.idleGhosts[0].endIdleMode();
-          _this8.idleGhosts.shift();
+          _this7.idleGhosts[0].endIdleMode();
+          _this7.idleGhosts.shift();
         }, delay);
       }
     }
@@ -2970,7 +3180,20 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "registerEventListeners",
     value: function registerEventListeners() {
-      var _this9 = this;
+      var _this8 = this;
+      //events: 
+      //  load, start, post-start, pacman-death, post-death, ghost-eaten-<ghostName>, item-taken (item as argument),
+      //  advance-level, game-over, speed-up-blinky, create-fruit
+      this.emitter = new _events["default"]();
+      this.entityList.forEach(function (e) {
+        e.emitter = _this8.emitter;
+        e.registerEventListeners();
+      });
+      this.emitter.on("start", this.startGameplay.bind(this));
+      this.emitter.on("advance-level", this.advanceLevel.bind(this));
+      this.emitter.on("speed-up-blinky", this.speedUpBlinky.bind(this));
+      this.emitter.on("create-fruit", this.createFruit.bind(this));
+      this.emitter.on("game-over", this.gameOver.bind(this));
       window.addEventListener('keydown', this.handleKeyDown.bind(this));
       window.addEventListener('awardPoints', this.awardPoints.bind(this));
       window.addEventListener('deathSequence', this.deathSequence.bind(this));
@@ -2984,7 +3207,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       var directions = ['up', 'down', 'left', 'right'];
       directions.forEach(function (direction) {
         document.getElementById("button-".concat(direction)).addEventListener('touchstart', function () {
-          _this9.changeDirection(direction);
+          _this8.changeDirection(direction);
         });
       });
     }
@@ -3025,12 +3248,12 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "handlePauseKey",
     value: function handlePauseKey() {
-      var _this0 = this;
+      var _this9 = this;
       if (this.allowPause) {
         this.allowPause = false;
         setTimeout(function () {
-          if (!_this0.cutscene) {
-            _this0.allowPause = true;
+          if (!_this9.cutscene) {
+            _this9.allowPause = true;
           }
         }, 500);
         this.gameEngine.changePausedState(this.gameEngine.running);
@@ -3103,7 +3326,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "deathSequence",
     value: function deathSequence(event) {
-      var _this1 = this;
+      var _this0 = this;
       this.allowPause = false;
       this.cutscene = true;
       this.soundManager.setCutscene(this.cutscene);
@@ -3135,34 +3358,37 @@ var GameCoordinator = /*#__PURE__*/function () {
         ghostRef.moving = false;
       });
       new Timer(function () {
-        _this1.ghosts.forEach(function (ghost) {
+        _this0.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.display = false;
         });
-        _this1.pacman.prepDeathAnimation();
-        _this1.soundManager.play('death');
-        if (_this1.lives > 0) {
+        _this0.pacman.prepDeathAnimation();
+        _this0.soundManager.play('death');
+        if (_this0.lives > 0) {
           var _event$detail;
-          _this1.lives -= 1;
+          _this0.lives -= 1;
           var callbackAfter = event === null || event === void 0 || (_event$detail = event.detail) === null || _event$detail === void 0 ? void 0 : _event$detail.callbackAfter;
           if (callbackAfter) callbackAfter();
           new Timer(function () {
-            _this1.mazeCover.style.visibility = 'visible';
+            _this0.emitter.emit("post-death");
+            _this0.mazeCover.style.visibility = 'visible';
             new Timer(function () {
               var _event$detail2;
-              _this1.allowKeyPresses = true;
-              _this1.mazeCover.style.visibility = 'hidden';
-              _this1.pacman.reset();
-              _this1.ghosts.forEach(function (ghost) {
+              _this0.allowKeyPresses = true;
+              _this0.mazeCover.style.visibility = 'hidden';
+              _this0.pacman.reset();
+              _this0.ghosts.forEach(function (ghost) {
                 ghost.reset();
               });
-              _this1.fruit.hideFruit();
+              _this0.fruit.hideFruit();
               var shouldRestart = (event === null || event === void 0 || (_event$detail2 = event.detail) === null || _event$detail2 === void 0 ? void 0 : _event$detail2.restart) === undefined ? true : event.detail.restart;
-              if (shouldRestart) _this1.startGameplay();
+              if (shouldRestart) _this0.emitter.emit("start");
+              //this.startGameplay();            
             }, 500);
           }, 2250);
         } else {
-          _this1.gameOver();
+          _this0.emitter.emit("game-over");
+          //this.gameOver();
         }
       }, 750);
     }
@@ -3173,23 +3399,23 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "gameOver",
     value: function gameOver() {
-      var _this10 = this;
+      var _this1 = this;
       localStorage.setItem('highScore', this.highScore);
       new Timer(function () {
         //for mods
-        _this10.mod.stop();
-        _this10.displayText({
-          left: _this10.scaledTileSize * 9,
-          top: _this10.scaledTileSize * 16.5
-        }, 'game_over', 4000, _this10.scaledTileSize * 10, _this10.scaledTileSize * 2);
-        _this10.fruit.hideFruit();
+        _this1.mod.stop();
+        _this1.displayText({
+          left: _this1.scaledTileSize * 9,
+          top: _this1.scaledTileSize * 16.5
+        }, 'game_over', 4000, _this1.scaledTileSize * 10, _this1.scaledTileSize * 2);
+        _this1.fruit.hideFruit();
         new Timer(function () {
-          _this10.leftCover.style.left = '0';
-          _this10.rightCover.style.right = '0';
+          _this1.leftCover.style.left = '0';
+          _this1.rightCover.style.right = '0';
           setTimeout(function () {
-            _this10.mainMenu.style.opacity = 1;
-            _this10.gameStartButton.disabled = false;
-            _this10.mainMenu.style.visibility = 'visible';
+            _this1.mainMenu.style.opacity = 1;
+            _this1.gameStartButton.disabled = false;
+            _this1.mainMenu.style.visibility = 'visible';
           }, 1000);
         }, 2500);
       }, 2250);
@@ -3204,13 +3430,16 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.remainingDots -= 1;
       this.soundManager.playDotSound();
       if (this.remainingDots === 174 || this.remainingDots === 74) {
-        this.createFruit();
+        this.emitter.emit("create-fruit");
+        //this.createFruit();
       }
       if (this.remainingDots === 40 || this.remainingDots === 20) {
-        this.speedUpBlinky();
+        this.emitter.emit("speed-up-blinky");
+        //this.speedUpBlinky();
       }
       if (this.remainingDots === 0) {
-        this.advanceLevel();
+        this.emitter.emit("advance-level");
+        //this.advanceLevel();
       }
     }
 
@@ -3220,7 +3449,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "createFruit",
     value: function createFruit() {
-      var _this11 = this;
+      var _this10 = this;
       this.removeTimer({
         detail: {
           timer: this.fruitTimer
@@ -3228,7 +3457,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       });
       this.fruit.showFruit(this.fruitPoints[this.level] || 5000);
       this.fruitTimer = new Timer(function () {
-        _this11.fruit.hideFruit();
+        _this10.fruit.hideFruit();
       }, 10000);
     }
 
@@ -3269,14 +3498,14 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "advanceLevel",
     value: function advanceLevel() {
-      var _this12 = this;
+      var _this11 = this;
       this.allowPause = false;
       this.cutscene = true;
       this.soundManager.setCutscene(this.cutscene);
       this.allowKeyPresses = false;
       this.soundManager.stopAmbience();
 
-      //stop the current mod
+      //stop the current mod    
       this.mod.stop();
       this.entityList.forEach(function (entity) {
         var entityRef = entity;
@@ -3304,49 +3533,49 @@ var GameCoordinator = /*#__PURE__*/function () {
       });
       var imgBase = 'app/style//graphics/spriteSheets/maze/';
       new Timer(function () {
-        _this12.ghosts.forEach(function (ghost) {
+        _this11.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.display = false;
         });
-        _this12.mazeSprite.texture = _pixi.Texture.from("maze_white");
-        _this12.mazeImg.src = "".concat(imgBase, "maze_white.svg");
+        _this11.mazeSprite.texture = _pixi.Texture.from("maze_white");
+        _this11.mazeImg.src = "".concat(imgBase, "maze_white.svg");
         new Timer(function () {
-          _this12.mazeSprite.texture = _pixi.Texture.from("maze_blue");
-          _this12.mazeImg.src = "".concat(imgBase, "maze_blue.svg");
+          _this11.mazeSprite.texture = _pixi.Texture.from("maze_blue");
+          _this11.mazeImg.src = "".concat(imgBase, "maze_blue.svg");
           new Timer(function () {
-            _this12.mazeSprite.texture = _pixi.Texture.from("maze_white");
-            _this12.mazeImg.src = "".concat(imgBase, "maze_white.svg");
+            _this11.mazeSprite.texture = _pixi.Texture.from("maze_white");
+            _this11.mazeImg.src = "".concat(imgBase, "maze_white.svg");
             new Timer(function () {
-              _this12.mazeSprite.texture = _pixi.Texture.from("maze_blue");
-              _this12.mazeImg.src = "".concat(imgBase, "maze_blue.svg");
+              _this11.mazeSprite.texture = _pixi.Texture.from("maze_blue");
+              _this11.mazeImg.src = "".concat(imgBase, "maze_blue.svg");
               new Timer(function () {
-                _this12.mazeSprite.texture = _pixi.Texture.from("maze_white");
-                _this12.mazeImg.src = "".concat(imgBase, "maze_white.svg");
+                _this11.mazeSprite.texture = _pixi.Texture.from("maze_white");
+                _this11.mazeImg.src = "".concat(imgBase, "maze_white.svg");
                 new Timer(function () {
-                  _this12.mazeSprite.texture = _pixi.Texture.from("maze_blue");
-                  _this12.mazeImg.src = "".concat(imgBase, "maze_blue.svg");
+                  _this11.mazeSprite.texture = _pixi.Texture.from("maze_blue");
+                  _this11.mazeImg.src = "".concat(imgBase, "maze_blue.svg");
                   new Timer(function () {
-                    _this12.mazeCover.visible = false;
-                    _this12.mazeCover.style.visibility = 'visible';
+                    _this11.mazeCover.visible = false;
+                    _this11.mazeCover.style.visibility = 'visible';
                     new Timer(function () {
-                      _this12.mazeCover.visible = true;
-                      _this12.mazeCover.style.visibility = 'hidden';
-                      _this12.level += 1;
-                      _this12.allowKeyPresses = true;
-                      _this12.entityList.forEach(function (entity) {
+                      _this11.mazeCover.visible = true;
+                      _this11.mazeCover.style.visibility = 'hidden';
+                      _this11.level += 1;
+                      _this11.allowKeyPresses = true;
+                      _this11.entityList.forEach(function (entity) {
                         var entityRef = entity;
                         if (entityRef.level) {
-                          entityRef.level = _this12.level;
+                          entityRef.level = _this11.level;
                         }
                         entityRef.reset();
                         if (entityRef instanceof Ghost) {
                           entityRef.resetDefaultSpeed();
                         }
                         if (entityRef instanceof Pickup && entityRef.type !== 'fruit') {
-                          _this12.remainingDots += 1;
+                          _this11.remainingDots += 1;
                         }
                       });
-                      _this12.startGameplay();
+                      _this11.startGameplay();
                     }, 500);
                   }, 250);
                 }, 250);
@@ -3365,7 +3594,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "flashGhosts",
     value: function flashGhosts(flashes, maxFlashes) {
-      var _this13 = this;
+      var _this12 = this;
       if (flashes === maxFlashes) {
         this.scaredGhosts.forEach(function (ghost) {
           ghost.endScared();
@@ -3379,7 +3608,7 @@ var GameCoordinator = /*#__PURE__*/function () {
           ghost.toggleScaredColor();
         });
         this.ghostFlashTimer = new Timer(function () {
-          _this13.flashGhosts(flashes + 1, maxFlashes);
+          _this12.flashGhosts(flashes + 1, maxFlashes);
         }, 250);
       }
     }
@@ -3390,7 +3619,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "powerUp",
     value: function powerUp() {
-      var _this14 = this;
+      var _this13 = this;
       if (this.remainingDots !== 0) {
         this.soundManager.setAmbience('power_up');
       }
@@ -3403,7 +3632,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.scaredGhosts = [];
       this.ghosts.forEach(function (ghost) {
         if (ghost.mode !== 'eyes') {
-          _this14.scaredGhosts.push(ghost);
+          _this13.scaredGhosts.push(ghost);
         }
       });
       this.scaredGhosts.forEach(function (ghost) {
@@ -3411,7 +3640,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       });
       var powerDuration = Math.max((7 - this.level) * 1000, 0);
       this.ghostFlashTimer = new Timer(function () {
-        _this14.flashGhosts(0, 9);
+        _this13.flashGhosts(0, 9);
       }, powerDuration);
     }
 
@@ -3431,7 +3660,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "eatGhost",
     value: function eatGhost(e) {
-      var _this15 = this;
+      var _this14 = this;
       var pauseDuration = 1000;
       var _e$detail$ghost = e.detail.ghost,
         position = _e$detail$ghost.position,
@@ -3476,28 +3705,28 @@ var GameCoordinator = /*#__PURE__*/function () {
         ghostRef.allowCollision = false;
       });
       new Timer(function () {
-        _this15.soundManager.setAmbience('eyes');
-        _this15.resumeTimer({
+        _this14.soundManager.setAmbience('eyes');
+        _this14.resumeTimer({
           detail: {
-            timer: _this15.ghostFlashTimer
+            timer: _this14.ghostFlashTimer
           }
         });
-        _this15.resumeTimer({
+        _this14.resumeTimer({
           detail: {
-            timer: _this15.ghostCycleTimer
+            timer: _this14.ghostCycleTimer
           }
         });
-        _this15.resumeTimer({
+        _this14.resumeTimer({
           detail: {
-            timer: _this15.fruitTimer
+            timer: _this14.fruitTimer
           }
         });
-        _this15.allowPacmanMovement = true;
-        _this15.pacman.display = true;
-        _this15.pacman.moving = true;
+        _this14.allowPacmanMovement = true;
+        _this14.pacman.display = true;
+        _this14.pacman.moving = true;
         e.detail.ghost.display = true;
         e.detail.ghost.moving = true;
-        _this15.ghosts.forEach(function (ghost) {
+        _this14.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.animate = true;
           ghostRef.pause(false);
@@ -3530,7 +3759,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "displayText",
     value: function displayText(position, amount, duration, width, height) {
-      var _this16 = this;
+      var _this15 = this;
       var pointsDiv = document.createElement('div');
       var textSp = new _pixi.Sprite(this.am.getTexture(amount));
       textSp.position.set(position.left, position.top);
@@ -3545,8 +3774,8 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.stage.addChild(textSp);
       this.mazeDiv.appendChild(pointsDiv);
       new Timer(function () {
-        _this16.stage.removeChild(textSp);
-        _this16.mazeDiv.removeChild(pointsDiv);
+        _this15.stage.removeChild(textSp);
+        _this15.mazeDiv.removeChild(pointsDiv);
       }, duration);
     }
 
@@ -3619,7 +3848,7 @@ if (!process.env.NYC_PROCESS_ID) global.window.GameCoordinator = GameCoordinator
 var _default = exports["default"] = GameCoordinator; // endRemoveIf(production)
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../mods/empty-mod.js":10,"../mods/mod.js":26,"./assetsManager.js":3,"_process":444,"pixi.js":443}],5:[function(require,module,exports){
+},{"../mods/empty-mod.js":11,"../mods/mod.js":26,"./assetsManager.js":4,"./mazeManager.js":7,"_process":445,"events":420,"pixi.js":444}],6:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 
@@ -3852,7 +4081,7 @@ if (!process.env.NYC_PROCESS_ID) global.window.GameEngine = GameEngine;
 var _default = exports["default"] = GameEngine; // endRemoveIf(production)
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":444}],6:[function(require,module,exports){
+},{"_process":445}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3922,7 +4151,7 @@ var MazeManager = /*#__PURE__*/function () {
 }();
 var _default = exports["default"] = MazeManager;
 
-},{"../mazes/maze-1.js":9}],7:[function(require,module,exports){
+},{"../mazes/maze-1.js":10}],8:[function(require,module,exports){
 "use strict";
 
 // import GameCoordinator from "./core/gameCoordinator.js";
@@ -3935,7 +4164,7 @@ window.onload = function () {
   window.debug = new Debugger(gc);
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -6585,7 +6814,7 @@ function _typeof(o) {
   }, "undefined" == typeof e && (ie.jQuery = ie.$ = _ce), _ce;
 });
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6595,7 +6824,7 @@ exports["default"] = void 0;
 var maze1 = [['XXXXXXXXXXXXXXXXXXXXXXXXXXXX'], ['XooooooooooooXXooooooooooooX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XOXXXXoXXXXXoXXoXXXXXoXXXXOX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XooooooooooooooooooooooooooX'], ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'], ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'], ['XooooooXXooooXXooooXXooooooX'], ['XXXXXXoXXXXX XX XXXXXoXXXXXX'], ['XXXXXXoXXXXX XX XXXXXoXXXXXX'], ['XXXXXXoXX          XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX X      X XXoXXXXXX'], ['      o   X      X   o      '], ['XXXXXXoXX X      X XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX          XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XooooooooooooXXooooooooooooX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XOooXXooooooo  oooooooXXooOX'], ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'], ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'], ['XooooooXXooooXXooooXXooooooX'], ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'], ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'], ['XooooooooooooooooooooooooooX'], ['XXXXXXXXXXXXXXXXXXXXXXXXXXXX']];
 var _default = exports["default"] = maze1;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -6697,7 +6926,7 @@ var EmptyMod = /*#__PURE__*/function (_Mod) {
 }(_mod["default"]);
 var _default = exports["default"] = EmptyMod;
 
-},{"./mod.js":26}],11:[function(require,module,exports){
+},{"./mod.js":26}],12:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 
@@ -6835,6 +7064,11 @@ var FloodModImp = /*#__PURE__*/function (_Mod) {
       this.flood.initialize();
     }
   }, {
+    key: "reset",
+    value: function reset() {
+      this.flood.reset();
+    }
+  }, {
     key: "start",
     value: function start() {
       this.flood.start();
@@ -6868,7 +7102,7 @@ if (!process.env.NYC_PROCESS_ID) global.window.FloodModImp = FloodModImp;
 var _default = exports["default"] = FloodModImp; //endRemoveIf
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../mod.js":26,"./mods/flood/app/scripts/core/flood.js":15,"_process":444}],12:[function(require,module,exports){
+},{"../mod.js":26,"./mods/flood/app/scripts/core/flood.js":16,"_process":445}],13:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -7082,7 +7316,7 @@ function _end() {
 }
 var _default = exports["default"] = Animation;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7222,7 +7456,7 @@ var Animator = /*#__PURE__*/function () {
 }();
 var _default = exports["default"] = Animator;
 
-},{"./animation.js":12}],14:[function(require,module,exports){
+},{"./animation.js":13}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7304,7 +7538,7 @@ var Breath = /*#__PURE__*/function () {
 }();
 var _default = exports["default"] = Breath;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 
@@ -7523,6 +7757,9 @@ var Flood = /*#__PURE__*/function (_Mod) {
       this.state.generateWave(timeToStartMS);
     }
   }, {
+    key: "reset",
+    value: function reset() {}
+  }, {
     key: "resetEntitiesBreathing",
     value: function resetEntitiesBreathing() {
       _assertClassBrand(_Flood_brand, this, _resetEntity).call(this, this.pacman);
@@ -7566,7 +7803,8 @@ var Flood = /*#__PURE__*/function (_Mod) {
     value: function killEntity(entity) {
       var breath = entity[breathNamespace];
       if (entity instanceof _pacman["default"]) {
-        window.dispatchEvent(new Event('deathSequence'));
+        // window.dispatchEvent(new Event('deathSequence'));
+        this.emitter.emit("pacman-death");
         breath.stop();
         breath.reset();
         //this.terminateWave()
@@ -7611,38 +7849,49 @@ var Flood = /*#__PURE__*/function (_Mod) {
   }]);
 }(_mod["default"]);
 function _registerListeners() {
+  this.emitter = this.gc.emitter;
   _assertClassBrand(_Flood_brand, this, _changePacmanDeathSequence).call(this);
 }
 function _changePacmanDeathSequence() {
-  var deathSequence = this.gc.deathSequence;
+  var _this4 = this;
+  this.gc.emitter.removeAllListeners("pacman-death");
   var _this = this;
-  var deathSquence2 = function () {
+  this.gc.emitter.on("pacman-death", function () {
     var wave = _this.factory.wave;
     if (wave && wave.started) {
-      //deathSequence.bind(_this.gc)()
-      deathSequence.bind(_this.gc)({
+      var detail = {
         detail: {
           restart: false,
           callbackAfter: function callbackAfter() {
             _this.changeState(_state.States.CANCEL_STATE);
           }
         }
-      });
-      // window.dispatchEvent(new CustomEvent("deathSequence",{
-      //     detail: {
-      //         restart:false,
-      //         callbackAfter: ()=>{ 
-      //             _this.stop()
-      //         }
-      //     }
-      // }))
-      //this.animator.play("endFlood")                
+      };
+      _this4.gc.deathSequence(detail);
     } else {
-      deathSequence.bind(_this.gc)();
+      _this4.pacman.onDeath();
     }
-  }.bind(this.gc);
-  this.gc.deathSequence = deathSquence2;
-  this.gc.deathSquence2 = deathSequence;
+  });
+  // const deathSequence = this.gc.deathSequence 
+  // const _this = this        
+  // const deathSquence2 = function(){ 
+  //     const wave = _this.factory.wave
+  //     if (wave && wave.started) {
+  //         //deathSequence.bind(_this.gc)()
+  //         deathSequence.bind(_this.gc)({
+  //             detail: {
+  //                 restart:false,
+  //                 callbackAfter: ()=>{ 
+  //                     _this.changeState(States.CANCEL_STATE)                            
+  //                 }
+  //             }
+  //         })                              
+  //     }else {
+  //         deathSequence.bind(_this.gc)()
+  //     }
+  // }.bind(this.gc)
+  // this.gc.deathSequence = deathSquence2
+  // this.gc.deathSquence2 = deathSequence
 }
 function _endFloodAnimation() {}
 function _createNewProperties(entity, options) {
@@ -7656,7 +7905,7 @@ if (!process.env.NYC_PROCESS_ID) global.window.Flood = Flood;
 var _default = exports["default"] = Flood; //endRemoveIf
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../../../../../../characters/pacman.js":2,"../animations/animator.js":13,"../mod.js":25,"./breath.js":14,"./states/cancelState.js":16,"./states/endState.js":17,"./states/idleState.js":18,"./states/startState.js":19,"./states/state.js":20,"./states/stateFactory.js":21,"./wave.js":22,"_process":444,"pixi.js":443}],16:[function(require,module,exports){
+},{"../../../../../../../characters/pacman.js":3,"../animations/animator.js":14,"../mod.js":25,"./breath.js":15,"./states/cancelState.js":17,"./states/endState.js":18,"./states/idleState.js":19,"./states/startState.js":20,"./states/state.js":21,"./states/stateFactory.js":22,"./wave.js":23,"_process":445,"pixi.js":444}],17:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -7818,7 +8067,7 @@ var CancelState = /*#__PURE__*/function (_State) {
 }(_state.State);
 var _default = exports["default"] = CancelState;
 
-},{"./state.js":20}],17:[function(require,module,exports){
+},{"./state.js":21}],18:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -7965,7 +8214,7 @@ var EndState = /*#__PURE__*/function (_State) {
 }(_state.State);
 var _default = exports["default"] = EndState;
 
-},{"./state.js":20,"./stateFactory.js":21}],18:[function(require,module,exports){
+},{"./state.js":21,"./stateFactory.js":22}],19:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -8093,10 +8342,12 @@ var IdleState = /*#__PURE__*/function (_State) {
       this.flood.container.children.length = 0;
       this.flood.container.addChild(wave);
       var waveTimeMs;
-      if (timeToStartMS >= 0) waveTimeMs = timeToStartMS;else while ((waveTimeMs = Math.random() * 40) <= 15) {}
+      if (timeToStartMS >= 0) waveTimeMs = timeToStartMS;else while ((waveTimeMs = Math.random() * 15) <= 10) {}
+      //between 15 and 40 seconds to generate a new wave     
       this.factory.waveTime = waveTimeMs * 1000;
       var durationMs;
-      while ((durationMs = Math.random() * 20) <= 8) {}
+      while ((durationMs = Math.random() * 8) <= 5) {}
+      //the duration of the wave is between 8 and 20 seconds
       wave.duration = durationMs * 1000;
       this.factory.nextWaveTime = Date.now() + this.factory.waveTime;
     }
@@ -8128,7 +8379,7 @@ var IdleState = /*#__PURE__*/function (_State) {
 }(_state.State);
 var _default = exports["default"] = IdleState;
 
-},{"../wave.js":22,"./state.js":20}],19:[function(require,module,exports){
+},{"../wave.js":23,"./state.js":21}],20:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -8271,7 +8522,7 @@ var StartState = /*#__PURE__*/function (_State) {
 }(_state.State);
 var _default = exports["default"] = StartState;
 
-},{"./state.js":20,"./stateFactory.js":21}],20:[function(require,module,exports){
+},{"./state.js":21,"./stateFactory.js":22}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8356,7 +8607,7 @@ var State = exports.State = /*#__PURE__*/function () {
   }]);
 }();
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -8466,7 +8717,7 @@ function _resetEntity(entity) {
 }
 var _default = exports["default"] = StateFactory;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8622,395 +8873,7 @@ var Wave = /*#__PURE__*/function (_Sprite) {
 }(_pixi.Sprite);
 var _default = exports["default"] = Wave;
 
-},{"pixi.js":443}],23:[function(require,module,exports){
-(function (process,global){(function (){
-"use strict";
-
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
-var _mod = _interopRequireDefault(require("./mod"));
-var _pacman = _interopRequireDefault(require("../../../../../../characters/pacman.js"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _classPrivateMethodInitSpec(e, a) {
-  _checkPrivateRedeclaration(e, a), a.add(e);
-}
-function _checkPrivateRedeclaration(e, t) {
-  if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
-}
-function _assertClassBrand(e, t, n) {
-  if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-  throw new TypeError("Private element is not present on this object");
-}
-/**
- * name spacing used to create the needed properties
- */
-var breathNamespace = "breath";
-var _Flood_brand = /*#__PURE__*/new WeakSet();
-var Flood = /*#__PURE__*/function (_Mod) {
-  function Flood(gameCoordinator) {
-    var _this;
-    _classCallCheck(this, Flood);
-    _this = _callSuper(this, Flood, [gameCoordinator]);
-    _classPrivateMethodInitSpec(_this, _Flood_brand);
-    _this.width = gameCoordinator.width;
-    _this.maxHeight = gameCoordinator.height;
-    _this.tileSize = _this.gc.tileSize;
-    _this.container = new _pixi.Container();
-    _this.nextWaveTime;
-    _this.lives = 10;
-    console.log("lives for debugging ", _this.lives);
-    return _this;
-  }
-  _inherits(Flood, _Mod);
-  return _createClass(Flood, [{
-    key: "initialize",
-    value: function initialize() {
-      var _this2 = this;
-      this.pacman = this.gc.pacman;
-      this.ghosts = this.gc.ghosts;
-      _assertClassBrand(_Flood_brand, this, _createNewProperties).call(this, this.pacman, {
-        breathing: 5,
-        maxBreathing: 10,
-        decreaseVelocityPerMs: 0.8
-      });
-      this.ghosts.forEach(function (g) {
-        _assertClassBrand(_Flood_brand, _this2, _createNewProperties).call(_this2, g);
-      });
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      _superPropGet(Flood, "start", this, 3)([]);
-      this.pacman = this.gc.pacman;
-      this.ghosts = this.gc.ghosts;
-      this.gc.stage.removeChild(this.container);
-      this.gc.stage.addChild(this.container);
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      _superPropGet(Flood, "stop", this, 3)([]);
-      this.container.children.length = 0;
-      this.nextWaveTime = null;
-      this.wave = null;
-      this.pacman = null;
-      this.ghosts = null;
-    }
-  }, {
-    key: "startWave",
-    value: function startWave() {
-      if (this.wave && !this.wave.started) {
-        if (this.nextWaveTime && Date.now() >= this.nextWaveTime) {
-          this.wave.startTime = Date.now();
-          this.wave.started = true;
-          this.wave.show();
-          //                console.log("start wave", this.wave.startTime)
-        }
-      }
-    }
-  }, {
-    key: "generateWave",
-    value: function generateWave(timeToStartMS) {
-      this.wave = new Wave(this.gc.mazeSprite, this.width, 0);
-      this.container.addChild(this.wave);
-      var waveTimeMs;
-      if (timeToStartMS >= 0) waveTimeMs = timeToStartMS;else while ((waveTimeMs = Math.random() * 40) <= 15) {}
-      this.waveTime = waveTimeMs * 1000;
-      var durationMs;
-      while ((durationMs = Math.random() * 20) <= 8) {}
-      this.wave.duration = durationMs * 1000;
-      // this.waveTimer = setTimeout(()=>{
-      //     this.startWave()
-      // }, this.waveTime)
-      this.nextWaveTime = Date.now() + this.waveTime;
-      //      console.log("next wave will start/during: ", this.waveTime, this.wave.duration)
-    }
-  }, {
-    key: "endWave",
-    value: function endWave() {
-      this.container.removeChild(this.wave);
-      //    console.log("wave ends")
-      this.resetEntitiesBreathing();
-      this.nextWaveTime = null;
-      this.wave = null;
-    }
-  }, {
-    key: "resetEntitiesBreathing",
-    value: function resetEntitiesBreathing() {
-      _assertClassBrand(_Flood_brand, this, _resetEntity).call(this, this.pacman);
-    }
-  }, {
-    key: "stopDrown",
-    value: function stopDrown(entity) {
-      entity[breathNamespace].stopped = true;
-    }
-  }, {
-    key: "startDrownEntity",
-    value: function startDrownEntity(entity, elapsedMs) {
-      var breath = entity[breathNamespace];
-      if (!this.wave || !this.wave.started || breath.stopped) return;
-      var sprite = entity.sprite.getBounds();
-      if (this.wave.getBounds().contains(sprite.x, sprite.y)) {
-        breath.elapsedTimeLastBreathMs += elapsedMs;
-        if (breath.elapsedTimeLastBreathMs >= 1000) {
-          breath.elapsedTimeLastBreathMs = 0;
-          breath.breathing -= 1;
-          if (breath.breathing <= 0) {
-            breath.breathing = 0;
-            this.killEntity(entity);
-          }
-          console.log(entity.constructor.name, "breathing: ", breath.breathing);
-        }
-      } else {
-        breath.elapsedTimeLastBreathMs += elapsedMs;
-        if (breath.elapsedTimeLastBreathMs >= 300) {
-          breath.breathing += 1;
-          breath.elapsedTimeLastBreathMs = 0;
-          if (breath.breathing >= breath.defaultBreathing) breath.breathing = breath.defaultBreathing;
-          console.log(entity.constructor.name, "breathing: ", breath.breathing);
-        }
-      }
-    }
-  }, {
-    key: "killEntity",
-    value: function killEntity(entity) {
-      var breath = entity[breathNamespace];
-      if (entity instanceof _pacman["default"]) {
-        window.dispatchEvent(new Event('deathSequence'));
-        breath.stop();
-        breath.reset();
-        this.endWave();
-      }
-      console.log(entity.constructor.name, " is drowned!");
-    }
-  }, {
-    key: "update",
-    value: function update(elapsedMs) {
-      if (!this.started) return;
-      if (!this.nextWaveTime) this.generateWave();
-      this.startWave();
-      if (this.wave.started) {
-        var isTimeLimited = Date.now() - this.wave.startTime >= this.wave.duration;
-        if (this.wave.isDescreasing && this.wave.height < 5) this.endWave();else if (this.wave.height >= this.maxHeight || isTimeLimited) this.wave.decrease(elapsedMs);else this.wave.increase(elapsedMs);
-
-        //start to drown Pacman
-        this.startDrownEntity(this.pacman, elapsedMs);
-      }
-    }
-  }, {
-    key: "draw",
-    value: function draw() {
-      if (!this.started) return;
-    }
-  }]);
-}(_mod["default"]);
-function _createNewProperties(entity, options) {
-  entity[breathNamespace] = new Breath(options);
-}
-function _resetEntity(entity) {
-  entity[breathNamespace].reset();
-}
-var Wave = /*#__PURE__*/function (_Sprite) {
-  function Wave(mazeSprite, width, height) {
-    var _this3;
-    _classCallCheck(this, Wave);
-    _this3 = _callSuper(this, Wave, [_pixi.Texture.WHITE]);
-    _defineProperty(_this3, "speedY", 15);
-    _defineProperty(_this3, "startTime", 0);
-    _defineProperty(_this3, "started", false);
-    _defineProperty(_this3, "decreasing", false);
-    _this3.width = width;
-    _this3.height = height;
-    _this3.visible = false;
-    _this3.alpha = 0.5;
-    _this3.mazeSprite = mazeSprite;
-    return _this3;
-  }
-  _inherits(Wave, _Sprite);
-  return _createClass(Wave, [{
-    key: "increase",
-    value: function increase(elapsedMs) {
-      if (this.visible) {
-        this.height += this.speedY * (elapsedMs / 1000);
-        this.decreasing = false;
-        this.updatePosition();
-        //console.log("increase wave: ", this.height, this.position)
-      }
-    }
-  }, {
-    key: "decrease",
-    value: function decrease(elapsedMs) {
-      if (this.visible) {
-        this.height -= this.speedY * 1.3 * (elapsedMs / 1000);
-        this.decreasing = true;
-        this.updatePosition();
-        //console.log("decrease wave: ", this.height, this.position)
-      }
-    }
-  }, {
-    key: "updatePosition",
-    value: function updatePosition() {
-      this.y = this.mazeSprite.height - this.height;
-    }
-  }, {
-    key: "isDescreasing",
-    get: function get() {
-      return this.decreasing;
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      this.visible = true;
-    }
-  }]);
-}(_pixi.Sprite);
-var Breath = /*#__PURE__*/function () {
-  function Breath(options) {
-    _classCallCheck(this, Breath);
-    _defineProperty(this, "stopped", false);
-    var defaultOptions = {
-      breathing: 5,
-      maxBreathing: 10,
-      decreaseVelocityPerMs: 0.7,
-      invincible: false,
-      elapsedTimeLastBreathMs: null
-    };
-    for (var opt in options) defaultOptions[opt] = options[opt];
-    for (var _opt in defaultOptions) this[_opt] = defaultOptions[_opt];
-    this.defaultBreathing = this.breathing;
-  }
-  return _createClass(Breath, [{
-    key: "reset",
-    value: function reset() {
-      this.breathing = this.defaultBreathing;
-      this.stopped = false;
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      this.stopped = true;
-    }
-  }]);
-}();
-if (!process.env.NYC_PROCESS_ID) global.window.Flood = Flood;
-//removeIf(production)
-var _default = exports["default"] = Flood; //endRemoveIf
-
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../../../../../characters/pacman.js":2,"./mod":25,"_process":444,"pixi.js":443}],24:[function(require,module,exports){
+},{"pixi.js":444}],24:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -9112,13 +8975,20 @@ function _toPrimitive(t, r) {
 var Mod = /*#__PURE__*/function () {
   function Mod(gameCoordinator) {
     _classCallCheck(this, Mod);
+    _defineProperty(this, "emitter", void 0);
     _defineProperty(this, "started", false);
     _defineProperty(this, "paused", false);
+    _defineProperty(this, "initialized", false);
     this.gc = gameCoordinator;
   }
   return _createClass(Mod, [{
     key: "initialize",
-    value: function initialize() {}
+    value: function initialize() {
+      this.initialized = true;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {}
   }, {
     key: "start",
     value: function start() {
@@ -9150,12 +9020,11 @@ var Mod = /*#__PURE__*/function () {
 var _default = exports["default"] = Mod;
 
 },{}],26:[function(require,module,exports){
+arguments[4][25][0].apply(exports,arguments)
+},{"dup":25}],27:[function(require,module,exports){
+(function (process,global){(function (){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -9165,102 +9034,16 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-/**
- * Module class to pacmam-bward game
- */
-var Mod = /*#__PURE__*/function () {
-  function Mod(gameCoordinator) {
-    _classCallCheck(this, Mod);
-    _defineProperty(this, "started", false);
-    _defineProperty(this, "paused", false);
-    this.gc = gameCoordinator;
-  }
-  return _createClass(Mod, [{
-    key: "initialize",
-    value: function initialize() {}
-  }, {
-    key: "start",
-    value: function start() {
-      this.started = true;
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      this.started = false;
-    }
-  }, {
-    key: "pause",
-    value: function pause() {
-      this.paused = true;
-    }
-  }, {
-    key: "unPause",
-    value: function unPause() {
-      this.paused = false;
-    }
-  }, {
-    key: "update",
-    value: function update(elapsedMs) {}
-  }, {
-    key: "draw",
-    value: function draw() {}
-  }]);
-}();
-var _default = exports["default"] = Mod;
-
-},{}],27:[function(require,module,exports){
-(function (process,global){(function (){
-"use strict";
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 var _pixi = require("pixi.js");
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
+var _entity = _interopRequireDefault(require("../characters/entity.js"));
+function _interopRequireDefault(e) {
+  return e && e.__esModule ? e : {
+    "default": e
+  };
 }
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
@@ -9290,17 +9073,60 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
-var Pickup = /*#__PURE__*/function () {
+function _callSuper(t, o, e) {
+  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+}
+function _possibleConstructorReturn(t, e) {
+  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
+  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
+  return _assertThisInitialized(t);
+}
+function _assertThisInitialized(e) {
+  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  return e;
+}
+function _isNativeReflectConstruct() {
+  try {
+    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+  } catch (t) {}
+  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
+    return !!t;
+  })();
+}
+function _getPrototypeOf(t) {
+  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
+    return t.__proto__ || Object.getPrototypeOf(t);
+  }, _getPrototypeOf(t);
+}
+function _inherits(t, e) {
+  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
+  t.prototype = Object.create(e && e.prototype, {
+    constructor: {
+      value: t,
+      writable: !0,
+      configurable: !0
+    }
+  }), Object.defineProperty(t, "prototype", {
+    writable: !1
+  }), e && _setPrototypeOf(t, e);
+}
+function _setPrototypeOf(t, e) {
+  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
+    return t.__proto__ = e, t;
+  }, _setPrototypeOf(t, e);
+}
+var Pickup = /*#__PURE__*/function (_Entity) {
   function Pickup(type, column, row, points, gameCoordinator) {
+    var _this;
     _classCallCheck(this, Pickup);
-    this.gameCoordinator = gameCoordinator;
-    this.type = type;
-    this.pacman = gameCoordinator.pacman;
-    this.mazeDiv = gameCoordinator.mazeDiv;
-    this.points = points;
-    this.nearPacman = false;
-    this.sprites = null;
-    this.fruitImages = {
+    _this = _callSuper(this, Pickup, [gameCoordinator, "pickup", null]);
+    _this.type = type;
+    _this.pacman = gameCoordinator.pacman;
+    _this.mazeDiv = gameCoordinator.mazeDiv;
+    _this.points = points;
+    _this.nearPacman = false;
+    _this.sprites = null;
+    _this.fruitImages = {
       100: 'cherry',
       300: 'strawberry',
       500: 'orange',
@@ -9310,12 +9136,14 @@ var Pickup = /*#__PURE__*/function () {
       3000: 'bell',
       5000: 'key'
     };
-    this.setStyleMeasurements(type, gameCoordinator.scaledTileSize, column, row, points);
+    _this.setStyleMeasurements(type, gameCoordinator.scaledTileSize, column, row, points);
+    return _this;
   }
 
   /**
    * Resets the pickup's visibility
    */
+  _inherits(Pickup, _Entity);
   return _createClass(Pickup, [{
     key: "reset",
     value: function reset() {
@@ -9536,6 +9364,7 @@ var Pickup = /*#__PURE__*/function () {
         })) {
           this.sprite.visible = false;
           this.animationTarget.style.visibility = 'hidden';
+          this.emitter.emit("item-taken", this);
           window.dispatchEvent(new CustomEvent('awardPoints', {
             detail: {
               points: this.points,
@@ -9552,14 +9381,14 @@ var Pickup = /*#__PURE__*/function () {
       }
     }
   }]);
-}(); //Just to avoid problems with NYC coverage test
+}(_entity["default"]); //Just to avoid problems with NYC coverage test
 if (!process.env.NYC_PROCESS_ID) global.window.Pickup = Pickup;
 // removeIf(production)
 //module.exports = Pickup;
 var _default = exports["default"] = Pickup; // endRemoveIf(production)
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":444,"pixi.js":443}],28:[function(require,module,exports){
+},{"../characters/entity.js":1,"_process":445,"pixi.js":444}],28:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 
@@ -9890,7 +9719,7 @@ if (!process.env.NYC_PROCESS_ID) global.window.CharacterUtil = CharacterUtil;
 var _default = exports["default"] = CharacterUtil; // endRemoveIf(production)
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":444}],29:[function(require,module,exports){
+},{"_process":445}],29:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 
@@ -10281,7 +10110,7 @@ if (!process.env.NYC_PROCESS_ID) global.window.Debugger = Debugger;
 var _default = exports["default"] = Debugger; //endRemoveIf
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":444,"pixi.js":443}],30:[function(require,module,exports){
+},{"_process":445,"pixi.js":444}],30:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 
@@ -10636,7 +10465,7 @@ if (!process.env.NYC_PROCESS_ID) global.window.SoundManager = SoundManager;
 var _default = exports["default"] = SoundManager; // endRemoveIf(production)
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":444}],31:[function(require,module,exports){
+},{"_process":445}],31:[function(require,module,exports){
 (function (process,global){(function (){
 "use strict";
 
@@ -10742,7 +10571,7 @@ if (!process.env.NYC_PROCESS_ID) global.window.Timer = Timer;
 var _default = exports["default"] = Timer; // endRemoveIf(production)
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":444}],32:[function(require,module,exports){
+},{"_process":445}],32:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), events = require("@pixi/events"), accessibleTarget = require("./accessibleTarget.js");
 display.DisplayObject.mixin(accessibleTarget.accessibleTarget);
@@ -30771,7 +30600,7 @@ const isMobileCall = isMobileJs.default ?? isMobileJs, isMobile = isMobileCall(g
 exports.isMobile = isMobile;
 
 
-},{"ismobilejs":431}],327:[function(require,module,exports){
+},{"ismobilejs":432}],327:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite");
 class AnimatedSprite extends sprite.Sprite {
@@ -35627,7 +35456,7 @@ const url = {
 exports.url = url;
 
 
-},{"./logging/deprecation.js":388,"url":455}],401:[function(require,module,exports){
+},{"./logging/deprecation.js":388,"url":456}],401:[function(require,module,exports){
 
 },{}],402:[function(require,module,exports){
 'use strict';
@@ -35641,7 +35470,7 @@ var $reflectApply = require('./reflectApply');
 /** @type {import('./actualApply')} */
 module.exports = $reflectApply || bind.call($call, $apply);
 
-},{"./functionApply":403,"./functionCall":404,"./reflectApply":406,"function-bind":421}],403:[function(require,module,exports){
+},{"./functionApply":403,"./functionCall":404,"./reflectApply":406,"function-bind":422}],403:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./functionApply')} */
@@ -35670,7 +35499,7 @@ module.exports = function callBindBasic(args) {
 	return $actualApply(bind, $call, args);
 };
 
-},{"./actualApply":402,"./functionCall":404,"es-errors/type":416,"function-bind":421}],406:[function(require,module,exports){
+},{"./actualApply":402,"./functionCall":404,"es-errors/type":416,"function-bind":422}],406:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./reflectApply')} */
@@ -35697,7 +35526,7 @@ module.exports = function callBoundIntrinsic(name, allowMissing) {
 	return intrinsic;
 };
 
-},{"call-bind-apply-helpers":405,"get-intrinsic":422}],408:[function(require,module,exports){
+},{"call-bind-apply-helpers":405,"get-intrinsic":423}],408:[function(require,module,exports){
 'use strict';
 
 var callBind = require('call-bind-apply-helpers');
@@ -35729,7 +35558,7 @@ module.exports = desc && typeof desc.get === 'function'
 		}
 		: false;
 
-},{"call-bind-apply-helpers":405,"gopd":427}],409:[function(require,module,exports){
+},{"call-bind-apply-helpers":405,"gopd":428}],409:[function(require,module,exports){
 'use strict';
 
 module.exports = earcut;
@@ -36815,6 +36644,505 @@ if ('undefined' !== typeof module) {
 }
 
 },{}],420:[function(require,module,exports){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+'use strict';
+
+var R = typeof Reflect === 'object' ? Reflect : null
+var ReflectApply = R && typeof R.apply === 'function'
+  ? R.apply
+  : function ReflectApply(target, receiver, args) {
+    return Function.prototype.apply.call(target, receiver, args);
+  }
+
+var ReflectOwnKeys
+if (R && typeof R.ownKeys === 'function') {
+  ReflectOwnKeys = R.ownKeys
+} else if (Object.getOwnPropertySymbols) {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target)
+      .concat(Object.getOwnPropertySymbols(target));
+  };
+} else {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target);
+  };
+}
+
+function ProcessEmitWarning(warning) {
+  if (console && console.warn) console.warn(warning);
+}
+
+var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
+  return value !== value;
+}
+
+function EventEmitter() {
+  EventEmitter.init.call(this);
+}
+module.exports = EventEmitter;
+module.exports.once = once;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._eventsCount = 0;
+EventEmitter.prototype._maxListeners = undefined;
+
+// By default EventEmitters will print a warning if more than 10 listeners are
+// added to it. This is a useful default which helps finding memory leaks.
+var defaultMaxListeners = 10;
+
+function checkListener(listener) {
+  if (typeof listener !== 'function') {
+    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
+  }
+}
+
+Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
+  enumerable: true,
+  get: function() {
+    return defaultMaxListeners;
+  },
+  set: function(arg) {
+    if (typeof arg !== 'number' || arg < 0 || NumberIsNaN(arg)) {
+      throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
+    }
+    defaultMaxListeners = arg;
+  }
+});
+
+EventEmitter.init = function() {
+
+  if (this._events === undefined ||
+      this._events === Object.getPrototypeOf(this)._events) {
+    this._events = Object.create(null);
+    this._eventsCount = 0;
+  }
+
+  this._maxListeners = this._maxListeners || undefined;
+};
+
+// Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
+  if (typeof n !== 'number' || n < 0 || NumberIsNaN(n)) {
+    throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + n + '.');
+  }
+  this._maxListeners = n;
+  return this;
+};
+
+function _getMaxListeners(that) {
+  if (that._maxListeners === undefined)
+    return EventEmitter.defaultMaxListeners;
+  return that._maxListeners;
+}
+
+EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
+  return _getMaxListeners(this);
+};
+
+EventEmitter.prototype.emit = function emit(type) {
+  var args = [];
+  for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
+  var doError = (type === 'error');
+
+  var events = this._events;
+  if (events !== undefined)
+    doError = (doError && events.error === undefined);
+  else if (!doError)
+    return false;
+
+  // If there is no 'error' event listener then throw.
+  if (doError) {
+    var er;
+    if (args.length > 0)
+      er = args[0];
+    if (er instanceof Error) {
+      // Note: The comments on the `throw` lines are intentional, they show
+      // up in Node's output if this results in an unhandled exception.
+      throw er; // Unhandled 'error' event
+    }
+    // At least give some kind of context to the user
+    var err = new Error('Unhandled error.' + (er ? ' (' + er.message + ')' : ''));
+    err.context = er;
+    throw err; // Unhandled 'error' event
+  }
+
+  var handler = events[type];
+
+  if (handler === undefined)
+    return false;
+
+  if (typeof handler === 'function') {
+    ReflectApply(handler, this, args);
+  } else {
+    var len = handler.length;
+    var listeners = arrayClone(handler, len);
+    for (var i = 0; i < len; ++i)
+      ReflectApply(listeners[i], this, args);
+  }
+
+  return true;
+};
+
+function _addListener(target, type, listener, prepend) {
+  var m;
+  var events;
+  var existing;
+
+  checkListener(listener);
+
+  events = target._events;
+  if (events === undefined) {
+    events = target._events = Object.create(null);
+    target._eventsCount = 0;
+  } else {
+    // To avoid recursion in the case that type === "newListener"! Before
+    // adding it to the listeners, first emit "newListener".
+    if (events.newListener !== undefined) {
+      target.emit('newListener', type,
+                  listener.listener ? listener.listener : listener);
+
+      // Re-assign `events` because a newListener handler could have caused the
+      // this._events to be assigned to a new object
+      events = target._events;
+    }
+    existing = events[type];
+  }
+
+  if (existing === undefined) {
+    // Optimize the case of one listener. Don't need the extra array object.
+    existing = events[type] = listener;
+    ++target._eventsCount;
+  } else {
+    if (typeof existing === 'function') {
+      // Adding the second element, need to change to array.
+      existing = events[type] =
+        prepend ? [listener, existing] : [existing, listener];
+      // If we've already got an array, just append.
+    } else if (prepend) {
+      existing.unshift(listener);
+    } else {
+      existing.push(listener);
+    }
+
+    // Check for listener leak
+    m = _getMaxListeners(target);
+    if (m > 0 && existing.length > m && !existing.warned) {
+      existing.warned = true;
+      // No error code for this since it is a Warning
+      // eslint-disable-next-line no-restricted-syntax
+      var w = new Error('Possible EventEmitter memory leak detected. ' +
+                          existing.length + ' ' + String(type) + ' listeners ' +
+                          'added. Use emitter.setMaxListeners() to ' +
+                          'increase limit');
+      w.name = 'MaxListenersExceededWarning';
+      w.emitter = target;
+      w.type = type;
+      w.count = existing.length;
+      ProcessEmitWarning(w);
+    }
+  }
+
+  return target;
+}
+
+EventEmitter.prototype.addListener = function addListener(type, listener) {
+  return _addListener(this, type, listener, false);
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.prependListener =
+    function prependListener(type, listener) {
+      return _addListener(this, type, listener, true);
+    };
+
+function onceWrapper() {
+  if (!this.fired) {
+    this.target.removeListener(this.type, this.wrapFn);
+    this.fired = true;
+    if (arguments.length === 0)
+      return this.listener.call(this.target);
+    return this.listener.apply(this.target, arguments);
+  }
+}
+
+function _onceWrap(target, type, listener) {
+  var state = { fired: false, wrapFn: undefined, target: target, type: type, listener: listener };
+  var wrapped = onceWrapper.bind(state);
+  wrapped.listener = listener;
+  state.wrapFn = wrapped;
+  return wrapped;
+}
+
+EventEmitter.prototype.once = function once(type, listener) {
+  checkListener(listener);
+  this.on(type, _onceWrap(this, type, listener));
+  return this;
+};
+
+EventEmitter.prototype.prependOnceListener =
+    function prependOnceListener(type, listener) {
+      checkListener(listener);
+      this.prependListener(type, _onceWrap(this, type, listener));
+      return this;
+    };
+
+// Emits a 'removeListener' event if and only if the listener was removed.
+EventEmitter.prototype.removeListener =
+    function removeListener(type, listener) {
+      var list, events, position, i, originalListener;
+
+      checkListener(listener);
+
+      events = this._events;
+      if (events === undefined)
+        return this;
+
+      list = events[type];
+      if (list === undefined)
+        return this;
+
+      if (list === listener || list.listener === listener) {
+        if (--this._eventsCount === 0)
+          this._events = Object.create(null);
+        else {
+          delete events[type];
+          if (events.removeListener)
+            this.emit('removeListener', type, list.listener || listener);
+        }
+      } else if (typeof list !== 'function') {
+        position = -1;
+
+        for (i = list.length - 1; i >= 0; i--) {
+          if (list[i] === listener || list[i].listener === listener) {
+            originalListener = list[i].listener;
+            position = i;
+            break;
+          }
+        }
+
+        if (position < 0)
+          return this;
+
+        if (position === 0)
+          list.shift();
+        else {
+          spliceOne(list, position);
+        }
+
+        if (list.length === 1)
+          events[type] = list[0];
+
+        if (events.removeListener !== undefined)
+          this.emit('removeListener', type, originalListener || listener);
+      }
+
+      return this;
+    };
+
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+
+EventEmitter.prototype.removeAllListeners =
+    function removeAllListeners(type) {
+      var listeners, events, i;
+
+      events = this._events;
+      if (events === undefined)
+        return this;
+
+      // not listening for removeListener, no need to emit
+      if (events.removeListener === undefined) {
+        if (arguments.length === 0) {
+          this._events = Object.create(null);
+          this._eventsCount = 0;
+        } else if (events[type] !== undefined) {
+          if (--this._eventsCount === 0)
+            this._events = Object.create(null);
+          else
+            delete events[type];
+        }
+        return this;
+      }
+
+      // emit removeListener for all listeners on all events
+      if (arguments.length === 0) {
+        var keys = Object.keys(events);
+        var key;
+        for (i = 0; i < keys.length; ++i) {
+          key = keys[i];
+          if (key === 'removeListener') continue;
+          this.removeAllListeners(key);
+        }
+        this.removeAllListeners('removeListener');
+        this._events = Object.create(null);
+        this._eventsCount = 0;
+        return this;
+      }
+
+      listeners = events[type];
+
+      if (typeof listeners === 'function') {
+        this.removeListener(type, listeners);
+      } else if (listeners !== undefined) {
+        // LIFO order
+        for (i = listeners.length - 1; i >= 0; i--) {
+          this.removeListener(type, listeners[i]);
+        }
+      }
+
+      return this;
+    };
+
+function _listeners(target, type, unwrap) {
+  var events = target._events;
+
+  if (events === undefined)
+    return [];
+
+  var evlistener = events[type];
+  if (evlistener === undefined)
+    return [];
+
+  if (typeof evlistener === 'function')
+    return unwrap ? [evlistener.listener || evlistener] : [evlistener];
+
+  return unwrap ?
+    unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
+}
+
+EventEmitter.prototype.listeners = function listeners(type) {
+  return _listeners(this, type, true);
+};
+
+EventEmitter.prototype.rawListeners = function rawListeners(type) {
+  return _listeners(this, type, false);
+};
+
+EventEmitter.listenerCount = function(emitter, type) {
+  if (typeof emitter.listenerCount === 'function') {
+    return emitter.listenerCount(type);
+  } else {
+    return listenerCount.call(emitter, type);
+  }
+};
+
+EventEmitter.prototype.listenerCount = listenerCount;
+function listenerCount(type) {
+  var events = this._events;
+
+  if (events !== undefined) {
+    var evlistener = events[type];
+
+    if (typeof evlistener === 'function') {
+      return 1;
+    } else if (evlistener !== undefined) {
+      return evlistener.length;
+    }
+  }
+
+  return 0;
+}
+
+EventEmitter.prototype.eventNames = function eventNames() {
+  return this._eventsCount > 0 ? ReflectOwnKeys(this._events) : [];
+};
+
+function arrayClone(arr, n) {
+  var copy = new Array(n);
+  for (var i = 0; i < n; ++i)
+    copy[i] = arr[i];
+  return copy;
+}
+
+function spliceOne(list, index) {
+  for (; index + 1 < list.length; index++)
+    list[index] = list[index + 1];
+  list.pop();
+}
+
+function unwrapListeners(arr) {
+  var ret = new Array(arr.length);
+  for (var i = 0; i < ret.length; ++i) {
+    ret[i] = arr[i].listener || arr[i];
+  }
+  return ret;
+}
+
+function once(emitter, name) {
+  return new Promise(function (resolve, reject) {
+    function errorListener(err) {
+      emitter.removeListener(name, resolver);
+      reject(err);
+    }
+
+    function resolver() {
+      if (typeof emitter.removeListener === 'function') {
+        emitter.removeListener('error', errorListener);
+      }
+      resolve([].slice.call(arguments));
+    };
+
+    eventTargetAgnosticAddListener(emitter, name, resolver, { once: true });
+    if (name !== 'error') {
+      addErrorHandlerIfEventEmitter(emitter, errorListener, { once: true });
+    }
+  });
+}
+
+function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
+  if (typeof emitter.on === 'function') {
+    eventTargetAgnosticAddListener(emitter, 'error', handler, flags);
+  }
+}
+
+function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
+  if (typeof emitter.on === 'function') {
+    if (flags.once) {
+      emitter.once(name, listener);
+    } else {
+      emitter.on(name, listener);
+    }
+  } else if (typeof emitter.addEventListener === 'function') {
+    // EventTarget does not have `error` event semantics like Node
+    // EventEmitters, we do not listen for `error` events here.
+    emitter.addEventListener(name, function wrapListener(arg) {
+      // IE does not have builtin `{ once: true }` support so we
+      // have to do it manually.
+      if (flags.once) {
+        emitter.removeEventListener(name, wrapListener);
+      }
+      listener(arg);
+    });
+  } else {
+    throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
+  }
+}
+
+},{}],421:[function(require,module,exports){
 'use strict';
 
 /* eslint no-invalid-this: 1 */
@@ -36900,14 +37228,14 @@ module.exports = function bind(that) {
     return bound;
 };
 
-},{}],421:[function(require,module,exports){
+},{}],422:[function(require,module,exports){
 'use strict';
 
 var implementation = require('./implementation');
 
 module.exports = Function.prototype.bind || implementation;
 
-},{"./implementation":420}],422:[function(require,module,exports){
+},{"./implementation":421}],423:[function(require,module,exports){
 'use strict';
 
 var undefined;
@@ -37287,7 +37615,7 @@ module.exports = function GetIntrinsic(name, allowMissing) {
 	return value;
 };
 
-},{"call-bind-apply-helpers/functionApply":403,"call-bind-apply-helpers/functionCall":404,"es-define-property":410,"es-errors":412,"es-errors/eval":411,"es-errors/range":413,"es-errors/ref":414,"es-errors/syntax":415,"es-errors/type":416,"es-errors/uri":417,"es-object-atoms":418,"function-bind":421,"get-proto":425,"get-proto/Object.getPrototypeOf":423,"get-proto/Reflect.getPrototypeOf":424,"gopd":427,"has-symbols":428,"hasown":430,"math-intrinsics/abs":433,"math-intrinsics/floor":434,"math-intrinsics/max":436,"math-intrinsics/min":437,"math-intrinsics/pow":438,"math-intrinsics/round":439,"math-intrinsics/sign":440}],423:[function(require,module,exports){
+},{"call-bind-apply-helpers/functionApply":403,"call-bind-apply-helpers/functionCall":404,"es-define-property":410,"es-errors":412,"es-errors/eval":411,"es-errors/range":413,"es-errors/ref":414,"es-errors/syntax":415,"es-errors/type":416,"es-errors/uri":417,"es-object-atoms":418,"function-bind":422,"get-proto":426,"get-proto/Object.getPrototypeOf":424,"get-proto/Reflect.getPrototypeOf":425,"gopd":428,"has-symbols":429,"hasown":431,"math-intrinsics/abs":434,"math-intrinsics/floor":435,"math-intrinsics/max":437,"math-intrinsics/min":438,"math-intrinsics/pow":439,"math-intrinsics/round":440,"math-intrinsics/sign":441}],424:[function(require,module,exports){
 'use strict';
 
 var $Object = require('es-object-atoms');
@@ -37295,13 +37623,13 @@ var $Object = require('es-object-atoms');
 /** @type {import('./Object.getPrototypeOf')} */
 module.exports = $Object.getPrototypeOf || null;
 
-},{"es-object-atoms":418}],424:[function(require,module,exports){
+},{"es-object-atoms":418}],425:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./Reflect.getPrototypeOf')} */
 module.exports = (typeof Reflect !== 'undefined' && Reflect.getPrototypeOf) || null;
 
-},{}],425:[function(require,module,exports){
+},{}],426:[function(require,module,exports){
 'use strict';
 
 var reflectGetProto = require('./Reflect.getPrototypeOf');
@@ -37330,13 +37658,13 @@ module.exports = reflectGetProto
 			}
 			: null;
 
-},{"./Object.getPrototypeOf":423,"./Reflect.getPrototypeOf":424,"dunder-proto/get":408}],426:[function(require,module,exports){
+},{"./Object.getPrototypeOf":424,"./Reflect.getPrototypeOf":425,"dunder-proto/get":408}],427:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./gOPD')} */
 module.exports = Object.getOwnPropertyDescriptor;
 
-},{}],427:[function(require,module,exports){
+},{}],428:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
@@ -37353,7 +37681,7 @@ if ($gOPD) {
 
 module.exports = $gOPD;
 
-},{"./gOPD":426}],428:[function(require,module,exports){
+},{"./gOPD":427}],429:[function(require,module,exports){
 'use strict';
 
 var origSymbol = typeof Symbol !== 'undefined' && Symbol;
@@ -37369,7 +37697,7 @@ module.exports = function hasNativeSymbols() {
 	return hasSymbolSham();
 };
 
-},{"./shams":429}],429:[function(require,module,exports){
+},{"./shams":430}],430:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./shams')} */
@@ -37416,7 +37744,7 @@ module.exports = function hasSymbols() {
 	return true;
 };
 
-},{}],430:[function(require,module,exports){
+},{}],431:[function(require,module,exports){
 'use strict';
 
 var call = Function.prototype.call;
@@ -37426,7 +37754,7 @@ var bind = require('function-bind');
 /** @type {import('.')} */
 module.exports = bind.call(call, $hasOwn);
 
-},{"function-bind":421}],431:[function(require,module,exports){
+},{"function-bind":422}],432:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -37436,7 +37764,7 @@ __export(require("./isMobile"));
 var isMobile_1 = require("./isMobile");
 exports["default"] = isMobile_1["default"];
 
-},{"./isMobile":432}],432:[function(require,module,exports){
+},{"./isMobile":433}],433:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 var appleIphone = /iPhone/i;
@@ -37565,19 +37893,19 @@ function isMobile(param) {
 }
 exports["default"] = isMobile;
 
-},{}],433:[function(require,module,exports){
+},{}],434:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./abs')} */
 module.exports = Math.abs;
 
-},{}],434:[function(require,module,exports){
+},{}],435:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./floor')} */
 module.exports = Math.floor;
 
-},{}],435:[function(require,module,exports){
+},{}],436:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./isNaN')} */
@@ -37585,31 +37913,31 @@ module.exports = Number.isNaN || function isNaN(a) {
 	return a !== a;
 };
 
-},{}],436:[function(require,module,exports){
+},{}],437:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./max')} */
 module.exports = Math.max;
 
-},{}],437:[function(require,module,exports){
+},{}],438:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./min')} */
 module.exports = Math.min;
 
-},{}],438:[function(require,module,exports){
+},{}],439:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./pow')} */
 module.exports = Math.pow;
 
-},{}],439:[function(require,module,exports){
+},{}],440:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./round')} */
 module.exports = Math.round;
 
-},{}],440:[function(require,module,exports){
+},{}],441:[function(require,module,exports){
 'use strict';
 
 var $isNaN = require('./isNaN');
@@ -37622,7 +37950,7 @@ module.exports = function sign(number) {
 	return number < 0 ? -1 : +1;
 };
 
-},{"./isNaN":435}],441:[function(require,module,exports){
+},{"./isNaN":436}],442:[function(require,module,exports){
 (function (global){(function (){
 var hasMap = typeof Map === 'function' && Map.prototype;
 var mapSizeDescriptor = Object.getOwnPropertyDescriptor && hasMap ? Object.getOwnPropertyDescriptor(Map.prototype, 'size') : null;
@@ -38170,7 +38498,7 @@ function arrObjKeys(obj, inspect) {
 }
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./util.inspect":401}],442:[function(require,module,exports){
+},{"./util.inspect":401}],443:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), filterAlpha = require("@pixi/filter-alpha"), filterBlur = require("@pixi/filter-blur"), filterColorMatrix = require("@pixi/filter-color-matrix"), filterDisplacement = require("@pixi/filter-displacement"), filterFxaa = require("@pixi/filter-fxaa"), filterNoise = require("@pixi/filter-noise");
 const filters = {
@@ -38234,7 +38562,7 @@ Object.entries(filters).forEach(([key, FilterClass]) => {
 exports.filters = filters;
 
 
-},{"@pixi/core":145,"@pixi/filter-alpha":239,"@pixi/filter-blur":244,"@pixi/filter-color-matrix":247,"@pixi/filter-displacement":251,"@pixi/filter-fxaa":255,"@pixi/filter-noise":257}],443:[function(require,module,exports){
+},{"@pixi/core":145,"@pixi/filter-alpha":239,"@pixi/filter-blur":244,"@pixi/filter-color-matrix":247,"@pixi/filter-displacement":251,"@pixi/filter-fxaa":255,"@pixi/filter-noise":257}],444:[function(require,module,exports){
 "use strict";
 require("@pixi/mixin-cache-as-bitmap");
 require("@pixi/mixin-get-child-by-name");
@@ -38451,7 +38779,7 @@ Object.keys(textHtml).forEach(function(k) {
 });
 
 
-},{"./filters.js":442,"@pixi/accessibility":34,"@pixi/app":37,"@pixi/assets":58,"@pixi/compressed-textures":91,"@pixi/core":145,"@pixi/display":222,"@pixi/events":233,"@pixi/extract":236,"@pixi/filter-alpha":239,"@pixi/filter-blur":244,"@pixi/filter-color-matrix":247,"@pixi/filter-displacement":251,"@pixi/filter-fxaa":255,"@pixi/filter-noise":257,"@pixi/graphics":263,"@pixi/mesh":301,"@pixi/mesh-extras":296,"@pixi/mixin-cache-as-bitmap":304,"@pixi/mixin-get-child-by-name":305,"@pixi/mixin-get-global-position":306,"@pixi/particle-container":310,"@pixi/prepare":317,"@pixi/sprite":338,"@pixi/sprite-animated":328,"@pixi/sprite-tiling":331,"@pixi/spritesheet":340,"@pixi/text":367,"@pixi/text-bitmap":350,"@pixi/text-html":362}],444:[function(require,module,exports){
+},{"./filters.js":443,"@pixi/accessibility":34,"@pixi/app":37,"@pixi/assets":58,"@pixi/compressed-textures":91,"@pixi/core":145,"@pixi/display":222,"@pixi/events":233,"@pixi/extract":236,"@pixi/filter-alpha":239,"@pixi/filter-blur":244,"@pixi/filter-color-matrix":247,"@pixi/filter-displacement":251,"@pixi/filter-fxaa":255,"@pixi/filter-noise":257,"@pixi/graphics":263,"@pixi/mesh":301,"@pixi/mesh-extras":296,"@pixi/mixin-cache-as-bitmap":304,"@pixi/mixin-get-child-by-name":305,"@pixi/mixin-get-global-position":306,"@pixi/particle-container":310,"@pixi/prepare":317,"@pixi/sprite":338,"@pixi/sprite-animated":328,"@pixi/sprite-tiling":331,"@pixi/spritesheet":340,"@pixi/text":367,"@pixi/text-bitmap":350,"@pixi/text-html":362}],445:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -38637,7 +38965,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],445:[function(require,module,exports){
+},{}],446:[function(require,module,exports){
 'use strict';
 
 var inspect = require('object-inspect');
@@ -38752,7 +39080,7 @@ module.exports = function getSideChannelList() {
 	return channel;
 };
 
-},{"es-errors/type":416,"object-inspect":441}],446:[function(require,module,exports){
+},{"es-errors/type":416,"object-inspect":442}],447:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -38822,7 +39150,7 @@ module.exports = !!$Map && /** @type {Exclude<import('.'), false>} */ function g
 	return channel;
 };
 
-},{"call-bound":407,"es-errors/type":416,"get-intrinsic":422,"object-inspect":441}],447:[function(require,module,exports){
+},{"call-bound":407,"es-errors/type":416,"get-intrinsic":423,"object-inspect":442}],448:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -38908,7 +39236,7 @@ module.exports = $WeakMap
 	}
 	: getSideChannelMap;
 
-},{"call-bound":407,"es-errors/type":416,"get-intrinsic":422,"object-inspect":441,"side-channel-map":446}],448:[function(require,module,exports){
+},{"call-bound":407,"es-errors/type":416,"get-intrinsic":423,"object-inspect":442,"side-channel-map":447}],449:[function(require,module,exports){
 'use strict';
 
 var $TypeError = require('es-errors/type');
@@ -38953,7 +39281,7 @@ module.exports = function getSideChannel() {
 	return channel;
 };
 
-},{"es-errors/type":416,"object-inspect":441,"side-channel-list":445,"side-channel-map":446,"side-channel-weakmap":447}],449:[function(require,module,exports){
+},{"es-errors/type":416,"object-inspect":442,"side-channel-list":446,"side-channel-map":447,"side-channel-weakmap":448}],450:[function(require,module,exports){
 (function (global){(function (){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -39490,7 +39818,7 @@ module.exports = function getSideChannel() {
 }(this));
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],450:[function(require,module,exports){
+},{}],451:[function(require,module,exports){
 'use strict';
 
 var replace = String.prototype.replace;
@@ -39515,7 +39843,7 @@ module.exports = {
     RFC3986: Format.RFC3986
 };
 
-},{}],451:[function(require,module,exports){
+},{}],452:[function(require,module,exports){
 'use strict';
 
 var stringify = require('./stringify');
@@ -39528,7 +39856,7 @@ module.exports = {
     stringify: stringify
 };
 
-},{"./formats":450,"./parse":452,"./stringify":453}],452:[function(require,module,exports){
+},{"./formats":451,"./parse":453,"./stringify":454}],453:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -39858,7 +40186,7 @@ module.exports = function (str, opts) {
     return utils.compact(obj);
 };
 
-},{"./utils":454}],453:[function(require,module,exports){
+},{"./utils":455}],454:[function(require,module,exports){
 'use strict';
 
 var getSideChannel = require('side-channel');
@@ -40216,7 +40544,7 @@ module.exports = function (object, opts) {
     return joined.length > 0 ? prefix + joined : '';
 };
 
-},{"./formats":450,"./utils":454,"side-channel":448}],454:[function(require,module,exports){
+},{"./formats":451,"./utils":455,"side-channel":449}],455:[function(require,module,exports){
 'use strict';
 
 var formats = require('./formats');
@@ -40486,7 +40814,7 @@ module.exports = {
     merge: merge
 };
 
-},{"./formats":450}],455:[function(require,module,exports){
+},{"./formats":451}],456:[function(require,module,exports){
 /*
  * Copyright Joyent, Inc. and other Node contributors.
  *
@@ -41264,4 +41592,4 @@ exports.format = urlFormat;
 
 exports.Url = Url;
 
-},{"punycode/":449,"qs":451}]},{},[7,1,2,3,4,5,6,8,9,10,26,27,28,29,30,31,11,23,24,25,12,13,14,15,22,16,17,18,19,20,21]);
+},{"punycode/":450,"qs":452}]},{},[8,1,2,3,4,5,6,7,9,10,11,26,27,28,29,30,31,12,24,25,13,14,15,16,23,17,18,19,20,21,22]);

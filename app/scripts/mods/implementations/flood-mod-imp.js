@@ -12,6 +12,9 @@ class FloodModImp extends Mod{
     initialize() {
         this.flood.initialize()
     } 
+    reset() {
+        this.flood.reset()
+    }
     start() {
         this.flood.start()
     }

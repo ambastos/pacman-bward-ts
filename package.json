@@ -26,6 +26,7 @@
     "corser": "^2.0.1",
     "ecstatic": "^4.1.4",
     "eventemitter3": "^4.0.6",
+    "events": "^3.3.0",
     "follow-redirects": "^1.13.0",
     "he": "^1.2.0",
     "http-proxy": "^1.18.1",

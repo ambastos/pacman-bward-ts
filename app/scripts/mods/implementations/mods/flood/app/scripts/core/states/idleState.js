@@ -16,11 +16,13 @@ class IdleState extends State {
         if(timeToStartMS >=0)
             waveTimeMs = timeToStartMS
         else 
-            while ((waveTimeMs = Math.random() * 40) <=15 ){}        
+            while ((waveTimeMs = Math.random() * 15) <=10 ){}   
+        //between 15 and 40 seconds to generate a new wave     
         this.factory.waveTime = waveTimeMs * 1000
 
         let durationMs
-        while ((durationMs = Math.random() * 20) <=8 ){}
+        while ((durationMs = Math.random() * 8) <=5 ){}
+        //the duration of the wave is between 8 and 20 seconds
         wave.duration = durationMs * 1000
         this.factory.nextWaveTime = Date.now()+ this.factory.waveTime
     }

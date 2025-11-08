@@ -1,9 +1,10 @@
 import { Container, Rectangle, RenderTexture, Sprite, Texture } from "pixi.js";
+import Entity from "./entity.js";
 
-class Ghost {
+class Ghost extends Entity{
   constructor(gameCoordinator, name, level, characterUtil, blinky
   ) {
-    this.gameCoordinator = gameCoordinator
+    super(gameCoordinator, name, characterUtil)
     this.scaledTileSize = gameCoordinator.scaledTileSize;
     this.mazeArray = gameCoordinator.mazeArray;
     this.pacman = gameCoordinator.pacman;
@@ -14,7 +15,8 @@ class Ghost {
     this.animationTarget = document.getElementById(name);
     this.sprite = null
 
-    this.reset();
+    this.reset();    
+    
   }
 
   /**
@@ -35,6 +37,9 @@ class Ghost {
     this.setSpriteSheet(this.name, this.direction, this.mode);
   }
 
+  registerEventListeners() {
+    this.emitter.on("ghost-eaten-"+this.name, this.onEaten)
+  }
   /**
    * Sets the default mode and idleMode behavior
    */
@@ -838,14 +843,16 @@ class Ghost {
       && this.mode !== 'eyes'
       && this.allowCollision) {
       if (this.mode === 'scared') {
-        window.dispatchEvent(new CustomEvent('eatGhost', {
-          detail: {
-            ghost: this,
-          },
-        }));
+        this.emitter.emit("ghost-eaten-"+this.name, {ghost: this})
+        // window.dispatchEvent(new CustomEvent('eatGhost', {
+        //   detail: {
+        //     ghost: this,
+        //   },
+        // }));
         this.mode = 'eyes';
-      } else {
-        window.dispatchEvent(new Event('deathSequence'));
+      } else {        
+        this.emitter.emit("pacman-death")                
+        //window.dispatchEvent(new Event('deathSequence'));
       }
     }
   }
@@ -876,6 +883,11 @@ class Ghost {
     return this.defaultSpeed;
   }
 
+  onEaten(detail) {
+    window.dispatchEvent(new CustomEvent('eatGhost', {
+          detail: detail 
+    }));  
+  }
   /**
    * Updates the css position, hides if there is a stutter, and animates the spritesheet
    * @param {number} interp - The animation accuracy as a percentage

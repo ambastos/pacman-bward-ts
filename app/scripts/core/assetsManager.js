@@ -165,7 +165,9 @@ class AssetsManager {
     "3000",
     "5000",    
     "extra_life"]
-    await Assets.load(imageAliases)
+    await Assets.load(imageAliases, (progress)=>{
+      //console.log("loading assets", progress)
+    })
     
       //put the audios here:      
 

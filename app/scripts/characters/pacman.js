@@ -1,8 +1,9 @@
 import { Container, Rectangle, RenderTexture, Sprite, Texture } from "pixi.js";
+import Entity from "./entity.js";
 
-class Pacman {
+class Pacman extends Entity{
   constructor(gameCoordinator, characterUtil) {
-    this.gameCoordinator = gameCoordinator
+    super(gameCoordinator, "pacman", characterUtil)
     this.scaledTileSize = gameCoordinator.scaledTileSize;
     this.mazeArray = gameCoordinator.mazeArray;
     this.characterUtil = characterUtil;
@@ -25,9 +26,13 @@ class Pacman {
     this.setSpriteSheet(this.direction);
     
     this.pacmanArrow.style.backgroundImage = 'url(app/style/graphics/'
-      + `spriteSheets/characters/pacman/arrow_${this.direction}.svg)`;
+      + `spriteSheets/characters/pacman/arrow_${this.direction}.svg)`;    
   }
 
+  registerEventListeners() {
+    this.emitter.on("pacman-reset", this.onReset)  
+    this.emitter.on("pacman-death", this.onDeath)
+  }
   /**
    * Sets various properties related to Pacman's movement
    * @param {number} scaledTileSize - The dimensions of a single tile
@@ -287,7 +292,11 @@ class Pacman {
     }
     return alternate.newPosition;
   }
-
+  /**
+   */
+  onDeath() {    
+    window.dispatchEvent(new Event('deathSequence'))
+  }
   /**
    * Updates the css position, hides if there is a stutter, and animates the spritesheet
    * @param {number} interp - The animation accuracy as a percentage

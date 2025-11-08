@@ -5,6 +5,8 @@ import * as PIXI from 'pixi.js'
 import AssetsManager from "./assetsManager.js";
 import Mod from "../mods/mod.js";
 import EmptyMod from "../mods/empty-mod.js";
+import MazeManager from "./mazeManager.js";
+import EventEmitter from "events";
 //global.window.Assets = Assets
 //import path from 'path'
 const options = {
@@ -37,40 +39,9 @@ class GameCoordinator {
     
     this.bottomRow = document.getElementById('bottom-row');
     this.movementButtons = document.getElementById('movement-buttons');
+    this.mazeManager = new MazeManager()
 
-    this.mazeArray = [
-      ['XXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
-      ['XooooooooooooXXooooooooooooX'],
-      ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'],
-      ['XOXXXXoXXXXXoXXoXXXXXoXXXXOX'],
-      ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'],
-      ['XooooooooooooooooooooooooooX'],
-      ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'],
-      ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'],
-      ['XooooooXXooooXXooooXXooooooX'],
-      ['XXXXXXoXXXXX XX XXXXXoXXXXXX'],
-      ['XXXXXXoXXXXX XX XXXXXoXXXXXX'],
-      ['XXXXXXoXX          XXoXXXXXX'],
-      ['XXXXXXoXX XXXXXXXX XXoXXXXXX'],
-      ['XXXXXXoXX X      X XXoXXXXXX'],
-      ['      o   X      X   o      '],
-      ['XXXXXXoXX X      X XXoXXXXXX'],
-      ['XXXXXXoXX XXXXXXXX XXoXXXXXX'],
-      ['XXXXXXoXX          XXoXXXXXX'],
-      ['XXXXXXoXX XXXXXXXX XXoXXXXXX'],
-      ['XXXXXXoXX XXXXXXXX XXoXXXXXX'],
-      ['XooooooooooooXXooooooooooooX'],
-      ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'],
-      ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'],
-      ['XOooXXooooooo  oooooooXXooOX'],
-      ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'],
-      ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'],
-      ['XooooooXXooooXXooooXXooooooX'],
-      ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'],
-      ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'],
-      ['XooooooooooooooooooooooooooX'],
-      ['XXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
-    ];
+    this.mazeArray = this.mazeManager.get("maze1")
 
     this.maxFps = 120;
     this.tileSize = 8; 
@@ -81,7 +52,7 @@ class GameCoordinator {
     this.width = this.scaledTileSize * 28
     window.PIXI = PIXI
 
-    this.firstGame = true;
+    this.firstGame = true; 
     this.createUi()
     this.movementKeys = { 
       // WASD
@@ -108,18 +79,14 @@ class GameCoordinator {
       8: 5000,
     };
 
-    this.mazeArray.forEach((row, rowIndex) => {
-      this.mazeArray[rowIndex] = row[0].split('');
-    });
-
     this.gameStartButton.addEventListener(
-      'click',
-      this.startButtonClick.bind(this),
+    'click',
+    this.startButtonClick.bind(this),
     );
     this.pauseButton.addEventListener('click', this.handlePauseKey.bind(this));
     this.soundButton.addEventListener(
-      'click',
-      this.soundButtonClick.bind(this),
+    'click',
+    this.soundButtonClick.bind(this),
     );
 
     const head = document.getElementsByTagName('head')[0];
@@ -132,7 +99,7 @@ class GameCoordinator {
     head.appendChild(link);
     
   }
-
+  
   /**
    * Included to accpet a new mod to the game
    * @param {Mod} mod
@@ -544,16 +511,16 @@ class GameCoordinator {
     );
     this.setSoundButtonIcon(volumePreference);
     this.soundManager.setMasterVolume(volumePreference);
-
-    //initialize the current mod values    
-    this.mod.initialize()
+    
   }
 
   /**
    * Calls necessary setup functions to start the game
    */
   init() {
+    //initialize the current mod values    
     this.registerEventListeners();
+    this.mod.initialize()
 
     this.gameEngine = new GameEngine(this, this.maxFps, this.entityList);
     this.gameEngine.start();
@@ -764,7 +731,8 @@ class GameCoordinator {
       this.ghostCycle('scatter');
 
       this.idleGhosts = [this.pinky, this.inky, this.clyde];
-      this.releaseGhost();
+      this.releaseGhost();  
+      this.emitter.emit("post-start")    
     }, duration);
   }
 
@@ -868,6 +836,19 @@ class GameCoordinator {
    * Register listeners for various game sequences
    */
   registerEventListeners() {
+    //events: 
+    //  load, start, post-start, pacman-death, post-death, ghost-eaten-<ghostName>, item-taken (item as argument),
+    //  advance-level, game-over, speed-up-blinky, create-fruit
+    this.emitter = new EventEmitter()        
+    this.entityList.forEach((e)=>{
+      e.emitter = this.emitter
+      e.registerEventListeners()
+    })
+    this.emitter.on("start", this.startGameplay.bind(this)) 
+    this.emitter.on("advance-level", this.advanceLevel.bind(this))
+    this.emitter.on("speed-up-blinky", this.speedUpBlinky.bind(this))
+    this.emitter.on("create-fruit", this.createFruit.bind(this))
+    this.emitter.on("game-over", this.gameOver.bind(this)) 
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     window.addEventListener('awardPoints', this.awardPoints.bind(this));
     window.addEventListener('deathSequence', this.deathSequence.bind(this));
@@ -1034,6 +1015,7 @@ class GameCoordinator {
       if (callbackAfter)
           callbackAfter()
         new Timer(() => {
+          this.emitter.emit("post-death")
           this.mazeCover.style.visibility = 'visible';
           new Timer(() => {
             this.allowKeyPresses = true;
@@ -1046,11 +1028,13 @@ class GameCoordinator {
             let shouldRestart =  (event?.detail?.restart) === undefined ?  true : (event.detail.restart)
             
             if (shouldRestart )
-              this.startGameplay();            
+              this.emitter.emit("start")
+              //this.startGameplay();            
           }, 500);
         }, 2250);
       } else {
-        this.gameOver();
+        this.emitter.emit("game-over")
+        //this.gameOver();
       }
     }, 750);
   }
@@ -1061,8 +1045,7 @@ class GameCoordinator {
   gameOver() {
     localStorage.setItem('highScore', this.highScore);
 
-    new Timer(() => {
-
+    new Timer(() => {      
       //for mods
       this.mod.stop()
 
@@ -1100,15 +1083,18 @@ class GameCoordinator {
     this.soundManager.playDotSound();
 
     if (this.remainingDots === 174 || this.remainingDots === 74) {
-      this.createFruit();
+      this.emitter.emit("create-fruit")
+      //this.createFruit();
     }
 
     if (this.remainingDots === 40 || this.remainingDots === 20) {
-      this.speedUpBlinky();
+      this.emitter.emit("speed-up-blinky")
+      //this.speedUpBlinky();
     }
 
     if (this.remainingDots === 0) {
-      this.advanceLevel();
+      this.emitter.emit("advance-level")
+      //this.advanceLevel();
     }
   }
 
@@ -1163,7 +1149,7 @@ class GameCoordinator {
     this.allowKeyPresses = false;
     this.soundManager.stopAmbience();
 
-    //stop the current mod
+    //stop the current mod    
     this.mod.stop()
 
     this.entityList.forEach((entity) => {
