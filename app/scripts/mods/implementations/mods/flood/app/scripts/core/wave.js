@@ -1,17 +1,25 @@
-import { Sprite, Texture } from "pixi.js"
+import { Graphics, Polygon, Sprite, Texture } from "pixi.js"
 
 class Wave extends Sprite {
     speedY = 15    
     startTime = 0
     started = false
     decreasing = false
-    constructor(mazeSprite, width, height) {        
+    lastTime = 0
+    constructor(factory, maze, width, height) {        
         super(Texture.WHITE)   
         this.width = width
         this.height = height 
         this.visible = false   
-        this.alpha = 0.5    
-        this.mazeSprite = mazeSprite            
+        this.alpha = 0  
+        //this.tint = "0x56DBE3"
+        this.maze = maze            
+        this.factory = factory        
+        /**@param{Graphics} */
+        this.gp = this.factory.gp
+        this.gp.parent.setChildIndex(this.gp, this.gp.parent.children.length-1)
+        this.startTopY = Math.PI * 2
+        this.position.x = this.maze.tileSize
     }
     increase(elapsedMs) {
         if (this.visible) {
@@ -30,7 +38,8 @@ class Wave extends Sprite {
         }
     }
     updatePosition() {
-        this.y = this.mazeSprite.height - this.height
+       this.y = this.maze.height - this.height
+       //this.y = 100
     }
     get isDescreasing() {
         return this.decreasing
@@ -40,6 +49,110 @@ class Wave extends Sprite {
     }
     show() {
         this.visible = true
+    }
+    draw() { 
+        const gp = this.gp        
+        gp.clear() 
+        const tileSize = this.maze.tileSize
+        if (this.height < 4)
+            return
+        let bounds = this.maze.getPixelBounds(this.x, this.y)
+        // this.x = bounds.left[0].x 
+        // this.width = bounds.right[0].x
+        if (bounds.left == null) {
+            bounds.left = [{x: this.x, y: this.y}]
+            bounds.right = [{x: this.width, y: this.y}] 
+        }
+        let x = bounds.left[0].x + tileSize/2
+        let y= bounds.left[0].y + (this.y - bounds.left[0].y)
+        const points = []        
+        let percent = 0.1
+        // y += 2 * Math.sin(this.startTopY) 
+        // points.push(x,y)
+        let index = 0   
+        let coefX = 2, coefY = 1.2
+        gp.lineStyle(2,0xffffff)
+        while(x <= bounds.right[0].x) {  
+            if (index == 0) {                
+                x-=this.startTopY;
+            } 
+            y = this.y            
+            //points.push(x,y)             
+            for (let i=0; i < Math.PI; i+=Math.PI*percent) {
+                x +=coefX * Math.sin(i ) 
+                y +=coefY * Math.cos(i)     
+                points.push(x,y)
+            }
+            index++
+        }
+        //gp.lineStyle(0,0x000000, 0)
+        //TOP bound
+        points.push(x,y)
+        x = bounds.right[0].x + tileSize/2
+        points.push(x,y)
+        //Right BOUNDs
+        let y2, lastY = y, prevBounds
+        for (let h=0; h < this.height; h+=tileSize) {
+            y2 = lastY +  h
+            prevBounds = bounds
+            bounds = this.maze.getPixelBounds(x, y2)
+            if (!bounds.right || bounds.right[0].y < this.y) 
+                continue
+            y = bounds.right[0].y
+            if (prevBounds?.right && prevBounds.right[0].x != bounds.right[0].x) {
+                x = prevBounds.right[0].x + tileSize/2
+                //y = prevBounds.right[0].y
+                points.push(x,y)
+            }
+            x = bounds.right[0].x + tileSize/2
+            points.push(x,y)
+        }
+        //x += tileSize
+        //points.push(x, y)
+        //BOTTOM bound
+        bounds = this.maze.getPixelBounds(x, y)        
+        x -= bounds.right[0].x + tileSize/2
+        points.push(x,y)
+        //Left Bounds
+        lastY = y 
+        let nextBounds
+        for (let h=0; h < this.height; h+=tileSize) {
+            y2 = lastY -  h
+            nextBounds = this.maze.getPixelBounds(x, y2-tileSize)
+            bounds = this.maze.getPixelBounds(x, y2)
+            if (!bounds.left || bounds.left[0].y < this.y) 
+                continue
+            y = bounds.left[0].y 
+            x = bounds.left[0].x + tileSize/2//+this.startTopY
+            points.push(x,y)
+            if (nextBounds?.left && nextBounds.left[0].x != bounds.left[0].x) {
+                x = nextBounds.left[0].x + tileSize/2
+                points.push(x,y)
+            }
+        }
+        //x = this.x
+        //y = this.y
+        if (bounds.left) {
+            x = bounds.left[0].x + tileSize/2
+            y = bounds.left[0].y
+            points.push(x,y)
+        }
+        const poly = new Polygon(points)
+        gp.beginFill(0x56DBE3,0.5)
+        gp.drawShape(poly)
+
+        //Interval to draw the waves in mileseconds
+        const shouldChange = Date.now() - this.lastTime >= 200
+        if (shouldChange) {
+            this.lastTime = Date.now()            
+            if(this.startTopY ==  Math.PI * 2) {
+               this.startTopY = Math.PI
+            }else if (this.startTopY == Math.PI) {  
+                this.startTopY = 0
+            }else {
+                this.startTopY = Math.PI * 2
+            }
+        }
     }
 }
 export default Wave

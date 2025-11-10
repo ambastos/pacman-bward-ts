@@ -1,15 +1,14 @@
-import { Container} from "pixi.js"
+import { Container, Graphics} from "pixi.js"
 import Mod from "../mod.js"
 import Pacman from "../../../../../../../characters/pacman.js"
-import Wave from "./wave.js"
 import Breath from "./breath.js"
-import Animator from "../animations/animator.js"
-import IdleState from "./states/idleState.js"
-import {States} from './states/state.js'
-import StartState from "./states/startState.js"
-import EndState from "./states/endState.js"
-import CancelState from "./states/cancelState.js"
-import StateFactory from "./states/stateFactory.js"
+import IdleState from "../states/idleState.js"
+import {States} from '../states/state.js'
+import StartState from "../states/startState.js"
+import EndState from "../states/endState.js"
+import CancelState from "../states/cancelState.js"
+import StateFactory from "../states/stateFactory.js"
+
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
 class Flood extends Mod{
@@ -20,7 +19,8 @@ class Flood extends Mod{
         this.tileSize = this.gc.tileSize 
         this.container = new Container()
         this.nextWaveTime
-        this.animator = new Animator(this)        
+        this.gp = new Graphics()
+        
     }
     initialize() {
         this.pacman = this.gc.pacman
@@ -105,28 +105,14 @@ class Flood extends Mod{
         this.ghosts = this.gc.ghosts
         this.gc.stage.removeChild(this.container)
         this.gc.stage.addChild(this.container)
+        //Gp is the graphics to draw
+        this.container.removeChild(this.gp)
+        this.container.addChild(this.gp)
         this.state = this.states[States.IDLE_STATE]
         this.state.start()
-
-        const {animator} = this
-        // animator.createAnimation("endFlood",100,null,(args)=>{
-        //     if (!this.wave)  return
-        //     this.wave.cancel()
-        //     if (this.wave && this.wave.height >4 ) {
-        //         console.log("end flood animation")                
-        //         this.wave.decrease(args[0])
-        //         if (this.wave.isDescreasing && this.wave.height < 5) {
-        //             this.terminateWave()                    
-        //             this.stop()
-        //         }
-        //     }
-        // })
     } 
     stop() { 
         super.stop()
-        //this.terminateWave()
-        //this.animator.stopAnimator()
-        console.log("stop flood")
         this.factory.stop()
     }
     generateWave(timeToStartMS) {
@@ -185,27 +171,11 @@ class Flood extends Mod{
         }
         console.log(entity.constructor.name, " is drowned!")
     }
-    // #cycleWave(elapsedMs) {
-    //     let isTimeLimited = (Date.now() - this.wave.startTime)  >= this.wave.duration
-    //         if (this.wave.isDescreasing && this.wave.height < 5) 
-    //             this.terminateWave()        
-    //         else if (this.wave.height >= this.maxHeight ||isTimeLimited)
-    //             this.wave.decrease(elapsedMs)
-    //         else 
-    //             this.wave.increase(elapsedMs)
-
-    // }
+   
     update(elapsedMs) {
         if (!this.started) return
         
-        //if (!this.nextWaveTime) this.generateWave()
-        console.log(this.state.constructor.name)
-        this.state.update(elapsedMs)
-        // this.startWave()
-        // this.animator.update(elapsedMs)
-        // if (this.wave &&  this.wave.started) { 
-        //     this.changeState(START_STATE)
-        //     // this.#cycleWave(elapsedMs)        
+        this.state.update(elapsedMs)            
         if ( !(this.state instanceof CancelState) ) {
             //start to drown Pacman
             this.startDrownEntity(this.pacman, elapsedMs)
@@ -214,6 +184,9 @@ class Flood extends Mod{
     }
     draw() {
         if (!this.started) return
+        if (this.factory?.wave) {
+            this.factory.wave.draw()
+        }
     }
 }
 

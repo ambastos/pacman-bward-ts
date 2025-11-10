@@ -6,11 +6,12 @@ class Mod {
     started = false
     paused = false
     initialized = false
+    scale = 1
     constructor(gameCoordinator) {
-        this.gc = gameCoordinator
+        this.gc = gameCoordinator        
     }
     initialize() {
-        this.initialized = true
+        this.initialized = true 
     }
     reset() {
 

@@ -9,6 +9,7 @@ class StateFactory {
         this.flood = flood      
         this.maxHeight = flood.maxHeight
         this.gc = flood.gc
+        this.gp = flood.gp
     }    
     resetEntitiesBreathing() {
         this.#resetEntity(this.flood.pacman)        
@@ -17,7 +18,8 @@ class StateFactory {
         entity[breathNamespace].reset()
     }
     clear() {
-        this.flood.container.children.length=0
+        if (this.wave)
+            this.flood.container.removeChild(this.wave)
     }
     stop() {
         this.wave = null

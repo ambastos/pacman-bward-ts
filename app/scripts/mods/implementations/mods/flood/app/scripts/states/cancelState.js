@@ -10,6 +10,7 @@ class CancelState extends State {
     }  
     endFlood() {
         const wave = this.factory.wave
+        wave.height = -1
         this.factory.wave.cancel()
         this.flood.container.removeChild(wave)
     //    console.log("wave ends")

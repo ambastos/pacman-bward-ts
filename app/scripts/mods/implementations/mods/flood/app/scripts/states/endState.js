@@ -6,6 +6,7 @@ class EndState extends State {
     }    
     terminateWave() {
         const wave = this.factory.wave
+        wave.height = -1
         this.flood.container.removeChild(wave)
     //    console.log("wave ends")
         this.flood.resetEntitiesBreathing()

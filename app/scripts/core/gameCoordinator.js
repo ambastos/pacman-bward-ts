@@ -39,9 +39,10 @@ class GameCoordinator {
     
     this.bottomRow = document.getElementById('bottom-row');
     this.movementButtons = document.getElementById('movement-buttons');
-    this.mazeManager = new MazeManager()
 
-    this.mazeArray = this.mazeManager.get("maze1")
+    const mm = new MazeManager()    
+    this.maze = mm.get("maze1")
+    this.mazeArray = this.maze.mazeArray
 
     this.maxFps = 120;
     this.tileSize = 8; 
@@ -50,6 +51,8 @@ class GameCoordinator {
     this.scaledTileSize = this.tileSize * 1;
     this.height = this.scaledTileSize * 31
     this.width = this.scaledTileSize * 28
+    this.maze.setDimensions(this.width, this.height) 
+
     window.PIXI = PIXI
 
     this.firstGame = true; 

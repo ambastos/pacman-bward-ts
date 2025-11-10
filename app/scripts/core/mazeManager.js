@@ -1,17 +1,13 @@
 import maze1 from "../mazes/maze-1.js"
+import Maze from "../mazes/maze.js"
 
 class MazeManager {    
-    constructor() {
+    constructor() {        
         this.mazes = new Map()
-        this.mazes.set("maze1", maze1)
+        this.mazes.set("maze1", new Maze(maze1)) 
     }
-    get(name) {
-        const mazeArray = this.mazes.get(name)
-        if (!mazeArray) return null
-        mazeArray.forEach((row, rowIndex)=>{
-            mazeArray[rowIndex] = row[0].split("")
-        })
-        return mazeArray
+    get(name) {       
+        return this.mazes.get(name)
     }
 }
 export default MazeManager

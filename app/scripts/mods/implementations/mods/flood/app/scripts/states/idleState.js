@@ -1,15 +1,15 @@
-import Wave from "../wave.js"
+import Wave from '../core/wave.js'
 import {State, States} from './state.js'
 class IdleState extends State {    
     constructor(stateFactory) {
         super(stateFactory)        
     }    
     generateWave(timeToStartMS) {
-        const mazeSprite = this.factory.gc.mazeSprite
+        const maze = this.factory.gc.maze
         const width = this.factory.gc.width
-        this.factory.wave = new Wave(mazeSprite, width, 0)
+        this.factory.wave = new Wave(this.factory, maze, width, 0)
         const wave = this.factory.wave
-        this.flood.container.children.length = 0        
+        //this.flood.container.children.length = 1        
         this.flood.container.addChild(wave)
 
         let waveTimeMs 
@@ -21,7 +21,7 @@ class IdleState extends State {
         this.factory.waveTime = waveTimeMs * 1000
 
         let durationMs
-        while ((durationMs = Math.random() * 8) <=5 ){}
+        while ((durationMs = Math.random() * 20) <=10 ){}
         //the duration of the wave is between 8 and 20 seconds
         wave.duration = durationMs * 1000
         this.factory.nextWaveTime = Date.now()+ this.factory.waveTime
@@ -36,7 +36,8 @@ class IdleState extends State {
         if (!this.factory.nextWaveTime) this.generateWave()
         const wave = this.factory.wave    
         if (wave &&  !wave.started) {
-            if (this.factory.nextWaveTime && Date.now() >= this.factory.nextWaveTime) {            
+            if (this.factory.gc.allowKeyPresses &&
+             (this.factory.nextWaveTime && Date.now() >= this.factory.nextWaveTime) ) {            
                 this.flood.changeState(States.START_STATE)
             }
         }
