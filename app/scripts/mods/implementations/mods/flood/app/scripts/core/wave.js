@@ -20,6 +20,33 @@ class Wave extends Sprite {
         this.gp.parent.setChildIndex(this.gp, this.gp.parent.children.length-1)
         this.startTopY = Math.PI * 2
         this.position.x = this.maze.tileSize
+
+        let numberOfBubles = Math.floor(Math.random() * 3) + 1
+        let wayCells = this.maze.mazeArray.map((f,i, a)=>{ 
+            var rr = f.map((g,j)=>{   
+                if  (g == 'o') 
+                    return j
+                else 
+                    return null
+            })  
+            return {"row": i, "cols":rr.filter(f=>f!=null)}
+        }).filter((f,i)=>{  
+            return f.cols.length > 0
+        })
+        let rows = wayCells.map(m=>m.row)
+        this.bublesLocation = []
+        for (let i=1; i <= numberOfBubles;i++) {
+            let indexRow = Math.floor(Math.random() * (rows.length -1))
+            let row = rows[indexRow]
+            let cols =  wayCells.find(f=>f.row == row).cols
+            let indexCol =  Math.floor(Math.random() * (cols.length - 1))
+            let col = cols[indexCol]
+            this.bublesLocation.push({
+                row: row,
+                col: col
+            })
+        } 
+
     }
     increase(elapsedMs) {
         if (this.visible) {
@@ -69,6 +96,7 @@ class Wave extends Sprite {
         let percent = 0.1
         // y += 2 * Math.sin(this.startTopY) 
         // points.push(x,y)
+        //This create the wave itself
         let index = 0   
         let coefX = 2, coefY = 1.2
         gp.lineStyle(2,0xffffff)
@@ -106,6 +134,8 @@ class Wave extends Sprite {
             }
             x = bounds.right[0].x + tileSize/2
             points.push(x,y)
+            
+            const buble = this.bublesLocation.find(f=>f.row==y)
         }
         //x += tileSize
         //points.push(x, y)
@@ -132,6 +162,7 @@ class Wave extends Sprite {
         }
         //x = this.x
         //y = this.y
+        //Close the path
         if (bounds.left) {
             x = bounds.left[0].x + tileSize/2
             y = bounds.left[0].y

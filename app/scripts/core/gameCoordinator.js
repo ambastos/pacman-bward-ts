@@ -505,6 +505,8 @@ class GameCoordinator {
 
     this.pointsDisplay.innerHTML = '00';
     this.highScoreDisplay.innerHTML = this.highScore || '00';
+    this.updatePoints()
+    this.updateHightScore()
     this.clearDisplay2(this.fruitDisplay);
     this.clearDisplay("fruitsDisplay")
 
@@ -572,25 +574,26 @@ class GameCoordinator {
     this.renderTop = new PIXI.Renderer({
 //      view: document.createElement("canvas"),
       backgroundColor: 0x0000ff,
-      width: this.width,
-      height: this.height * 0.23
+      width: this.width * this.scale,
+      height: this.height * 0.11 * this.scale 
     })
     this.renderTop.view.classList.add("row-top-view")
+    document.body.appendChild(this.renderTop.view)
+    
+    this.rowTopContainer = new Container()   
+    this.rowTopContainer.scale.set(this.scale)
+    
+    this.createRowTopTexts()
+
     this.renderBottom = new PIXI.Renderer({
   //    view: document.createElement("canvas"),
       backgroundColor: 0x0000ff,
-      width: this.width,
-      height: this.height * 0.23 
+      width: this.width * this.scale,
+      height: this.height * 0.06 * this.scale
     })
     this.renderBottom.view.classList.add("row-bottom-view")
-
-    this.rowTopMainContainer = new Container()                                                      
-    this.rowTopContainer = new Container()   
-    this.rowTopMainContainer.addChild(this.rowTopContainer) 
- 
-    this.bottomRowMainContainer = new Container()
-
     this.bottomRowContainer = new Container()
+    this.bottomRowContainer.scale.set(this.scale)
     const livesDisplay = new Container()
     livesDisplay.name = "livesDisplay"
     this.bottomRowContainer.addChild(livesDisplay)
@@ -598,32 +601,13 @@ class GameCoordinator {
     fruitsDisplay.name = "fruitsDisplay"
     this.fruitDisplay.x = this.bottomRowContainer.width
     this.bottomRowContainer.addChild(fruitsDisplay)
-    this.bottomRowMainContainer.addChild(this.bottomRowContainer)
-
-    this.rowTop.appendChild(this.renderTop.view)
-    document.body.appendChild(this.renderTop.view)
-    //this.bottomRow.appendChild(this.renderBottom.view)
     document.body.appendChild(this.renderBottom.view)
-    let text = new Text("1UP", {
-      fontFamily: "Press Start 2P",
-      fontSize: 24,
-      fill: "0xffffff",
-    })
-    text.scale.set(0.333)
-    this.rowTopContainer.addChild(text)
 
      //canvas view     
     this.view = document.createElement("canvas")
     this.view.width = (this.tileSize * 28) * this.scale
     this.view.height = (this.tileSize * 31) * this.scale
     document.body.appendChild(this.view)
-    //this.mazeDiv.appendChild(this.view)
-    //this.mazeImg.style.visibility = "hidden"
-    //For while
-    
-    // this.view.width = this.width * this.scale
-    // this.view.height = this.height * this.scale
-
     this.view.classList.add("view") 
     this.view.style.top = "70px"
     this.view.style.left = "900px" //(this.width + 20) + "px"
@@ -646,18 +630,17 @@ class GameCoordinator {
     this.rowTop.style.marginBottom = `${this.scaledTileSize}px`;
     this.gameUi.style.scale = this.scale
 
+    //this.rowTopContainer.width = this.width 
+    //this.rowTopContainer.height = this.height * 0.11
+    //this.rowTopContainer.scale.set(this.scale)
 
-    this.rowTopContainer.width = this.width 
-    this.rowTopContainer.height = this.height * 0.23
-    this.rowTopContainer.scale.set(this.scale)
-
-    this.bottomRowContainer.width = this.width 
-    this.bottomRowContainer.height = this.height * 0.23
-    this.bottomRowContainer.scale.set(this.scale)
+    //this.bottomRowContainer.width = this.width
+    //this.bottomRowContainer.height = this.height * 0.06
+    //this.bottomRowContainer.scale.set(this.scale)
     //just for whilte
-    this.renderTop.view.style.left = "910px"
-    this.renderTop.view.style.top = "50px"
-    this.renderBottom.view.style.left = "910px"
+    this.renderTop.view.style.left = "900px"
+    this.renderTop.view.style.top = "20px"
+    this.renderBottom.view.style.left = "900px"
     this.renderBottom.view.style.top = "570px"
   }
 
@@ -665,9 +648,9 @@ class GameCoordinator {
     //super.render()
     this.renderer.render(this.stage)
     if (this.renderTop)
-      this.renderTop.render(this.rowTopMainContainer)
+      this.renderTop.render(this.rowTopContainer)
     if (this.renderBottom)
-      this.renderBottom.render(this.bottomRowMainContainer)
+      this.renderBottom.render(this.bottomRowContainer)
   }
 
   /**
@@ -753,6 +736,40 @@ class GameCoordinator {
     if (display) display.children.length = 0
   }
 
+  updatePoints() {
+    this.textPoints.text = this.points
+  }
+  updateHightScore() {
+    this.textHightScore.text = this.highScore
+  }
+  createRowTopTexts() {
+    const textStyle = {
+      fontFamily: "sans-serif",
+      fontSize: 8,
+      //fontWeight: "bold",
+      fill: "0xffffff",      
+    }
+    let x = 0, y = 0
+    //text.scale.set(0.333) 
+    let text = new Text("1UP", textStyle)
+    x = this.width * 0.25 - text.width * 0.5
+    this.rowTopContainer.addChild(text)
+    text.position.x = x
+    this.textPoints = new Text(this.points, textStyle)
+    y = this.renderTop.view.height / (2 * this.scale)
+    x = this.width * 0.25 - this.textPoints.width * 0.5
+    this.rowTopContainer.addChild(this.textPoints)
+    this.textPoints.position.set(x, y)   
+
+    text = new Text("HIGH SCORE", textStyle)    
+    this.rowTopContainer.addChild(text)    
+    //text.scale.set(0.333)
+    x = this.width * 0.50 - text.width * 0.5
+    text.position.x = x
+    this.textHightScore = new Text(this.highScore, textStyle)
+    this.rowTopContainer.addChild(this.textHightScore)
+    this.textHightScore.position.set(x, y)    
+  }
   /**
    * Displays extra life images equal to the number of remaining lives
    */
@@ -801,6 +818,10 @@ class GameCoordinator {
       if (first) fruitsDisplay.removeChild(first)
     }
     const fruitSp = new Sprite(this.am.getTexture(name))
+    let x = 0
+    fruitsDisplay.children.forEach(f=>x+=f.width)
+    x+=fruitSp.width
+    fruitSp.position.x = this.width - x
     fruitsDisplay.addChild(fruitSp)
   }
 
@@ -945,9 +966,11 @@ class GameCoordinator {
    */
   awardPoints(e) {
     this.points += e.detail.points;
+    this.updatePoints()
     this.pointsDisplay.innerText = this.points;
     if (this.points > (this.highScore || 0)) {
       this.highScore = this.points;
+      this.updateHightScore()
       this.highScoreDisplay.innerText = this.points;
       localStorage.setItem('highScore', this.highScore);
     }
