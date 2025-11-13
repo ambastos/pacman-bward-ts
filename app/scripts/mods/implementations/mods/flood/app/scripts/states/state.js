@@ -7,10 +7,10 @@ const States = {
 
 class State {
     flood = null
-    constructor(factory) {
-        this.factory = factory
+    constructor(drownManager) {
+        this.drownManager = drownManager
         this.started = false
-        this.flood = factory.flood
+        this.flood = drownManager.flood
     }
     start() {
         this.started = true

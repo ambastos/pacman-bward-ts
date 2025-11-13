@@ -1,4 +1,4 @@
-import { Container, Graphics} from "pixi.js"
+import { Assets, Container, Graphics} from "pixi.js"
 import Mod from "../mod.js"
 import Pacman from "../../../../../../../characters/pacman.js"
 import Breath from "./breath.js"
@@ -7,8 +7,8 @@ import {States} from '../states/state.js'
 import StartState from "../states/startState.js"
 import EndState from "../states/endState.js"
 import CancelState from "../states/cancelState.js"
-import StateFactory from "../states/stateFactory.js"
 import DrownManager from "./drownManager.js"
+import path from "path"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -23,19 +23,20 @@ class Flood extends Mod{
         this.gp = new Graphics()      
         this.drownManager = new DrownManager(this)  
     }
-    initialize() {
+    async initialize() {
         this.pacman = this.gc.pacman
         this.gc.lives = 10
         console.log("lives for debugging ", this.gc.lives)
         this.ghosts = this.gc.ghosts
 
-        this.factory = new StateFactory(this)
-        this.states = [new IdleState(this.factory), new StartState(this.factory),
-            new EndState(this.factory), new CancelState(this.factory)
+        this.drownManager.initialize()
+        this.states = [new IdleState(this.drownManager), new StartState(this.drownManager),
+            new EndState(this.drownManager), new CancelState(this.drownManager)
         ]
         this.state = this.states[States.IDLE_STATE]
-        
-        this.drownManager.initialize()
+
+        //Assets.add({alias:"bubbles", src: "../../sprites/bubbles.png"})
+        //await Assets.load(["bubbles"])
         this.#registerListeners()
     }
     #registerListeners() {
@@ -46,7 +47,7 @@ class Flood extends Mod{
         this.gc.emitter.removeAllListeners("pacman-death")
         const _this = this 
         this.gc.emitter.on("pacman-death", ()=>{
-             const wave = _this.factory.wave
+             const wave = _this.drownManager.wave
             if (wave && wave.started) {
                 const detail = {
                     detail: {
@@ -68,7 +69,7 @@ class Flood extends Mod{
         this.state.start()
     }
     start() {
-        super.start()
+        super.start() 
         this.pacman = this.gc.pacman
         this.ghosts = this.gc.ghosts
         this.gc.stage.removeChild(this.container)
@@ -81,7 +82,7 @@ class Flood extends Mod{
     } 
     stop() { 
         super.stop()
-        this.factory.stop()
+        this.drownManager.stop()
     }
     generateWave(timeToStartMS) {
         this.changeState(States.IDLE_STATE)
@@ -94,7 +95,8 @@ class Flood extends Mod{
     update(elapsedMs) {
         if (!this.started) return
         
-        this.state.update(elapsedMs)            
+        this.drownManager.update(elapsedMs)         
+        this.state.update(elapsedMs)   
         if ( !(this.state instanceof CancelState) ) {
             //start to drown Pacman
             this.drownManager.tryDrownEntities(elapsedMs)
@@ -103,8 +105,8 @@ class Flood extends Mod{
     }
     draw() {
         if (!this.started) return
-        if (this.factory?.wave) {
-            this.factory.wave.draw()
+        if (this.drownManager?.wave) {
+            this.drownManager.wave.draw()
         }
     }
 }

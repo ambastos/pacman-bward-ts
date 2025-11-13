@@ -6,13 +6,15 @@ class Maze {
     rows
     cols
     tileSize
-    constructor(mazeArray) {        
-        this.mazeArray = mazeArray         
+    constructor(mazePrp) {        
+
+        this.mazeArray = mazePrp.mazeArray         
         this.mazeArray.forEach((row, rowIndex)=>{
             this.mazeArray[rowIndex] = row[0].split("")
         })
         this.rows = this.mazeArray.length
         this.cols = this.mazeArray[0].length        
+        this.ghostHouses = mazePrp.ghostHouses
     }    
     #calculateBounds() {
         const bounds = {top:[], left:[], right:[], bottom:[]}
@@ -126,13 +128,15 @@ class Maze {
             )
         }
     }
-
     setDimensions(width, height) {
         this.width = width
         this.height = height
         this.tileSize = this.height/ this.rows
         this.#calculateBounds()
     }
+    getPixelCoordinates(x,y) {
+        return {x: x * this.tileSize, y: y * this.tileSize}
+    }    
     getPixelBounds(x,y) {      
         const row = Math.floor(y / this.tileSize)
         // const index = this.pixelBounds.left.map((f,i)=>{

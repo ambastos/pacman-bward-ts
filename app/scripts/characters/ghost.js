@@ -839,6 +839,8 @@ class Ghost extends Entity{
    * @param {({x: number, y: number})} pacman - Pacman's current x-y position on the 2D Maze Array
    */
   checkCollision(position, pacman) {
+    //if pacman is not allowing collision, then, he doesn't die!
+    if (!this.pacman.allowCollision) return
     if (this.calculateDistance(position, pacman) < 1
       && this.mode !== 'eyes'
       && this.allowCollision) {

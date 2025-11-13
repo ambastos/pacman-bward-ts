@@ -42,6 +42,7 @@ class Pacman extends Entity{
     this.desiredDirection = this.characterUtil.directions.left;
     this.direction = this.characterUtil.directions.left;
     this.moving = false;
+    this.allowCollision = true
   }
 
   /**

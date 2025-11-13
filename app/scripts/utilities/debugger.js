@@ -252,9 +252,10 @@ class Debugger {
         if (this.gc.allowPacmanMovement) {
             this.gc.pacman.immortal = isImmortal
             this.pacmanImmortal = isImmortal
-            this.gc.ghosts.forEach(ghost => {
-                ghost.allowCollision = !isImmortal
-            });
+            this.gc.pacman.allowCollision = !isImmortal
+            // this.gc.ghosts.forEach(ghost => {
+            //     ghost.allowCollision = !isImmortal
+            // });
             if (isImmortal)
                 console.info('Pacman is immortal!')
             else

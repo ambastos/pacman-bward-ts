@@ -1,4 +1,5 @@
-const maze1 = [
+const maze1 = {
+ mazeArray: [
       ['XXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
       ['XooooooooooooXXooooooooooooX'],
       ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'],
@@ -30,5 +31,12 @@ const maze1 = [
       ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'],
       ['XooooooooooooooooooooooooooX'],
       ['XXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
-];
+],
+//In tile cordinates
+ghostHouses: [
+      {x1: 10.5, x2: 17.5,
+       y1:12.5, y2: 16.5
+      }
+]
+};
 export default maze1

@@ -295,10 +295,8 @@ class GameCoordinator {
         // Misc
         'app/style/graphics/extra_life.png',
       ];
-
       this.am = new AssetsManager(this)
       await this.am.load()
-
 
       const audioBase = 'app/style/audio/';
       const audioSources = [

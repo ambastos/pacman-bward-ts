@@ -6,7 +6,7 @@ class Wave extends Sprite {
     started = false
     decreasing = false
     lastTime = 0
-    constructor(factory, maze, width, height) {        
+    constructor(drownManager, maze, width, height) {        
         super(Texture.WHITE)   
         this.width = width
         this.height = height 
@@ -14,12 +14,11 @@ class Wave extends Sprite {
         this.alpha = 0  
         //this.tint = "0x56DBE3"
         this.maze = maze            
-        this.factory = factory        
+        this.drownManager = drownManager        
         /**@param{Graphics} */
-        this.gp = this.factory.gp
+        this.gp = this.drownManager.gp
         this.gp.parent.setChildIndex(this.gp, this.gp.parent.children.length-1)
         this.startTopY = Math.PI * 2
-        this.position.x = this.maze.tileSize
 
         let numberOfBubles = Math.floor(Math.random() * 3) + 1
         let wayCells = this.maze.mazeArray.map((f,i, a)=>{ 
@@ -54,6 +53,24 @@ class Wave extends Sprite {
             this.decreasing = false
             this.updatePosition()
             //console.log("increase wave: ", this.height, this.position)
+            let buble
+            const tileSize = this.maze.tileSize
+            for (let i=0;i< this.bublesLocation.length; i++) {
+                const pixelBounds = this.maze.getPixelCoordinates(
+                    this.bublesLocation[i].col,this.bublesLocation[i].row
+                )
+                if (pixelBounds.y == this.y) {    
+                    buble = this.bublesLocation[i]                
+                    const bubleSprite = new Sprite(Texture.WHITE)
+                    bubleSprite.tint = 0x002400
+                    bubleSprite.alpha = 0.6
+                    bubleSprite.name = "buble"
+                    bubleSprite.height = tileSize
+                    bubleSprite.width = tileSize
+                    bubleSprite.position.set(pixelBounds.x, pixelBounds.y)
+                    this.drownManager.flood.container.addChild(bubleSprite)
+                }
+            } 
         }
     }
     decrease(elapsedMs) {
@@ -62,6 +79,21 @@ class Wave extends Sprite {
             this.decreasing = true
             this.updatePosition()
             //console.log("decrease wave: ", this.height, this.position)
+            for (let i=0;i< this.bublesLocation.length; i++) {
+                const pixelBounds = this.maze.getPixelCoordinates(
+                    this.bublesLocation[i].col,this.bublesLocation[i].row
+                )
+                if (pixelBounds.y <= this.y) {                      
+                    const buble = this.drownManager.flood.container.children.find(f=>{
+                        if (f.name == 'buble') {
+                            if (f.y <= this.y)
+                                return f
+                        }
+                    })
+                    if (buble)
+                        this.drownManager.flood.container.removeChild(buble)
+                }
+            } 
         }
     }
     updatePosition() {
@@ -73,6 +105,10 @@ class Wave extends Sprite {
     }
     cancel() {
         this.started = false
+        const bubles = this.drownManager.flood.container.children.filter(f=>f.name=='buble')
+        for (let i = bubles.length -1; i >= 0; i--) {
+            this.drownManager.flood.container.removeChild(bubles[i])
+        }
     }
     show() {
         this.visible = true
@@ -134,8 +170,6 @@ class Wave extends Sprite {
             }
             x = bounds.right[0].x + tileSize/2
             points.push(x,y)
-            
-            const buble = this.bublesLocation.find(f=>f.row==y)
         }
         //x += tileSize
         //points.push(x, y)

@@ -1,14 +1,14 @@
 import Wave from '../core/wave.js'
 import {State, States} from './state.js'
 class IdleState extends State {    
-    constructor(stateFactory) {
-        super(stateFactory)        
+    constructor(drownManager) {
+        super(drownManager)        
     }    
     generateWave(timeToStartMS) {
-        const maze = this.factory.gc.maze
-        const width = this.factory.gc.width
-        this.factory.wave = new Wave(this.factory, maze, width, 0)
-        const wave = this.factory.wave
+        const maze = this.drownManager.gc.maze
+        const width = this.drownManager.gc.width
+        this.drownManager.wave = new Wave(this.drownManager, maze, width, 0)
+        const wave = this.drownManager.wave
         //this.flood.container.children.length = 1        
         this.flood.container.addChild(wave)
 
@@ -18,26 +18,27 @@ class IdleState extends State {
         else 
             while ((waveTimeMs = Math.random() * 15) <=10 ){}   
         //between 15 and 40 seconds to generate a new wave     
-        this.factory.waveTime = waveTimeMs * 1000
+        this.drownManager.waveTime = waveTimeMs * 1000
 
         let durationMs
         while ((durationMs = Math.random() * 20) <=10 ){}
         //the duration of the wave is between 8 and 20 seconds
         wave.duration = durationMs * 1000
-        this.factory.nextWaveTime = Date.now()+ this.factory.waveTime
+        this.drownManager.nextWaveTime = Date.now()+ this.drownManager.waveTime
     }
     start() {
+        if (this.drownManager)
+            this.drownManager.stop()
         super.start()
-        this.factory.clear()
     }
     update(elapsedMs) {        
         if (!this.started) return
         super.update(elapsedMs)
-        if (!this.factory.nextWaveTime) this.generateWave()
-        const wave = this.factory.wave    
+        if (!this.drownManager.nextWaveTime) this.generateWave()
+        const wave = this.drownManager.wave    
         if (wave &&  !wave.started) {
-            if (this.factory.gc.allowKeyPresses &&
-             (this.factory.nextWaveTime && Date.now() >= this.factory.nextWaveTime) ) {            
+            if (this.drownManager.gc.allowKeyPresses &&
+             (this.drownManager.nextWaveTime && Date.now() >= this.drownManager.nextWaveTime) ) {            
                 this.flood.changeState(States.START_STATE)
             }
         }

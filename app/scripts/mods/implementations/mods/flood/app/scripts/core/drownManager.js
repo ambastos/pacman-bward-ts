@@ -1,13 +1,25 @@
 import Ghost from "../../../../../../../characters/ghost.js"
 import Pacman from "../../../../../../../characters/pacman.js"
+import Animator from "../animations/animator.js"
 import { States } from "../states/state.js"
 import Breath from "./breath.js"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
 class DrownManager {
+    wave = null
+    waveTime = null
+    nextWaveTime = null
+    maxHeight  
+    gc
+    animator
     constructor(flood) {
         this.flood = flood
+        this.maxHeight = flood.maxHeight
+        this.gc = flood.gc
+        this.gp = flood.gp
+        this.gc.ghostCombo = 0   
+        this.animator = new Animator()
     }
     initialize() {
         this.gc = this.flood.gc
@@ -23,6 +35,9 @@ class DrownManager {
         this.ghosts.forEach(g=>{
             this.#createBreath(g)
         })        
+        this.animator.createAnimation("breath", 200,null,(args)=>{
+            console.log("animation", args.entity)
+        })
     }
     #createBreath(entity, options) {               
         entity[breathNamespace] = new Breath(options)
@@ -104,6 +119,37 @@ class DrownManager {
             }
         }
         //console.log(entity.constructor.name, " is drowned!")
+    }
+   
+    clear() {
+        if (this.wave) { 
+            this.gp.clear()
+            this.flood.container.removeChild(this.wave)
+        }        
+    }
+    stop() {
+        this.clear()
+        this.wave = null
+        this.waveTime = null    
+        this.nextWaveTime = null
+        this.gc.ghostCombo = 0   
+    }
+    update(elapsedMs) {
+        if (this.wave) {
+            const container = this.flood.container
+            const bubbles = container.children.filter((f)=>{
+                return f.name == 'buble'
+            })
+            const pacman = this.gc.pacman
+            bubbles.forEach((b)=>{
+                if (b.getBounds().intersects(this.gc.pacman.sprite.getBounds())) {
+                    container.removeChild(b)
+                    pacman[breathNamespace].breathing = pacman[breathNamespace].maxBreathing
+                    this.animator.play("breath", {entity: pacman})
+                }
+            })
+        }
+        this.animator.update()
     }
 }
 export default DrownManager

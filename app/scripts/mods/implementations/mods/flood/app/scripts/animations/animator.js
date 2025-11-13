@@ -17,13 +17,13 @@ class Animator {
     /**
      * Plays the animation with this name
      * @param {String} name 
-     * @param {any} value 
+     * @param {any} args 
      */
-    play(name, value) {
+    play(name, args) {
         const an = this.animations.get(name)
         if (!an)
             throw new Error(`There is no Animation with name ${name}.`)
-        an.play(value)
+        an.play(args)
     }
     /**
      * Stops the animation with this name

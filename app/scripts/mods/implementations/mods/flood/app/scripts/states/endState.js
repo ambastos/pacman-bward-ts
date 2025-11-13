@@ -1,22 +1,22 @@
-import StateFactory from "./stateFactory.js"
 import {State, States} from './state.js'
 class EndState extends State {
-    constructor(factory) {
-        super(factory)
+    constructor(drownManager) {
+        super(drownManager)
     }    
     terminateWave() {
-        const wave = this.factory.wave
+        const wave = this.drownManager.wave
         wave.height = -1
         this.flood.container.removeChild(wave)
     //    console.log("wave ends")
-        this.flood.resetEntitiesBreathing()
-        this.factory.nextWaveTime = null
-        this.factory.wave = null
+        this.drownManager.resetEntitiesBreathing()
+        this.drownManager.nextWaveTime = null
+        this.drownManager.wave = null
+        this.flood.changeState(States.IDLE_STATE)
     }
     update(elapsedMs) {        
         if (!this.started) return
         super.update(elapsedMs)
-        const wave = this.factory.wave
+        const wave = this.drownManager.wave
         if (!wave) return
         wave.decrease(elapsedMs)       
         if (wave.isDescreasing && wave.height < 5) 

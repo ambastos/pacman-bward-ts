@@ -1,13 +1,12 @@
-import StateFactory from "./stateFactory.js"
 import {State, States} from './state.js'
 class StartState extends State {
-    constructor(factory) {
-        super(factory)
+    constructor(drownManager) {
+        super(drownManager)
     }    
     update(elapsedMs) {        
         if (!this.started) return
         super.update(elapsedMs)
-        const wave = this.factory.wave
+        const wave = this.drownManager.wave
         if (!wave) return
         if ( !wave.started) {
             wave.startTime = Date.now()
@@ -17,7 +16,7 @@ class StartState extends State {
         let isTimeLimited = (Date.now() - wave.startTime)  >= wave.duration
 
         wave.increase(elapsedMs)
-        if (wave.height >= this.factory.maxHeight ||isTimeLimited) 
+        if (wave.height >= this.drownManager.maxHeight ||isTimeLimited) 
             this.flood.changeState(States.END_STATE)
     } 
     draw() {

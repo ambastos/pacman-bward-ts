@@ -126,13 +126,13 @@ body {
 
 .row-top-view {
   position: absolute;
-  left: 910px;
+  left: 900px;
   top: 20px;
 }
 
 .row-bottom-view {
-  left: 910px;
-  top: 600px;
+  left: 900px;
+  top: 570px;
   position: absolute;
 }
 
