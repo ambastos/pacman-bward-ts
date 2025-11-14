@@ -16,13 +16,18 @@ class Animation {
         if (this.callback)
             this.callback.bind(this.thisClass)
     }
+    reset() {
+        this.startTime = null
+        this.currentTime = null
+        this.end = false
+        this.endTime = null
+    }
     play(keys_values_args) {
         this.playing = true
         this.startTime = Date.now()
         this.currentTime = this.startTime
         if (keys_values_args)
-            for (const obj of keys_values_args ) 
-                this.args.push(obj) 
+           this.updateArguments(keys_values_args, false)
     }
     stop() {
         this.#end()
@@ -34,26 +39,7 @@ class Animation {
             //console.log(this.currentTime)
             if (this.callback) {
                 //update the args                
-                if (arguments.length>0) {
-                    //delete the first arguments
-                    for (let i =0; i < this.args.length; i++) {
-                        if (this.args[i][i]) {
-                            this.args.splice(i,1)
-                            i--
-                        }
-                    }
-                    //include the arguments in first line of all arguments
-                    for (let i =0; i < arguments.length; i++) {
-                        let arg = arguments[i]
-                        if (args instanceof Object) {
-                            this.args.splice(0,0,arg)
-                        }else {
-                            let obj = {}
-                            obj[i] = arg
-                            this.args.splice(0,0,obj)
-                        }
-                    }
-                }
+                this.updateArguments(args, true)
                 this.callback.bind(this.thisClass)
                 .apply(this.callback, this.args)
             }
@@ -64,6 +50,39 @@ class Animation {
             this.#end()
         }
     }
+    updateArguments(args, passArgsFirst) {
+        let numberOfArgs = 0
+        for (let argName in args) {
+            numberOfArgs++
+        if (numberOfArgs > 0) {
+            //delete the first arguments            
+            for (let i = 0; i < this.args.length; i++) {
+                if (this.args[i][i]) {
+                    this.args.splice(i, 1) 
+                    i--
+                }
+            }
+            
+            }
+            let index = 0
+             if (passArgsFirst)
+                index = 0
+            else 
+                index = numberOfArgs -1
+            //include the arguments in first line of all arguments
+            for (let argName in args) {
+                let arg = args[argName]
+                if (args instanceof Object) {
+                    this.args.splice(index, index, args)
+                } else {
+                    let obj = {}
+                    obj[argName] = arg                                       
+                    this.args.splice(index, index, obj)
+                }
+            }
+        }
+    }
+
     #end() {
         this.endTime = Date.now()
         this.end = true

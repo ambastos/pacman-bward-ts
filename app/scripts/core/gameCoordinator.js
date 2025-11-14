@@ -1393,7 +1393,18 @@ class GameCoordinator {
   displayText(position, amount, duration, width, height) {
     const pointsDiv = document.createElement('div');
 
-    const textSp = new Sprite(this.am.getTexture(amount))
+    let textSp 
+    const texture = this.am.getTexture(amount)
+    if (texture)
+      textSp = new Sprite(texture)
+    else 
+      textSp = new Text(amount, {
+        fontFamily: "Press Start 2P",
+        fontSize: 6,
+        fill: 0xffffff
+      })
+    // textSp.width = width  
+    // textSp.height = height || width
     textSp.position.set(position.left, position.top)
 
     pointsDiv.style.position = 'absolute';

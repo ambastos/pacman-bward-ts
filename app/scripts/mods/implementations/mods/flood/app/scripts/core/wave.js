@@ -17,10 +17,12 @@ class Wave extends Sprite {
         this.drownManager = drownManager        
         /**@param{Graphics} */
         this.gp = this.drownManager.gp
+        this.container = this.drownManager.gc.stage 
+
         this.gp.parent.setChildIndex(this.gp, this.gp.parent.children.length-1)
         this.startTopY = Math.PI * 2
 
-        let numberOfBubles = Math.floor(Math.random() * 3) + 1
+        let numberOfBubles = Math.ceil(Math.random() * 3) 
         let wayCells = this.maze.mazeArray.map((f,i, a)=>{ 
             var rr = f.map((g,j)=>{   
                 if  (g == 'o') 
@@ -68,7 +70,7 @@ class Wave extends Sprite {
                     bubleSprite.height = tileSize
                     bubleSprite.width = tileSize
                     bubleSprite.position.set(pixelBounds.x, pixelBounds.y)
-                    this.drownManager.flood.container.addChild(bubleSprite)
+                    this.container.addChild(bubleSprite)
                 }
             } 
         }
@@ -77,21 +79,21 @@ class Wave extends Sprite {
         if (this.visible) {            
             this.height -=this.speedY * 1.3 * (elapsedMs/1000)
             this.decreasing = true
-            this.updatePosition()
+            this.updatePosition()            
             //console.log("decrease wave: ", this.height, this.position)
             for (let i=0;i< this.bublesLocation.length; i++) {
                 const pixelBounds = this.maze.getPixelCoordinates(
                     this.bublesLocation[i].col,this.bublesLocation[i].row
                 )
                 if (pixelBounds.y <= this.y) {                      
-                    const buble = this.drownManager.flood.container.children.find(f=>{
+                    const buble = this.container.children.find(f=>{
                         if (f.name == 'buble') {
                             if (f.y <= this.y)
                                 return f
                         }
                     })
                     if (buble)
-                        this.drownManager.flood.container.removeChild(buble)
+                        this.container.removeChild(buble)
                 }
             } 
         }
@@ -105,9 +107,9 @@ class Wave extends Sprite {
     }
     cancel() {
         this.started = false
-        const bubles = this.drownManager.flood.container.children.filter(f=>f.name=='buble')
+        const bubles = this.container.children.filter(f=>f.name=='buble')
         for (let i = bubles.length -1; i >= 0; i--) {
-            this.drownManager.flood.container.removeChild(bubles[i])
+            this.container.removeChild(bubles[i])
         }
     }
     show() {

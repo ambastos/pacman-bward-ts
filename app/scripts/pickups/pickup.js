@@ -244,6 +244,7 @@ class Pickup extends Entity {
    */
   update() {
     if (this.shouldCheckForCollision()) {
+      super.update()
       if (this.checkForCollision(
         {
           x: this.x,

@@ -933,6 +933,7 @@ class Ghost extends Entity{
    * @param {number} elapsedMs - The amount of MS that have passed since the last update
    */
   update(elapsedMs) {
+    super.update(elapsedMs)
     this.oldPosition = Object.assign({}, this.position);
 
     if (this.moving) {

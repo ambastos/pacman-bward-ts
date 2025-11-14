@@ -15,6 +15,11 @@ class Breath {
             this[opt] = defaultOptions[opt] 
         this.defaultBreathing = this.breathing
     }
+    showBreathingStatus() {
+        if (this.text) {
+            
+        }
+    }
     reset() {
         this.breathing = this.defaultBreathing
         this.stopped = false

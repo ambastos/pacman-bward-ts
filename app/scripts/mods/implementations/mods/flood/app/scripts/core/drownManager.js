@@ -2,6 +2,7 @@ import Ghost from "../../../../../../../characters/ghost.js"
 import Pacman from "../../../../../../../characters/pacman.js"
 import Animator from "../animations/animator.js"
 import { States } from "../states/state.js"
+import { enlarge } from "../utils/util.js"
 import Breath from "./breath.js"
 
 /** name spacing used to create the needed properties*/ 
@@ -22,8 +23,7 @@ class DrownManager {
         this.animator = new Animator()
     }
     initialize() {
-        this.gc = this.flood.gc
-        this.factory = this.flood.factory
+        this.gc = this.flood.gc        
         this.pacman = this.flood.gc.pacman
         this.ghosts = this.flood.gc.ghosts
         this.emitter = this.gc.emitter        
@@ -36,7 +36,8 @@ class DrownManager {
             this.#createBreath(g)
         })        
         this.animator.createAnimation("breath", 200,null,(args)=>{
-            console.log("animation", args.entity)
+            const pacman = args.entity           
+            //console.log("animation", args)
         })
     }
     #createBreath(entity, options) {               
@@ -62,7 +63,7 @@ class DrownManager {
     }
     #tryDrownEntity(entity, elapsedMs) {
         const breath = entity[breathNamespace]
-        const wave = this.factory?.wave
+        const wave = this?.wave
         if (!wave || !wave.started || breath.stopped) return
 
         const sprite = entity.sprite.getBounds()
@@ -120,11 +121,17 @@ class DrownManager {
         }
         //console.log(entity.constructor.name, " is drowned!")
     }
-   
+    showBreathingStatus(entity) {
+         const {position, measurement} = entity
+            const text = `Breathing ${entity[breathNamespace].breathing}`
+            this.gc.displayText(position,
+                text,
+                5000, measurement)
+    }   
     clear() {
         if (this.wave) { 
             this.gp.clear()
-            this.flood.container.removeChild(this.wave)
+            this.gc.stage.removeChild(this.wave)
         }        
     }
     stop() {
@@ -136,20 +143,23 @@ class DrownManager {
     }
     update(elapsedMs) {
         if (this.wave) {
-            const container = this.flood.container
+            this.animator.update()
+            const container = this.gc.stage
             const bubbles = container.children.filter((f)=>{
                 return f.name == 'buble'
             })
             const pacman = this.gc.pacman
+            const hitArea = enlarge(pacman.sprite.hitArea.clone(),2)
             bubbles.forEach((b)=>{
-                if (b.getBounds().intersects(this.gc.pacman.sprite.getBounds())) {
+                if (b.getBounds().contains(hitArea.x, hitArea.y)) {
                     container.removeChild(b)
                     pacman[breathNamespace].breathing = pacman[breathNamespace].maxBreathing
-                    this.animator.play("breath", {entity: pacman})
+                    this.showBreathingStatus(pacman)
+                    //console.log("play breath")
+                    //this.animator.play("breath", {entity: pacman})
                 }
             })
-        }
-        this.animator.update()
+        }        
     }
 }
 export default DrownManager
