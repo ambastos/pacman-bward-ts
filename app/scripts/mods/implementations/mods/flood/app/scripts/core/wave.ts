@@ -27,7 +27,7 @@ class Wave extends Sprite {
         this.gp = this.drownManager.gp 
         this.container = this.drownManager.flood.container
         //if (this.container.children.length > 0) 
-        this.container.addChild(this.gp)
+        this.container.addChild(this.gp) 
 
         this.startTopY = Math.PI * 2
         let numberOfBubles = Math.ceil(Math.random() * 3) 
