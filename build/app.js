@@ -1,11 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -51,6 +46,10 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pixi_js_1 = require("pixi.js");
 var Entity = /*#__PURE__*/function () {
   function Entity(gameCoordinator, name, characterUtil) {
     _classCallCheck(this, Entity);
@@ -59,18 +58,34 @@ var Entity = /*#__PURE__*/function () {
     _defineProperty(this, "emitter", void 0);
     _defineProperty(this, "gameCoordinator", void 0);
     _defineProperty(this, "scaledTileSize", void 0);
+    _defineProperty(this, "characterUtil", void 0);
+    _defineProperty(this, "position", void 0);
+    _defineProperty(this, "oldPosition", void 0);
     _defineProperty(this, "sprite", void 0);
     _defineProperty(this, "hitArea", void 0);
+    _defineProperty(this, "msSinceLastSprite", 0);
+    _defineProperty(this, "frame", 0);
+    _defineProperty(this, "msBetweenSprites", 0);
+    _defineProperty(this, "animate", false);
+    _defineProperty(this, "measurement", 0);
+    _defineProperty(this, "spriteFrames", 0);
+    _defineProperty(this, "loopAnimation", false);
+    _defineProperty(this, "mazeArray", void 0);
+    _defineProperty(this, "moving", void 0);
+    _defineProperty(this, "display", void 0);
+    _defineProperty(this, "level", void 0);
+    _defineProperty(this, "direction", void 0);
     this.gameCoordinator = gameCoordinator;
     this.name = name;
     this.scaledTileSize = gameCoordinator.scaledTileSize;
     this.characterUtil = characterUtil;
-    this.emitter = this.gameCoordinator.emitter;
+    this.emitter = gameCoordinator.emitter;
   }
   return _createClass(Entity, [{
     key: "getGridPosition",
     value: function getGridPosition() {
-      return this.characterUtil.determineGridPosition(this.position, this.scaledTileSize);
+      var _this$characterUtil;
+      return (_this$characterUtil = this.characterUtil) === null || _this$characterUtil === void 0 ? void 0 : _this$characterUtil.determineGridPosition(this.position, this.scaledTileSize);
     }
   }, {
     key: "registerEventListeners",
@@ -82,13 +97,16 @@ var Entity = /*#__PURE__*/function () {
     key: "onDeath",
     value: function onDeath() {}
   }, {
+    key: "reset",
+    value: function reset() {}
+  }, {
     key: "update",
     value: function update(elapsedMs) {
       if (this.sprite) {
         var half = this.scaledTileSize * 0.5;
         var x = this.sprite.x + this.sprite.width * 0.5 - half;
         var y = this.sprite.y + this.sprite.height * 0.5 - half;
-        this.sprite.hitArea = new _pixi.Rectangle(x, y, this.scaledTileSize, this.scaledTileSize);
+        this.sprite.hitArea = new pixi_js_1.Rectangle(x, y, this.scaledTileSize, this.scaledTileSize);
         this.hitArea = this.sprite.hitArea;
       }
     }
@@ -97,10 +115,9 @@ var Entity = /*#__PURE__*/function () {
     value: function draw(interp) {}
   }]);
 }();
-var _default = exports["default"] = Entity;
+exports["default"] = Entity;
 
-},{"pixi.js":447}],2:[function(require,module,exports){
-(function (process,global){(function (){
+},{"pixi.js":445}],2:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -111,17 +128,6 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
-var _entity = _interopRequireDefault(require("./entity.js"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
 }
 function _slicedToArray(r, e) {
   return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
@@ -185,20 +191,6 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 function _callSuper(t, o, e) {
   return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 }
@@ -260,11 +252,63 @@ function _setPrototypeOf(t, e) {
     return t.__proto__ = e, t;
   }, _setPrototypeOf(t, e);
 }
-var Ghost = /*#__PURE__*/function (_Entity) {
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : i + "";
+}
+function _toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pixi_js_1 = require("pixi.js");
+var entity_js_1 = __importDefault(require("./entity.js"));
+var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
   function Ghost(gameCoordinator, name, level, characterUtil, blinky) {
     var _this;
     _classCallCheck(this, Ghost);
     _this = _callSuper(this, Ghost, [gameCoordinator, name, characterUtil]);
+    _defineProperty(_this, "pacman", void 0);
+    _defineProperty(_this, "level", void 0);
+    _defineProperty(_this, "blinky", void 0);
+    _defineProperty(_this, "defaultSpeed", void 0);
+    _defineProperty(_this, "cruiseElroy", void 0);
+    _defineProperty(_this, "mode", void 0);
+    _defineProperty(_this, "defaultMode", void 0);
+    _defineProperty(_this, "idleMode", void 0);
+    _defineProperty(_this, "slowSpeed", void 0);
+    _defineProperty(_this, "mediumSpeed", void 0);
+    _defineProperty(_this, "fastSpeed", void 0);
+    _defineProperty(_this, "scaredSpeed", void 0);
+    _defineProperty(_this, "transitionSpeed", void 0);
+    _defineProperty(_this, "eyeSpeed", void 0);
+    _defineProperty(_this, "velocityPerMs", void 0);
+    _defineProperty(_this, "emotion", void 0);
+    _defineProperty(_this, "scaredColor", void 0);
+    _defineProperty(_this, "defaultPosition", void 0);
+    _defineProperty(_this, "defaultDirection", void 0);
+    _defineProperty(_this, "paused", void 0);
     _this.scaledTileSize = gameCoordinator.scaledTileSize;
     _this.mazeArray = gameCoordinator.mazeArray;
     _this.pacman = gameCoordinator.pacman;
@@ -272,17 +316,15 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     _this.level = level;
     _this.characterUtil = characterUtil;
     _this.blinky = blinky;
-    _this.animationTarget = document.getElementById(name);
     _this.sprite = null;
     _this.reset();
     return _this;
   }
-
   /**
    * Rests the character to its default state
    * @param {Boolean} fullGameReset
    */
-  _inherits(Ghost, _Entity);
+  _inherits(Ghost, _entity_js_1$default);
   return _createClass(Ghost, [{
     key: "reset",
     value: function reset(fullGameReset) {
@@ -315,7 +357,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
         this.idleMode = 'idle';
       }
     }
-
     /**
      * Sets various properties related to the ghost's movement
      * @param {Object} pacman - Pacman's speed is used as the base for the ghosts' speeds
@@ -356,7 +397,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       }
       this.direction = this.defaultDirection;
     }
-
     /**
      * Sets values pertaining to the ghost's spritesheet animation
      */
@@ -370,10 +410,7 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       this.msSinceLastSprite = 0;
       this.frame = 0;
       this.spriteFrames = 2;
-      this.backgroundOffsetPixels = 0;
-      this.animationTarget.style.backgroundPosition = '0px 0px';
     }
-
     /**
      * Sets css property values for the ghost
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -384,12 +421,7 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function setStyleMeasurements(scaledTileSize, spriteFrames) {
       // The ghosts are the size of 2x2 game tiles.
       this.measurement = scaledTileSize * 2;
-      this.animationTarget.style.height = "".concat(this.measurement, "px");
-      this.animationTarget.style.width = "".concat(this.measurement, "px");
-      var bgSize = this.measurement * spriteFrames;
-      this.animationTarget.style.backgroundSize = "".concat(bgSize, "px");
     }
-
     /**
      * Sets the default position and direction for the ghosts at the game's start
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -398,6 +430,7 @@ var Ghost = /*#__PURE__*/function (_Entity) {
   }, {
     key: "setDefaultPosition",
     value: function setDefaultPosition(scaledTileSize, name) {
+      var _this$sprite;
       switch (name) {
         case 'blinky':
           this.defaultPosition = {
@@ -432,10 +465,8 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       }
       this.position = Object.assign({}, this.defaultPosition);
       this.oldPosition = Object.assign({}, this.position);
-      this.animationTarget.style.top = "".concat(this.position.top, "px");
-      this.animationTarget.style.left = "".concat(this.position.left, "px");
+      (_this$sprite = this.sprite) === null || _this$sprite === void 0 || _this$sprite.position.set(this.position.left, this.position.top);
     }
-
     /**
      * Chooses a movement Spritesheet depending upon direction
      * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
@@ -445,7 +476,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
   }, {
     key: "setSpriteSheet",
     value: function setSpriteSheet(name, direction, mode) {
-      this.animationTarget.style.visibility = "hidden";
       this.emotion = '';
       if (this.defaultSpeed !== this.slowSpeed) {
         this.emotion = this.defaultSpeed === this.mediumSpeed ? '_annoyed' : '_angry';
@@ -454,20 +484,17 @@ var Ghost = /*#__PURE__*/function (_Entity) {
         this.frame = 0;
         var scared = this.scaredColor == "blue" ? "scared" : "scaredWhite";
         this.setSprite(this.name, this.direction, scared, this.frame);
-        this.animationTarget.style.backgroundImage = 'url(app/style/graphics/' + "spriteSheets/characters/ghosts/scared_".concat(this.scaredColor, ".svg)");
       } else if (mode === 'eyes') {
         this.frame = 0;
         this.setSprite(this.name, this.direction, "eyes", this.frame);
-        this.animationTarget.style.backgroundImage = 'url(app/style/graphics/' + "spriteSheets/characters/ghosts/eyes_".concat(direction, ".svg)");
       } else {
         this.setSprite(this.name, this.direction, this.emotion, this.frame);
-        this.animationTarget.style.backgroundImage = 'url(app/style/graphics/' + "spriteSheets/characters/ghosts/".concat(name, "/").concat(name, "_").concat(direction) + "".concat(this.emotion, ".svg)");
       }
     }
   }, {
     key: "getTexture",
     value: function getTexture(name, direction, emotion, frameX) {
-      var frameY,
+      var frameY = 0,
         fx = frameX ? frameX : 0;
       switch (name) {
         case "blinky":
@@ -523,7 +550,7 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     key: "setSprite",
     value: function setSprite(name, direction, emotion, frameX) {
       var texture = this.getTexture(name, direction, emotion, frameX);
-      if (!this.sprite) this.sprite = new _pixi.Sprite(texture);else this.sprite.texture = texture;
+      if (!this.sprite) this.sprite = new pixi_js_1.Sprite(texture);else this.sprite.texture = texture;
     }
     /**
      * Checks to see if the ghost is currently in the 'tunnels' on the outer edges of the maze
@@ -535,7 +562,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function isInTunnel(gridPosition) {
       return gridPosition.y === 14 && (gridPosition.x < 6 || gridPosition.x > 21);
     }
-
     /**
      * Checks to see if the ghost is currently in the 'Ghost House' in the center of the maze
      * @param {({x: number, y: number})} gridPosition - The current x-y position on the 2D Maze Array
@@ -546,7 +572,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function isInGhostHouse(gridPosition) {
       return gridPosition.x > 9 && gridPosition.x < 18 && gridPosition.y > 11 && gridPosition.y < 17;
     }
-
     /**
      * Checks to see if the tile at the given coordinates of the Maze is an open position
      * @param {Array} mazeArray - 2D array representing the game board
@@ -557,7 +582,7 @@ var Ghost = /*#__PURE__*/function (_Entity) {
   }, {
     key: "getTile",
     value: function getTile(mazeArray, y, x) {
-      var tile = false;
+      var tile = undefined;
       if (mazeArray[y] && mazeArray[y][x] && mazeArray[y][x] !== 'X') {
         tile = {
           x: x,
@@ -566,7 +591,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       }
       return tile;
     }
-
     /**
      * Returns a list of all of the possible moves for the ghost to make on the next turn
      * @param {({x: number, y: number})} gridPosition - The current x-y position on the 2D Maze Array
@@ -585,17 +609,15 @@ var Ghost = /*#__PURE__*/function (_Entity) {
         left: this.getTile(mazeArray, y, x - 1),
         right: this.getTile(mazeArray, y, x + 1)
       };
-
       // Ghosts are not allowed to turn around at crossroads
-      possibleMoves[this.characterUtil.getOppositeDirection(direction)] = false;
+      possibleMoves[this.characterUtil.getOppositeDirection(direction)] = undefined;
       Object.keys(possibleMoves).forEach(function (tile) {
-        if (possibleMoves[tile] === false) {
+        if (possibleMoves[tile] === undefined) {
           delete possibleMoves[tile];
         }
       });
       return possibleMoves;
     }
-
     /**
      * Uses the Pythagorean Theorem to measure the distance between a given postion and Pacman
      * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
@@ -607,7 +629,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function calculateDistance(position, pacman) {
       return Math.sqrt(Math.pow(position.x - pacman.x, 2) + Math.pow(position.y - pacman.y, 2));
     }
-
     /**
      * Gets a position a number of spaces in front of Pacman's direction
      * @param {({x: number, y: number})} pacmanGridPosition
@@ -623,7 +644,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       target[propToChange] += tileOffset;
       return target;
     }
-
     /**
      * Determines Pinky's target, which is four tiles in front of Pacman's direction
      * @param {({x: number, y: number})} pacmanGridPosition
@@ -634,7 +654,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function determinePinkyTarget(pacmanGridPosition) {
       return this.getPositionInFrontOfPacman(pacmanGridPosition, 4);
     }
-
     /**
      * Determines Inky's target, which is a mirror image of Blinky's position
      * reflected across a point two tiles in front of Pacman's direction.
@@ -652,7 +671,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
         y: pivotPoint.y + (pivotPoint.y - blinkyGridPosition.y)
       };
     }
-
     /**
      * Clyde targets Pacman when the two are far apart, but retreats to the
      * lower-left corner when the two are within eight tiles of each other
@@ -669,7 +687,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
         y: 30
       };
     }
-
     /**
      * Determines the appropriate target for the ghost's AI
      * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
@@ -688,12 +705,10 @@ var Ghost = /*#__PURE__*/function (_Entity) {
           y: 10
         };
       }
-
       // Ghosts run from Pacman if scared
       if (mode === 'scared') {
         return pacmanGridPosition;
       }
-
       // Ghosts seek out corners in Scatter mode
       if (mode === 'scatter') {
         switch (name) {
@@ -740,7 +755,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
           return pacmanGridPosition;
       }
     }
-
     /**
      * Calls the appropriate function to determine the best move depending on the ghost's name
      * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
@@ -767,7 +781,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       });
       return bestMove;
     }
-
     /**
      * Determines the best direction for the ghost to travel in during the current frame
      * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
@@ -792,7 +805,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       }
       return newDirection;
     }
-
     /**
      * Handles movement for idle Ghosts in the Ghost House
      * @param {*} elapsedMs
@@ -826,7 +838,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       newPosition[this.characterUtil.getPropertyToChange(this.direction)] += this.characterUtil.getVelocity(this.direction, velocity) * elapsedMs;
       return newPosition;
     }
-
     /**
      * Sets idleMode to 'leaving', allowing the ghost to leave the Ghost House
      */
@@ -835,7 +846,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function endIdleMode() {
       this.idleMode = 'leaving';
     }
-
     /**
      * Handle the ghost's movement when it is snapped to the x-y grid of the Maze Array
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -852,7 +862,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       newPosition[this.characterUtil.getPropertyToChange(this.direction)] += this.characterUtil.getVelocity(this.direction, velocity) * elapsedMs;
       return newPosition;
     }
-
     /**
      * Determines if an eaten ghost is at the entrance of the Ghost House
      * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
@@ -864,7 +873,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function enteringGhostHouse(mode, position) {
       return mode === 'eyes' && position.y === 11 && position.x > 13.4 && position.x < 13.6;
     }
-
     /**
      * Determines if an eaten ghost has reached the center of the Ghost House
      * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
@@ -876,7 +884,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function enteredGhostHouse(mode, position) {
       return mode === 'eyes' && position.x === 13.5 && position.y > 13.8 && position.y < 14.2;
     }
-
     /**
      * Determines if a restored ghost is at the exit of the Ghost House
      * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
@@ -888,7 +895,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function leavingGhostHouse(mode, position) {
       return mode !== 'eyes' && position.x === 13.5 && position.y > 10.8 && position.y < 11;
     }
-
     /**
      * Handles entering and leaving the Ghost House after a ghost is eaten
      * @param {({x: number, y: number})} gridPosition - x-y position during the current frame
@@ -917,7 +923,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       }
       return gridPositionCopy;
     }
-
     /**
      * Handle the ghost's movement when it is inbetween tiles on the x-y grid of the Maze Array
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -935,7 +940,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       }
       return desired.newPosition;
     }
-
     /**
      * Determines the new Ghost position
      * @param {number} elapsedMs
@@ -959,7 +963,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       this.checkCollision(gridPosition, pacmanGridPosition);
       return newPosition;
     }
-
     /**
      * Changes the defaultMode to chase or scatter, and turns the ghost around
      * if needed
@@ -977,7 +980,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
         }
       }
     }
-
     /**
      * Toggles a scared ghost between blue and white, then updates its spritsheet
      */
@@ -987,7 +989,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       this.scaredColor = this.scaredColor === 'blue' ? 'white' : 'blue';
       this.setSpriteSheet(this.name, this.direction, this.mode);
     }
-
     /**
      * Sets the ghost's mode to SCARED, turns the ghost around,
      * and changes spritesheets accordingly
@@ -1005,7 +1006,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
         this.setSpriteSheet("scared", this.direction, this.mode);
       }
     }
-
     /**
      * Returns the scared ghost to chase/scatter mode and sets its spritesheet
      */
@@ -1015,7 +1015,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       this.mode = this.defaultMode;
       this.setSpriteSheet(this.name, this.direction, this.mode);
     }
-
     /**
      * Speeds up the ghost (used for Blinky as Pacdots are eaten)
      */
@@ -1029,7 +1028,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
         this.defaultSpeed = this.fastSpeed;
       }
     }
-
     /**
      * Resets defaultSpeed to slow and updates the spritesheet
      */
@@ -1040,7 +1038,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       this.cruiseElroy = false;
       this.setSpriteSheet(this.name, this.direction, this.mode);
     }
-
     /**
      * Sets a flag to indicate when the ghost should pause its movement
      * @param {Boolean} newValue
@@ -1050,7 +1047,6 @@ var Ghost = /*#__PURE__*/function (_Entity) {
     value: function pause(newValue) {
       this.paused = newValue;
     }
-
     /**
      * Checks if the ghost contacts Pacman - starts the death sequence if so
      * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
@@ -1066,19 +1062,12 @@ var Ghost = /*#__PURE__*/function (_Entity) {
           this.emitter.emit("ghost-eaten-" + this.name, {
             ghost: this
           });
-          // window.dispatchEvent(new CustomEvent('eatGhost', {
-          //   detail: {
-          //     ghost: this,
-          //   },
-          // }));
           this.mode = 'eyes';
         } else {
           this.emitter.emit("pacman-death");
-          //window.dispatchEvent(new Event('deathSequence'));
         }
       }
     }
-
     /**
      * Determines the appropriate speed for the ghost
      * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
@@ -1120,20 +1109,14 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       var newLeft = this.characterUtil.calculateNewDrawValue(interp, 'left', this.oldPosition, this.position);
       this.sprite.position.set(newLeft, newTop);
       this.sprite.visible = this.display;
-      this.animationTarget.style.top = "".concat(newTop, "px");
-      this.animationTarget.style.left = "".concat(newLeft, "px");
-      this.animationTarget.style.visibility = this.display ? this.characterUtil.checkForStutter(this.position, this.oldPosition) : 'hidden';
       var updatedProperties = this.characterUtil.advanceSpriteSheet(this);
       this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
-      this.animationTarget = updatedProperties.animationTarget;
       this.frame = updatedProperties.frame;
       var emotion = this.emotion;
       var scared = this.scaredColor == "blue" ? "scared" : "scaredWhite";
       if (this.mode == "scared") emotion = scared;else if (this.mode == 'eyes') emotion = 'eyes';
       this.setSprite(this.name, this.direction, emotion, updatedProperties.frame);
-      this.backgroundOffsetPixels = updatedProperties.backgroundOffsetPixels;
     }
-
     /**
      * Handles movement logic for the ghost
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -1150,17 +1133,11 @@ var Ghost = /*#__PURE__*/function (_Entity) {
       }
     }
   }]);
-}(_entity["default"]); //Just to avoid problems with NYC coverage test
-if (!process.env.NYC_PROCESS_ID) global.window.Ghost = Ghost;
-// removeIf(production)
-//module.exports = Ghost;
-// endRemoveIf(production)
-//removeIf(production)
-var _default = exports["default"] = Ghost; //endRemoveIf(production)
+}(entity_js_1["default"]); //removeIf(production)
+exports["default"] = Ghost;
+//endRemoveIf(production)
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./entity.js":1,"_process":448,"pixi.js":447}],3:[function(require,module,exports){
-(function (process,global){(function (){
+},{"./entity.js":1,"pixi.js":445}],3:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -1171,17 +1148,6 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
-var _entity = _interopRequireDefault(require("./entity.js"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
 }
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
@@ -1196,20 +1162,6 @@ function _createClass(e, r, t) {
   return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
     writable: !1
   }), e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
 }
 function _callSuper(t, o, e) {
   return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
@@ -1272,26 +1224,62 @@ function _setPrototypeOf(t, e) {
     return t.__proto__ = e, t;
   }, _setPrototypeOf(t, e);
 }
-var Pacman = /*#__PURE__*/function (_Entity) {
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : i + "";
+}
+function _toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pixi_js_1 = require("pixi.js");
+var entity_js_1 = __importDefault(require("./entity.js"));
+var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
   function Pacman(gameCoordinator, characterUtil) {
     var _this;
     _classCallCheck(this, Pacman);
     _this = _callSuper(this, Pacman, [gameCoordinator, "pacman", characterUtil]);
+    _defineProperty(_this, "velocityPerMs", void 0);
+    _defineProperty(_this, "pacmanArrow", void 0);
+    _defineProperty(_this, "spriteArrow", void 0);
+    _defineProperty(_this, "specialAnimation", void 0);
+    _defineProperty(_this, "desiredDirection", void 0);
+    _defineProperty(_this, "defaultPosition", void 0);
+    _defineProperty(_this, "death", void 0);
     _this.scaledTileSize = gameCoordinator.scaledTileSize;
     _this.mazeArray = gameCoordinator.mazeArray;
     _this.characterUtil = characterUtil;
-    _this.animationTarget = document.getElementById('pacman');
-    _this.pacmanArrow = document.getElementById('pacman-arrow');
     _this.sprite = null;
     _this.spriteArrow = null;
     _this.reset();
     return _this;
   }
-
   /**
    * Rests the character to its default state
    */
-  _inherits(Pacman, _Entity);
+  _inherits(Pacman, _entity_js_1$default);
   return _createClass(Pacman, [{
     key: "reset",
     value: function reset() {
@@ -1300,7 +1288,6 @@ var Pacman = /*#__PURE__*/function (_Entity) {
       this.setStyleMeasurements(this.scaledTileSize, this.spriteFrames);
       this.setDefaultPosition(this.scaledTileSize);
       this.setSpriteSheet(this.direction);
-      this.pacmanArrow.style.backgroundImage = 'url(app/style/graphics/' + "spriteSheets/characters/pacman/arrow_".concat(this.direction, ".svg)");
     }
   }, {
     key: "registerEventListeners",
@@ -1321,7 +1308,6 @@ var Pacman = /*#__PURE__*/function (_Entity) {
       this.moving = false;
       this.allowCollision = true;
     }
-
     /**
      * Sets values pertaining to Pacman's spritesheet animation
      */
@@ -1336,10 +1322,7 @@ var Pacman = /*#__PURE__*/function (_Entity) {
       this.msSinceLastSprite = 0;
       this.spriteFrames = 4;
       this.frame = 0;
-      this.backgroundOffsetPixels = 0;
-      this.animationTarget.style.backgroundPosition = '0px 0px';
     }
-
     /**
      * Sets css property values for Pacman and Pacman's Arrow
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -1352,14 +1335,7 @@ var Pacman = /*#__PURE__*/function (_Entity) {
       var frameX = scaledTileSize / spriteFrames;
       this.setSprite(this.direction, frameX);
       this.setArrowSprite(this.direction, frameX);
-      this.animationTarget.style.height = "".concat(this.measurement, "px");
-      this.animationTarget.style.width = "".concat(this.measurement, "px");
-      this.animationTarget.style.backgroundSize = "".concat(this.measurement * spriteFrames, "px");
-      this.pacmanArrow.style.height = "".concat(this.measurement * 2, "px");
-      this.pacmanArrow.style.width = "".concat(this.measurement * 2, "px");
-      this.pacmanArrow.style.backgroundSize = "".concat(this.measurement * 2, "px");
     }
-
     /**
      * Sets the default position and direction for Pacman at the game's start
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -1367,16 +1343,15 @@ var Pacman = /*#__PURE__*/function (_Entity) {
   }, {
     key: "setDefaultPosition",
     value: function setDefaultPosition(scaledTileSize) {
+      var _this$sprite;
       this.defaultPosition = {
         top: scaledTileSize * 22.5,
         left: scaledTileSize * 13
       };
       this.position = Object.assign({}, this.defaultPosition);
       this.oldPosition = Object.assign({}, this.position);
-      this.animationTarget.style.top = "".concat(this.position.top, "px");
-      this.animationTarget.style.left = "".concat(this.position.left, "px");
+      (_this$sprite = this.sprite) === null || _this$sprite === void 0 || _this$sprite.position.set(this.position.left, this.position.top);
     }
-
     /**
      * Calculates how fast Pacman should move in a millisecond
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -1388,7 +1363,6 @@ var Pacman = /*#__PURE__*/function (_Entity) {
       var velocityPerSecond = scaledTileSize * 11;
       return velocityPerSecond / 1000;
     }
-
     /**
      * Chooses a movement Spritesheet depending upon direction
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -1399,8 +1373,6 @@ var Pacman = /*#__PURE__*/function (_Entity) {
       this.death = false;
       this.setSprite(direction, 0);
       this.setArrowSprite(direction, 0);
-      this.animationTarget.style.visibility = 'hidden';
-      this.animationTarget.style.backgroundImage = 'url(app/style/graphics/' + "spriteSheets/characters/pacman/pacman_".concat(direction, ".svg)");
     }
   }, {
     key: "getArrowTexture",
@@ -1450,13 +1422,13 @@ var Pacman = /*#__PURE__*/function (_Entity) {
     key: "setSprite",
     value: function setSprite(direction, frameX, death) {
       var texture = this.getTexture(direction, frameX, death);
-      if (!this.sprite) this.sprite = new _pixi.Sprite(texture);else this.sprite.texture = texture;
+      if (!this.sprite) this.sprite = new pixi_js_1.Sprite(texture);else this.sprite.texture = texture;
     }
   }, {
     key: "setArrowSprite",
     value: function setArrowSprite(direction, frameX, death) {
       var textureArrow = this.getArrowTexture(direction, death);
-      if (!this.spriteArrow) this.spriteArrow = new _pixi.Sprite(textureArrow);else this.spriteArrow.texture = textureArrow;
+      if (!this.spriteArrow) this.spriteArrow = new pixi_js_1.Sprite(textureArrow);else this.spriteArrow.texture = textureArrow;
     }
   }, {
     key: "prepDeathAnimation",
@@ -1469,16 +1441,8 @@ var Pacman = /*#__PURE__*/function (_Entity) {
       this.death = true;
       this.setSprite(this.direction, this.frame, this.death);
       this.spriteArrow.visible = false;
-      //this.setArrowSprite(this.direction, this.frame,  this.death)
-
-      this.backgroundOffsetPixels = 0;
-      var bgSize = this.measurement * this.spriteFrames;
-      this.animationTarget.style.backgroundSize = "".concat(bgSize, "px");
-      this.animationTarget.style.backgroundImage = 'url(app/style/' + 'graphics/spriteSheets/characters/pacman/pacman_death.svg)';
-      this.animationTarget.style.backgroundPosition = '0px 0px';
-      this.pacmanArrow.style.backgroundImage = '';
+      this.setArrowSprite(this.direction, this.frame, this.death);
     }
-
     /**
      * Changes Pacman's desiredDirection, updates the PacmanArrow sprite, and sets moving to true
      * @param {Event} e - The keydown event to evaluate
@@ -1489,24 +1453,10 @@ var Pacman = /*#__PURE__*/function (_Entity) {
     value: function changeDirection(newDirection, startMoving) {
       this.desiredDirection = newDirection;
       this.setArrowSprite(this.desiredDirection, 0);
-      this.pacmanArrow.style.backgroundImage = 'url(app/style/graphics/' + "spriteSheets/characters/pacman/arrow_".concat(this.desiredDirection, ".svg)");
       if (startMoving) {
         this.moving = true;
       }
     }
-
-    /**
-     * Updates the position of the leading arrow in front of Pacman
-     * @param {({top: number, left: number})} position - Pacman's position during the current frame
-     * @param {number} scaledTileSize - The dimensions of a single tile
-     */
-  }, {
-    key: "updatePacmanArrowPosition",
-    value: function updatePacmanArrowPosition(position, scaledTileSize) {
-      this.pacmanArrow.style.top = "".concat(position.top - scaledTileSize, "px");
-      this.pacmanArrow.style.left = "".concat(position.left - scaledTileSize, "px");
-    }
-
     /**
      * Handle Pacman's movement when he is snapped to the x-y grid of the Maze Array
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -1528,7 +1478,6 @@ var Pacman = /*#__PURE__*/function (_Entity) {
       this.setSpriteSheet(this.direction);
       return desired.newPosition;
     }
-
     /**
      * Handle Pacman's movement when he is inbetween tiles on the x-y grid of the Maze Array
      * @param {({x: number, y: number})} gridPosition - x-y position during the current frame
@@ -1566,25 +1515,17 @@ var Pacman = /*#__PURE__*/function (_Entity) {
     value: function draw(interp) {
       var newTop = this.characterUtil.calculateNewDrawValue(interp, 'top', this.oldPosition, this.position);
       var newLeft = this.characterUtil.calculateNewDrawValue(interp, 'left', this.oldPosition, this.position);
-      this.animationTarget.style.top = "".concat(newTop, "px");
-      this.animationTarget.style.left = "".concat(newLeft, "px");
       this.sprite.position.set(newLeft, newTop);
       var arrowLeft = newLeft - this.gameCoordinator.tileSize;
       var arrowTop = newTop - this.gameCoordinator.tileSize;
       this.spriteArrow.position.set(arrowLeft, arrowTop);
-      this.animationTarget.style.visibility = this.display ? this.characterUtil.checkForStutter(this.position, this.oldPosition) : 'hidden';
-      this.pacmanArrow.style.visibility = this.animationTarget.style.visibility;
-      this.updatePacmanArrowPosition(this.position, this.scaledTileSize);
       var updatedProperties = this.characterUtil.advanceSpriteSheet(this);
       this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
-      this.animationTarget = updatedProperties.animationTarget;
       this.frame = updatedProperties.frame;
       this.setSprite(this.direction, updatedProperties.frame, this.death);
       this.sprite.visible = this.display;
       this.spriteArrow.visible = this.display;
-      this.backgroundOffsetPixels = updatedProperties.backgroundOffsetPixels;
     }
-
     /**
      * Handles movement logic for Pacman
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -1608,14 +1549,18 @@ var Pacman = /*#__PURE__*/function (_Entity) {
       }
     }
   }]);
-}(_entity["default"]); //Just to avoid problems with NYC coverage test
-if (!process.env.NYC_PROCESS_ID) global.window.Pacman = Pacman;
-// removeIf(production)
-//module.exports = Pacman;
-var _default = exports["default"] = Pacman; // endRemoveIf(production)
+}(entity_js_1["default"]); // removeIf(production)
+exports["default"] = Pacman;
+// endRemoveIf(production)
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./entity.js":1,"_process":448,"pixi.js":447}],4:[function(require,module,exports){
+},{"./entity.js":1,"pixi.js":445}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+},{}],5:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -1627,11 +1572,6 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
 function _regenerator() {
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
     t,
@@ -1778,6 +1718,14 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == _typeof(i) ? i : i + "";
@@ -1792,21 +1740,15 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
-function _classPrivateMethodInitSpec(e, a) {
-  _checkPrivateRedeclaration(e, a), a.add(e);
-}
-function _checkPrivateRedeclaration(e, t) {
-  if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
-}
-function _assertClassBrand(e, t, n) {
-  if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-  throw new TypeError("Private element is not present on this object");
-}
-var _AssetsManager_brand = /*#__PURE__*/new WeakSet();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pixi_js_1 = require("pixi.js");
 var AssetsManager = /*#__PURE__*/function () {
   function AssetsManager(gameCoordinator) {
     _classCallCheck(this, AssetsManager);
-    _classPrivateMethodInitSpec(this, _AssetsManager_brand);
+    _defineProperty(this, "gameCoordinator", void 0);
+    _defineProperty(this, "textures", void 0);
     this.gameCoordinator = gameCoordinator;
     this.textures = new Map();
   }
@@ -1819,305 +1761,293 @@ var AssetsManager = /*#__PURE__*/function () {
           while (1) switch (_context.n) {
             case 0:
               imgBase = 'app/style/graphics/spriteSheets/';
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "maze_blue",
                 src: "".concat(imgBase, "maze/maze_blue.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "maze_white",
                 src: "".concat(imgBase, "maze/maze_white.svg")
               });
-
               // Pacman
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "arrow_down",
                 src: "".concat(imgBase, "characters/pacman/arrow_down.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "arrow_left",
                 src: "".concat(imgBase, "characters/pacman/arrow_left.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "arrow_right",
                 src: "".concat(imgBase, "characters/pacman/arrow_right.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "arrow_up",
                 src: "".concat(imgBase, "characters/pacman/arrow_up.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pacman_death",
                 src: "".concat(imgBase, "characters/pacman/pacman_death.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pacman_error",
                 src: "".concat(imgBase, "characters/pacman/pacman_error.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pacman_down",
                 src: "".concat(imgBase, "characters/pacman/pacman_down.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pacman_left",
                 src: "".concat(imgBase, "characters/pacman/pacman_left.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pacman_right",
                 src: "".concat(imgBase, "characters/pacman/pacman_right.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pacman_up",
                 src: "".concat(imgBase, "characters/pacman/pacman_up.svg")
               });
-
               // Blinky
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_down_angry",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_down_angry.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_down_annoyed",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_down_annoyed.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_down",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_down.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_left_angry",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_left_angry.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_left_annoyed",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_left_annoyed.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_left",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_left.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_right_angry",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_right_angry.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_right_annoyed",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_right_annoyed.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_right",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_right.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_up_angry",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_up_angry.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_up_annoyed",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_up_annoyed.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "blinky_up",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_up.svg")
               });
-
               // Clyde
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "clyde_down",
                 src: "".concat(imgBase, "characters/ghosts/clyde/clyde_down.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "clyde_left",
                 src: "".concat(imgBase, "characters/ghosts/clyde/clyde_left.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "clyde_right",
                 src: "".concat(imgBase, "characters/ghosts/clyde/clyde_right.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "clyde_up",
                 src: "".concat(imgBase, "characters/ghosts/clyde/clyde_up.svg")
               });
-
               // Inky
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "inky_down",
                 src: "".concat(imgBase, "characters/ghosts/inky/inky_down.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "inky_left",
                 src: "".concat(imgBase, "characters/ghosts/inky/inky_left.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "inky_right",
                 src: "".concat(imgBase, "characters/ghosts/inky/inky_right.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "inky_up",
                 src: "".concat(imgBase, "characters/ghosts/inky/inky_up.svg")
               });
-
               // Pinky
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pinky_down",
                 src: "".concat(imgBase, "characters/ghosts/pinky/pinky_down.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pinky_left",
                 src: "".concat(imgBase, "characters/ghosts/pinky/pinky_left.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pinky_right",
                 src: "".concat(imgBase, "characters/ghosts/pinky/pinky_right.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pinky_up",
                 src: "".concat(imgBase, "characters/ghosts/pinky/pinky_up.svg")
               });
-
               // Ghosts Common
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "eyes_down",
                 src: "".concat(imgBase, "characters/ghosts/eyes_down.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "eyes_left",
                 src: "".concat(imgBase, "characters/ghosts/eyes_left.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "eyes_right",
                 src: "".concat(imgBase, "characters/ghosts/eyes_right.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "eyes_up",
                 src: "".concat(imgBase, "characters/ghosts/eyes_up.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "scared_blue",
                 src: "".concat(imgBase, "characters/ghosts/scared_blue.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "scared_white",
                 src: "".concat(imgBase, "characters/ghosts/scared_white.svg")
               });
-
               // Dots
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "pacdot",
                 src: "".concat(imgBase, "pickups/pacdot.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "powerPellet",
                 src: "".concat(imgBase, "pickups/powerPellet.svg")
               });
-
               // Fruit
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "apple",
                 src: "".concat(imgBase, "pickups/apple.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "bell",
                 src: "".concat(imgBase, "pickups/bell.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "cherry",
                 src: "".concat(imgBase, "pickups/cherry.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "galaxian",
                 src: "".concat(imgBase, "pickups/galaxian.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "key",
                 src: "".concat(imgBase, "pickups/key.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "melon",
                 src: "".concat(imgBase, "pickups/melon.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "orange",
                 src: "".concat(imgBase, "pickups/orange.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "strawberry",
                 src: "".concat(imgBase, "pickups/strawberry.svg")
               });
-
               // Text
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "ready",
                 src: "".concat(imgBase, "text/ready.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "game_over",
                 src: "".concat(imgBase, "text/game_over.svg")
               });
-
               // Points
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "100",
                 src: "".concat(imgBase, "text/100.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "200",
                 src: "".concat(imgBase, "text/200.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "300",
                 src: "".concat(imgBase, "text/300.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "400",
                 src: "".concat(imgBase, "text/400.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "500",
                 src: "".concat(imgBase, "text/500.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "700",
                 src: "".concat(imgBase, "text/700.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "800",
                 src: "".concat(imgBase, "text/800.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "1000",
                 src: "".concat(imgBase, "text/1000.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "1600",
                 src: "".concat(imgBase, "text/1600.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "2000",
                 src: "".concat(imgBase, "text/2000.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "3000",
                 src: "".concat(imgBase, "text/3000.svg")
               });
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "5000",
                 src: "".concat(imgBase, "text/5000.svg")
               });
-
               // Misc
-              _pixi.Assets.add({
+              pixi_js_1.Assets.add({
                 alias: "extra_life",
                 src: 'app/style/graphics/extra_life.png'
               });
               imageAliases = ["maze_blue", "maze_white", "arrow_down", "arrow_left", "arrow_right", "arrow_up", "pacman_death", "pacman_error", "pacman_down", "pacman_left", "pacman_right", "pacman_up", "blinky_down_angry", "blinky_down_annoyed", "blinky_down", "blinky_left_angry", "blinky_left_annoyed", "blinky_left", "blinky_right_angry", "blinky_right_annoyed", "blinky_right", "blinky_up_angry", "blinky_up_annoyed", "blinky_up", "clyde_down", "clyde_left", "clyde_right", "clyde_up", "inky_down", "inky_left", "inky_right", "inky_up", "pinky_down", "pinky_left", "pinky_right", "pinky_up", "eyes_down", "eyes_left", "eyes_right", "eyes_up", "scared_blue", "scared_white", "pacdot", "powerPellet", "apple", "bell", "cherry", "galaxian", "key", "melon", "orange", "strawberry", "ready", "game_over", "100", "200", "300", "400", "500", "700", "800", "1000", "1600", "2000", "3000", "5000", "extra_life"];
               _context.n = 1;
-              return _pixi.Assets.load(imageAliases, function (progress) {
+              return pixi_js_1.Assets.load(imageAliases, function (progress) {
                 //console.log("loading assets", progress)
               });
             case 1:
               //put the audios here:      
-
-              _assertClassBrand(_AssetsManager_brand, this, _createSprites).call(this);
+              this.createTextures();
             case 2:
               return _context.a(2);
           }
@@ -2129,6 +2059,212 @@ var AssetsManager = /*#__PURE__*/function () {
       return load;
     }()
   }, {
+    key: "createTextures",
+    value: function createTextures() {
+      //the maze background sprite
+      this.textures.set("mazeBlue", pixi_js_1.Texture.from("maze_blue"));
+      this.textures.set("mazeWhite", pixi_js_1.Texture.from("maze_white"));
+      this.createPacmanSprite();
+      this.createGhostsSprites();
+      this.createPickupsSprite();
+    }
+  }, {
+    key: "createPacmanSprite",
+    value: function createPacmanSprite() {
+      var container = new pixi_js_1.Container();
+      var sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("arrow_left"));
+      sprite1.position.set(0, 0);
+      sprite1.anchor.set(0, 0);
+      var sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("arrow_right"));
+      sprite2.position.set(32, 0);
+      sprite2.anchor.set(0, 0);
+      var sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("arrow_up"));
+      sprite3.position.set(64, 0);
+      sprite3.anchor.set(0, 0);
+      var sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("arrow_down"));
+      sprite4.position.set(96, 0);
+      sprite4.anchor.set(0, 0);
+      container.addChild(sprite1, sprite2, sprite3, sprite4);
+      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_left"));
+      sprite1.position.set(0, 32);
+      sprite1.anchor.set(0, 0);
+      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_right"));
+      sprite2.position.set(0, 48);
+      sprite2.anchor.set(0, 0);
+      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_up"));
+      sprite3.position.set(0, 64);
+      sprite3.anchor.set(0, 0);
+      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_down"));
+      sprite4.position.set(0, 80);
+      sprite4.anchor.set(0, 0);
+      container.addChild(sprite1, sprite2, sprite3, sprite4);
+      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_death"));
+      sprite1.position.set(0, 96);
+      sprite1.anchor.set(0, 0);
+      container.addChild(sprite1);
+      var renderTexture = this.gameCoordinator.renderer.generateTexture(container);
+      this.gameCoordinator.renderer.render(container, {
+        renderTexture: renderTexture
+      });
+      this.textures.set("pacman", renderTexture);
+    }
+  }, {
+    key: "createGhostsSprites",
+    value: function createGhostsSprites() {
+      var sprite1, sprite2, sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9, sprite10, sprite11, sprite12;
+      var container = new pixi_js_1.Container();
+      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_left"));
+      sprite1.position.set(0, 0);
+      sprite1.anchor.set(0, 0);
+      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_right"));
+      sprite2.position.set(0, 16);
+      sprite2.anchor.set(0, 0);
+      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_up"));
+      sprite3.position.set(0, 32);
+      sprite3.anchor.set(0, 0);
+      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_down"));
+      sprite4.position.set(0, 48);
+      sprite4.anchor.set(0, 0);
+      sprite5 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_left_angry"));
+      sprite5.position.set(0, 64);
+      sprite5.anchor.set(0, 0);
+      sprite6 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_right_angry"));
+      sprite6.position.set(0, 80);
+      sprite6.anchor.set(0, 0);
+      sprite7 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_up_angry"));
+      sprite7.position.set(0, 96);
+      sprite7.anchor.set(0, 0);
+      sprite8 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_down_angry"));
+      sprite8.position.set(0, 112);
+      sprite8.anchor.set(0, 0);
+      sprite9 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_left_annoyed"));
+      sprite9.position.set(0, 128);
+      sprite9.anchor.set(0, 0);
+      sprite10 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_right_annoyed"));
+      sprite10.position.set(0, 144);
+      sprite10.anchor.set(0, 0);
+      sprite11 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_up_annoyed"));
+      sprite11.position.set(0, 160);
+      sprite11.anchor.set(0, 0);
+      sprite12 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_down_annoyed"));
+      sprite12.position.set(0, 176);
+      sprite12.anchor.set(0, 0);
+      container.addChild(sprite1, sprite2, sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9, sprite10, sprite11, sprite12);
+      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pinky_left"));
+      sprite1.position.set(0, 192);
+      sprite1.anchor.set(0, 0);
+      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pinky_right"));
+      sprite2.position.set(0, 208);
+      sprite2.anchor.set(0, 0);
+      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pinky_up"));
+      sprite3.position.set(0, 224);
+      sprite3.anchor.set(0, 0);
+      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pinky_down"));
+      sprite4.position.set(0, 240);
+      sprite4.anchor.set(0, 0);
+      container.addChild(sprite1, sprite2, sprite3, sprite4);
+      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("inky_left"));
+      sprite1.position.set(0, 256);
+      sprite1.anchor.set(0, 0);
+      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("inky_right"));
+      sprite2.position.set(0, 272);
+      sprite2.anchor.set(0, 0);
+      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("inky_up"));
+      sprite3.position.set(0, 288);
+      sprite3.anchor.set(0, 0);
+      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("inky_down"));
+      sprite4.position.set(0, 304);
+      sprite4.anchor.set(0, 0);
+      container.addChild(sprite1, sprite2, sprite3, sprite4);
+      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("clyde_left"));
+      sprite1.position.set(0, 320);
+      sprite1.anchor.set(0, 0);
+      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("clyde_right"));
+      sprite2.position.set(0, 336);
+      sprite2.anchor.set(0, 0);
+      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("clyde_up"));
+      sprite3.position.set(0, 352);
+      sprite3.anchor.set(0, 0);
+      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("clyde_down"));
+      sprite4.position.set(0, 368);
+      sprite4.anchor.set(0, 0);
+      container.addChild(sprite1, sprite2, sprite3, sprite4);
+      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("eyes_left"));
+      sprite1.position.set(0, 384);
+      sprite1.anchor.set(0, 0);
+      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("eyes_right"));
+      sprite2.position.set(0, 400);
+      sprite2.anchor.set(0, 0);
+      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("eyes_up"));
+      sprite3.position.set(0, 416);
+      sprite3.anchor.set(0, 0);
+      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("eyes_down"));
+      sprite4.position.set(0, 432);
+      sprite4.anchor.set(0, 0);
+      container.addChild(sprite1, sprite2, sprite3, sprite4);
+      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("scared_blue"));
+      sprite1.position.set(0, 448);
+      sprite1.anchor.set(0, 0);
+      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("scared_white"));
+      sprite2.position.set(0, 464);
+      sprite2.anchor.set(0, 0);
+      container.addChild(sprite1, sprite2);
+      var renderTexture = pixi_js_1.RenderTexture.create({
+        width: 32,
+        height: 480
+      });
+      this.gameCoordinator.renderer.render(container, {
+        renderTexture: renderTexture
+      });
+      this.textures.set("ghosts", renderTexture);
+    }
+  }, {
+    key: "createPickupsSprite",
+    value: function createPickupsSprite() {
+      var container = new pixi_js_1.Container();
+      var sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacdot"));
+      sprite1.position.set(0, 0);
+      sprite1.anchor.set(0, 0);
+      container.addChild(sprite1);
+      var sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("powerPellet"));
+      sprite2.position.set(0, 16);
+      sprite2.anchor.set(0, 0);
+      container.addChild(sprite2);
+      var sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("cherry"));
+      sprite3.position.set(0, 32);
+      sprite3.anchor.set(0, 0);
+      var sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("strawberry"));
+      sprite4.position.set(0, 48);
+      sprite4.anchor.set(0, 0);
+      var sprite5 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("orange"));
+      sprite5.position.set(0, 64);
+      sprite5.anchor.set(0, 0);
+      var sprite6 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("apple"));
+      sprite6.position.set(0, 80);
+      sprite6.anchor.set(0, 0);
+      var sprite7 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("melon"));
+      sprite7.position.set(0, 96);
+      sprite7.anchor.set(0, 0);
+      var sprite8 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("galaxian"));
+      sprite8.position.set(0, 112);
+      sprite8.anchor.set(0, 0);
+      var sprite9 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("bell"));
+      sprite9.position.set(0, 128);
+      sprite9.anchor.set(0, 0);
+      var sprite10 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("key"));
+      sprite10.position.set(0, 144);
+      sprite10.anchor.set(0, 0);
+      container.addChild(sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9, sprite10);
+      var renderTexture = pixi_js_1.RenderTexture.create({
+        width: 16,
+        height: 160
+      });
+      this.gameCoordinator.renderer.render(container, {
+        renderTexture: renderTexture
+      });
+      this.textures.set("pickups", renderTexture);
+    }
+  }, {
     key: "getTexture",
     value: function getTexture(textureName, frameX, frameY, width, height, spWidth, spHeight) {
       var tx = this.textures.get(textureName.toString());
@@ -2139,264 +2275,30 @@ var AssetsManager = /*#__PURE__*/function () {
           if (!width || !height) throw new Error("If the frameX or/and frameY is informed, width and hight should be paased as parameters.");
           if (!frameY) frameY = 0;
           txName = textureName + "_" + frameX + "_" + frameY;
-          newTx = _pixi.Cache.get(txName);
+          newTx = pixi_js_1.Cache.get(txName);
           if (!newTx) {
-            var rect = new _pixi.Rectangle(frameX * width, frameY * height, width, height);
+            var rect = new pixi_js_1.Rectangle(frameX * width, frameY * height, width, height);
             if (spWidth) rect.width = spWidth;
             if (spHeight) rect.height = spHeight;
-            newTx = new _pixi.Texture(tx.castToBaseTexture(), rect);
-            _pixi.Cache.set(txName, newTx);
+            newTx = new pixi_js_1.Texture(tx.castToBaseTexture(), rect);
+            pixi_js_1.Cache.set(txName, newTx);
           }
           tx = newTx;
         }
       } else {
         //get from the cache directly
-        return _pixi.Cache.get(textureName.toString());
+        return pixi_js_1.Cache.get(textureName.toString());
       }
       return tx;
     }
   }]);
 }(); //removeIf(production)
-function _createSprites() {
-  //the maze background sprite
-  this.textures.set("mazeBlue", new _pixi.Sprite(_pixi.Texture.from("maze_blue")));
-  this.textures.set("mazeWhite", new _pixi.Sprite(_pixi.Texture.from("maze_white")));
-  _assertClassBrand(_AssetsManager_brand, this, _createPacmanSprite).call(this);
-  _assertClassBrand(_AssetsManager_brand, this, _createGhostsSprites).call(this);
-  _assertClassBrand(_AssetsManager_brand, this, _createPickupsSprite).call(this);
-}
-function _createPacmanSprite() {
-  var container = new _pixi.Container();
-  var sprite1 = new _pixi.Sprite(_pixi.Texture.from("arrow_left"));
-  sprite1.position.set(0, 0);
-  sprite1.anchor.set(0, 0);
-  var sprite2 = new _pixi.Sprite(_pixi.Texture.from("arrow_right"));
-  sprite2.position.set(32, 0);
-  sprite2.anchor.set(0, 0);
-  var sprite3 = new _pixi.Sprite(_pixi.Texture.from("arrow_up"));
-  sprite3.position.set(64, 0);
-  sprite3.anchor.set(0, 0);
-  var sprite4 = new _pixi.Sprite(_pixi.Texture.from("arrow_down"));
-  sprite4.position.set(96, 0);
-  sprite4.anchor.set(0, 0);
-  container.addChild(sprite1, sprite2, sprite3, sprite4);
-  sprite1 = new _pixi.Sprite(_pixi.Texture.from("pacman_left"));
-  sprite1.position.set(0, 32);
-  sprite1.anchor.set(0, 0);
-  sprite2 = new _pixi.Sprite(_pixi.Texture.from("pacman_right"));
-  sprite2.position.set(0, 48);
-  sprite2.anchor.set(0, 0);
-  sprite3 = new _pixi.Sprite(_pixi.Texture.from("pacman_up"));
-  sprite3.position.set(0, 64);
-  sprite3.anchor.set(0, 0);
-  sprite4 = new _pixi.Sprite(_pixi.Texture.from("pacman_down"));
-  sprite4.position.set(0, 80);
-  sprite4.anchor.set(0, 0);
-  container.addChild(sprite1, sprite2, sprite3, sprite4);
-  sprite1 = new _pixi.Sprite(_pixi.Texture.from("pacman_death"));
-  sprite1.position.set(0, 96);
-  sprite1.anchor.set(0, 0);
-  container.addChild(sprite1);
-  var renderTexture = this.gameCoordinator.renderer.generateTexture(container);
-  this.gameCoordinator.renderer.render(container, {
-    renderTexture: renderTexture
-  });
-  this.textures.set("pacman", renderTexture);
-}
-function _createGhostsSprites() {
-  var sprite1, sprite2, sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9, sprite10, sprite11, sprite12;
-  var container = new _pixi.Container();
-  sprite1 = new _pixi.Sprite(_pixi.Texture.from("blinky_left"));
-  sprite1.position.set(0, 0);
-  sprite1.anchor.set(0, 0);
-  sprite2 = new _pixi.Sprite(_pixi.Texture.from("blinky_right"));
-  sprite2.position.set(0, 16);
-  sprite2.anchor.set(0, 0);
-  sprite3 = new _pixi.Sprite(_pixi.Texture.from("blinky_up"));
-  sprite3.position.set(0, 32);
-  sprite3.anchor.set(0, 0);
-  sprite4 = new _pixi.Sprite(_pixi.Texture.from("blinky_down"));
-  sprite4.position.set(0, 48);
-  sprite4.anchor.set(0, 0);
-  sprite5 = new _pixi.Sprite(_pixi.Texture.from("blinky_left_angry"));
-  sprite5.position.set(0, 64);
-  sprite5.anchor.set(0, 0);
-  sprite6 = new _pixi.Sprite(_pixi.Texture.from("blinky_right_angry"));
-  sprite6.position.set(0, 80);
-  sprite6.anchor.set(0, 0);
-  sprite7 = new _pixi.Sprite(_pixi.Texture.from("blinky_up_angry"));
-  sprite7.position.set(0, 96);
-  sprite7.anchor.set(0, 0);
-  sprite8 = new _pixi.Sprite(_pixi.Texture.from("blinky_down_angry"));
-  sprite8.position.set(0, 112);
-  sprite8.anchor.set(0, 0);
-  sprite9 = new _pixi.Sprite(_pixi.Texture.from("blinky_left_annoyed"));
-  sprite9.position.set(0, 128);
-  sprite9.anchor.set(0, 0);
-  sprite10 = new _pixi.Sprite(_pixi.Texture.from("blinky_right_annoyed"));
-  sprite10.position.set(0, 144);
-  sprite10.anchor.set(0, 0);
-  sprite11 = new _pixi.Sprite(_pixi.Texture.from("blinky_up_annoyed"));
-  sprite11.position.set(0, 160);
-  sprite11.anchor.set(0, 0);
-  sprite12 = new _pixi.Sprite(_pixi.Texture.from("blinky_down_annoyed"));
-  sprite12.position.set(0, 176);
-  sprite12.anchor.set(0, 0);
-  container.addChild(sprite1, sprite2, sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9, sprite10, sprite11, sprite12);
-  sprite1 = new _pixi.Sprite(_pixi.Texture.from("pinky_left"));
-  sprite1.position.set(0, 192);
-  sprite1.anchor.set(0, 0);
-  sprite2 = new _pixi.Sprite(_pixi.Texture.from("pinky_right"));
-  sprite2.position.set(0, 208);
-  sprite2.anchor.set(0, 0);
-  sprite3 = new _pixi.Sprite(_pixi.Texture.from("pinky_up"));
-  sprite3.position.set(0, 224);
-  sprite3.anchor.set(0, 0);
-  sprite4 = new _pixi.Sprite(_pixi.Texture.from("pinky_down"));
-  sprite4.position.set(0, 240);
-  sprite4.anchor.set(0, 0);
-  container.addChild(sprite1, sprite2, sprite3, sprite4);
-  sprite1 = new _pixi.Sprite(_pixi.Texture.from("inky_left"));
-  sprite1.position.set(0, 256);
-  sprite1.anchor.set(0, 0);
-  sprite2 = new _pixi.Sprite(_pixi.Texture.from("inky_right"));
-  sprite2.position.set(0, 272);
-  sprite2.anchor.set(0, 0);
-  sprite3 = new _pixi.Sprite(_pixi.Texture.from("inky_up"));
-  sprite3.position.set(0, 288);
-  sprite3.anchor.set(0, 0);
-  sprite4 = new _pixi.Sprite(_pixi.Texture.from("inky_down"));
-  sprite4.position.set(0, 304);
-  sprite4.anchor.set(0, 0);
-  container.addChild(sprite1, sprite2, sprite3, sprite4);
-  sprite1 = new _pixi.Sprite(_pixi.Texture.from("clyde_left"));
-  sprite1.position.set(0, 320);
-  sprite1.anchor.set(0, 0);
-  sprite2 = new _pixi.Sprite(_pixi.Texture.from("clyde_right"));
-  sprite2.position.set(0, 336);
-  sprite2.anchor.set(0, 0);
-  sprite3 = new _pixi.Sprite(_pixi.Texture.from("clyde_up"));
-  sprite3.position.set(0, 352);
-  sprite3.anchor.set(0, 0);
-  sprite4 = new _pixi.Sprite(_pixi.Texture.from("clyde_down"));
-  sprite4.position.set(0, 368);
-  sprite4.anchor.set(0, 0);
-  container.addChild(sprite1, sprite2, sprite3, sprite4);
-  sprite1 = new _pixi.Sprite(_pixi.Texture.from("eyes_left"));
-  sprite1.position.set(0, 384);
-  sprite1.anchor.set(0, 0);
-  sprite2 = new _pixi.Sprite(_pixi.Texture.from("eyes_right"));
-  sprite2.position.set(0, 400);
-  sprite2.anchor.set(0, 0);
-  sprite3 = new _pixi.Sprite(_pixi.Texture.from("eyes_up"));
-  sprite3.position.set(0, 416);
-  sprite3.anchor.set(0, 0);
-  sprite4 = new _pixi.Sprite(_pixi.Texture.from("eyes_down"));
-  sprite4.position.set(0, 432);
-  sprite4.anchor.set(0, 0);
-  container.addChild(sprite1, sprite2, sprite3, sprite4);
-  sprite1 = new _pixi.Sprite(_pixi.Texture.from("scared_blue"));
-  sprite1.position.set(0, 448);
-  sprite1.anchor.set(0, 0);
-  sprite2 = new _pixi.Sprite(_pixi.Texture.from("scared_white"));
-  sprite2.position.set(0, 464);
-  sprite2.anchor.set(0, 0);
-  container.addChild(sprite1, sprite2);
-  var renderTexture = _pixi.RenderTexture.create({
-    width: 32,
-    height: 480
-  });
-  this.gameCoordinator.renderer.render(container, {
-    renderTexture: renderTexture
-  });
-  this.textures.set("ghosts", renderTexture);
-}
-function _createPickupsSprite() {
-  var container = new _pixi.Container();
-  var sprite1 = new _pixi.Sprite(_pixi.Texture.from("pacdot"));
-  sprite1.position.set(0, 0);
-  sprite1.anchor.set(0, 0);
-  container.addChild(sprite1);
-  var sprite2 = new _pixi.Sprite(_pixi.Texture.from("powerPellet"));
-  sprite2.position.set(0, 16);
-  sprite2.anchor.set(0, 0);
-  container.addChild(sprite2);
-  var sprite3 = new _pixi.Sprite(_pixi.Texture.from("cherry"));
-  sprite3.position.set(0, 32);
-  sprite3.anchor.set(0, 0);
-  var sprite4 = new _pixi.Sprite(_pixi.Texture.from("strawberry"));
-  sprite4.position.set(0, 48);
-  sprite4.anchor.set(0, 0);
-  var sprite5 = new _pixi.Sprite(_pixi.Texture.from("orange"));
-  sprite5.position.set(0, 64);
-  sprite5.anchor.set(0, 0);
-  var sprite6 = new _pixi.Sprite(_pixi.Texture.from("apple"));
-  sprite6.position.set(0, 80);
-  sprite6.anchor.set(0, 0);
-  var sprite7 = new _pixi.Sprite(_pixi.Texture.from("melon"));
-  sprite7.position.set(0, 96);
-  sprite7.anchor.set(0, 0);
-  var sprite8 = new _pixi.Sprite(_pixi.Texture.from("galaxian"));
-  sprite8.position.set(0, 112);
-  sprite8.anchor.set(0, 0);
-  var sprite9 = new _pixi.Sprite(_pixi.Texture.from("bell"));
-  sprite9.position.set(0, 128);
-  sprite9.anchor.set(0, 0);
-  var sprite10 = new _pixi.Sprite(_pixi.Texture.from("key"));
-  sprite10.position.set(0, 144);
-  sprite10.anchor.set(0, 0);
-  container.addChild(sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9, sprite10);
-  var renderTexture = _pixi.RenderTexture.create({
-    width: 16,
-    height: 160
-  });
-  this.gameCoordinator.renderer.render(container, {
-    renderTexture: renderTexture
-  });
-  this.textures.set("pickups", renderTexture);
-}
-var _default = exports["default"] = AssetsManager; //endRemoveIf
+exports["default"] = AssetsManager;
+//endRemoveIf
 
-},{"pixi.js":447}],5:[function(require,module,exports){
-(function (process,global){(function (){
+},{"pixi.js":445}],6:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = _interopRequireWildcard(require("pixi.js"));
-var PIXI = _pixi;
-var _assetsManager = _interopRequireDefault(require("./assetsManager.js"));
-var _mod = _interopRequireDefault(require("../mods/mod.js"));
-var _emptyMod = _interopRequireDefault(require("../mods/empty-mod.js"));
-var _mazeManager = _interopRequireDefault(require("./mazeManager.js"));
-var _events = _interopRequireDefault(require("events"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
-}
-function _interopRequireWildcard(e, t) {
-  if ("function" == typeof WeakMap) var r = new WeakMap(),
-    n = new WeakMap();
-  return (_interopRequireWildcard = function _interopRequireWildcard(e, t) {
-    if (!t && e && e.__esModule) return e;
-    var o,
-      i,
-      f = {
-        __proto__: null,
-        "default": e
-      };
-    if (null === e || "object" != _typeof(e) && "function" != typeof e) return f;
-    if (o = t ? n : r) {
-      if (o.has(e)) return o.get(e);
-      o.set(e, f);
-    }
-    for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]);
-    return f;
-  })(e, t);
-}
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -2405,6 +2307,48 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
+}
+function _callSuper(t, o, e) {
+  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+}
+function _possibleConstructorReturn(t, e) {
+  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
+  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
+  return _assertThisInitialized(t);
+}
+function _assertThisInitialized(e) {
+  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  return e;
+}
+function _isNativeReflectConstruct() {
+  try {
+    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+  } catch (t) {}
+  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
+    return !!t;
+  })();
+}
+function _getPrototypeOf(t) {
+  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
+    return t.__proto__ || Object.getPrototypeOf(t);
+  }, _getPrototypeOf(t);
+}
+function _inherits(t, e) {
+  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
+  t.prototype = Object.create(e && e.prototype, {
+    constructor: {
+      value: t,
+      writable: !0,
+      configurable: !0
+    }
+  }), Object.defineProperty(t, "prototype", {
+    writable: !1
+  }), e && _setPrototypeOf(t, e);
+}
+function _setPrototypeOf(t, e) {
+  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
+    return t.__proto__ = e, t;
+  }, _setPrototypeOf(t, e);
 }
 function _regenerator() {
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
@@ -2552,6 +2496,14 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == _typeof(i) ? i : i + "";
@@ -2566,6 +2518,68 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+var __createBinding = void 0 && (void 0).__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+var __setModuleDefault = void 0 && (void 0).__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+var __importStar = void 0 && (void 0).__importStar || function () {
+  var _ownKeys = function ownKeys(o) {
+    _ownKeys = Object.getOwnPropertyNames || function (o) {
+      var ar = [];
+      for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+      return ar;
+    };
+    return _ownKeys(o);
+  };
+  return function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k = _ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+    __setModuleDefault(result, mod);
+    return result;
+  };
+}();
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pixi_js_1 = require("pixi.js");
+var PIXI = __importStar(require("pixi.js"));
+var eventemitter3_1 = __importDefault(require("eventemitter3"));
+var empty_mod_js_1 = __importDefault(require("../mods/empty-mod.js"));
+var mazeManagert_js_1 = __importDefault(require("./mazeManagert.js"));
+var soundManager_js_1 = __importDefault(require("../utilities/soundManager.js"));
+var assetsManager_js_1 = __importDefault(require("./assetsManager.js"));
+var ghost_js_1 = __importDefault(require("../characters/ghost.js"));
+var pacman_js_1 = __importDefault(require("../characters/pacman.js"));
+var pickup_js_1 = __importDefault(require("../pickups/pickup.js"));
+var characterUtil_js_1 = __importDefault(require("../utilities/characterUtil.js"));
+var gameEngine_js_1 = __importDefault(require("./gameEngine.js"));
+var timer_js_1 = __importDefault(require("../utilities/timer.js"));
 //global.window.Assets = Assets
 //import path from 'path'
 var options = {
@@ -2574,21 +2588,80 @@ var options = {
   antialias: false
 };
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-_pixi.BaseTexture.defaultOptions.scaleMode = _pixi.SCALE_MODES.NEAREST;
+pixi_js_1.BaseTexture.defaultOptions.scaleMode = pixi_js_1.SCALE_MODES.NEAREST;
 var GameCoordinator = /*#__PURE__*/function () {
   function GameCoordinator() {
     _classCallCheck(this, GameCoordinator);
+    _defineProperty(this, "mod", void 0);
+    _defineProperty(this, "gameUi", void 0);
+    _defineProperty(this, "rowTop", void 0);
+    _defineProperty(this, "mazeDiv", void 0);
+    _defineProperty(this, "mazeCover", void 0);
+    _defineProperty(this, "mainMenu", void 0);
+    _defineProperty(this, "gameStartButton", void 0);
+    _defineProperty(this, "pauseButton", void 0);
+    _defineProperty(this, "soundButton", void 0);
+    _defineProperty(this, "leftCover", void 0);
+    _defineProperty(this, "rightCover", void 0);
+    _defineProperty(this, "pausedText", void 0);
+    _defineProperty(this, "bottomRow", void 0);
+    _defineProperty(this, "movementButtons", void 0);
+    _defineProperty(this, "maxFps", void 0);
+    _defineProperty(this, "tileSize", void 0);
+    _defineProperty(this, "scale", void 0);
+    _defineProperty(this, "scaledTileSize", void 0);
+    _defineProperty(this, "height", void 0);
+    _defineProperty(this, "width", void 0);
+    _defineProperty(this, "maze", void 0);
+    _defineProperty(this, "mazeArray", void 0);
+    _defineProperty(this, "firstGame", void 0);
+    _defineProperty(this, "movementKeys", void 0);
+    _defineProperty(this, "fruitPoints", void 0);
+    _defineProperty(this, "emitter", void 0);
+    _defineProperty(this, "soundManager", void 0);
+    _defineProperty(this, "eyeGhosts", void 0);
+    _defineProperty(this, "ghostCombo", void 0);
+    _defineProperty(this, "am", void 0);
+    _defineProperty(this, "mazeSprite", void 0);
+    _defineProperty(this, "stage", void 0);
+    _defineProperty(this, "remainingSources", void 0);
+    _defineProperty(this, "activeTimers", void 0);
+    _defineProperty(this, "points", 0);
+    _defineProperty(this, "level", 1);
+    _defineProperty(this, "lives", 2);
+    _defineProperty(this, "extraLifeGiven", false);
+    _defineProperty(this, "remainingDots", 0);
+    _defineProperty(this, "allowKeyPresses", true);
+    _defineProperty(this, "allowPacmanMovement", false);
+    _defineProperty(this, "allowPause", false);
+    _defineProperty(this, "cutscene", true);
+    _defineProperty(this, "highScore", void 0);
+    _defineProperty(this, "pacman", void 0);
+    _defineProperty(this, "blinky", void 0);
+    _defineProperty(this, "pinky", void 0);
+    _defineProperty(this, "inky", void 0);
+    _defineProperty(this, "clyde", void 0);
+    _defineProperty(this, "fruit", void 0);
+    _defineProperty(this, "entityList", void 0);
+    _defineProperty(this, "ghosts", void 0);
+    _defineProperty(this, "scaredGhosts", void 0);
+    _defineProperty(this, "idleGhosts", void 0);
+    _defineProperty(this, "pickups", void 0);
+    _defineProperty(this, "gameEngine", void 0);
+    _defineProperty(this, "renderer", void 0);
+    _defineProperty(this, "ghostCycleTimer", void 0);
+    _defineProperty(this, "endIdleTimer", void 0);
+    _defineProperty(this, "fruitTimer", void 0);
+    _defineProperty(this, "ghostFlashTimer", void 0);
+    _defineProperty(this, "topRender", void 0);
+    _defineProperty(this, "bottomRender", void 0);
+    _defineProperty(this, "view", void 0);
     //super(options)
-    this.mod = new _emptyMod["default"]();
+    this.mod = new empty_mod_js_1["default"](this);
     this.gameUi = document.getElementById('game-ui');
     this.rowTop = document.getElementById('row-top');
     this.mazeDiv = document.getElementById('maze');
-    this.mazeImg = document.getElementById('maze-img');
     this.mazeCover = document.getElementById('maze-cover');
-    this.pointsDisplay = document.getElementById('points-display');
-    this.highScoreDisplay = document.getElementById('high-score-display');
-    this.extraLivesDisplay = document.getElementById('extra-lives');
-    this.fruitDisplay = document.getElementById('fruit-display');
     this.mainMenu = document.getElementById('main-menu-container');
     this.gameStartButton = document.getElementById('game-start');
     this.pauseButton = document.getElementById('pause-button');
@@ -2598,7 +2671,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     this.pausedText = document.getElementById('paused-text');
     this.bottomRow = document.getElementById('bottom-row');
     this.movementButtons = document.getElementById('movement-buttons');
-    var mm = new _mazeManager["default"]();
+    var mm = new mazeManagert_js_1["default"]();
     this.maze = mm.get("maze1");
     this.mazeArray = this.maze.mazeArray;
     this.maxFps = 120;
@@ -2609,7 +2682,8 @@ var GameCoordinator = /*#__PURE__*/function () {
     this.height = this.scaledTileSize * 31;
     this.width = this.scaledTileSize * 28;
     this.maze.setDimensions(this.width, this.height);
-    window.PIXI = PIXI;
+    //window['PIXI'] = PIXI
+    //PIXI
     this.firstGame = true;
     this.createUi();
     this.movementKeys = {
@@ -2642,9 +2716,8 @@ var GameCoordinator = /*#__PURE__*/function () {
     link.rel = 'stylesheet';
     link.href = 'build/app.css';
     link.onload = this.preloadAssets.bind(this);
-    head.appendChild(link);
+    head === null || head === void 0 || head.appendChild(link);
   }
-
   /**
    * Included to accpet a new mod to the game
    * @param {Mod} mod
@@ -2654,7 +2727,6 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function setMod(mod) {
       this.mod = mod;
     }
-
     /**
      * Recursive method which determines the largest possible scale the game's graphics can use
      * @param {Number} scale
@@ -2665,7 +2737,6 @@ var GameCoordinator = /*#__PURE__*/function () {
       var availableScreenHeight = Math.min(document.documentElement.clientHeight, window.innerHeight || 0);
       var availableScreenWidth = Math.min(document.documentElement.clientWidth, window.innerWidth || 0);
       var scaledTileSize = this.tileSize * scale;
-
       // The original Pac-Man game leaves 5 tiles of height (3 above, 2 below) surrounding the
       // maze for the UI. See app\style\graphics\spriteSheets\references\mazeGridSystemReference.png
       // for reference.
@@ -2676,7 +2747,6 @@ var GameCoordinator = /*#__PURE__*/function () {
       }
       return scale - 1;
     }
-
     /**
      * Reveals the game underneath the loading covers and starts gameplay
      */
@@ -2698,7 +2768,6 @@ var GameCoordinator = /*#__PURE__*/function () {
       }
       this.startGameplay(true);
     }
-
     /**
      * Toggles the master volume for the soundManager, and saves the preference to storage
      */
@@ -2707,10 +2776,9 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function soundButtonClick() {
       var newVolume = this.soundManager.masterVolume === 1 ? 0 : 1;
       this.soundManager.setMasterVolume(newVolume);
-      localStorage.setItem('volumePreference', newVolume);
+      localStorage.setItem('volumePreference', newVolume.toString());
       this.setSoundButtonIcon(newVolume);
     }
-
     /**
      * Sets the icon for the sound button
      */
@@ -2719,7 +2787,6 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function setSoundButtonIcon(newVolume) {
       this.soundButton.innerHTML = newVolume === 0 ? 'volume_off' : 'volume_up';
     }
-
     /**
      * Displays an error message in the event assets are unable to download
      */
@@ -2728,14 +2795,13 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function displayErrorMessage() {
       var loadingContainer = document.getElementById('loading-container');
       var errorMessage = document.getElementById('error-message');
-      loadingContainer.style.opacity = 0;
+      loadingContainer.style.opacity = "0";
       setTimeout(function () {
         loadingContainer.remove();
-        errorMessage.style.opacity = 1;
+        errorMessage.style.opacity = 1 + "";
         errorMessage.style.visibility = 'visible';
       }, 1500);
     }
-
     /**
      * Load all assets into a hidden Div to pre-load them into memory.
      * There is probably a better way to read all of these file names.
@@ -2779,24 +2845,22 @@ var GameCoordinator = /*#__PURE__*/function () {
                 "".concat(imgBase, "maze/maze_blue.svg"),
                 // Misc
                 'app/style/graphics/extra_life.png'];
-                _this2.am = new _assetsManager["default"](_this2);
+                _this2.am = new assetsManager_js_1["default"](_this2);
                 _context.n = 1;
                 return _this2.am.load();
               case 1:
                 audioBase = 'app/style/audio/';
                 audioSources = ["".concat(audioBase, "game_start.mp3"), "".concat(audioBase, "pause.mp3"), "".concat(audioBase, "pause_beat.mp3"), "".concat(audioBase, "siren_1.mp3"), "".concat(audioBase, "siren_2.mp3"), "".concat(audioBase, "siren_3.mp3"), "".concat(audioBase, "power_up.mp3"), "".concat(audioBase, "extra_life.mp3"), "".concat(audioBase, "eyes.mp3"), "".concat(audioBase, "eat_ghost.mp3"), "".concat(audioBase, "death.mp3"), "".concat(audioBase, "fruit.mp3"), "".concat(audioBase, "dot_1.mp3"), "".concat(audioBase, "dot_2.mp3")]; //the maze background sprite
-                _this2.mazeSprite = new _pixi.Sprite(_pixi.Texture.from("maze_blue"));
+                _this2.mazeSprite = new pixi_js_1.Sprite(pixi_js_1.Texture.from("maze_blue"));
                 _this2.stage.addChild(_this2.mazeSprite);
                 totalSources = imgSources.length + audioSources.length;
                 _this2.remainingSources = totalSources;
                 loadingPacman.style.left = '0';
                 loadingDotMask.style.width = '0';
                 Promise.all([_this2.createElements(imgSources, 'img', totalSources, _this2), _this2.createElements(audioSources, 'audio', totalSources, _this2)]).then(function () {
-                  loadingContainer.style.opacity = 0;
+                  loadingContainer.style.opacity = "0";
                   resolve();
-
                   //initialize the current mod
-
                   setTimeout(function () {
                     loadingContainer.remove();
                     _this2.mainMenu.style.opacity = 1;
@@ -2813,7 +2877,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         };
       }());
     }
-
     /**
      * Iterates through a list of sources and updates the loading bar as the assets load in
      * @param {String[]} sources
@@ -2860,7 +2923,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         });
       });
     }
-
     /**
      * Resets gameCoordinator values to their default states
      */
@@ -2883,12 +2945,12 @@ var GameCoordinator = /*#__PURE__*/function () {
         setInterval(function () {
           _this3.collisionDetectionLoop();
         }, 500);
-        this.pacman = new Pacman(this, new CharacterUtil());
-        this.blinky = new Ghost(this, 'blinky', this.level, new CharacterUtil());
-        this.pinky = new Ghost(this, 'pinky', this.level, new CharacterUtil());
-        this.inky = new Ghost(this, 'inky', this.level, new CharacterUtil(), this.blinky);
-        this.clyde = new Ghost(this, 'clyde', this.level, new CharacterUtil());
-        this.fruit = new Pickup('fruit', 13.5, 17, 100, this);
+        this.pacman = new pacman_js_1["default"](this, new characterUtil_js_1["default"]());
+        this.blinky = new ghost_js_1["default"](this, 'blinky', this.level, new characterUtil_js_1["default"]());
+        this.pinky = new ghost_js_1["default"](this, 'pinky', this.level, new characterUtil_js_1["default"]());
+        this.inky = new ghost_js_1["default"](this, 'inky', this.level, new characterUtil_js_1["default"](), this.blinky);
+        this.clyde = new ghost_js_1["default"](this, 'clyde', this.level, new characterUtil_js_1["default"]());
+        this.fruit = new pickup_js_1["default"]('fruit', 13.5, 17, 100, this);
       }
       this.entityList = [this.pacman, this.blinky, this.pinky, this.inky, this.clyde, this.fruit];
       this.ghosts = [this.blinky, this.pinky, this.inky, this.clyde];
@@ -2898,14 +2960,18 @@ var GameCoordinator = /*#__PURE__*/function () {
         //add dots,  pacman, ghosts sprites to the stage
         this.drawMaze(this.mazeArray, this.entityList);
         this.pickups.forEach(function (p) {
+          //@ts-ignore
           _this3.stage.addChild(p.sprite);
         });
+        //@ts-ignore
         this.stage.addChild(this.pacman.sprite);
+        //@ts-ignore
         this.stage.addChild(this.pacman.spriteArrow);
         this.ghosts.forEach(function (g) {
+          //@ts-ignore
           _this3.stage.addChild(g.sprite);
         });
-        this.soundManager = new SoundManager();
+        this.soundManager = new soundManager_js_1["default"]();
         this.setUiDimensions();
       } else {
         this.pacman.reset();
@@ -2920,17 +2986,14 @@ var GameCoordinator = /*#__PURE__*/function () {
           }
         });
       }
-      this.pointsDisplay.innerHTML = '00';
-      this.highScoreDisplay.innerHTML = this.highScore || '00';
       this.updatePoints();
       this.updateHightScore();
-      this.clearDisplay2(this.fruitDisplay);
       this.clearDisplay("fruitsDisplay");
-      var volumePreference = parseInt(localStorage.getItem('volumePreference') || 1, 10);
+      var vp = localStorage.getItem('volumePreference');
+      var volumePreference = vp ? Number(vp) : 1;
       this.setSoundButtonIcon(volumePreference);
       this.soundManager.setMasterVolume(volumePreference);
     }
-
     /**
      * Calls necessary setup functions to start the game
      */
@@ -2940,10 +3003,9 @@ var GameCoordinator = /*#__PURE__*/function () {
       //initialize the current mod values    
       this.registerEventListeners();
       this.mod.initialize();
-      this.gameEngine = new GameEngine(this, this.maxFps, this.entityList);
+      this.gameEngine = new gameEngine_js_1["default"](this, this.maxFps, this.entityList);
       this.gameEngine.start();
     }
-
     /**
      * Adds HTML elements to draw on the webpage by iterating through the 2D maze array
      * @param {Array} mazeArray - 2D array representing the game board
@@ -2954,22 +3016,19 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function drawMaze(mazeArray, entityList) {
       var _this4 = this;
       this.pickups = [this.fruit];
-
       //sprite
       // this.mazeSprite.width = this.width
       // this.mazeSprite.height = this.height
-
-      this.mazeDiv.style.height = "".concat(this.height, "px");
-      this.mazeDiv.style.width = "".concat(this.width, "px");
-      this.gameUi.style.width = "".concat(this.width, "px");
+      this.mazeDiv.style.height = "".concat(this.height * this.scale, "px");
+      this.mazeDiv.style.width = "".concat(this.width * this.scale, "px");
+      this.gameUi.style.width = "".concat(this.width * this.scale, "px");
       this.bottomRow.style.minHeight = "".concat(this.scaledTileSize * 2, "px");
-      this.dotContainer = document.getElementById('dot-container');
       mazeArray.forEach(function (row, rowIndex) {
         row.forEach(function (block, columnIndex) {
           if (block === 'o' || block === 'O') {
             var type = block === 'o' ? 'pacdot' : 'powerPellet';
             var points = block === 'o' ? 10 : 50;
-            var dot = new Pickup(type, columnIndex, rowIndex, points, _this4);
+            var dot = new pickup_js_1["default"](type, columnIndex, rowIndex, points, _this4);
             entityList.push(dot);
             _this4.pickups.push(dot);
             _this4.remainingDots += 1;
@@ -2980,52 +3039,37 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "createUi",
     value: function createUi() {
-      this.renderTop = new PIXI.Renderer({
-        //      view: document.createElement("canvas"),
+      this.topRender = new RendererTop(this, {
         backgroundColor: 0x0000ff,
         width: this.width * this.scale,
-        height: this.height * 0.11 * this.scale
+        height: this.height * 0.09 * this.scale
       });
-      this.renderTop.view.classList.add("row-top-view");
-      document.body.appendChild(this.renderTop.view);
-      this.rowTopContainer = new _pixi.Container();
-      this.rowTopContainer.scale.set(this.scale);
-      this.createRowTopTexts();
-      this.renderBottom = new PIXI.Renderer({
-        //    view: document.createElement("canvas"),
+      this.topRender.update();
+      this.bottomRender = new RendererBottom(this, {
         backgroundColor: 0x0000ff,
         width: this.width * this.scale,
         height: this.height * 0.06 * this.scale
       });
-      this.renderBottom.view.classList.add("row-bottom-view");
-      this.bottomRowContainer = new _pixi.Container();
-      this.bottomRowContainer.scale.set(this.scale);
-      var livesDisplay = new _pixi.Container();
-      livesDisplay.name = "livesDisplay";
-      this.bottomRowContainer.addChild(livesDisplay);
-      var fruitsDisplay = new _pixi.Container();
-      fruitsDisplay.name = "fruitsDisplay";
-      this.fruitDisplay.x = this.bottomRowContainer.width;
-      this.bottomRowContainer.addChild(fruitsDisplay);
-      document.body.appendChild(this.renderBottom.view);
-
+      this.bottomRender.update();
       //canvas view     
       this.view = document.createElement("canvas");
       this.view.width = this.tileSize * 28 * this.scale;
       this.view.height = this.tileSize * 31 * this.scale;
-      document.body.appendChild(this.view);
+      this.mazeDiv.appendChild(this.view);
+      //document.body.appendChild(this.view)
       this.view.classList.add("view");
-      this.view.style.top = "70px";
-      this.view.style.left = "900px"; //(this.width + 20) + "px"
-
-      this.stage = new _pixi.Container();
+      // this.view.style.top = "70px"
+      // this.view.style.left = "900px" //(this.width + 20) + "px"
+      this.stage = new pixi_js_1.Container();
       this.stage.scale.set(this.scale);
       var opts = {
         view: this.view,
         width: this.view.width,
         height: this.view.height
       };
-      for (var opt in options) opts[opt] = options[opt];
+      for (var opt in options)
+      //@ts-ignore
+      opts[opt] = options[opt];
       this.renderer = new PIXI.Renderer(opts);
     }
   }, {
@@ -3033,30 +3077,25 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function setUiDimensions() {
       this.gameUi.style.fontSize = "".concat(this.scaledTileSize, "px");
       this.rowTop.style.marginBottom = "".concat(this.scaledTileSize, "px");
-      this.gameUi.style.scale = this.scale;
-
-      //this.rowTopContainer.width = this.width 
-      //this.rowTopContainer.height = this.height * 0.11
-      //this.rowTopContainer.scale.set(this.scale)
-
-      //this.bottomRowContainer.width = this.width
-      //this.bottomRowContainer.height = this.height * 0.06
-      //this.bottomRowContainer.scale.set(this.scale)
+      //this.gameUi.style.scale = this.scale
       //just for whilte
-      this.renderTop.view.style.left = "900px";
-      this.renderTop.view.style.top = "20px";
-      this.renderBottom.view.style.left = "900px";
-      this.renderBottom.view.style.top = "570px";
+      //@ts-ignore
+      // this.topRender.view.style!.left = "900px"
+      // //@ts-ignore
+      // this.topRender.view.style!.top = "20px"
+      // //@ts-ignore
+      // this.bottomRender.view.style!.left = "900px"
+      // //@ts-ignore
+      // this.bottomRender.view.style!.top = "570px"
     }
   }, {
     key: "render",
     value: function render() {
       //super.render()
       this.renderer.render(this.stage);
-      if (this.renderTop) this.renderTop.render(this.rowTopContainer);
-      if (this.renderBottom) this.renderBottom.render(this.bottomRowContainer);
+      if (this.topRender) this.topRender.render(this.topRender.container);
+      if (this.bottomRender) this.bottomRender.render(this.bottomRender.container);
     }
-
     /**
      * Loop which periodically checks which pickups are nearby Pacman.
      * Pickups which are far away will not be considered for collision detection.
@@ -3070,7 +3109,6 @@ var GameCoordinator = /*#__PURE__*/function () {
           x: this.pacman.position.left + this.scaledTileSize,
           y: this.pacman.position.top + this.scaledTileSize
         };
-
         // Set this flag to TRUE to see how two-phase collision detection works!
         var debugging = false;
         this.pickups.forEach(function (pickup) {
@@ -3078,7 +3116,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         });
       }
     }
-
     /**
      * Displays "Ready!" and allows Pacman to move after a breif delay
      * @param {Boolean} initialStart - Special condition for the game's beginning
@@ -3103,13 +3140,13 @@ var GameCoordinator = /*#__PURE__*/function () {
         top: top
       }, 'ready', duration, width, height);
       this.updateExtraLivesDisplay();
-      new Timer(function () {
+      new timer_js_1["default"](function () {
         //for mods. start the mod 
         _this5.mod.start();
         _this5.allowPause = true;
         _this5.cutscene = false;
         _this5.soundManager.setCutscene(_this5.cutscene);
-        _this5.soundManager.setAmbience(_this5.determineSiren(_this5.remainingDots));
+        _this5.soundManager.setAmbience(_this5.determineSiren(_this5.remainingDots), false);
         _this5.allowPacmanMovement = true;
         _this5.pacman.moving = true;
         _this5.ghosts.forEach(function (ghost) {
@@ -3122,63 +3159,26 @@ var GameCoordinator = /*#__PURE__*/function () {
         _this5.emitter.emit("post-start");
       }, duration);
     }
-
     /**
      * Clears out all children nodes from a given display element
-     * @param {String} display
+     * @param {String} displayName
      */
-  }, {
-    key: "clearDisplay2",
-    value: function clearDisplay2(display) {
-      while (display.firstChild) {
-        display.removeChild(display.firstChild);
-      }
-    }
   }, {
     key: "clearDisplay",
     value: function clearDisplay(displayName) {
-      var display = this.bottomRowContainer.getChildByName(displayName);
+      var display = this.bottomRender.container.getChildByName(displayName);
+      //@ts-ignore
       if (display) display.children.length = 0;
     }
   }, {
     key: "updatePoints",
     value: function updatePoints() {
-      this.textPoints.text = this.points;
+      this.topRender.update();
     }
   }, {
     key: "updateHightScore",
     value: function updateHightScore() {
-      this.textHightScore.text = this.highScore;
-    }
-  }, {
-    key: "createRowTopTexts",
-    value: function createRowTopTexts() {
-      var textStyle = {
-        fontFamily: "sans-serif",
-        fontSize: 8,
-        //fontWeight: "bold",
-        fill: "0xffffff"
-      };
-      var x = 0,
-        y = 0;
-      //text.scale.set(0.333) 
-      var text = new _pixi.Text("1UP", textStyle);
-      x = this.width * 0.25 - text.width * 0.5;
-      this.rowTopContainer.addChild(text);
-      text.position.x = x;
-      this.textPoints = new _pixi.Text(this.points, textStyle);
-      y = this.renderTop.view.height / (2 * this.scale);
-      x = this.width * 0.25 - this.textPoints.width * 0.5;
-      this.rowTopContainer.addChild(this.textPoints);
-      this.textPoints.position.set(x, y);
-      text = new _pixi.Text("HIGH SCORE", textStyle);
-      this.rowTopContainer.addChild(text);
-      //text.scale.set(0.333)
-      x = this.width * 0.50 - text.width * 0.5;
-      text.position.x = x;
-      this.textHightScore = new _pixi.Text(this.highScore, textStyle);
-      this.rowTopContainer.addChild(this.textHightScore);
-      this.textHightScore.position.set(x, y);
+      this.topRender.update();
     }
     /**
      * Displays extra life images equal to the number of remaining lives
@@ -3186,56 +3186,42 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "updateExtraLivesDisplay",
     value: function updateExtraLivesDisplay() {
-      this.clearDisplay2(this.extraLivesDisplay);
       this.clearDisplay("livesDisplay");
-      var livesDisplay = this.bottomRowContainer.getChildByName("livesDisplay");
+      var livesDisplay = this.bottomRender.container.getChildByName("livesDisplay");
       var tx = this.am.getTexture("extra_life");
       for (var i = 0; i < this.lives; i += 1) {
-        var extraLifePic = document.createElement('img');
-        extraLifePic.setAttribute('src', 'app/style/graphics/extra_life.svg');
-        extraLifePic.style.height = "".concat(this.scaledTileSize * 2, "px");
-        this.extraLivesDisplay.appendChild(extraLifePic);
-        var extraLifeSprite = new _pixi.Sprite(tx);
+        var extraLifeSprite = new pixi_js_1.Sprite(tx);
         extraLifeSprite.x = extraLifeSprite.width * i;
+        //@ts-ignore
         livesDisplay.addChild(extraLifeSprite);
       }
     }
-
     /**
      * Displays a rolling log of the seven most-recently eaten fruit
-     * @param {String} rawImageSource
+     * @param {number} points
      */
-  }, {
-    key: "updateFruitDisplay2",
-    value: function updateFruitDisplay2(rawImageSource) {
-      var parsedSource = rawImageSource.slice(rawImageSource.indexOf('(') + 1, rawImageSource.indexOf(')'));
-      if (this.fruitDisplay.children.length === 7) {
-        this.fruitDisplay.removeChild(this.fruitDisplay.firstChild);
-      }
-      var fruitPic = document.createElement('img');
-      fruitPic.setAttribute('src', parsedSource);
-      fruitPic.style.height = "".concat(this.scaledTileSize * 2, "px");
-      this.fruitDisplay.appendChild(fruitPic);
-    }
   }, {
     key: "updateFruitsDisplay",
     value: function updateFruitsDisplay(points) {
       var name = this.fruit.getFruitName(points);
-      var fruitsDisplay = this.bottomRowContainer.getChildByName("fruitsDisplay");
+      var fruitsDisplay = this.bottomRender.container.getChildByName("fruitsDisplay");
+      //@ts-ignore
       if (fruitsDisplay.length == 7) {
+        //@ts-ignore
         var first = fruitsDisplay.getChildAt(0);
         if (first) fruitsDisplay.removeChild(first);
       }
-      var fruitSp = new _pixi.Sprite(this.am.getTexture(name));
+      var fruitSp = new pixi_js_1.Sprite(this.am.getTexture(name));
       var x = 0;
+      //@ts-ignore
       fruitsDisplay.children.forEach(function (f) {
         return x += f.width;
       });
       x += fruitSp.width;
       fruitSp.position.x = this.width - x;
+      //@ts-ignore
       fruitsDisplay.addChild(fruitSp);
     }
-
     /**
      * Cycles the ghosts between 'chase' and 'scatter' mode
      * @param {('chase'|'scatter')} mode
@@ -3246,14 +3232,13 @@ var GameCoordinator = /*#__PURE__*/function () {
       var _this6 = this;
       var delay = mode === 'scatter' ? 7000 : 20000;
       var nextMode = mode === 'scatter' ? 'chase' : 'scatter';
-      this.ghostCycleTimer = new Timer(function () {
+      this.ghostCycleTimer = new timer_js_1["default"](function () {
         _this6.ghosts.forEach(function (ghost) {
           ghost.changeMode(nextMode);
         });
         _this6.ghostCycle(nextMode);
       }, delay);
     }
-
     /**
      * Releases a ghost from the Ghost House after a delay
      */
@@ -3263,13 +3248,12 @@ var GameCoordinator = /*#__PURE__*/function () {
       var _this7 = this;
       if (this.idleGhosts.length > 0) {
         var delay = Math.max((8 - (this.level - 1) * 4) * 1000, 0);
-        this.endIdleTimer = new Timer(function () {
+        this.endIdleTimer = new timer_js_1["default"](function () {
           _this7.idleGhosts[0].endIdleMode();
           _this7.idleGhosts.shift();
         }, delay);
       }
     }
-
     /**
      * Register listeners for various game sequences
      */
@@ -3280,7 +3264,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       //events: 
       //  load, start, post-start, pacman-death, post-death, ghost-eaten-<ghostName>, item-taken (item as argument),
       //  advance-level, game-over, speed-up-blinky, create-fruit
-      this.emitter = new _events["default"]();
+      this.emitter = new eventemitter3_1["default"]();
       this.entityList.forEach(function (e) {
         e.emitter = _this8.emitter;
         e.registerEventListeners();
@@ -3291,13 +3275,18 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.emitter.on("create-fruit", this.createFruit.bind(this));
       this.emitter.on("game-over", this.gameOver.bind(this));
       window.addEventListener('keydown', this.handleKeyDown.bind(this));
+      //@ts-ignore
       window.addEventListener('awardPoints', this.awardPoints.bind(this));
+      //@ts-ignore
       window.addEventListener('deathSequence', this.deathSequence.bind(this));
       window.addEventListener('dotEaten', this.dotEaten.bind(this));
       window.addEventListener('powerUp', this.powerUp.bind(this));
+      //@ts-ignore
       window.addEventListener('eatGhost', this.eatGhost.bind(this));
       window.addEventListener('restoreGhost', this.restoreGhost.bind(this));
+      //@ts-ignore
       window.addEventListener('addTimer', this.addTimer.bind(this));
+      //@ts-ignore
       window.addEventListener('removeTimer', this.removeTimer.bind(this));
       window.addEventListener('releaseGhost', this.releaseGhost.bind(this));
       var directions = ['up', 'down', 'left', 'right'];
@@ -3307,7 +3296,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         });
       });
     }
-
     /**
      * Calls Pacman's changeDirection event if certain conditions are met
      * @param {({'up'|'down'|'left'|'right'})} direction
@@ -3319,7 +3307,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.pacman.changeDirection(direction, this.allowPacmanMovement);
       }
     }
-
     /**
      * Calls various class functions depending upon the pressed key
      * @param {Event} e - The keydown event to evaluate
@@ -3337,7 +3324,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.changeDirection(this.movementKeys[e.keyCode]);
       }
     }
-
     /**
      * Handle behavior for the pause key
      */
@@ -3355,7 +3341,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.gameEngine.changePausedState(this.gameEngine.running);
         this.soundManager.play('pause');
         if (this.gameEngine.started) {
-          this.soundManager.resumeAmbience();
+          this.soundManager.resumeAmbience(false);
           this.gameUi.style.filter = 'unset';
           this.movementButtons.style.filter = 'unset';
           this.pausedText.style.visibility = 'hidden';
@@ -3376,7 +3362,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         }
       }
     }
-
     /**
      * Adds points to the player's total
      * @param {({ detail: { points: Number }})} e - Contains a quantity of points to add
@@ -3386,11 +3371,9 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function awardPoints(e) {
       this.points += e.detail.points;
       this.updatePoints();
-      this.pointsDisplay.innerText = this.points;
-      if (this.points > (this.highScore || 0)) {
-        this.highScore = this.points;
+      if (this.points > (Number(this.highScore) || 0)) {
+        this.highScore = this.points.toString();
         this.updateHightScore();
-        this.highScoreDisplay.innerText = this.points;
         localStorage.setItem('highScore', this.highScore);
       }
       if (this.points >= 10000 && !this.extraLifeGiven) {
@@ -3409,17 +3392,15 @@ var GameCoordinator = /*#__PURE__*/function () {
           top: top
         }, e.detail.points, 2000, width, height);
         this.soundManager.play('fruit');
-        this.updateFruitDisplay2(this.fruit.determineImage2('fruit', e.detail.points));
         this.updateFruitsDisplay(e.detail.points);
       }
     }
-
     /**
      * Animates Pacman's death, subtracts a life, and resets character positions if
      * the player has remaining lives.
      */
     /**
-     * Changed to suport events details values to change the behavior of this method 
+     * Changed to suport events details values to change the behavior of this method
      */
   }, {
     key: "deathSequence",
@@ -3455,7 +3436,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         var ghostRef = ghost;
         ghostRef.moving = false;
       });
-      new Timer(function () {
+      new timer_js_1["default"](function () {
         _this0.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.display = false;
@@ -3467,10 +3448,10 @@ var GameCoordinator = /*#__PURE__*/function () {
           _this0.lives -= 1;
           var callbackAfter = event === null || event === void 0 || (_event$detail = event.detail) === null || _event$detail === void 0 ? void 0 : _event$detail.callbackAfter;
           if (callbackAfter) callbackAfter();
-          new Timer(function () {
+          new timer_js_1["default"](function () {
             _this0.emitter.emit("post-death");
             _this0.mazeCover.style.visibility = 'visible';
-            new Timer(function () {
+            new timer_js_1["default"](function () {
               var _event$detail2;
               _this0.allowKeyPresses = true;
               _this0.mazeCover.style.visibility = 'hidden';
@@ -3481,16 +3462,13 @@ var GameCoordinator = /*#__PURE__*/function () {
               _this0.fruit.hideFruit();
               var shouldRestart = (event === null || event === void 0 || (_event$detail2 = event.detail) === null || _event$detail2 === void 0 ? void 0 : _event$detail2.restart) === undefined ? true : event.detail.restart;
               if (shouldRestart) _this0.emitter.emit("start");
-              //this.startGameplay();            
             }, 500);
           }, 2250);
         } else {
           _this0.emitter.emit("game-over");
-          //this.gameOver();
         }
       }, 750);
     }
-
     /**
      * Displays GAME OVER text and displays the menu so players can play again
      */
@@ -3499,7 +3477,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function gameOver() {
       var _this1 = this;
       localStorage.setItem('highScore', this.highScore);
-      new Timer(function () {
+      new timer_js_1["default"](function () {
         //for mods
         _this1.mod.stop();
         _this1.displayText({
@@ -3507,7 +3485,7 @@ var GameCoordinator = /*#__PURE__*/function () {
           top: _this1.scaledTileSize * 16.5
         }, 'game_over', 4000, _this1.scaledTileSize * 10, _this1.scaledTileSize * 2);
         _this1.fruit.hideFruit();
-        new Timer(function () {
+        new timer_js_1["default"](function () {
           _this1.leftCover.style.left = '0';
           _this1.rightCover.style.right = '0';
           setTimeout(function () {
@@ -3518,7 +3496,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         }, 2500);
       }, 2250);
     }
-
     /**
      * Handle events related to the number of remaining dots
      */
@@ -3529,18 +3506,14 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.soundManager.playDotSound();
       if (this.remainingDots === 174 || this.remainingDots === 74) {
         this.emitter.emit("create-fruit");
-        //this.createFruit();
       }
       if (this.remainingDots === 40 || this.remainingDots === 20) {
         this.emitter.emit("speed-up-blinky");
-        //this.speedUpBlinky();
       }
       if (this.remainingDots === 0) {
         this.emitter.emit("advance-level");
-        //this.advanceLevel();
       }
     }
-
     /**
      * Creates a bonus fruit for ten seconds
      */
@@ -3554,11 +3527,10 @@ var GameCoordinator = /*#__PURE__*/function () {
         }
       });
       this.fruit.showFruit(this.fruitPoints[this.level] || 5000);
-      this.fruitTimer = new Timer(function () {
+      this.fruitTimer = new timer_js_1["default"](function () {
         _this10.fruit.hideFruit();
       }, 10000);
     }
-
     /**
      * Speeds up Blinky and raises the background noise pitch
      */
@@ -3570,7 +3542,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.soundManager.setAmbience(this.determineSiren(this.remainingDots));
       }
     }
-
     /**
      * Determines the correct siren ambience
      * @param {Number} remainingDots
@@ -3589,7 +3560,6 @@ var GameCoordinator = /*#__PURE__*/function () {
       }
       return "siren_".concat(sirenNum);
     }
-
     /**
      * Resets the gameboard and prepares the next level
      */
@@ -3602,7 +3572,6 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.soundManager.setCutscene(this.cutscene);
       this.allowKeyPresses = false;
       this.soundManager.stopAmbience();
-
       //stop the current mod    
       this.mod.stop();
       this.entityList.forEach(function (entity) {
@@ -3629,33 +3598,25 @@ var GameCoordinator = /*#__PURE__*/function () {
           timer: this.ghostFlashTimer
         }
       });
-      var imgBase = 'app/style//graphics/spriteSheets/maze/';
-      new Timer(function () {
+      new timer_js_1["default"](function () {
         _this11.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.display = false;
         });
-        _this11.mazeSprite.texture = _pixi.Texture.from("maze_white");
-        _this11.mazeImg.src = "".concat(imgBase, "maze_white.svg");
-        new Timer(function () {
-          _this11.mazeSprite.texture = _pixi.Texture.from("maze_blue");
-          _this11.mazeImg.src = "".concat(imgBase, "maze_blue.svg");
-          new Timer(function () {
-            _this11.mazeSprite.texture = _pixi.Texture.from("maze_white");
-            _this11.mazeImg.src = "".concat(imgBase, "maze_white.svg");
-            new Timer(function () {
-              _this11.mazeSprite.texture = _pixi.Texture.from("maze_blue");
-              _this11.mazeImg.src = "".concat(imgBase, "maze_blue.svg");
-              new Timer(function () {
-                _this11.mazeSprite.texture = _pixi.Texture.from("maze_white");
-                _this11.mazeImg.src = "".concat(imgBase, "maze_white.svg");
-                new Timer(function () {
-                  _this11.mazeSprite.texture = _pixi.Texture.from("maze_blue");
-                  _this11.mazeImg.src = "".concat(imgBase, "maze_blue.svg");
-                  new Timer(function () {
+        _this11.mazeSprite.texture = pixi_js_1.Texture.from("maze_white");
+        new timer_js_1["default"](function () {
+          _this11.mazeSprite.texture = pixi_js_1.Texture.from("maze_blue");
+          new timer_js_1["default"](function () {
+            _this11.mazeSprite.texture = pixi_js_1.Texture.from("maze_white");
+            new timer_js_1["default"](function () {
+              _this11.mazeSprite.texture = pixi_js_1.Texture.from("maze_blue");
+              new timer_js_1["default"](function () {
+                _this11.mazeSprite.texture = pixi_js_1.Texture.from("maze_white");
+                new timer_js_1["default"](function () {
+                  _this11.mazeSprite.texture = pixi_js_1.Texture.from("maze_blue");
+                  new timer_js_1["default"](function () {
                     _this11.mazeCover.visible = false;
-                    _this11.mazeCover.style.visibility = 'visible';
-                    new Timer(function () {
+                    new timer_js_1["default"](function () {
                       _this11.mazeCover.visible = true;
                       _this11.mazeCover.style.visibility = 'hidden';
                       _this11.level += 1;
@@ -3666,10 +3627,10 @@ var GameCoordinator = /*#__PURE__*/function () {
                           entityRef.level = _this11.level;
                         }
                         entityRef.reset();
-                        if (entityRef instanceof Ghost) {
+                        if (entityRef instanceof ghost_js_1["default"]) {
                           entityRef.resetDefaultSpeed();
                         }
-                        if (entityRef instanceof Pickup && entityRef.type !== 'fruit') {
+                        if (entityRef instanceof pickup_js_1["default"] && entityRef.type !== 'fruit') {
                           _this11.remainingDots += 1;
                         }
                       });
@@ -3683,7 +3644,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         }, 250);
       }, 2000);
     }
-
     /**
      * Flashes ghosts blue and white to indicate the end of the powerup
      * @param {Number} flashes - Total number of elapsed flashes
@@ -3705,12 +3665,11 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.scaredGhosts.forEach(function (ghost) {
           ghost.toggleScaredColor();
         });
-        this.ghostFlashTimer = new Timer(function () {
+        this.ghostFlashTimer = new timer_js_1["default"](function () {
           _this12.flashGhosts(flashes + 1, maxFlashes);
         }, 250);
       }
     }
-
     /**
      * Upon eating a power pellet, sets the ghosts to 'scared' mode
      */
@@ -3737,11 +3696,10 @@ var GameCoordinator = /*#__PURE__*/function () {
         ghost.becomeScared();
       });
       var powerDuration = Math.max((7 - this.level) * 1000, 0);
-      this.ghostFlashTimer = new Timer(function () {
+      this.ghostFlashTimer = new timer_js_1["default"](function () {
         _this13.flashGhosts(0, 9);
       }, powerDuration);
     }
-
     /**
      * Determines the quantity of points to give based on the current combo
      */
@@ -3750,7 +3708,6 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function determineComboPoints() {
       return 100 * Math.pow(2, this.ghostCombo);
     }
-
     /**
      * Upon eating a ghost, award points and temporarily pause movement
      * @param {CustomEvent} e - Contains a target ghost object
@@ -3802,7 +3759,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         ghostRef.pause(true);
         ghostRef.allowCollision = false;
       });
-      new Timer(function () {
+      new timer_js_1["default"](function () {
         _this14.soundManager.setAmbience('eyes');
         _this14.resumeTimer({
           detail: {
@@ -3832,7 +3789,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         });
       }, pauseDuration);
     }
-
     /**
      * Decrements the count of "eye" ghosts and updates the ambience
      */
@@ -3845,7 +3801,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.soundManager.setAmbience(sound);
       }
     }
-
     /**
      * Creates a temporary div to display points on screen
      * @param {({ left: number, top: number })} position - CSS coordinates to display the points at
@@ -3858,33 +3813,21 @@ var GameCoordinator = /*#__PURE__*/function () {
     key: "displayText",
     value: function displayText(position, amount, duration, width, height) {
       var _this15 = this;
-      var pointsDiv = document.createElement('div');
       var textSp;
       var texture = this.am.getTexture(amount);
-      if (texture) textSp = new _pixi.Sprite(texture);else textSp = new _pixi.Text(amount, {
+      if (texture) textSp = new pixi_js_1.Sprite(texture);else textSp = new pixi_js_1.Text(amount, {
         fontFamily: "Press Start 2P",
         fontSize: 6,
         fill: 0xffffff
       });
-      // textSp.width = width  
-      // textSp.height = height || width
+      textSp.width = width;
+      textSp.height = height || width;
       textSp.position.set(position.left, position.top);
-      pointsDiv.style.position = 'absolute';
-      pointsDiv.style.backgroundSize = "".concat(width, "px");
-      pointsDiv.style.backgroundImage = 'url(app/style/graphics/' + "spriteSheets/text/".concat(amount, ".svg");
-      pointsDiv.style.width = "".concat(width, "px");
-      pointsDiv.style.height = "".concat(height || width, "px");
-      pointsDiv.style.top = "".concat(position.top, "px");
-      pointsDiv.style.left = "".concat(position.left, "px");
-      pointsDiv.style.zIndex = 2;
       this.stage.addChild(textSp);
-      this.mazeDiv.appendChild(pointsDiv);
-      new Timer(function () {
+      new timer_js_1["default"](function () {
         _this15.stage.removeChild(textSp);
-        _this15.mazeDiv.removeChild(pointsDiv);
       }, duration);
     }
-
     /**
      * Pushes a Timer to the activeTimers array
      * @param {({ detail: { timer: Object }})} e
@@ -3894,7 +3837,6 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function addTimer(e) {
       this.activeTimers.push(e.detail.timer);
     }
-
     /**
      * Checks if a Timer with a matching ID exists
      * @param {({ detail: { timer: Object }})} e
@@ -3905,7 +3847,6 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function timerExists(e) {
       return !!(e.detail.timer || {}).timerId;
     }
-
     /**
      * Pauses a timer
      * @param {({ detail: { timer: Object }})} e
@@ -3917,7 +3858,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         e.detail.timer.pause(true);
       }
     }
-
     /**
      * Resumes a timer
      * @param {({ detail: { timer: Object }})} e
@@ -3929,7 +3869,6 @@ var GameCoordinator = /*#__PURE__*/function () {
         e.detail.timer.resume(true);
       }
     }
-
     /**
      * Removes a Timer from activeTimers
      * @param {({ detail: { timer: Object }})} e
@@ -3945,23 +3884,110 @@ var GameCoordinator = /*#__PURE__*/function () {
       }
     }
   }]);
-}(); //Just to avoid problems with NYC coverage test
-if (!process.env.NYC_PROCESS_ID) global.window.GameCoordinator = GameCoordinator;
-// removeIf(production)
-//module.exports = GameCoordinator;
+}(); // removeIf(production)
+exports["default"] = GameCoordinator;
 // endRemoveIf(production)
-// removeIf(production)
-var _default = exports["default"] = GameCoordinator; // endRemoveIf(production)
+var RendererTop = /*#__PURE__*/function (_PIXI$Renderer) {
+  function RendererTop(gameCoordinator, options) {
+    var _this16;
+    _classCallCheck(this, RendererTop);
+    _this16 = _callSuper(this, RendererTop, [options]);
+    _defineProperty(_this16, "container", new pixi_js_1.Container());
+    _defineProperty(_this16, "player1Label", void 0);
+    _defineProperty(_this16, "points", void 0);
+    _defineProperty(_this16, "highScoreLabel", void 0);
+    _defineProperty(_this16, "highScore", void 0);
+    _defineProperty(_this16, "gc", void 0);
+    _this16.gc = gameCoordinator;
+    var textStyle = {
+      fontFamily: "Press Start 2P, sans-serif",
+      fontSize: 8,
+      //fontWeight: "bold",
+      fill: "0xffffff"
+    };
+    _this16.player1Label = new pixi_js_1.Text("", textStyle);
+    _this16.points = new pixi_js_1.Text("", textStyle);
+    _this16.highScoreLabel = new pixi_js_1.Text("", textStyle);
+    _this16.highScore = new pixi_js_1.Text("", textStyle);
+    _this16.container.addChild(_this16.player1Label, _this16.points, _this16.highScoreLabel, _this16.highScore);
+    _this16.initialize();
+    return _this16;
+  }
+  _inherits(RendererTop, _PIXI$Renderer);
+  return _createClass(RendererTop, [{
+    key: "initialize",
+    value: function initialize() {
+      //@ts-ignore
+      //this.view.classList.add("row-top-view")
+      //@ts-ignore
+      this.gc.rowTop.appendChild(this.view);
+      this.container.scale.set(this.gc.scale);
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      this.player1Label.text = "";
+      this.player1Label.style.align = "left";
+      this.player1Label.text = "1UP";
+      this.points.text = "";
+      this.points.text = this.gc.points;
+      this.points.style.align = "right";
+      this.highScoreLabel.style.align = "center";
+      this.highScoreLabel.text = "";
+      this.highScoreLabel.text = "HIGH SCORE";
+      this.highScore.style.align = "center";
+      this.highScore.text = this.gc.highScore ? this.gc.highScore : 0;
+      var x = 0,
+        y = 2;
+      //text.scale.set(0.333) 
+      x = this.gc.width * 0.10 - this.player1Label.width * 0.5;
+      this.player1Label.position.set(x, y);
+      var line2y = this.view.height / (2 * this.gc.scale) * 0.9;
+      y = line2y;
+      x = this.gc.width * 0.20 - this.points.width * 0.5;
+      this.points.position.set(x, y);
+      //text.scale.set(0.333)
+      x = this.gc.width * 0.50 - this.highScoreLabel.width * 0.5;
+      y = 2;
+      this.highScoreLabel.position.set(x, y);
+      x = this.gc.width * 0.50 - this.highScore.width * 0.5;
+      y = line2y;
+      this.highScore.position.set(x, y);
+    }
+  }]);
+}(PIXI.Renderer);
+var RendererBottom = /*#__PURE__*/function (_PIXI$Renderer2) {
+  function RendererBottom(gameCoordinator, options) {
+    var _this17;
+    _classCallCheck(this, RendererBottom);
+    _this17 = _callSuper(this, RendererBottom, [options]);
+    _defineProperty(_this17, "gc", void 0);
+    _defineProperty(_this17, "container", new pixi_js_1.Container());
+    _this17.gc = gameCoordinator;
+    //@ts-ignore
+    //   this.view.classList.add("row-bottom-view")
+    _this17.container.scale.set(_this17.gc.scale);
+    var livesDisplay = new pixi_js_1.Container();
+    livesDisplay.name = "livesDisplay";
+    _this17.container.addChild(livesDisplay);
+    var fruitsDisplay = new pixi_js_1.Container();
+    fruitsDisplay.name = "fruitsDisplay";
+    fruitsDisplay.x = _this17.container.width;
+    _this17.container.addChild(fruitsDisplay);
+    //@ts-ignore
+    _this17.gc.bottomRow.appendChild(_this17.view);
+    return _this17;
+  }
+  _inherits(RendererBottom, _PIXI$Renderer2);
+  return _createClass(RendererBottom, [{
+    key: "update",
+    value: function update() {}
+  }]);
+}(PIXI.Renderer);
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../mods/empty-mod.js":12,"../mods/mod.js":28,"./assetsManager.js":4,"./mazeManager.js":7,"_process":448,"events":422,"pixi.js":447}],6:[function(require,module,exports){
-(function (process,global){(function (){
+},{"../characters/ghost.js":2,"../characters/pacman.js":3,"../mods/empty-mod.js":12,"../pickups/pickup.js":29,"../utilities/characterUtil.js":30,"../utilities/soundManager.js":32,"../utilities/timer.js":33,"./assetsManager.js":5,"./gameEngine.js":7,"./mazeManagert.js":8,"eventemitter3":421,"pixi.js":445}],7:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -3985,6 +4011,14 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == _typeof(i) ? i : i + "";
@@ -3999,9 +4033,25 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var GameEngine = /*#__PURE__*/function () {
   function GameEngine(gameCoordinator, maxFps, entityList) {
     _classCallCheck(this, GameEngine);
+    _defineProperty(this, "gameCoordinator", void 0);
+    _defineProperty(this, "lastFpsUpdate", void 0);
+    _defineProperty(this, "fps", void 0);
+    _defineProperty(this, "framesThisSecond", void 0);
+    _defineProperty(this, "fpsDisplay", void 0);
+    _defineProperty(this, "elapsedMs", void 0);
+    _defineProperty(this, "lastFrameTimeMs", void 0);
+    _defineProperty(this, "entityList", void 0);
+    _defineProperty(this, "maxFps", void 0);
+    _defineProperty(this, "timestep", void 0);
+    _defineProperty(this, "frameId", void 0);
+    _defineProperty(this, "running", void 0);
+    _defineProperty(this, "started", void 0);
     this.gameCoordinator = gameCoordinator;
     this.fpsDisplay = document.getElementById('fps-display');
     this.elapsedMs = 0;
@@ -4016,7 +4066,6 @@ var GameEngine = /*#__PURE__*/function () {
     this.running = false;
     this.started = false;
   }
-
   /**
    * Toggles the paused/running status of the game
    * @param {Boolean} running - Whether the game is currently in motion
@@ -4030,7 +4079,6 @@ var GameEngine = /*#__PURE__*/function () {
         this.start();
       }
     }
-
     /**
      * Updates the on-screen FPS counter once per second
      * @param {number} timestamp - The amount of MS which has passed since starting the game engine
@@ -4046,7 +4094,6 @@ var GameEngine = /*#__PURE__*/function () {
       this.framesThisSecond += 1;
       this.fpsDisplay.textContent = "".concat(Math.round(this.fps), " FPS");
     }
-
     /**
      * Calls the draw function for every member of the entityList
      * @param {number} interp - The animation accuracy as a percentage
@@ -4063,7 +4110,6 @@ var GameEngine = /*#__PURE__*/function () {
         }
       });
     }
-
     /**
      * Calls the update function for every member of the entityList
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -4079,7 +4125,6 @@ var GameEngine = /*#__PURE__*/function () {
         }
       });
     }
-
     /**
      * In the event that a ton of unsimulated frames pile up, discard all of these frames
      * to prevent crashing the game
@@ -4089,7 +4134,6 @@ var GameEngine = /*#__PURE__*/function () {
     value: function panic() {
       this.elapsedMs = 0;
     }
-
     /**
      * Draws an initial frame, resets a few tracking variables related to animation, and calls
      * the mainLoop function to start the engine
@@ -4112,7 +4156,6 @@ var GameEngine = /*#__PURE__*/function () {
         });
       }
     }
-
     /**
      * Stops the engine and cancels the current animation frame
      */
@@ -4123,7 +4166,6 @@ var GameEngine = /*#__PURE__*/function () {
       this.started = false;
       cancelAnimationFrame(this.frameId);
     }
-
     /**
      * The loop which will process all necessary frames to update the game's entities
      * prior to animating them
@@ -4142,7 +4184,6 @@ var GameEngine = /*#__PURE__*/function () {
         }
       }
     }
-
     /**
      * A single cycle of the engine which checks to see if enough time has passed, and, if so,
      * will kick off the loops to update and draw the game's entities.
@@ -4164,12 +4205,10 @@ var GameEngine = /*#__PURE__*/function () {
       this.processFrames();
       this.draw(this.elapsedMs / this.timestep, this.entityList);
       //for debuging popurses
-
       this.frameId = requestAnimationFrame(function (nextTimestamp) {
         _this2.mainLoop(nextTimestamp);
       });
     }
-
     /**
      * The endless loop which will kick off engine cycles so long as the game is running
      * @param {number} timestamp - The amount of MS which has passed since starting the game engine
@@ -4181,26 +4220,16 @@ var GameEngine = /*#__PURE__*/function () {
     }
   }]);
 }(); //Just to avoid problems with NYC coverage test
-if (!process.env.NYC_PROCESS_ID) global.window.GameEngine = GameEngine;
+// if (!process.env.NYC_PROCESS_ID) 
+//   global.window.GameEngine = GameEngine
 // removeIf(production)
 //module.exports = GameEngine;
-var _default = exports["default"] = GameEngine; // endRemoveIf(production)
+exports["default"] = GameEngine;
+// endRemoveIf(production)
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":448}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _maze = _interopRequireDefault(require("../mazes/maze-1.js"));
-var _maze2 = _interopRequireDefault(require("../mazes/maze.js"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
-}
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -4224,6 +4253,14 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == _typeof(i) ? i : i + "";
@@ -4238,11 +4275,22 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var maze_1_js_1 = __importDefault(require("../mazes/maze-1.js"));
+var maze_js_1 = __importDefault(require("../mazes/maze.js"));
 var MazeManager = /*#__PURE__*/function () {
   function MazeManager() {
     _classCallCheck(this, MazeManager);
+    _defineProperty(this, "mazes", void 0);
     this.mazes = new Map();
-    this.mazes.set("maze1", new _maze2["default"](_maze["default"]));
+    this.mazes.set("maze1", new maze_js_1["default"](maze_1_js_1["default"]));
   }
   return _createClass(MazeManager, [{
     key: "get",
@@ -4251,2678 +4299,38 @@ var MazeManager = /*#__PURE__*/function () {
     }
   }]);
 }();
-var _default = exports["default"] = MazeManager;
+exports["default"] = MazeManager;
 
-},{"../mazes/maze-1.js":10,"../mazes/maze.js":11}],8:[function(require,module,exports){
+},{"../mazes/maze-1.js":10,"../mazes/maze.js":11}],9:[function(require,module,exports){
 "use strict";
 
 // import GameCoordinator from "./core/gameCoordinator.js";
 // import Debugger from "./utilities/debugger.js";
 // import FloodModImp from "../mods/implementations/flood-mod-imp.js";
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var gameCoordinator_js_1 = __importDefault(require("./core/gameCoordinator.js"));
+var flood_mod_imp_js_1 = __importDefault(require("./mods/implementations/flood-mod-imp.js"));
+var debugger_js_1 = __importDefault(require("./utilities/debugger.js"));
 window.onload = function () {
-  window.gc = new GameCoordinator();
-  var mod = new FloodModImp(gc);
+  window.gc = new gameCoordinator_js_1["default"]();
+  var mod = new flood_mod_imp_js_1["default"](window.gc);
   window.gc.setMod(mod);
-  window.debug = new Debugger(gc);
+  window.debug = new debugger_js_1["default"](window.gc);
 };
 
-},{}],9:[function(require,module,exports){
-"use strict";
-
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-/*! jQuery v3.7.1 -ajax,-ajax/jsonp,-ajax/load,-ajax/script,-ajax/var/location,-ajax/var/nonce,-ajax/var/rquery,-ajax/xhr,-manipulation/_evalUrl,-deprecated/ajax-event-alias,-effects,-effects/animatedSelector,-effects/Tween | (c) OpenJS Foundation and other contributors | jquery.org/license */
-!function (e, t) {
-  "use strict";
-
-  "object" == (typeof module === "undefined" ? "undefined" : _typeof(module)) && "object" == _typeof(module.exports) ? module.exports = e.document ? t(e, !0) : function (e) {
-    if (!e.document) throw new Error("jQuery requires a window with a document");
-    return t(e);
-  } : t(e);
-}("undefined" != typeof window ? window : void 0, function (ie, e) {
-  "use strict";
-
-  var oe = [],
-    r = Object.getPrototypeOf,
-    ae = oe.slice,
-    g = oe.flat ? function (e) {
-      return oe.flat.call(e);
-    } : function (e) {
-      return oe.concat.apply([], e);
-    },
-    s = oe.push,
-    se = oe.indexOf,
-    n = {},
-    i = n.toString,
-    ue = n.hasOwnProperty,
-    o = ue.toString,
-    a = o.call(Object),
-    le = {},
-    v = function v(e) {
-      return "function" == typeof e && "number" != typeof e.nodeType && "function" != typeof e.item;
-    },
-    y = function y(e) {
-      return null != e && e === e.window;
-    },
-    m = ie.document,
-    u = {
-      type: !0,
-      src: !0,
-      nonce: !0,
-      noModule: !0
-    };
-  function b(e, t, n) {
-    var r,
-      i,
-      o = (n = n || m).createElement("script");
-    if (o.text = e, t) for (r in u) (i = t[r] || t.getAttribute && t.getAttribute(r)) && o.setAttribute(r, i);
-    n.head.appendChild(o).parentNode.removeChild(o);
-  }
-  function x(e) {
-    return null == e ? e + "" : "object" == _typeof(e) || "function" == typeof e ? n[i.call(e)] || "object" : _typeof(e);
-  }
-  var t = "3.7.1 -ajax,-ajax/jsonp,-ajax/load,-ajax/script,-ajax/var/location,-ajax/var/nonce,-ajax/var/rquery,-ajax/xhr,-manipulation/_evalUrl,-deprecated/ajax-event-alias,-effects,-effects/animatedSelector,-effects/Tween",
-    l = /HTML$/i,
-    _ce = function ce(e, t) {
-      return new _ce.fn.init(e, t);
-    };
-  function c(e) {
-    var t = !!e && "length" in e && e.length,
-      n = x(e);
-    return !v(e) && !y(e) && ("array" === n || 0 === t || "number" == typeof t && 0 < t && t - 1 in e);
-  }
-  function fe(e, t) {
-    return e.nodeName && e.nodeName.toLowerCase() === t.toLowerCase();
-  }
-  _ce.fn = _ce.prototype = {
-    jquery: t,
-    constructor: _ce,
-    length: 0,
-    toArray: function toArray() {
-      return ae.call(this);
-    },
-    get: function get(e) {
-      return null == e ? ae.call(this) : e < 0 ? this[e + this.length] : this[e];
-    },
-    pushStack: function pushStack(e) {
-      var t = _ce.merge(this.constructor(), e);
-      return t.prevObject = this, t;
-    },
-    each: function each(e) {
-      return _ce.each(this, e);
-    },
-    map: function map(n) {
-      return this.pushStack(_ce.map(this, function (e, t) {
-        return n.call(e, t, e);
-      }));
-    },
-    slice: function slice() {
-      return this.pushStack(ae.apply(this, arguments));
-    },
-    first: function first() {
-      return this.eq(0);
-    },
-    last: function last() {
-      return this.eq(-1);
-    },
-    even: function even() {
-      return this.pushStack(_ce.grep(this, function (e, t) {
-        return (t + 1) % 2;
-      }));
-    },
-    odd: function odd() {
-      return this.pushStack(_ce.grep(this, function (e, t) {
-        return t % 2;
-      }));
-    },
-    eq: function eq(e) {
-      var t = this.length,
-        n = +e + (e < 0 ? t : 0);
-      return this.pushStack(0 <= n && n < t ? [this[n]] : []);
-    },
-    end: function end() {
-      return this.prevObject || this.constructor();
-    },
-    push: s,
-    sort: oe.sort,
-    splice: oe.splice
-  }, _ce.extend = _ce.fn.extend = function () {
-    var e,
-      t,
-      n,
-      r,
-      i,
-      o,
-      a = arguments[0] || {},
-      s = 1,
-      u = arguments.length,
-      l = !1;
-    for ("boolean" == typeof a && (l = a, a = arguments[s] || {}, s++), "object" == _typeof(a) || v(a) || (a = {}), s === u && (a = this, s--); s < u; s++) if (null != (e = arguments[s])) for (t in e) r = e[t], "__proto__" !== t && a !== r && (l && r && (_ce.isPlainObject(r) || (i = Array.isArray(r))) ? (n = a[t], o = i && !Array.isArray(n) ? [] : i || _ce.isPlainObject(n) ? n : {}, i = !1, a[t] = _ce.extend(l, o, r)) : void 0 !== r && (a[t] = r));
-    return a;
-  }, _ce.extend({
-    expando: "jQuery" + (t + Math.random()).replace(/\D/g, ""),
-    isReady: !0,
-    error: function error(e) {
-      throw new Error(e);
-    },
-    noop: function noop() {},
-    isPlainObject: function isPlainObject(e) {
-      var t, n;
-      return !(!e || "[object Object]" !== i.call(e)) && (!(t = r(e)) || "function" == typeof (n = ue.call(t, "constructor") && t.constructor) && o.call(n) === a);
-    },
-    isEmptyObject: function isEmptyObject(e) {
-      var t;
-      for (t in e) return !1;
-      return !0;
-    },
-    globalEval: function globalEval(e, t, n) {
-      b(e, {
-        nonce: t && t.nonce
-      }, n);
-    },
-    each: function each(e, t) {
-      var n,
-        r = 0;
-      if (c(e)) {
-        for (n = e.length; r < n; r++) if (!1 === t.call(e[r], r, e[r])) break;
-      } else for (r in e) if (!1 === t.call(e[r], r, e[r])) break;
-      return e;
-    },
-    text: function text(e) {
-      var t,
-        n = "",
-        r = 0,
-        i = e.nodeType;
-      if (!i) while (t = e[r++]) n += _ce.text(t);
-      return 1 === i || 11 === i ? e.textContent : 9 === i ? e.documentElement.textContent : 3 === i || 4 === i ? e.nodeValue : n;
-    },
-    makeArray: function makeArray(e, t) {
-      var n = t || [];
-      return null != e && (c(Object(e)) ? _ce.merge(n, "string" == typeof e ? [e] : e) : s.call(n, e)), n;
-    },
-    inArray: function inArray(e, t, n) {
-      return null == t ? -1 : se.call(t, e, n);
-    },
-    isXMLDoc: function isXMLDoc(e) {
-      var t = e && e.namespaceURI,
-        n = e && (e.ownerDocument || e).documentElement;
-      return !l.test(t || n && n.nodeName || "HTML");
-    },
-    merge: function merge(e, t) {
-      for (var n = +t.length, r = 0, i = e.length; r < n; r++) e[i++] = t[r];
-      return e.length = i, e;
-    },
-    grep: function grep(e, t, n) {
-      for (var r = [], i = 0, o = e.length, a = !n; i < o; i++) !t(e[i], i) !== a && r.push(e[i]);
-      return r;
-    },
-    map: function map(e, t, n) {
-      var r,
-        i,
-        o = 0,
-        a = [];
-      if (c(e)) for (r = e.length; o < r; o++) null != (i = t(e[o], o, n)) && a.push(i);else for (o in e) null != (i = t(e[o], o, n)) && a.push(i);
-      return g(a);
-    },
-    guid: 1,
-    support: le
-  }), "function" == typeof Symbol && (_ce.fn[Symbol.iterator] = oe[Symbol.iterator]), _ce.each("Boolean Number String Function Array Date RegExp Object Error Symbol".split(" "), function (e, t) {
-    n["[object " + t + "]"] = t.toLowerCase();
-  });
-  var de = oe.pop,
-    pe = oe.sort,
-    he = oe.splice,
-    ge = "[\\x20\\t\\r\\n\\f]",
-    ve = new RegExp("^" + ge + "+|((?:^|[^\\\\])(?:\\\\.)*)" + ge + "+$", "g");
-  _ce.contains = function (e, t) {
-    var n = t && t.parentNode;
-    return e === n || !(!n || 1 !== n.nodeType || !(e.contains ? e.contains(n) : e.compareDocumentPosition && 16 & e.compareDocumentPosition(n)));
-  };
-  var f = /([\0-\x1f\x7f]|^-?\d)|^-$|[^\x80-\uFFFF\w-]/g;
-  function d(e, t) {
-    return t ? "\0" === e ? "\uFFFD" : e.slice(0, -1) + "\\" + e.charCodeAt(e.length - 1).toString(16) + " " : "\\" + e;
-  }
-  _ce.escapeSelector = function (e) {
-    return (e + "").replace(f, d);
-  };
-  var ye = m,
-    me = s;
-  !function () {
-    var e,
-      x,
-      w,
-      o,
-      a,
-      C,
-      r,
-      T,
-      p,
-      i,
-      E = me,
-      k = _ce.expando,
-      S = 0,
-      n = 0,
-      s = W(),
-      c = W(),
-      u = W(),
-      h = W(),
-      l = function l(e, t) {
-        return e === t && (a = !0), 0;
-      },
-      f = "checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped",
-      t = "(?:\\\\[\\da-fA-F]{1,6}" + ge + "?|\\\\[^\\r\\n\\f]|[\\w-]|[^\0-\\x7f])+",
-      d = "\\[" + ge + "*(" + t + ")(?:" + ge + "*([*^$|!~]?=)" + ge + "*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + t + "))|)" + ge + "*\\]",
-      g = ":(" + t + ")(?:\\((('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|((?:\\\\.|[^\\\\()[\\]]|" + d + ")*)|.*)\\)|)",
-      v = new RegExp(ge + "+", "g"),
-      y = new RegExp("^" + ge + "*," + ge + "*"),
-      m = new RegExp("^" + ge + "*([>+~]|" + ge + ")" + ge + "*"),
-      b = new RegExp(ge + "|>"),
-      A = new RegExp(g),
-      D = new RegExp("^" + t + "$"),
-      N = {
-        ID: new RegExp("^#(" + t + ")"),
-        CLASS: new RegExp("^\\.(" + t + ")"),
-        TAG: new RegExp("^(" + t + "|[*])"),
-        ATTR: new RegExp("^" + d),
-        PSEUDO: new RegExp("^" + g),
-        CHILD: new RegExp("^:(only|first|last|nth|nth-last)-(child|of-type)(?:\\(" + ge + "*(even|odd|(([+-]|)(\\d*)n|)" + ge + "*(?:([+-]|)" + ge + "*(\\d+)|))" + ge + "*\\)|)", "i"),
-        bool: new RegExp("^(?:" + f + ")$", "i"),
-        needsContext: new RegExp("^" + ge + "*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\(" + ge + "*((?:-\\d)?\\d*)" + ge + "*\\)|)(?=[^-]|$)", "i")
-      },
-      L = /^(?:input|select|textarea|button)$/i,
-      j = /^h\d$/i,
-      O = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/,
-      P = /[+~]/,
-      H = new RegExp("\\\\[\\da-fA-F]{1,6}" + ge + "?|\\\\([^\\r\\n\\f])", "g"),
-      q = function q(e, t) {
-        var n = "0x" + e.slice(1) - 65536;
-        return t || (n < 0 ? String.fromCharCode(n + 65536) : String.fromCharCode(n >> 10 | 55296, 1023 & n | 56320));
-      },
-      R = function R() {
-        V();
-      },
-      M = K(function (e) {
-        return !0 === e.disabled && fe(e, "fieldset");
-      }, {
-        dir: "parentNode",
-        next: "legend"
-      });
-    try {
-      E.apply(oe = ae.call(ye.childNodes), ye.childNodes), oe[ye.childNodes.length].nodeType;
-    } catch (e) {
-      E = {
-        apply: function apply(e, t) {
-          me.apply(e, ae.call(t));
-        },
-        call: function call(e) {
-          me.apply(e, ae.call(arguments, 1));
-        }
-      };
-    }
-    function I(t, e, n, r) {
-      var i,
-        o,
-        a,
-        s,
-        u,
-        l,
-        c,
-        f = e && e.ownerDocument,
-        d = e ? e.nodeType : 9;
-      if (n = n || [], "string" != typeof t || !t || 1 !== d && 9 !== d && 11 !== d) return n;
-      if (!r && (V(e), e = e || C, T)) {
-        if (11 !== d && (u = O.exec(t))) if (i = u[1]) {
-          if (9 === d) {
-            if (!(a = e.getElementById(i))) return n;
-            if (a.id === i) return E.call(n, a), n;
-          } else if (f && (a = f.getElementById(i)) && I.contains(e, a) && a.id === i) return E.call(n, a), n;
-        } else {
-          if (u[2]) return E.apply(n, e.getElementsByTagName(t)), n;
-          if ((i = u[3]) && e.getElementsByClassName) return E.apply(n, e.getElementsByClassName(i)), n;
-        }
-        if (!(h[t + " "] || p && p.test(t))) {
-          if (c = t, f = e, 1 === d && (b.test(t) || m.test(t))) {
-            (f = P.test(t) && X(e.parentNode) || e) == e && le.scope || ((s = e.getAttribute("id")) ? s = _ce.escapeSelector(s) : e.setAttribute("id", s = k)), o = (l = Y(t)).length;
-            while (o--) l[o] = (s ? "#" + s : ":scope") + " " + G(l[o]);
-            c = l.join(",");
-          }
-          try {
-            return E.apply(n, f.querySelectorAll(c)), n;
-          } catch (e) {
-            h(t, !0);
-          } finally {
-            s === k && e.removeAttribute("id");
-          }
-        }
-      }
-      return re(t.replace(ve, "$1"), e, n, r);
-    }
-    function W() {
-      var r = [];
-      return function e(t, n) {
-        return r.push(t + " ") > x.cacheLength && delete e[r.shift()], e[t + " "] = n;
-      };
-    }
-    function B(e) {
-      return e[k] = !0, e;
-    }
-    function F(e) {
-      var t = C.createElement("fieldset");
-      try {
-        return !!e(t);
-      } catch (e) {
-        return !1;
-      } finally {
-        t.parentNode && t.parentNode.removeChild(t), t = null;
-      }
-    }
-    function $(t) {
-      return function (e) {
-        return fe(e, "input") && e.type === t;
-      };
-    }
-    function _(t) {
-      return function (e) {
-        return (fe(e, "input") || fe(e, "button")) && e.type === t;
-      };
-    }
-    function z(t) {
-      return function (e) {
-        return "form" in e ? e.parentNode && !1 === e.disabled ? "label" in e ? "label" in e.parentNode ? e.parentNode.disabled === t : e.disabled === t : e.isDisabled === t || e.isDisabled !== !t && M(e) === t : e.disabled === t : "label" in e && e.disabled === t;
-      };
-    }
-    function U(a) {
-      return B(function (o) {
-        return o = +o, B(function (e, t) {
-          var n,
-            r = a([], e.length, o),
-            i = r.length;
-          while (i--) e[n = r[i]] && (e[n] = !(t[n] = e[n]));
-        });
-      });
-    }
-    function X(e) {
-      return e && "undefined" != typeof e.getElementsByTagName && e;
-    }
-    function V(e) {
-      var t,
-        n = e ? e.ownerDocument || e : ye;
-      return n != C && 9 === n.nodeType && n.documentElement && (r = (C = n).documentElement, T = !_ce.isXMLDoc(C), i = r.matches || r.webkitMatchesSelector || r.msMatchesSelector, r.msMatchesSelector && ye != C && (t = C.defaultView) && t.top !== t && t.addEventListener("unload", R), le.getById = F(function (e) {
-        return r.appendChild(e).id = _ce.expando, !C.getElementsByName || !C.getElementsByName(_ce.expando).length;
-      }), le.disconnectedMatch = F(function (e) {
-        return i.call(e, "*");
-      }), le.scope = F(function () {
-        return C.querySelectorAll(":scope");
-      }), le.cssHas = F(function () {
-        try {
-          return C.querySelector(":has(*,:jqfake)"), !1;
-        } catch (e) {
-          return !0;
-        }
-      }), le.getById ? (x.filter.ID = function (e) {
-        var t = e.replace(H, q);
-        return function (e) {
-          return e.getAttribute("id") === t;
-        };
-      }, x.find.ID = function (e, t) {
-        if ("undefined" != typeof t.getElementById && T) {
-          var n = t.getElementById(e);
-          return n ? [n] : [];
-        }
-      }) : (x.filter.ID = function (e) {
-        var n = e.replace(H, q);
-        return function (e) {
-          var t = "undefined" != typeof e.getAttributeNode && e.getAttributeNode("id");
-          return t && t.value === n;
-        };
-      }, x.find.ID = function (e, t) {
-        if ("undefined" != typeof t.getElementById && T) {
-          var n,
-            r,
-            i,
-            o = t.getElementById(e);
-          if (o) {
-            if ((n = o.getAttributeNode("id")) && n.value === e) return [o];
-            i = t.getElementsByName(e), r = 0;
-            while (o = i[r++]) if ((n = o.getAttributeNode("id")) && n.value === e) return [o];
-          }
-          return [];
-        }
-      }), x.find.TAG = function (e, t) {
-        return "undefined" != typeof t.getElementsByTagName ? t.getElementsByTagName(e) : t.querySelectorAll(e);
-      }, x.find.CLASS = function (e, t) {
-        if ("undefined" != typeof t.getElementsByClassName && T) return t.getElementsByClassName(e);
-      }, p = [], F(function (e) {
-        var t;
-        r.appendChild(e).innerHTML = "<a id='" + k + "' href='' disabled='disabled'></a><select id='" + k + "-\r\\' disabled='disabled'><option selected=''></option></select>", e.querySelectorAll("[selected]").length || p.push("\\[" + ge + "*(?:value|" + f + ")"), e.querySelectorAll("[id~=" + k + "-]").length || p.push("~="), e.querySelectorAll("a#" + k + "+*").length || p.push(".#.+[+~]"), e.querySelectorAll(":checked").length || p.push(":checked"), (t = C.createElement("input")).setAttribute("type", "hidden"), e.appendChild(t).setAttribute("name", "D"), r.appendChild(e).disabled = !0, 2 !== e.querySelectorAll(":disabled").length && p.push(":enabled", ":disabled"), (t = C.createElement("input")).setAttribute("name", ""), e.appendChild(t), e.querySelectorAll("[name='']").length || p.push("\\[" + ge + "*name" + ge + "*=" + ge + "*(?:''|\"\")");
-      }), le.cssHas || p.push(":has"), p = p.length && new RegExp(p.join("|")), l = function l(e, t) {
-        if (e === t) return a = !0, 0;
-        var n = !e.compareDocumentPosition - !t.compareDocumentPosition;
-        return n || (1 & (n = (e.ownerDocument || e) == (t.ownerDocument || t) ? e.compareDocumentPosition(t) : 1) || !le.sortDetached && t.compareDocumentPosition(e) === n ? e === C || e.ownerDocument == ye && I.contains(ye, e) ? -1 : t === C || t.ownerDocument == ye && I.contains(ye, t) ? 1 : o ? se.call(o, e) - se.call(o, t) : 0 : 4 & n ? -1 : 1);
-      }), C;
-    }
-    for (e in I.matches = function (e, t) {
-      return I(e, null, null, t);
-    }, I.matchesSelector = function (e, t) {
-      if (V(e), T && !h[t + " "] && (!p || !p.test(t))) try {
-        var n = i.call(e, t);
-        if (n || le.disconnectedMatch || e.document && 11 !== e.document.nodeType) return n;
-      } catch (e) {
-        h(t, !0);
-      }
-      return 0 < I(t, C, null, [e]).length;
-    }, I.contains = function (e, t) {
-      return (e.ownerDocument || e) != C && V(e), _ce.contains(e, t);
-    }, I.attr = function (e, t) {
-      (e.ownerDocument || e) != C && V(e);
-      var n = x.attrHandle[t.toLowerCase()],
-        r = n && ue.call(x.attrHandle, t.toLowerCase()) ? n(e, t, !T) : void 0;
-      return void 0 !== r ? r : e.getAttribute(t);
-    }, I.error = function (e) {
-      throw new Error("Syntax error, unrecognized expression: " + e);
-    }, _ce.uniqueSort = function (e) {
-      var t,
-        n = [],
-        r = 0,
-        i = 0;
-      if (a = !le.sortStable, o = !le.sortStable && ae.call(e, 0), pe.call(e, l), a) {
-        while (t = e[i++]) t === e[i] && (r = n.push(i));
-        while (r--) he.call(e, n[r], 1);
-      }
-      return o = null, e;
-    }, _ce.fn.uniqueSort = function () {
-      return this.pushStack(_ce.uniqueSort(ae.apply(this)));
-    }, (x = _ce.expr = {
-      cacheLength: 50,
-      createPseudo: B,
-      match: N,
-      attrHandle: {},
-      find: {},
-      relative: {
-        ">": {
-          dir: "parentNode",
-          first: !0
-        },
-        " ": {
-          dir: "parentNode"
-        },
-        "+": {
-          dir: "previousSibling",
-          first: !0
-        },
-        "~": {
-          dir: "previousSibling"
-        }
-      },
-      preFilter: {
-        ATTR: function ATTR(e) {
-          return e[1] = e[1].replace(H, q), e[3] = (e[3] || e[4] || e[5] || "").replace(H, q), "~=" === e[2] && (e[3] = " " + e[3] + " "), e.slice(0, 4);
-        },
-        CHILD: function CHILD(e) {
-          return e[1] = e[1].toLowerCase(), "nth" === e[1].slice(0, 3) ? (e[3] || I.error(e[0]), e[4] = +(e[4] ? e[5] + (e[6] || 1) : 2 * ("even" === e[3] || "odd" === e[3])), e[5] = +(e[7] + e[8] || "odd" === e[3])) : e[3] && I.error(e[0]), e;
-        },
-        PSEUDO: function PSEUDO(e) {
-          var t,
-            n = !e[6] && e[2];
-          return N.CHILD.test(e[0]) ? null : (e[3] ? e[2] = e[4] || e[5] || "" : n && A.test(n) && (t = Y(n, !0)) && (t = n.indexOf(")", n.length - t) - n.length) && (e[0] = e[0].slice(0, t), e[2] = n.slice(0, t)), e.slice(0, 3));
-        }
-      },
-      filter: {
-        TAG: function TAG(e) {
-          var t = e.replace(H, q).toLowerCase();
-          return "*" === e ? function () {
-            return !0;
-          } : function (e) {
-            return fe(e, t);
-          };
-        },
-        CLASS: function CLASS(e) {
-          var t = s[e + " "];
-          return t || (t = new RegExp("(^|" + ge + ")" + e + "(" + ge + "|$)")) && s(e, function (e) {
-            return t.test("string" == typeof e.className && e.className || "undefined" != typeof e.getAttribute && e.getAttribute("class") || "");
-          });
-        },
-        ATTR: function ATTR(n, r, i) {
-          return function (e) {
-            var t = I.attr(e, n);
-            return null == t ? "!=" === r : !r || (t += "", "=" === r ? t === i : "!=" === r ? t !== i : "^=" === r ? i && 0 === t.indexOf(i) : "*=" === r ? i && -1 < t.indexOf(i) : "$=" === r ? i && t.slice(-i.length) === i : "~=" === r ? -1 < (" " + t.replace(v, " ") + " ").indexOf(i) : "|=" === r && (t === i || t.slice(0, i.length + 1) === i + "-"));
-          };
-        },
-        CHILD: function CHILD(p, e, t, h, g) {
-          var v = "nth" !== p.slice(0, 3),
-            y = "last" !== p.slice(-4),
-            m = "of-type" === e;
-          return 1 === h && 0 === g ? function (e) {
-            return !!e.parentNode;
-          } : function (e, t, n) {
-            var r,
-              i,
-              o,
-              a,
-              s,
-              u = v !== y ? "nextSibling" : "previousSibling",
-              l = e.parentNode,
-              c = m && e.nodeName.toLowerCase(),
-              f = !n && !m,
-              d = !1;
-            if (l) {
-              if (v) {
-                while (u) {
-                  o = e;
-                  while (o = o[u]) if (m ? fe(o, c) : 1 === o.nodeType) return !1;
-                  s = u = "only" === p && !s && "nextSibling";
-                }
-                return !0;
-              }
-              if (s = [y ? l.firstChild : l.lastChild], y && f) {
-                d = (a = (r = (i = l[k] || (l[k] = {}))[p] || [])[0] === S && r[1]) && r[2], o = a && l.childNodes[a];
-                while (o = ++a && o && o[u] || (d = a = 0) || s.pop()) if (1 === o.nodeType && ++d && o === e) {
-                  i[p] = [S, a, d];
-                  break;
-                }
-              } else if (f && (d = a = (r = (i = e[k] || (e[k] = {}))[p] || [])[0] === S && r[1]), !1 === d) while (o = ++a && o && o[u] || (d = a = 0) || s.pop()) if ((m ? fe(o, c) : 1 === o.nodeType) && ++d && (f && ((i = o[k] || (o[k] = {}))[p] = [S, d]), o === e)) break;
-              return (d -= g) === h || d % h == 0 && 0 <= d / h;
-            }
-          };
-        },
-        PSEUDO: function PSEUDO(e, o) {
-          var t,
-            a = x.pseudos[e] || x.setFilters[e.toLowerCase()] || I.error("unsupported pseudo: " + e);
-          return a[k] ? a(o) : 1 < a.length ? (t = [e, e, "", o], x.setFilters.hasOwnProperty(e.toLowerCase()) ? B(function (e, t) {
-            var n,
-              r = a(e, o),
-              i = r.length;
-            while (i--) e[n = se.call(e, r[i])] = !(t[n] = r[i]);
-          }) : function (e) {
-            return a(e, 0, t);
-          }) : a;
-        }
-      },
-      pseudos: {
-        not: B(function (e) {
-          var r = [],
-            i = [],
-            s = ne(e.replace(ve, "$1"));
-          return s[k] ? B(function (e, t, n, r) {
-            var i,
-              o = s(e, null, r, []),
-              a = e.length;
-            while (a--) (i = o[a]) && (e[a] = !(t[a] = i));
-          }) : function (e, t, n) {
-            return r[0] = e, s(r, null, n, i), r[0] = null, !i.pop();
-          };
-        }),
-        has: B(function (t) {
-          return function (e) {
-            return 0 < I(t, e).length;
-          };
-        }),
-        contains: B(function (t) {
-          return t = t.replace(H, q), function (e) {
-            return -1 < (e.textContent || _ce.text(e)).indexOf(t);
-          };
-        }),
-        lang: B(function (n) {
-          return D.test(n || "") || I.error("unsupported lang: " + n), n = n.replace(H, q).toLowerCase(), function (e) {
-            var t;
-            do {
-              if (t = T ? e.lang : e.getAttribute("xml:lang") || e.getAttribute("lang")) return (t = t.toLowerCase()) === n || 0 === t.indexOf(n + "-");
-            } while ((e = e.parentNode) && 1 === e.nodeType);
-            return !1;
-          };
-        }),
-        target: function target(e) {
-          var t = ie.location && ie.location.hash;
-          return t && t.slice(1) === e.id;
-        },
-        root: function root(e) {
-          return e === r;
-        },
-        focus: function focus(e) {
-          return e === function () {
-            try {
-              return C.activeElement;
-            } catch (e) {}
-          }() && C.hasFocus() && !!(e.type || e.href || ~e.tabIndex);
-        },
-        enabled: z(!1),
-        disabled: z(!0),
-        checked: function checked(e) {
-          return fe(e, "input") && !!e.checked || fe(e, "option") && !!e.selected;
-        },
-        selected: function selected(e) {
-          return e.parentNode && e.parentNode.selectedIndex, !0 === e.selected;
-        },
-        empty: function empty(e) {
-          for (e = e.firstChild; e; e = e.nextSibling) if (e.nodeType < 6) return !1;
-          return !0;
-        },
-        parent: function parent(e) {
-          return !x.pseudos.empty(e);
-        },
-        header: function header(e) {
-          return j.test(e.nodeName);
-        },
-        input: function input(e) {
-          return L.test(e.nodeName);
-        },
-        button: function button(e) {
-          return fe(e, "input") && "button" === e.type || fe(e, "button");
-        },
-        text: function text(e) {
-          var t;
-          return fe(e, "input") && "text" === e.type && (null == (t = e.getAttribute("type")) || "text" === t.toLowerCase());
-        },
-        first: U(function () {
-          return [0];
-        }),
-        last: U(function (e, t) {
-          return [t - 1];
-        }),
-        eq: U(function (e, t, n) {
-          return [n < 0 ? n + t : n];
-        }),
-        even: U(function (e, t) {
-          for (var n = 0; n < t; n += 2) e.push(n);
-          return e;
-        }),
-        odd: U(function (e, t) {
-          for (var n = 1; n < t; n += 2) e.push(n);
-          return e;
-        }),
-        lt: U(function (e, t, n) {
-          var r;
-          for (r = n < 0 ? n + t : t < n ? t : n; 0 <= --r;) e.push(r);
-          return e;
-        }),
-        gt: U(function (e, t, n) {
-          for (var r = n < 0 ? n + t : n; ++r < t;) e.push(r);
-          return e;
-        })
-      }
-    }).pseudos.nth = x.pseudos.eq, {
-      radio: !0,
-      checkbox: !0,
-      file: !0,
-      password: !0,
-      image: !0
-    }) x.pseudos[e] = $(e);
-    for (e in {
-      submit: !0,
-      reset: !0
-    }) x.pseudos[e] = _(e);
-    function Q() {}
-    function Y(e, t) {
-      var n,
-        r,
-        i,
-        o,
-        a,
-        s,
-        u,
-        l = c[e + " "];
-      if (l) return t ? 0 : l.slice(0);
-      a = e, s = [], u = x.preFilter;
-      while (a) {
-        for (o in n && !(r = y.exec(a)) || (r && (a = a.slice(r[0].length) || a), s.push(i = [])), n = !1, (r = m.exec(a)) && (n = r.shift(), i.push({
-          value: n,
-          type: r[0].replace(ve, " ")
-        }), a = a.slice(n.length)), x.filter) !(r = N[o].exec(a)) || u[o] && !(r = u[o](r)) || (n = r.shift(), i.push({
-          value: n,
-          type: o,
-          matches: r
-        }), a = a.slice(n.length));
-        if (!n) break;
-      }
-      return t ? a.length : a ? I.error(e) : c(e, s).slice(0);
-    }
-    function G(e) {
-      for (var t = 0, n = e.length, r = ""; t < n; t++) r += e[t].value;
-      return r;
-    }
-    function K(a, e, t) {
-      var s = e.dir,
-        u = e.next,
-        l = u || s,
-        c = t && "parentNode" === l,
-        f = n++;
-      return e.first ? function (e, t, n) {
-        while (e = e[s]) if (1 === e.nodeType || c) return a(e, t, n);
-        return !1;
-      } : function (e, t, n) {
-        var r,
-          i,
-          o = [S, f];
-        if (n) {
-          while (e = e[s]) if ((1 === e.nodeType || c) && a(e, t, n)) return !0;
-        } else while (e = e[s]) if (1 === e.nodeType || c) if (i = e[k] || (e[k] = {}), u && fe(e, u)) e = e[s] || e;else {
-          if ((r = i[l]) && r[0] === S && r[1] === f) return o[2] = r[2];
-          if ((i[l] = o)[2] = a(e, t, n)) return !0;
-        }
-        return !1;
-      };
-    }
-    function J(i) {
-      return 1 < i.length ? function (e, t, n) {
-        var r = i.length;
-        while (r--) if (!i[r](e, t, n)) return !1;
-        return !0;
-      } : i[0];
-    }
-    function Z(e, t, n, r, i) {
-      for (var o, a = [], s = 0, u = e.length, l = null != t; s < u; s++) (o = e[s]) && (n && !n(o, r, i) || (a.push(o), l && t.push(s)));
-      return a;
-    }
-    function ee(p, h, g, v, y, e) {
-      return v && !v[k] && (v = ee(v)), y && !y[k] && (y = ee(y, e)), B(function (e, t, n, r) {
-        var i,
-          o,
-          a,
-          s,
-          u = [],
-          l = [],
-          c = t.length,
-          f = e || function (e, t, n) {
-            for (var r = 0, i = t.length; r < i; r++) I(e, t[r], n);
-            return n;
-          }(h || "*", n.nodeType ? [n] : n, []),
-          d = !p || !e && h ? f : Z(f, u, p, n, r);
-        if (g ? g(d, s = y || (e ? p : c || v) ? [] : t, n, r) : s = d, v) {
-          i = Z(s, l), v(i, [], n, r), o = i.length;
-          while (o--) (a = i[o]) && (s[l[o]] = !(d[l[o]] = a));
-        }
-        if (e) {
-          if (y || p) {
-            if (y) {
-              i = [], o = s.length;
-              while (o--) (a = s[o]) && i.push(d[o] = a);
-              y(null, s = [], i, r);
-            }
-            o = s.length;
-            while (o--) (a = s[o]) && -1 < (i = y ? se.call(e, a) : u[o]) && (e[i] = !(t[i] = a));
-          }
-        } else s = Z(s === t ? s.splice(c, s.length) : s), y ? y(null, t, s, r) : E.apply(t, s);
-      });
-    }
-    function te(e) {
-      for (var i, t, n, r = e.length, o = x.relative[e[0].type], a = o || x.relative[" "], s = o ? 1 : 0, u = K(function (e) {
-          return e === i;
-        }, a, !0), l = K(function (e) {
-          return -1 < se.call(i, e);
-        }, a, !0), c = [function (e, t, n) {
-          var r = !o && (n || t != w) || ((i = t).nodeType ? u(e, t, n) : l(e, t, n));
-          return i = null, r;
-        }]; s < r; s++) if (t = x.relative[e[s].type]) c = [K(J(c), t)];else {
-        if ((t = x.filter[e[s].type].apply(null, e[s].matches))[k]) {
-          for (n = ++s; n < r; n++) if (x.relative[e[n].type]) break;
-          return ee(1 < s && J(c), 1 < s && G(e.slice(0, s - 1).concat({
-            value: " " === e[s - 2].type ? "*" : ""
-          })).replace(ve, "$1"), t, s < n && te(e.slice(s, n)), n < r && te(e = e.slice(n)), n < r && G(e));
-        }
-        c.push(t);
-      }
-      return J(c);
-    }
-    function ne(e, t) {
-      var n,
-        v,
-        y,
-        m,
-        b,
-        r,
-        i = [],
-        o = [],
-        a = u[e + " "];
-      if (!a) {
-        t || (t = Y(e)), n = t.length;
-        while (n--) (a = te(t[n]))[k] ? i.push(a) : o.push(a);
-        (a = u(e, (v = o, m = 0 < (y = i).length, b = 0 < v.length, r = function r(e, t, n, _r, i) {
-          var o,
-            a,
-            s,
-            u = 0,
-            l = "0",
-            c = e && [],
-            f = [],
-            d = w,
-            p = e || b && x.find.TAG("*", i),
-            h = S += null == d ? 1 : Math.random() || .1,
-            g = p.length;
-          for (i && (w = t == C || t || i); l !== g && null != (o = p[l]); l++) {
-            if (b && o) {
-              a = 0, t || o.ownerDocument == C || (V(o), n = !T);
-              while (s = v[a++]) if (s(o, t || C, n)) {
-                E.call(_r, o);
-                break;
-              }
-              i && (S = h);
-            }
-            m && ((o = !s && o) && u--, e && c.push(o));
-          }
-          if (u += l, m && l !== u) {
-            a = 0;
-            while (s = y[a++]) s(c, f, t, n);
-            if (e) {
-              if (0 < u) while (l--) c[l] || f[l] || (f[l] = de.call(_r));
-              f = Z(f);
-            }
-            E.apply(_r, f), i && !e && 0 < f.length && 1 < u + y.length && _ce.uniqueSort(_r);
-          }
-          return i && (S = h, w = d), c;
-        }, m ? B(r) : r))).selector = e;
-      }
-      return a;
-    }
-    function re(e, t, n, r) {
-      var i,
-        o,
-        a,
-        s,
-        u,
-        l = "function" == typeof e && e,
-        c = !r && Y(e = l.selector || e);
-      if (n = n || [], 1 === c.length) {
-        if (2 < (o = c[0] = c[0].slice(0)).length && "ID" === (a = o[0]).type && 9 === t.nodeType && T && x.relative[o[1].type]) {
-          if (!(t = (x.find.ID(a.matches[0].replace(H, q), t) || [])[0])) return n;
-          l && (t = t.parentNode), e = e.slice(o.shift().value.length);
-        }
-        i = N.needsContext.test(e) ? 0 : o.length;
-        while (i--) {
-          if (a = o[i], x.relative[s = a.type]) break;
-          if ((u = x.find[s]) && (r = u(a.matches[0].replace(H, q), P.test(o[0].type) && X(t.parentNode) || t))) {
-            if (o.splice(i, 1), !(e = r.length && G(o))) return E.apply(n, r), n;
-            break;
-          }
-        }
-      }
-      return (l || ne(e, c))(r, t, !T, n, !t || P.test(e) && X(t.parentNode) || t), n;
-    }
-    Q.prototype = x.filters = x.pseudos, x.setFilters = new Q(), le.sortStable = k.split("").sort(l).join("") === k, V(), le.sortDetached = F(function (e) {
-      return 1 & e.compareDocumentPosition(C.createElement("fieldset"));
-    }), _ce.find = I, _ce.expr[":"] = _ce.expr.pseudos, _ce.unique = _ce.uniqueSort, I.compile = ne, I.select = re, I.setDocument = V, I.tokenize = Y, I.escape = _ce.escapeSelector, I.getText = _ce.text, I.isXML = _ce.isXMLDoc, I.selectors = _ce.expr, I.support = _ce.support, I.uniqueSort = _ce.uniqueSort;
-  }();
-  var p = function p(e, t, n) {
-      var r = [],
-        i = void 0 !== n;
-      while ((e = e[t]) && 9 !== e.nodeType) if (1 === e.nodeType) {
-        if (i && _ce(e).is(n)) break;
-        r.push(e);
-      }
-      return r;
-    },
-    h = function h(e, t) {
-      for (var n = []; e; e = e.nextSibling) 1 === e.nodeType && e !== t && n.push(e);
-      return n;
-    },
-    w = _ce.expr.match.needsContext,
-    C = /^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|)$/i;
-  function T(e, n, r) {
-    return v(n) ? _ce.grep(e, function (e, t) {
-      return !!n.call(e, t, e) !== r;
-    }) : n.nodeType ? _ce.grep(e, function (e) {
-      return e === n !== r;
-    }) : "string" != typeof n ? _ce.grep(e, function (e) {
-      return -1 < se.call(n, e) !== r;
-    }) : _ce.filter(n, e, r);
-  }
-  _ce.filter = function (e, t, n) {
-    var r = t[0];
-    return n && (e = ":not(" + e + ")"), 1 === t.length && 1 === r.nodeType ? _ce.find.matchesSelector(r, e) ? [r] : [] : _ce.find.matches(e, _ce.grep(t, function (e) {
-      return 1 === e.nodeType;
-    }));
-  }, _ce.fn.extend({
-    find: function find(e) {
-      var t,
-        n,
-        r = this.length,
-        i = this;
-      if ("string" != typeof e) return this.pushStack(_ce(e).filter(function () {
-        for (t = 0; t < r; t++) if (_ce.contains(i[t], this)) return !0;
-      }));
-      for (n = this.pushStack([]), t = 0; t < r; t++) _ce.find(e, i[t], n);
-      return 1 < r ? _ce.uniqueSort(n) : n;
-    },
-    filter: function filter(e) {
-      return this.pushStack(T(this, e || [], !1));
-    },
-    not: function not(e) {
-      return this.pushStack(T(this, e || [], !0));
-    },
-    is: function is(e) {
-      return !!T(this, "string" == typeof e && w.test(e) ? _ce(e) : e || [], !1).length;
-    }
-  });
-  var E,
-    k = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]+))$/;
-  (_ce.fn.init = function (e, t, n) {
-    var r, i;
-    if (!e) return this;
-    if (n = n || E, "string" == typeof e) {
-      if (!(r = "<" === e[0] && ">" === e[e.length - 1] && 3 <= e.length ? [null, e, null] : k.exec(e)) || !r[1] && t) return !t || t.jquery ? (t || n).find(e) : this.constructor(t).find(e);
-      if (r[1]) {
-        if (t = t instanceof _ce ? t[0] : t, _ce.merge(this, _ce.parseHTML(r[1], t && t.nodeType ? t.ownerDocument || t : m, !0)), C.test(r[1]) && _ce.isPlainObject(t)) for (r in t) v(this[r]) ? this[r](t[r]) : this.attr(r, t[r]);
-        return this;
-      }
-      return (i = m.getElementById(r[2])) && (this[0] = i, this.length = 1), this;
-    }
-    return e.nodeType ? (this[0] = e, this.length = 1, this) : v(e) ? void 0 !== n.ready ? n.ready(e) : e(_ce) : _ce.makeArray(e, this);
-  }).prototype = _ce.fn, E = _ce(m);
-  var S = /^(?:parents|prev(?:Until|All))/,
-    A = {
-      children: !0,
-      contents: !0,
-      next: !0,
-      prev: !0
-    };
-  function D(e, t) {
-    while ((e = e[t]) && 1 !== e.nodeType);
-    return e;
-  }
-  _ce.fn.extend({
-    has: function has(e) {
-      var t = _ce(e, this),
-        n = t.length;
-      return this.filter(function () {
-        for (var e = 0; e < n; e++) if (_ce.contains(this, t[e])) return !0;
-      });
-    },
-    closest: function closest(e, t) {
-      var n,
-        r = 0,
-        i = this.length,
-        o = [],
-        a = "string" != typeof e && _ce(e);
-      if (!w.test(e)) for (; r < i; r++) for (n = this[r]; n && n !== t; n = n.parentNode) if (n.nodeType < 11 && (a ? -1 < a.index(n) : 1 === n.nodeType && _ce.find.matchesSelector(n, e))) {
-        o.push(n);
-        break;
-      }
-      return this.pushStack(1 < o.length ? _ce.uniqueSort(o) : o);
-    },
-    index: function index(e) {
-      return e ? "string" == typeof e ? se.call(_ce(e), this[0]) : se.call(this, e.jquery ? e[0] : e) : this[0] && this[0].parentNode ? this.first().prevAll().length : -1;
-    },
-    add: function add(e, t) {
-      return this.pushStack(_ce.uniqueSort(_ce.merge(this.get(), _ce(e, t))));
-    },
-    addBack: function addBack(e) {
-      return this.add(null == e ? this.prevObject : this.prevObject.filter(e));
-    }
-  }), _ce.each({
-    parent: function parent(e) {
-      var t = e.parentNode;
-      return t && 11 !== t.nodeType ? t : null;
-    },
-    parents: function parents(e) {
-      return p(e, "parentNode");
-    },
-    parentsUntil: function parentsUntil(e, t, n) {
-      return p(e, "parentNode", n);
-    },
-    next: function next(e) {
-      return D(e, "nextSibling");
-    },
-    prev: function prev(e) {
-      return D(e, "previousSibling");
-    },
-    nextAll: function nextAll(e) {
-      return p(e, "nextSibling");
-    },
-    prevAll: function prevAll(e) {
-      return p(e, "previousSibling");
-    },
-    nextUntil: function nextUntil(e, t, n) {
-      return p(e, "nextSibling", n);
-    },
-    prevUntil: function prevUntil(e, t, n) {
-      return p(e, "previousSibling", n);
-    },
-    siblings: function siblings(e) {
-      return h((e.parentNode || {}).firstChild, e);
-    },
-    children: function children(e) {
-      return h(e.firstChild);
-    },
-    contents: function contents(e) {
-      return null != e.contentDocument && r(e.contentDocument) ? e.contentDocument : (fe(e, "template") && (e = e.content || e), _ce.merge([], e.childNodes));
-    }
-  }, function (r, i) {
-    _ce.fn[r] = function (e, t) {
-      var n = _ce.map(this, i, e);
-      return "Until" !== r.slice(-5) && (t = e), t && "string" == typeof t && (n = _ce.filter(t, n)), 1 < this.length && (A[r] || _ce.uniqueSort(n), S.test(r) && n.reverse()), this.pushStack(n);
-    };
-  });
-  var N = /[^\x20\t\r\n\f]+/g;
-  function L(e) {
-    return e;
-  }
-  function j(e) {
-    throw e;
-  }
-  function O(e, t, n, r) {
-    var i;
-    try {
-      e && v(i = e.promise) ? i.call(e).done(t).fail(n) : e && v(i = e.then) ? i.call(e, t, n) : t.apply(void 0, [e].slice(r));
-    } catch (e) {
-      n.apply(void 0, [e]);
-    }
-  }
-  _ce.Callbacks = function (r) {
-    var e, n;
-    r = "string" == typeof r ? (e = r, n = {}, _ce.each(e.match(N) || [], function (e, t) {
-      n[t] = !0;
-    }), n) : _ce.extend({}, r);
-    var i,
-      t,
-      o,
-      a,
-      s = [],
-      u = [],
-      l = -1,
-      c = function c() {
-        for (a = a || r.once, o = i = !0; u.length; l = -1) {
-          t = u.shift();
-          while (++l < s.length) !1 === s[l].apply(t[0], t[1]) && r.stopOnFalse && (l = s.length, t = !1);
-        }
-        r.memory || (t = !1), i = !1, a && (s = t ? [] : "");
-      },
-      f = {
-        add: function add() {
-          return s && (t && !i && (l = s.length - 1, u.push(t)), function n(e) {
-            _ce.each(e, function (e, t) {
-              v(t) ? r.unique && f.has(t) || s.push(t) : t && t.length && "string" !== x(t) && n(t);
-            });
-          }(arguments), t && !i && c()), this;
-        },
-        remove: function remove() {
-          return _ce.each(arguments, function (e, t) {
-            var n;
-            while (-1 < (n = _ce.inArray(t, s, n))) s.splice(n, 1), n <= l && l--;
-          }), this;
-        },
-        has: function has(e) {
-          return e ? -1 < _ce.inArray(e, s) : 0 < s.length;
-        },
-        empty: function empty() {
-          return s && (s = []), this;
-        },
-        disable: function disable() {
-          return a = u = [], s = t = "", this;
-        },
-        disabled: function disabled() {
-          return !s;
-        },
-        lock: function lock() {
-          return a = u = [], t || i || (s = t = ""), this;
-        },
-        locked: function locked() {
-          return !!a;
-        },
-        fireWith: function fireWith(e, t) {
-          return a || (t = [e, (t = t || []).slice ? t.slice() : t], u.push(t), i || c()), this;
-        },
-        fire: function fire() {
-          return f.fireWith(this, arguments), this;
-        },
-        fired: function fired() {
-          return !!o;
-        }
-      };
-    return f;
-  }, _ce.extend({
-    Deferred: function Deferred(e) {
-      var o = [["notify", "progress", _ce.Callbacks("memory"), _ce.Callbacks("memory"), 2], ["resolve", "done", _ce.Callbacks("once memory"), _ce.Callbacks("once memory"), 0, "resolved"], ["reject", "fail", _ce.Callbacks("once memory"), _ce.Callbacks("once memory"), 1, "rejected"]],
-        i = "pending",
-        a = {
-          state: function state() {
-            return i;
-          },
-          always: function always() {
-            return s.done(arguments).fail(arguments), this;
-          },
-          "catch": function _catch(e) {
-            return a.then(null, e);
-          },
-          pipe: function pipe() {
-            var i = arguments;
-            return _ce.Deferred(function (r) {
-              _ce.each(o, function (e, t) {
-                var n = v(i[t[4]]) && i[t[4]];
-                s[t[1]](function () {
-                  var e = n && n.apply(this, arguments);
-                  e && v(e.promise) ? e.promise().progress(r.notify).done(r.resolve).fail(r.reject) : r[t[0] + "With"](this, n ? [e] : arguments);
-                });
-              }), i = null;
-            }).promise();
-          },
-          then: function then(t, n, r) {
-            var u = 0;
-            function l(i, o, a, s) {
-              return function () {
-                var n = this,
-                  r = arguments,
-                  e = function e() {
-                    var e, t;
-                    if (!(i < u)) {
-                      if ((e = a.apply(n, r)) === o.promise()) throw new TypeError("Thenable self-resolution");
-                      t = e && ("object" == _typeof(e) || "function" == typeof e) && e.then, v(t) ? s ? t.call(e, l(u, o, L, s), l(u, o, j, s)) : (u++, t.call(e, l(u, o, L, s), l(u, o, j, s), l(u, o, L, o.notifyWith))) : (a !== L && (n = void 0, r = [e]), (s || o.resolveWith)(n, r));
-                    }
-                  },
-                  t = s ? e : function () {
-                    try {
-                      e();
-                    } catch (e) {
-                      _ce.Deferred.exceptionHook && _ce.Deferred.exceptionHook(e, t.error), u <= i + 1 && (a !== j && (n = void 0, r = [e]), o.rejectWith(n, r));
-                    }
-                  };
-                i ? t() : (_ce.Deferred.getErrorHook ? t.error = _ce.Deferred.getErrorHook() : _ce.Deferred.getStackHook && (t.error = _ce.Deferred.getStackHook()), ie.setTimeout(t));
-              };
-            }
-            return _ce.Deferred(function (e) {
-              o[0][3].add(l(0, e, v(r) ? r : L, e.notifyWith)), o[1][3].add(l(0, e, v(t) ? t : L)), o[2][3].add(l(0, e, v(n) ? n : j));
-            }).promise();
-          },
-          promise: function promise(e) {
-            return null != e ? _ce.extend(e, a) : a;
-          }
-        },
-        s = {};
-      return _ce.each(o, function (e, t) {
-        var n = t[2],
-          r = t[5];
-        a[t[1]] = n.add, r && n.add(function () {
-          i = r;
-        }, o[3 - e][2].disable, o[3 - e][3].disable, o[0][2].lock, o[0][3].lock), n.add(t[3].fire), s[t[0]] = function () {
-          return s[t[0] + "With"](this === s ? void 0 : this, arguments), this;
-        }, s[t[0] + "With"] = n.fireWith;
-      }), a.promise(s), e && e.call(s, s), s;
-    },
-    when: function when(e) {
-      var n = arguments.length,
-        t = n,
-        r = Array(t),
-        i = ae.call(arguments),
-        o = _ce.Deferred(),
-        a = function a(t) {
-          return function (e) {
-            r[t] = this, i[t] = 1 < arguments.length ? ae.call(arguments) : e, --n || o.resolveWith(r, i);
-          };
-        };
-      if (n <= 1 && (O(e, o.done(a(t)).resolve, o.reject, !n), "pending" === o.state() || v(i[t] && i[t].then))) return o.then();
-      while (t--) O(i[t], a(t), o.reject);
-      return o.promise();
-    }
-  });
-  var P = /^(Eval|Internal|Range|Reference|Syntax|Type|URI)Error$/;
-  _ce.Deferred.exceptionHook = function (e, t) {
-    ie.console && ie.console.warn && e && P.test(e.name) && ie.console.warn("jQuery.Deferred exception: " + e.message, e.stack, t);
-  }, _ce.readyException = function (e) {
-    ie.setTimeout(function () {
-      throw e;
-    });
-  };
-  var H = _ce.Deferred();
-  function q() {
-    m.removeEventListener("DOMContentLoaded", q), ie.removeEventListener("load", q), _ce.ready();
-  }
-  _ce.fn.ready = function (e) {
-    return H.then(e)["catch"](function (e) {
-      _ce.readyException(e);
-    }), this;
-  }, _ce.extend({
-    isReady: !1,
-    readyWait: 1,
-    ready: function ready(e) {
-      (!0 === e ? --_ce.readyWait : _ce.isReady) || (_ce.isReady = !0) !== e && 0 < --_ce.readyWait || H.resolveWith(m, [_ce]);
-    }
-  }), _ce.ready.then = H.then, "complete" === m.readyState || "loading" !== m.readyState && !m.documentElement.doScroll ? ie.setTimeout(_ce.ready) : (m.addEventListener("DOMContentLoaded", q), ie.addEventListener("load", q));
-  var _R = function R(e, t, n, r, i, o, a) {
-      var s = 0,
-        u = e.length,
-        l = null == n;
-      if ("object" === x(n)) for (s in i = !0, n) _R(e, t, s, n[s], !0, o, a);else if (void 0 !== r && (i = !0, v(r) || (a = !0), l && (a ? (t.call(e, r), t = null) : (l = t, t = function t(e, _t, n) {
-        return l.call(_ce(e), n);
-      })), t)) for (; s < u; s++) t(e[s], n, a ? r : r.call(e[s], s, t(e[s], n)));
-      return i ? e : l ? t.call(e) : u ? t(e[0], n) : o;
-    },
-    M = /^-ms-/,
-    I = /-([a-z])/g;
-  function W(e, t) {
-    return t.toUpperCase();
-  }
-  function B(e) {
-    return e.replace(M, "ms-").replace(I, W);
-  }
-  var F = function F(e) {
-    return 1 === e.nodeType || 9 === e.nodeType || !+e.nodeType;
-  };
-  function $() {
-    this.expando = _ce.expando + $.uid++;
-  }
-  $.uid = 1, $.prototype = {
-    cache: function cache(e) {
-      var t = e[this.expando];
-      return t || (t = {}, F(e) && (e.nodeType ? e[this.expando] = t : Object.defineProperty(e, this.expando, {
-        value: t,
-        configurable: !0
-      }))), t;
-    },
-    set: function set(e, t, n) {
-      var r,
-        i = this.cache(e);
-      if ("string" == typeof t) i[B(t)] = n;else for (r in t) i[B(r)] = t[r];
-      return i;
-    },
-    get: function get(e, t) {
-      return void 0 === t ? this.cache(e) : e[this.expando] && e[this.expando][B(t)];
-    },
-    access: function access(e, t, n) {
-      return void 0 === t || t && "string" == typeof t && void 0 === n ? this.get(e, t) : (this.set(e, t, n), void 0 !== n ? n : t);
-    },
-    remove: function remove(e, t) {
-      var n,
-        r = e[this.expando];
-      if (void 0 !== r) {
-        if (void 0 !== t) {
-          n = (t = Array.isArray(t) ? t.map(B) : (t = B(t)) in r ? [t] : t.match(N) || []).length;
-          while (n--) delete r[t[n]];
-        }
-        (void 0 === t || _ce.isEmptyObject(r)) && (e.nodeType ? e[this.expando] = void 0 : delete e[this.expando]);
-      }
-    },
-    hasData: function hasData(e) {
-      var t = e[this.expando];
-      return void 0 !== t && !_ce.isEmptyObject(t);
-    }
-  };
-  var _ = new $(),
-    z = new $(),
-    U = /^(?:\{[\w\W]*\}|\[[\w\W]*\])$/,
-    X = /[A-Z]/g;
-  function V(e, t, n) {
-    var r, i;
-    if (void 0 === n && 1 === e.nodeType) if (r = "data-" + t.replace(X, "-$&").toLowerCase(), "string" == typeof (n = e.getAttribute(r))) {
-      try {
-        n = "true" === (i = n) || "false" !== i && ("null" === i ? null : i === +i + "" ? +i : U.test(i) ? JSON.parse(i) : i);
-      } catch (e) {}
-      z.set(e, t, n);
-    } else n = void 0;
-    return n;
-  }
-  _ce.extend({
-    hasData: function hasData(e) {
-      return z.hasData(e) || _.hasData(e);
-    },
-    data: function data(e, t, n) {
-      return z.access(e, t, n);
-    },
-    removeData: function removeData(e, t) {
-      z.remove(e, t);
-    },
-    _data: function _data(e, t, n) {
-      return _.access(e, t, n);
-    },
-    _removeData: function _removeData(e, t) {
-      _.remove(e, t);
-    }
-  }), _ce.fn.extend({
-    data: function data(n, e) {
-      var t,
-        r,
-        i,
-        o = this[0],
-        a = o && o.attributes;
-      if (void 0 === n) {
-        if (this.length && (i = z.get(o), 1 === o.nodeType && !_.get(o, "hasDataAttrs"))) {
-          t = a.length;
-          while (t--) a[t] && 0 === (r = a[t].name).indexOf("data-") && (r = B(r.slice(5)), V(o, r, i[r]));
-          _.set(o, "hasDataAttrs", !0);
-        }
-        return i;
-      }
-      return "object" == _typeof(n) ? this.each(function () {
-        z.set(this, n);
-      }) : _R(this, function (e) {
-        var t;
-        if (o && void 0 === e) return void 0 !== (t = z.get(o, n)) ? t : void 0 !== (t = V(o, n)) ? t : void 0;
-        this.each(function () {
-          z.set(this, n, e);
-        });
-      }, null, e, 1 < arguments.length, null, !0);
-    },
-    removeData: function removeData(e) {
-      return this.each(function () {
-        z.remove(this, e);
-      });
-    }
-  }), _ce.extend({
-    queue: function queue(e, t, n) {
-      var r;
-      if (e) return t = (t || "fx") + "queue", r = _.get(e, t), n && (!r || Array.isArray(n) ? r = _.access(e, t, _ce.makeArray(n)) : r.push(n)), r || [];
-    },
-    dequeue: function dequeue(e, t) {
-      t = t || "fx";
-      var n = _ce.queue(e, t),
-        r = n.length,
-        i = n.shift(),
-        o = _ce._queueHooks(e, t);
-      "inprogress" === i && (i = n.shift(), r--), i && ("fx" === t && n.unshift("inprogress"), delete o.stop, i.call(e, function () {
-        _ce.dequeue(e, t);
-      }, o)), !r && o && o.empty.fire();
-    },
-    _queueHooks: function _queueHooks(e, t) {
-      var n = t + "queueHooks";
-      return _.get(e, n) || _.access(e, n, {
-        empty: _ce.Callbacks("once memory").add(function () {
-          _.remove(e, [t + "queue", n]);
-        })
-      });
-    }
-  }), _ce.fn.extend({
-    queue: function queue(t, n) {
-      var e = 2;
-      return "string" != typeof t && (n = t, t = "fx", e--), arguments.length < e ? _ce.queue(this[0], t) : void 0 === n ? this : this.each(function () {
-        var e = _ce.queue(this, t, n);
-        _ce._queueHooks(this, t), "fx" === t && "inprogress" !== e[0] && _ce.dequeue(this, t);
-      });
-    },
-    dequeue: function dequeue(e) {
-      return this.each(function () {
-        _ce.dequeue(this, e);
-      });
-    },
-    clearQueue: function clearQueue(e) {
-      return this.queue(e || "fx", []);
-    },
-    promise: function promise(e, t) {
-      var n,
-        r = 1,
-        i = _ce.Deferred(),
-        o = this,
-        a = this.length,
-        s = function s() {
-          --r || i.resolveWith(o, [o]);
-        };
-      "string" != typeof e && (t = e, e = void 0), e = e || "fx";
-      while (a--) (n = _.get(o[a], e + "queueHooks")) && n.empty && (r++, n.empty.add(s));
-      return s(), i.promise(t);
-    }
-  });
-  var Q = /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/.source,
-    Y = new RegExp("^(?:([+-])=|)(" + Q + ")([a-z%]*)$", "i"),
-    G = ["Top", "Right", "Bottom", "Left"],
-    K = m.documentElement,
-    J = function J(e) {
-      return _ce.contains(e.ownerDocument, e);
-    },
-    Z = {
-      composed: !0
-    };
-  K.getRootNode && (J = function J(e) {
-    return _ce.contains(e.ownerDocument, e) || e.getRootNode(Z) === e.ownerDocument;
-  });
-  var ee = function ee(e, t) {
-    return "none" === (e = t || e).style.display || "" === e.style.display && J(e) && "none" === _ce.css(e, "display");
-  };
-  var te = {};
-  function ne(e, t) {
-    for (var n, r, i, o, a, s, u, l = [], c = 0, f = e.length; c < f; c++) (r = e[c]).style && (n = r.style.display, t ? ("none" === n && (l[c] = _.get(r, "display") || null, l[c] || (r.style.display = "")), "" === r.style.display && ee(r) && (l[c] = (u = a = o = void 0, a = (i = r).ownerDocument, s = i.nodeName, (u = te[s]) || (o = a.body.appendChild(a.createElement(s)), u = _ce.css(o, "display"), o.parentNode.removeChild(o), "none" === u && (u = "block"), te[s] = u)))) : "none" !== n && (l[c] = "none", _.set(r, "display", n)));
-    for (c = 0; c < f; c++) null != l[c] && (e[c].style.display = l[c]);
-    return e;
-  }
-  _ce.fn.extend({
-    show: function show() {
-      return ne(this, !0);
-    },
-    hide: function hide() {
-      return ne(this);
-    },
-    toggle: function toggle(e) {
-      return "boolean" == typeof e ? e ? this.show() : this.hide() : this.each(function () {
-        ee(this) ? _ce(this).show() : _ce(this).hide();
-      });
-    }
-  });
-  var re,
-    be,
-    xe = /^(?:checkbox|radio)$/i,
-    we = /<([a-z][^\/\0>\x20\t\r\n\f]*)/i,
-    Ce = /^$|^module$|\/(?:java|ecma)script/i;
-  re = m.createDocumentFragment().appendChild(m.createElement("div")), (be = m.createElement("input")).setAttribute("type", "radio"), be.setAttribute("checked", "checked"), be.setAttribute("name", "t"), re.appendChild(be), le.checkClone = re.cloneNode(!0).cloneNode(!0).lastChild.checked, re.innerHTML = "<textarea>x</textarea>", le.noCloneChecked = !!re.cloneNode(!0).lastChild.defaultValue, re.innerHTML = "<option></option>", le.option = !!re.lastChild;
-  var Te = {
-    thead: [1, "<table>", "</table>"],
-    col: [2, "<table><colgroup>", "</colgroup></table>"],
-    tr: [2, "<table><tbody>", "</tbody></table>"],
-    td: [3, "<table><tbody><tr>", "</tr></tbody></table>"],
-    _default: [0, "", ""]
-  };
-  function Ee(e, t) {
-    var n;
-    return n = "undefined" != typeof e.getElementsByTagName ? e.getElementsByTagName(t || "*") : "undefined" != typeof e.querySelectorAll ? e.querySelectorAll(t || "*") : [], void 0 === t || t && fe(e, t) ? _ce.merge([e], n) : n;
-  }
-  function ke(e, t) {
-    for (var n = 0, r = e.length; n < r; n++) _.set(e[n], "globalEval", !t || _.get(t[n], "globalEval"));
-  }
-  Te.tbody = Te.tfoot = Te.colgroup = Te.caption = Te.thead, Te.th = Te.td, le.option || (Te.optgroup = Te.option = [1, "<select multiple='multiple'>", "</select>"]);
-  var Se = /<|&#?\w+;/;
-  function Ae(e, t, n, r, i) {
-    for (var o, a, s, u, l, c, f = t.createDocumentFragment(), d = [], p = 0, h = e.length; p < h; p++) if ((o = e[p]) || 0 === o) if ("object" === x(o)) _ce.merge(d, o.nodeType ? [o] : o);else if (Se.test(o)) {
-      a = a || f.appendChild(t.createElement("div")), s = (we.exec(o) || ["", ""])[1].toLowerCase(), u = Te[s] || Te._default, a.innerHTML = u[1] + _ce.htmlPrefilter(o) + u[2], c = u[0];
-      while (c--) a = a.lastChild;
-      _ce.merge(d, a.childNodes), (a = f.firstChild).textContent = "";
-    } else d.push(t.createTextNode(o));
-    f.textContent = "", p = 0;
-    while (o = d[p++]) if (r && -1 < _ce.inArray(o, r)) i && i.push(o);else if (l = J(o), a = Ee(f.appendChild(o), "script"), l && ke(a), n) {
-      c = 0;
-      while (o = a[c++]) Ce.test(o.type || "") && n.push(o);
-    }
-    return f;
-  }
-  var De = /^([^.]*)(?:\.(.+)|)/;
-  function Ne() {
-    return !0;
-  }
-  function Le() {
-    return !1;
-  }
-  function je(e, t, n, r, i, o) {
-    var a, s;
-    if ("object" == _typeof(t)) {
-      for (s in "string" != typeof n && (r = r || n, n = void 0), t) je(e, s, n, r, t[s], o);
-      return e;
-    }
-    if (null == r && null == i ? (i = n, r = n = void 0) : null == i && ("string" == typeof n ? (i = r, r = void 0) : (i = r, r = n, n = void 0)), !1 === i) i = Le;else if (!i) return e;
-    return 1 === o && (a = i, (i = function i(e) {
-      return _ce().off(e), a.apply(this, arguments);
-    }).guid = a.guid || (a.guid = _ce.guid++)), e.each(function () {
-      _ce.event.add(this, t, i, r, n);
-    });
-  }
-  function Oe(e, r, t) {
-    t ? (_.set(e, r, !1), _ce.event.add(e, r, {
-      namespace: !1,
-      handler: function handler(e) {
-        var t,
-          n = _.get(this, r);
-        if (1 & e.isTrigger && this[r]) {
-          if (n) (_ce.event.special[r] || {}).delegateType && e.stopPropagation();else if (n = ae.call(arguments), _.set(this, r, n), this[r](), t = _.get(this, r), _.set(this, r, !1), n !== t) return e.stopImmediatePropagation(), e.preventDefault(), t;
-        } else n && (_.set(this, r, _ce.event.trigger(n[0], n.slice(1), this)), e.stopPropagation(), e.isImmediatePropagationStopped = Ne);
-      }
-    })) : void 0 === _.get(e, r) && _ce.event.add(e, r, Ne);
-  }
-  _ce.event = {
-    global: {},
-    add: function add(t, e, n, r, i) {
-      var o,
-        a,
-        s,
-        u,
-        l,
-        c,
-        f,
-        d,
-        p,
-        h,
-        g,
-        v = _.get(t);
-      if (F(t)) {
-        n.handler && (n = (o = n).handler, i = o.selector), i && _ce.find.matchesSelector(K, i), n.guid || (n.guid = _ce.guid++), (u = v.events) || (u = v.events = Object.create(null)), (a = v.handle) || (a = v.handle = function (e) {
-          return "undefined" != typeof _ce && _ce.event.triggered !== e.type ? _ce.event.dispatch.apply(t, arguments) : void 0;
-        }), l = (e = (e || "").match(N) || [""]).length;
-        while (l--) p = g = (s = De.exec(e[l]) || [])[1], h = (s[2] || "").split(".").sort(), p && (f = _ce.event.special[p] || {}, p = (i ? f.delegateType : f.bindType) || p, f = _ce.event.special[p] || {}, c = _ce.extend({
-          type: p,
-          origType: g,
-          data: r,
-          handler: n,
-          guid: n.guid,
-          selector: i,
-          needsContext: i && _ce.expr.match.needsContext.test(i),
-          namespace: h.join(".")
-        }, o), (d = u[p]) || ((d = u[p] = []).delegateCount = 0, f.setup && !1 !== f.setup.call(t, r, h, a) || t.addEventListener && t.addEventListener(p, a)), f.add && (f.add.call(t, c), c.handler.guid || (c.handler.guid = n.guid)), i ? d.splice(d.delegateCount++, 0, c) : d.push(c), _ce.event.global[p] = !0);
-      }
-    },
-    remove: function remove(e, t, n, r, i) {
-      var o,
-        a,
-        s,
-        u,
-        l,
-        c,
-        f,
-        d,
-        p,
-        h,
-        g,
-        v = _.hasData(e) && _.get(e);
-      if (v && (u = v.events)) {
-        l = (t = (t || "").match(N) || [""]).length;
-        while (l--) if (p = g = (s = De.exec(t[l]) || [])[1], h = (s[2] || "").split(".").sort(), p) {
-          f = _ce.event.special[p] || {}, d = u[p = (r ? f.delegateType : f.bindType) || p] || [], s = s[2] && new RegExp("(^|\\.)" + h.join("\\.(?:.*\\.|)") + "(\\.|$)"), a = o = d.length;
-          while (o--) c = d[o], !i && g !== c.origType || n && n.guid !== c.guid || s && !s.test(c.namespace) || r && r !== c.selector && ("**" !== r || !c.selector) || (d.splice(o, 1), c.selector && d.delegateCount--, f.remove && f.remove.call(e, c));
-          a && !d.length && (f.teardown && !1 !== f.teardown.call(e, h, v.handle) || _ce.removeEvent(e, p, v.handle), delete u[p]);
-        } else for (p in u) _ce.event.remove(e, p + t[l], n, r, !0);
-        _ce.isEmptyObject(u) && _.remove(e, "handle events");
-      }
-    },
-    dispatch: function dispatch(e) {
-      var t,
-        n,
-        r,
-        i,
-        o,
-        a,
-        s = new Array(arguments.length),
-        u = _ce.event.fix(e),
-        l = (_.get(this, "events") || Object.create(null))[u.type] || [],
-        c = _ce.event.special[u.type] || {};
-      for (s[0] = u, t = 1; t < arguments.length; t++) s[t] = arguments[t];
-      if (u.delegateTarget = this, !c.preDispatch || !1 !== c.preDispatch.call(this, u)) {
-        a = _ce.event.handlers.call(this, u, l), t = 0;
-        while ((i = a[t++]) && !u.isPropagationStopped()) {
-          u.currentTarget = i.elem, n = 0;
-          while ((o = i.handlers[n++]) && !u.isImmediatePropagationStopped()) u.rnamespace && !1 !== o.namespace && !u.rnamespace.test(o.namespace) || (u.handleObj = o, u.data = o.data, void 0 !== (r = ((_ce.event.special[o.origType] || {}).handle || o.handler).apply(i.elem, s)) && !1 === (u.result = r) && (u.preventDefault(), u.stopPropagation()));
-        }
-        return c.postDispatch && c.postDispatch.call(this, u), u.result;
-      }
-    },
-    handlers: function handlers(e, t) {
-      var n,
-        r,
-        i,
-        o,
-        a,
-        s = [],
-        u = t.delegateCount,
-        l = e.target;
-      if (u && l.nodeType && !("click" === e.type && 1 <= e.button)) for (; l !== this; l = l.parentNode || this) if (1 === l.nodeType && ("click" !== e.type || !0 !== l.disabled)) {
-        for (o = [], a = {}, n = 0; n < u; n++) void 0 === a[i = (r = t[n]).selector + " "] && (a[i] = r.needsContext ? -1 < _ce(i, this).index(l) : _ce.find(i, this, null, [l]).length), a[i] && o.push(r);
-        o.length && s.push({
-          elem: l,
-          handlers: o
-        });
-      }
-      return l = this, u < t.length && s.push({
-        elem: l,
-        handlers: t.slice(u)
-      }), s;
-    },
-    addProp: function addProp(t, e) {
-      Object.defineProperty(_ce.Event.prototype, t, {
-        enumerable: !0,
-        configurable: !0,
-        get: v(e) ? function () {
-          if (this.originalEvent) return e(this.originalEvent);
-        } : function () {
-          if (this.originalEvent) return this.originalEvent[t];
-        },
-        set: function set(e) {
-          Object.defineProperty(this, t, {
-            enumerable: !0,
-            configurable: !0,
-            writable: !0,
-            value: e
-          });
-        }
-      });
-    },
-    fix: function fix(e) {
-      return e[_ce.expando] ? e : new _ce.Event(e);
-    },
-    special: {
-      load: {
-        noBubble: !0
-      },
-      click: {
-        setup: function setup(e) {
-          var t = this || e;
-          return xe.test(t.type) && t.click && fe(t, "input") && Oe(t, "click", !0), !1;
-        },
-        trigger: function trigger(e) {
-          var t = this || e;
-          return xe.test(t.type) && t.click && fe(t, "input") && Oe(t, "click"), !0;
-        },
-        _default: function _default(e) {
-          var t = e.target;
-          return xe.test(t.type) && t.click && fe(t, "input") && _.get(t, "click") || fe(t, "a");
-        }
-      },
-      beforeunload: {
-        postDispatch: function postDispatch(e) {
-          void 0 !== e.result && e.originalEvent && (e.originalEvent.returnValue = e.result);
-        }
-      }
-    }
-  }, _ce.removeEvent = function (e, t, n) {
-    e.removeEventListener && e.removeEventListener(t, n);
-  }, _ce.Event = function (e, t) {
-    if (!(this instanceof _ce.Event)) return new _ce.Event(e, t);
-    e && e.type ? (this.originalEvent = e, this.type = e.type, this.isDefaultPrevented = e.defaultPrevented || void 0 === e.defaultPrevented && !1 === e.returnValue ? Ne : Le, this.target = e.target && 3 === e.target.nodeType ? e.target.parentNode : e.target, this.currentTarget = e.currentTarget, this.relatedTarget = e.relatedTarget) : this.type = e, t && _ce.extend(this, t), this.timeStamp = e && e.timeStamp || Date.now(), this[_ce.expando] = !0;
-  }, _ce.Event.prototype = {
-    constructor: _ce.Event,
-    isDefaultPrevented: Le,
-    isPropagationStopped: Le,
-    isImmediatePropagationStopped: Le,
-    isSimulated: !1,
-    preventDefault: function preventDefault() {
-      var e = this.originalEvent;
-      this.isDefaultPrevented = Ne, e && !this.isSimulated && e.preventDefault();
-    },
-    stopPropagation: function stopPropagation() {
-      var e = this.originalEvent;
-      this.isPropagationStopped = Ne, e && !this.isSimulated && e.stopPropagation();
-    },
-    stopImmediatePropagation: function stopImmediatePropagation() {
-      var e = this.originalEvent;
-      this.isImmediatePropagationStopped = Ne, e && !this.isSimulated && e.stopImmediatePropagation(), this.stopPropagation();
-    }
-  }, _ce.each({
-    altKey: !0,
-    bubbles: !0,
-    cancelable: !0,
-    changedTouches: !0,
-    ctrlKey: !0,
-    detail: !0,
-    eventPhase: !0,
-    metaKey: !0,
-    pageX: !0,
-    pageY: !0,
-    shiftKey: !0,
-    view: !0,
-    "char": !0,
-    code: !0,
-    charCode: !0,
-    key: !0,
-    keyCode: !0,
-    button: !0,
-    buttons: !0,
-    clientX: !0,
-    clientY: !0,
-    offsetX: !0,
-    offsetY: !0,
-    pointerId: !0,
-    pointerType: !0,
-    screenX: !0,
-    screenY: !0,
-    targetTouches: !0,
-    toElement: !0,
-    touches: !0,
-    which: !0
-  }, _ce.event.addProp), _ce.each({
-    focus: "focusin",
-    blur: "focusout"
-  }, function (r, i) {
-    function o(e) {
-      if (m.documentMode) {
-        var t = _.get(this, "handle"),
-          n = _ce.event.fix(e);
-        n.type = "focusin" === e.type ? "focus" : "blur", n.isSimulated = !0, t(e), n.target === n.currentTarget && t(n);
-      } else _ce.event.simulate(i, e.target, _ce.event.fix(e));
-    }
-    _ce.event.special[r] = {
-      setup: function setup() {
-        var e;
-        if (Oe(this, r, !0), !m.documentMode) return !1;
-        (e = _.get(this, i)) || this.addEventListener(i, o), _.set(this, i, (e || 0) + 1);
-      },
-      trigger: function trigger() {
-        return Oe(this, r), !0;
-      },
-      teardown: function teardown() {
-        var e;
-        if (!m.documentMode) return !1;
-        (e = _.get(this, i) - 1) ? _.set(this, i, e) : (this.removeEventListener(i, o), _.remove(this, i));
-      },
-      _default: function _default(e) {
-        return _.get(e.target, r);
-      },
-      delegateType: i
-    }, _ce.event.special[i] = {
-      setup: function setup() {
-        var e = this.ownerDocument || this.document || this,
-          t = m.documentMode ? this : e,
-          n = _.get(t, i);
-        n || (m.documentMode ? this.addEventListener(i, o) : e.addEventListener(r, o, !0)), _.set(t, i, (n || 0) + 1);
-      },
-      teardown: function teardown() {
-        var e = this.ownerDocument || this.document || this,
-          t = m.documentMode ? this : e,
-          n = _.get(t, i) - 1;
-        n ? _.set(t, i, n) : (m.documentMode ? this.removeEventListener(i, o) : e.removeEventListener(r, o, !0), _.remove(t, i));
-      }
-    };
-  }), _ce.each({
-    mouseenter: "mouseover",
-    mouseleave: "mouseout",
-    pointerenter: "pointerover",
-    pointerleave: "pointerout"
-  }, function (e, i) {
-    _ce.event.special[e] = {
-      delegateType: i,
-      bindType: i,
-      handle: function handle(e) {
-        var t,
-          n = e.relatedTarget,
-          r = e.handleObj;
-        return n && (n === this || _ce.contains(this, n)) || (e.type = r.origType, t = r.handler.apply(this, arguments), e.type = i), t;
-      }
-    };
-  }), _ce.fn.extend({
-    on: function on(e, t, n, r) {
-      return je(this, e, t, n, r);
-    },
-    one: function one(e, t, n, r) {
-      return je(this, e, t, n, r, 1);
-    },
-    off: function off(e, t, n) {
-      var r, i;
-      if (e && e.preventDefault && e.handleObj) return r = e.handleObj, _ce(e.delegateTarget).off(r.namespace ? r.origType + "." + r.namespace : r.origType, r.selector, r.handler), this;
-      if ("object" == _typeof(e)) {
-        for (i in e) this.off(i, t, e[i]);
-        return this;
-      }
-      return !1 !== t && "function" != typeof t || (n = t, t = void 0), !1 === n && (n = Le), this.each(function () {
-        _ce.event.remove(this, e, n, t);
-      });
-    }
-  });
-  var Pe = /<script|<style|<link/i,
-    He = /checked\s*(?:[^=]|=\s*.checked.)/i,
-    qe = /^\s*<!\[CDATA\[|\]\]>\s*$/g;
-  function Re(e, t) {
-    return fe(e, "table") && fe(11 !== t.nodeType ? t : t.firstChild, "tr") && _ce(e).children("tbody")[0] || e;
-  }
-  function Me(e) {
-    return e.type = (null !== e.getAttribute("type")) + "/" + e.type, e;
-  }
-  function Ie(e) {
-    return "true/" === (e.type || "").slice(0, 5) ? e.type = e.type.slice(5) : e.removeAttribute("type"), e;
-  }
-  function We(e, t) {
-    var n, r, i, o, a, s;
-    if (1 === t.nodeType) {
-      if (_.hasData(e) && (s = _.get(e).events)) for (i in _.remove(t, "handle events"), s) for (n = 0, r = s[i].length; n < r; n++) _ce.event.add(t, i, s[i][n]);
-      z.hasData(e) && (o = z.access(e), a = _ce.extend({}, o), z.set(t, a));
-    }
-  }
-  function Be(n, r, i, o) {
-    r = g(r);
-    var e,
-      t,
-      a,
-      s,
-      u,
-      l,
-      c = 0,
-      f = n.length,
-      d = f - 1,
-      p = r[0],
-      h = v(p);
-    if (h || 1 < f && "string" == typeof p && !le.checkClone && He.test(p)) return n.each(function (e) {
-      var t = n.eq(e);
-      h && (r[0] = p.call(this, e, t.html())), Be(t, r, i, o);
-    });
-    if (f && (t = (e = Ae(r, n[0].ownerDocument, !1, n, o)).firstChild, 1 === e.childNodes.length && (e = t), t || o)) {
-      for (s = (a = _ce.map(Ee(e, "script"), Me)).length; c < f; c++) u = e, c !== d && (u = _ce.clone(u, !0, !0), s && _ce.merge(a, Ee(u, "script"))), i.call(n[c], u, c);
-      if (s) for (l = a[a.length - 1].ownerDocument, _ce.map(a, Ie), c = 0; c < s; c++) u = a[c], Ce.test(u.type || "") && !_.access(u, "globalEval") && _ce.contains(l, u) && (u.src && "module" !== (u.type || "").toLowerCase() ? _ce._evalUrl && !u.noModule && _ce._evalUrl(u.src, {
-        nonce: u.nonce || u.getAttribute("nonce")
-      }, l) : b(u.textContent.replace(qe, ""), u, l));
-    }
-    return n;
-  }
-  function Fe(e, t, n) {
-    for (var r, i = t ? _ce.filter(t, e) : e, o = 0; null != (r = i[o]); o++) n || 1 !== r.nodeType || _ce.cleanData(Ee(r)), r.parentNode && (n && J(r) && ke(Ee(r, "script")), r.parentNode.removeChild(r));
-    return e;
-  }
-  _ce.extend({
-    htmlPrefilter: function htmlPrefilter(e) {
-      return e;
-    },
-    clone: function clone(e, t, n) {
-      var r,
-        i,
-        o,
-        a,
-        s,
-        u,
-        l,
-        c = e.cloneNode(!0),
-        f = J(e);
-      if (!(le.noCloneChecked || 1 !== e.nodeType && 11 !== e.nodeType || _ce.isXMLDoc(e))) for (a = Ee(c), r = 0, i = (o = Ee(e)).length; r < i; r++) s = o[r], u = a[r], void 0, "input" === (l = u.nodeName.toLowerCase()) && xe.test(s.type) ? u.checked = s.checked : "input" !== l && "textarea" !== l || (u.defaultValue = s.defaultValue);
-      if (t) if (n) for (o = o || Ee(e), a = a || Ee(c), r = 0, i = o.length; r < i; r++) We(o[r], a[r]);else We(e, c);
-      return 0 < (a = Ee(c, "script")).length && ke(a, !f && Ee(e, "script")), c;
-    },
-    cleanData: function cleanData(e) {
-      for (var t, n, r, i = _ce.event.special, o = 0; void 0 !== (n = e[o]); o++) if (F(n)) {
-        if (t = n[_.expando]) {
-          if (t.events) for (r in t.events) i[r] ? _ce.event.remove(n, r) : _ce.removeEvent(n, r, t.handle);
-          n[_.expando] = void 0;
-        }
-        n[z.expando] && (n[z.expando] = void 0);
-      }
-    }
-  }), _ce.fn.extend({
-    detach: function detach(e) {
-      return Fe(this, e, !0);
-    },
-    remove: function remove(e) {
-      return Fe(this, e);
-    },
-    text: function text(e) {
-      return _R(this, function (e) {
-        return void 0 === e ? _ce.text(this) : this.empty().each(function () {
-          1 !== this.nodeType && 11 !== this.nodeType && 9 !== this.nodeType || (this.textContent = e);
-        });
-      }, null, e, arguments.length);
-    },
-    append: function append() {
-      return Be(this, arguments, function (e) {
-        1 !== this.nodeType && 11 !== this.nodeType && 9 !== this.nodeType || Re(this, e).appendChild(e);
-      });
-    },
-    prepend: function prepend() {
-      return Be(this, arguments, function (e) {
-        if (1 === this.nodeType || 11 === this.nodeType || 9 === this.nodeType) {
-          var t = Re(this, e);
-          t.insertBefore(e, t.firstChild);
-        }
-      });
-    },
-    before: function before() {
-      return Be(this, arguments, function (e) {
-        this.parentNode && this.parentNode.insertBefore(e, this);
-      });
-    },
-    after: function after() {
-      return Be(this, arguments, function (e) {
-        this.parentNode && this.parentNode.insertBefore(e, this.nextSibling);
-      });
-    },
-    empty: function empty() {
-      for (var e, t = 0; null != (e = this[t]); t++) 1 === e.nodeType && (_ce.cleanData(Ee(e, !1)), e.textContent = "");
-      return this;
-    },
-    clone: function clone(e, t) {
-      return e = null != e && e, t = null == t ? e : t, this.map(function () {
-        return _ce.clone(this, e, t);
-      });
-    },
-    html: function html(e) {
-      return _R(this, function (e) {
-        var t = this[0] || {},
-          n = 0,
-          r = this.length;
-        if (void 0 === e && 1 === t.nodeType) return t.innerHTML;
-        if ("string" == typeof e && !Pe.test(e) && !Te[(we.exec(e) || ["", ""])[1].toLowerCase()]) {
-          e = _ce.htmlPrefilter(e);
-          try {
-            for (; n < r; n++) 1 === (t = this[n] || {}).nodeType && (_ce.cleanData(Ee(t, !1)), t.innerHTML = e);
-            t = 0;
-          } catch (e) {}
-        }
-        t && this.empty().append(e);
-      }, null, e, arguments.length);
-    },
-    replaceWith: function replaceWith() {
-      var n = [];
-      return Be(this, arguments, function (e) {
-        var t = this.parentNode;
-        _ce.inArray(this, n) < 0 && (_ce.cleanData(Ee(this)), t && t.replaceChild(e, this));
-      }, n);
-    }
-  }), _ce.each({
-    appendTo: "append",
-    prependTo: "prepend",
-    insertBefore: "before",
-    insertAfter: "after",
-    replaceAll: "replaceWith"
-  }, function (e, a) {
-    _ce.fn[e] = function (e) {
-      for (var t, n = [], r = _ce(e), i = r.length - 1, o = 0; o <= i; o++) t = o === i ? this : this.clone(!0), _ce(r[o])[a](t), s.apply(n, t.get());
-      return this.pushStack(n);
-    };
-  });
-  var $e = new RegExp("^(" + Q + ")(?!px)[a-z%]+$", "i"),
-    _e = /^--/,
-    ze = function ze(e) {
-      var t = e.ownerDocument.defaultView;
-      return t && t.opener || (t = ie), t.getComputedStyle(e);
-    },
-    Ue = function Ue(e, t, n) {
-      var r,
-        i,
-        o = {};
-      for (i in t) o[i] = e.style[i], e.style[i] = t[i];
-      for (i in r = n.call(e), t) e.style[i] = o[i];
-      return r;
-    },
-    Xe = new RegExp(G.join("|"), "i");
-  function Ve(e, t, n) {
-    var r,
-      i,
-      o,
-      a,
-      s = _e.test(t),
-      u = e.style;
-    return (n = n || ze(e)) && (a = n.getPropertyValue(t) || n[t], s && a && (a = a.replace(ve, "$1") || void 0), "" !== a || J(e) || (a = _ce.style(e, t)), !le.pixelBoxStyles() && $e.test(a) && Xe.test(t) && (r = u.width, i = u.minWidth, o = u.maxWidth, u.minWidth = u.maxWidth = u.width = a, a = n.width, u.width = r, u.minWidth = i, u.maxWidth = o)), void 0 !== a ? a + "" : a;
-  }
-  function Qe(e, t) {
-    return {
-      get: function get() {
-        if (!e()) return (this.get = t).apply(this, arguments);
-        delete this.get;
-      }
-    };
-  }
-  !function () {
-    function e() {
-      if (l) {
-        u.style.cssText = "position:absolute;left:-11111px;width:60px;margin-top:1px;padding:0;border:0", l.style.cssText = "position:relative;display:block;box-sizing:border-box;overflow:scroll;margin:auto;border:1px;padding:1px;width:60%;top:1%", K.appendChild(u).appendChild(l);
-        var e = ie.getComputedStyle(l);
-        n = "1%" !== e.top, s = 12 === t(e.marginLeft), l.style.right = "60%", o = 36 === t(e.right), r = 36 === t(e.width), l.style.position = "absolute", i = 12 === t(l.offsetWidth / 3), K.removeChild(u), l = null;
-      }
-    }
-    function t(e) {
-      return Math.round(parseFloat(e));
-    }
-    var n,
-      r,
-      i,
-      o,
-      a,
-      s,
-      u = m.createElement("div"),
-      l = m.createElement("div");
-    l.style && (l.style.backgroundClip = "content-box", l.cloneNode(!0).style.backgroundClip = "", le.clearCloneStyle = "content-box" === l.style.backgroundClip, _ce.extend(le, {
-      boxSizingReliable: function boxSizingReliable() {
-        return e(), r;
-      },
-      pixelBoxStyles: function pixelBoxStyles() {
-        return e(), o;
-      },
-      pixelPosition: function pixelPosition() {
-        return e(), n;
-      },
-      reliableMarginLeft: function reliableMarginLeft() {
-        return e(), s;
-      },
-      scrollboxSize: function scrollboxSize() {
-        return e(), i;
-      },
-      reliableTrDimensions: function reliableTrDimensions() {
-        var e, t, n, r;
-        return null == a && (e = m.createElement("table"), t = m.createElement("tr"), n = m.createElement("div"), e.style.cssText = "position:absolute;left:-11111px;border-collapse:separate", t.style.cssText = "box-sizing:content-box;border:1px solid", t.style.height = "1px", n.style.height = "9px", n.style.display = "block", K.appendChild(e).appendChild(t).appendChild(n), r = ie.getComputedStyle(t), a = parseInt(r.height, 10) + parseInt(r.borderTopWidth, 10) + parseInt(r.borderBottomWidth, 10) === t.offsetHeight, K.removeChild(e)), a;
-      }
-    }));
-  }();
-  var Ye = ["Webkit", "Moz", "ms"],
-    Ge = m.createElement("div").style,
-    Ke = {};
-  function Je(e) {
-    var t = _ce.cssProps[e] || Ke[e];
-    return t || (e in Ge ? e : Ke[e] = function (e) {
-      var t = e[0].toUpperCase() + e.slice(1),
-        n = Ye.length;
-      while (n--) if ((e = Ye[n] + t) in Ge) return e;
-    }(e) || e);
-  }
-  var Ze,
-    et,
-    tt = /^(none|table(?!-c[ea]).+)/,
-    nt = {
-      position: "absolute",
-      visibility: "hidden",
-      display: "block"
-    },
-    rt = {
-      letterSpacing: "0",
-      fontWeight: "400"
-    };
-  function it(e, t, n) {
-    var r = Y.exec(t);
-    return r ? Math.max(0, r[2] - (n || 0)) + (r[3] || "px") : t;
-  }
-  function ot(e, t, n, r, i, o) {
-    var a = "width" === t ? 1 : 0,
-      s = 0,
-      u = 0,
-      l = 0;
-    if (n === (r ? "border" : "content")) return 0;
-    for (; a < 4; a += 2) "margin" === n && (l += _ce.css(e, n + G[a], !0, i)), r ? ("content" === n && (u -= _ce.css(e, "padding" + G[a], !0, i)), "margin" !== n && (u -= _ce.css(e, "border" + G[a] + "Width", !0, i))) : (u += _ce.css(e, "padding" + G[a], !0, i), "padding" !== n ? u += _ce.css(e, "border" + G[a] + "Width", !0, i) : s += _ce.css(e, "border" + G[a] + "Width", !0, i));
-    return !r && 0 <= o && (u += Math.max(0, Math.ceil(e["offset" + t[0].toUpperCase() + t.slice(1)] - o - u - s - .5)) || 0), u + l;
-  }
-  function at(e, t, n) {
-    var r = ze(e),
-      i = (!le.boxSizingReliable() || n) && "border-box" === _ce.css(e, "boxSizing", !1, r),
-      o = i,
-      a = Ve(e, t, r),
-      s = "offset" + t[0].toUpperCase() + t.slice(1);
-    if ($e.test(a)) {
-      if (!n) return a;
-      a = "auto";
-    }
-    return (!le.boxSizingReliable() && i || !le.reliableTrDimensions() && fe(e, "tr") || "auto" === a || !parseFloat(a) && "inline" === _ce.css(e, "display", !1, r)) && e.getClientRects().length && (i = "border-box" === _ce.css(e, "boxSizing", !1, r), (o = s in e) && (a = e[s])), (a = parseFloat(a) || 0) + ot(e, t, n || (i ? "border" : "content"), o, r, a) + "px";
-  }
-  _ce.extend({
-    cssHooks: {
-      opacity: {
-        get: function get(e, t) {
-          if (t) {
-            var n = Ve(e, "opacity");
-            return "" === n ? "1" : n;
-          }
-        }
-      }
-    },
-    cssNumber: {
-      animationIterationCount: !0,
-      aspectRatio: !0,
-      borderImageSlice: !0,
-      columnCount: !0,
-      flexGrow: !0,
-      flexShrink: !0,
-      fontWeight: !0,
-      gridArea: !0,
-      gridColumn: !0,
-      gridColumnEnd: !0,
-      gridColumnStart: !0,
-      gridRow: !0,
-      gridRowEnd: !0,
-      gridRowStart: !0,
-      lineHeight: !0,
-      opacity: !0,
-      order: !0,
-      orphans: !0,
-      scale: !0,
-      widows: !0,
-      zIndex: !0,
-      zoom: !0,
-      fillOpacity: !0,
-      floodOpacity: !0,
-      stopOpacity: !0,
-      strokeMiterlimit: !0,
-      strokeOpacity: !0
-    },
-    cssProps: {},
-    style: function style(e, t, n, r) {
-      if (e && 3 !== e.nodeType && 8 !== e.nodeType && e.style) {
-        var i,
-          o,
-          a,
-          s = B(t),
-          u = _e.test(t),
-          l = e.style;
-        if (u || (t = Je(s)), a = _ce.cssHooks[t] || _ce.cssHooks[s], void 0 === n) return a && "get" in a && void 0 !== (i = a.get(e, !1, r)) ? i : l[t];
-        "string" === (o = _typeof(n)) && (i = Y.exec(n)) && i[1] && (n = function (e, t, n, r) {
-          var i,
-            o,
-            a = 20,
-            s = r ? function () {
-              return r.cur();
-            } : function () {
-              return _ce.css(e, t, "");
-            },
-            u = s(),
-            l = n && n[3] || (_ce.cssNumber[t] ? "" : "px"),
-            c = e.nodeType && (_ce.cssNumber[t] || "px" !== l && +u) && Y.exec(_ce.css(e, t));
-          if (c && c[3] !== l) {
-            u /= 2, l = l || c[3], c = +u || 1;
-            while (a--) _ce.style(e, t, c + l), (1 - o) * (1 - (o = s() / u || .5)) <= 0 && (a = 0), c /= o;
-            c *= 2, _ce.style(e, t, c + l), n = n || [];
-          }
-          return n && (c = +c || +u || 0, i = n[1] ? c + (n[1] + 1) * n[2] : +n[2], r && (r.unit = l, r.start = c, r.end = i)), i;
-        }(e, t, i), o = "number"), null != n && n == n && ("number" !== o || u || (n += i && i[3] || (_ce.cssNumber[s] ? "" : "px")), le.clearCloneStyle || "" !== n || 0 !== t.indexOf("background") || (l[t] = "inherit"), a && "set" in a && void 0 === (n = a.set(e, n, r)) || (u ? l.setProperty(t, n) : l[t] = n));
-      }
-    },
-    css: function css(e, t, n, r) {
-      var i,
-        o,
-        a,
-        s = B(t);
-      return _e.test(t) || (t = Je(s)), (a = _ce.cssHooks[t] || _ce.cssHooks[s]) && "get" in a && (i = a.get(e, !0, n)), void 0 === i && (i = Ve(e, t, r)), "normal" === i && t in rt && (i = rt[t]), "" === n || n ? (o = parseFloat(i), !0 === n || isFinite(o) ? o || 0 : i) : i;
-    }
-  }), _ce.each(["height", "width"], function (e, u) {
-    _ce.cssHooks[u] = {
-      get: function get(e, t, n) {
-        if (t) return !tt.test(_ce.css(e, "display")) || e.getClientRects().length && e.getBoundingClientRect().width ? at(e, u, n) : Ue(e, nt, function () {
-          return at(e, u, n);
-        });
-      },
-      set: function set(e, t, n) {
-        var r,
-          i = ze(e),
-          o = !le.scrollboxSize() && "absolute" === i.position,
-          a = (o || n) && "border-box" === _ce.css(e, "boxSizing", !1, i),
-          s = n ? ot(e, u, n, a, i) : 0;
-        return a && o && (s -= Math.ceil(e["offset" + u[0].toUpperCase() + u.slice(1)] - parseFloat(i[u]) - ot(e, u, "border", !1, i) - .5)), s && (r = Y.exec(t)) && "px" !== (r[3] || "px") && (e.style[u] = t, t = _ce.css(e, u)), it(0, t, s);
-      }
-    };
-  }), _ce.cssHooks.marginLeft = Qe(le.reliableMarginLeft, function (e, t) {
-    if (t) return (parseFloat(Ve(e, "marginLeft")) || e.getBoundingClientRect().left - Ue(e, {
-      marginLeft: 0
-    }, function () {
-      return e.getBoundingClientRect().left;
-    })) + "px";
-  }), _ce.each({
-    margin: "",
-    padding: "",
-    border: "Width"
-  }, function (i, o) {
-    _ce.cssHooks[i + o] = {
-      expand: function expand(e) {
-        for (var t = 0, n = {}, r = "string" == typeof e ? e.split(" ") : [e]; t < 4; t++) n[i + G[t] + o] = r[t] || r[t - 2] || r[0];
-        return n;
-      }
-    }, "margin" !== i && (_ce.cssHooks[i + o].set = it);
-  }), _ce.fn.extend({
-    css: function css(e, t) {
-      return _R(this, function (e, t, n) {
-        var r,
-          i,
-          o = {},
-          a = 0;
-        if (Array.isArray(t)) {
-          for (r = ze(e), i = t.length; a < i; a++) o[t[a]] = _ce.css(e, t[a], !1, r);
-          return o;
-        }
-        return void 0 !== n ? _ce.style(e, t, n) : _ce.css(e, t);
-      }, e, t, 1 < arguments.length);
-    }
-  }), _ce.fn.delay = function (r, e) {
-    return r = _ce.fx && _ce.fx.speeds[r] || r, e = e || "fx", this.queue(e, function (e, t) {
-      var n = ie.setTimeout(e, r);
-      t.stop = function () {
-        ie.clearTimeout(n);
-      };
-    });
-  }, Ze = m.createElement("input"), et = m.createElement("select").appendChild(m.createElement("option")), Ze.type = "checkbox", le.checkOn = "" !== Ze.value, le.optSelected = et.selected, (Ze = m.createElement("input")).value = "t", Ze.type = "radio", le.radioValue = "t" === Ze.value;
-  var st,
-    ut = _ce.expr.attrHandle;
-  _ce.fn.extend({
-    attr: function attr(e, t) {
-      return _R(this, _ce.attr, e, t, 1 < arguments.length);
-    },
-    removeAttr: function removeAttr(e) {
-      return this.each(function () {
-        _ce.removeAttr(this, e);
-      });
-    }
-  }), _ce.extend({
-    attr: function attr(e, t, n) {
-      var r,
-        i,
-        o = e.nodeType;
-      if (3 !== o && 8 !== o && 2 !== o) return "undefined" == typeof e.getAttribute ? _ce.prop(e, t, n) : (1 === o && _ce.isXMLDoc(e) || (i = _ce.attrHooks[t.toLowerCase()] || (_ce.expr.match.bool.test(t) ? st : void 0)), void 0 !== n ? null === n ? void _ce.removeAttr(e, t) : i && "set" in i && void 0 !== (r = i.set(e, n, t)) ? r : (e.setAttribute(t, n + ""), n) : i && "get" in i && null !== (r = i.get(e, t)) ? r : null == (r = _ce.find.attr(e, t)) ? void 0 : r);
-    },
-    attrHooks: {
-      type: {
-        set: function set(e, t) {
-          if (!le.radioValue && "radio" === t && fe(e, "input")) {
-            var n = e.value;
-            return e.setAttribute("type", t), n && (e.value = n), t;
-          }
-        }
-      }
-    },
-    removeAttr: function removeAttr(e, t) {
-      var n,
-        r = 0,
-        i = t && t.match(N);
-      if (i && 1 === e.nodeType) while (n = i[r++]) e.removeAttribute(n);
-    }
-  }), st = {
-    set: function set(e, t, n) {
-      return !1 === t ? _ce.removeAttr(e, n) : e.setAttribute(n, n), n;
-    }
-  }, _ce.each(_ce.expr.match.bool.source.match(/\w+/g), function (e, t) {
-    var a = ut[t] || _ce.find.attr;
-    ut[t] = function (e, t, n) {
-      var r,
-        i,
-        o = t.toLowerCase();
-      return n || (i = ut[o], ut[o] = r, r = null != a(e, t, n) ? o : null, ut[o] = i), r;
-    };
-  });
-  var lt = /^(?:input|select|textarea|button)$/i,
-    ct = /^(?:a|area)$/i;
-  function ft(e) {
-    return (e.match(N) || []).join(" ");
-  }
-  function dt(e) {
-    return e.getAttribute && e.getAttribute("class") || "";
-  }
-  function pt(e) {
-    return Array.isArray(e) ? e : "string" == typeof e && e.match(N) || [];
-  }
-  _ce.fn.extend({
-    prop: function prop(e, t) {
-      return _R(this, _ce.prop, e, t, 1 < arguments.length);
-    },
-    removeProp: function removeProp(e) {
-      return this.each(function () {
-        delete this[_ce.propFix[e] || e];
-      });
-    }
-  }), _ce.extend({
-    prop: function prop(e, t, n) {
-      var r,
-        i,
-        o = e.nodeType;
-      if (3 !== o && 8 !== o && 2 !== o) return 1 === o && _ce.isXMLDoc(e) || (t = _ce.propFix[t] || t, i = _ce.propHooks[t]), void 0 !== n ? i && "set" in i && void 0 !== (r = i.set(e, n, t)) ? r : e[t] = n : i && "get" in i && null !== (r = i.get(e, t)) ? r : e[t];
-    },
-    propHooks: {
-      tabIndex: {
-        get: function get(e) {
-          var t = _ce.find.attr(e, "tabindex");
-          return t ? parseInt(t, 10) : lt.test(e.nodeName) || ct.test(e.nodeName) && e.href ? 0 : -1;
-        }
-      }
-    },
-    propFix: {
-      "for": "htmlFor",
-      "class": "className"
-    }
-  }), le.optSelected || (_ce.propHooks.selected = {
-    get: function get(e) {
-      var t = e.parentNode;
-      return t && t.parentNode && t.parentNode.selectedIndex, null;
-    },
-    set: function set(e) {
-      var t = e.parentNode;
-      t && (t.selectedIndex, t.parentNode && t.parentNode.selectedIndex);
-    }
-  }), _ce.each(["tabIndex", "readOnly", "maxLength", "cellSpacing", "cellPadding", "rowSpan", "colSpan", "useMap", "frameBorder", "contentEditable"], function () {
-    _ce.propFix[this.toLowerCase()] = this;
-  }), _ce.fn.extend({
-    addClass: function addClass(t) {
-      var e, n, r, i, o, a;
-      return v(t) ? this.each(function (e) {
-        _ce(this).addClass(t.call(this, e, dt(this)));
-      }) : (e = pt(t)).length ? this.each(function () {
-        if (r = dt(this), n = 1 === this.nodeType && " " + ft(r) + " ") {
-          for (o = 0; o < e.length; o++) i = e[o], n.indexOf(" " + i + " ") < 0 && (n += i + " ");
-          a = ft(n), r !== a && this.setAttribute("class", a);
-        }
-      }) : this;
-    },
-    removeClass: function removeClass(t) {
-      var e, n, r, i, o, a;
-      return v(t) ? this.each(function (e) {
-        _ce(this).removeClass(t.call(this, e, dt(this)));
-      }) : arguments.length ? (e = pt(t)).length ? this.each(function () {
-        if (r = dt(this), n = 1 === this.nodeType && " " + ft(r) + " ") {
-          for (o = 0; o < e.length; o++) {
-            i = e[o];
-            while (-1 < n.indexOf(" " + i + " ")) n = n.replace(" " + i + " ", " ");
-          }
-          a = ft(n), r !== a && this.setAttribute("class", a);
-        }
-      }) : this : this.attr("class", "");
-    },
-    toggleClass: function toggleClass(t, n) {
-      var e,
-        r,
-        i,
-        o,
-        a = _typeof(t),
-        s = "string" === a || Array.isArray(t);
-      return v(t) ? this.each(function (e) {
-        _ce(this).toggleClass(t.call(this, e, dt(this), n), n);
-      }) : "boolean" == typeof n && s ? n ? this.addClass(t) : this.removeClass(t) : (e = pt(t), this.each(function () {
-        if (s) for (o = _ce(this), i = 0; i < e.length; i++) r = e[i], o.hasClass(r) ? o.removeClass(r) : o.addClass(r);else void 0 !== t && "boolean" !== a || ((r = dt(this)) && _.set(this, "__className__", r), this.setAttribute && this.setAttribute("class", r || !1 === t ? "" : _.get(this, "__className__") || ""));
-      }));
-    },
-    hasClass: function hasClass(e) {
-      var t,
-        n,
-        r = 0;
-      t = " " + e + " ";
-      while (n = this[r++]) if (1 === n.nodeType && -1 < (" " + ft(dt(n)) + " ").indexOf(t)) return !0;
-      return !1;
-    }
-  });
-  var ht = /\r/g;
-  _ce.fn.extend({
-    val: function val(n) {
-      var r,
-        e,
-        i,
-        t = this[0];
-      return arguments.length ? (i = v(n), this.each(function (e) {
-        var t;
-        1 === this.nodeType && (null == (t = i ? n.call(this, e, _ce(this).val()) : n) ? t = "" : "number" == typeof t ? t += "" : Array.isArray(t) && (t = _ce.map(t, function (e) {
-          return null == e ? "" : e + "";
-        })), (r = _ce.valHooks[this.type] || _ce.valHooks[this.nodeName.toLowerCase()]) && "set" in r && void 0 !== r.set(this, t, "value") || (this.value = t));
-      })) : t ? (r = _ce.valHooks[t.type] || _ce.valHooks[t.nodeName.toLowerCase()]) && "get" in r && void 0 !== (e = r.get(t, "value")) ? e : "string" == typeof (e = t.value) ? e.replace(ht, "") : null == e ? "" : e : void 0;
-    }
-  }), _ce.extend({
-    valHooks: {
-      option: {
-        get: function get(e) {
-          var t = _ce.find.attr(e, "value");
-          return null != t ? t : ft(_ce.text(e));
-        }
-      },
-      select: {
-        get: function get(e) {
-          var t,
-            n,
-            r,
-            i = e.options,
-            o = e.selectedIndex,
-            a = "select-one" === e.type,
-            s = a ? null : [],
-            u = a ? o + 1 : i.length;
-          for (r = o < 0 ? u : a ? o : 0; r < u; r++) if (((n = i[r]).selected || r === o) && !n.disabled && (!n.parentNode.disabled || !fe(n.parentNode, "optgroup"))) {
-            if (t = _ce(n).val(), a) return t;
-            s.push(t);
-          }
-          return s;
-        },
-        set: function set(e, t) {
-          var n,
-            r,
-            i = e.options,
-            o = _ce.makeArray(t),
-            a = i.length;
-          while (a--) ((r = i[a]).selected = -1 < _ce.inArray(_ce.valHooks.option.get(r), o)) && (n = !0);
-          return n || (e.selectedIndex = -1), o;
-        }
-      }
-    }
-  }), _ce.each(["radio", "checkbox"], function () {
-    _ce.valHooks[this] = {
-      set: function set(e, t) {
-        if (Array.isArray(t)) return e.checked = -1 < _ce.inArray(_ce(e).val(), t);
-      }
-    }, le.checkOn || (_ce.valHooks[this].get = function (e) {
-      return null === e.getAttribute("value") ? "on" : e.value;
-    });
-  }), _ce.parseXML = function (e) {
-    var t, n;
-    if (!e || "string" != typeof e) return null;
-    try {
-      t = new ie.DOMParser().parseFromString(e, "text/xml");
-    } catch (e) {}
-    return n = t && t.getElementsByTagName("parsererror")[0], t && !n || _ce.error("Invalid XML: " + (n ? _ce.map(n.childNodes, function (e) {
-      return e.textContent;
-    }).join("\n") : e)), t;
-  };
-  var gt = /^(?:focusinfocus|focusoutblur)$/,
-    vt = function vt(e) {
-      e.stopPropagation();
-    };
-  _ce.extend(_ce.event, {
-    trigger: function trigger(e, t, n, r) {
-      var i,
-        o,
-        a,
-        s,
-        u,
-        l,
-        c,
-        f,
-        d = [n || m],
-        p = ue.call(e, "type") ? e.type : e,
-        h = ue.call(e, "namespace") ? e.namespace.split(".") : [];
-      if (o = f = a = n = n || m, 3 !== n.nodeType && 8 !== n.nodeType && !gt.test(p + _ce.event.triggered) && (-1 < p.indexOf(".") && (p = (h = p.split(".")).shift(), h.sort()), u = p.indexOf(":") < 0 && "on" + p, (e = e[_ce.expando] ? e : new _ce.Event(p, "object" == _typeof(e) && e)).isTrigger = r ? 2 : 3, e.namespace = h.join("."), e.rnamespace = e.namespace ? new RegExp("(^|\\.)" + h.join("\\.(?:.*\\.|)") + "(\\.|$)") : null, e.result = void 0, e.target || (e.target = n), t = null == t ? [e] : _ce.makeArray(t, [e]), c = _ce.event.special[p] || {}, r || !c.trigger || !1 !== c.trigger.apply(n, t))) {
-        if (!r && !c.noBubble && !y(n)) {
-          for (s = c.delegateType || p, gt.test(s + p) || (o = o.parentNode); o; o = o.parentNode) d.push(o), a = o;
-          a === (n.ownerDocument || m) && d.push(a.defaultView || a.parentWindow || ie);
-        }
-        i = 0;
-        while ((o = d[i++]) && !e.isPropagationStopped()) f = o, e.type = 1 < i ? s : c.bindType || p, (l = (_.get(o, "events") || Object.create(null))[e.type] && _.get(o, "handle")) && l.apply(o, t), (l = u && o[u]) && l.apply && F(o) && (e.result = l.apply(o, t), !1 === e.result && e.preventDefault());
-        return e.type = p, r || e.isDefaultPrevented() || c._default && !1 !== c._default.apply(d.pop(), t) || !F(n) || u && v(n[p]) && !y(n) && ((a = n[u]) && (n[u] = null), _ce.event.triggered = p, e.isPropagationStopped() && f.addEventListener(p, vt), n[p](), e.isPropagationStopped() && f.removeEventListener(p, vt), _ce.event.triggered = void 0, a && (n[u] = a)), e.result;
-      }
-    },
-    simulate: function simulate(e, t, n) {
-      var r = _ce.extend(new _ce.Event(), n, {
-        type: e,
-        isSimulated: !0
-      });
-      _ce.event.trigger(r, null, t);
-    }
-  }), _ce.fn.extend({
-    trigger: function trigger(e, t) {
-      return this.each(function () {
-        _ce.event.trigger(e, t, this);
-      });
-    },
-    triggerHandler: function triggerHandler(e, t) {
-      var n = this[0];
-      if (n) return _ce.event.trigger(e, t, n, !0);
-    }
-  });
-  var yt,
-    mt = /\[\]$/,
-    bt = /\r?\n/g,
-    xt = /^(?:submit|button|image|reset|file)$/i,
-    wt = /^(?:input|select|textarea|keygen)/i;
-  function Ct(n, e, r, i) {
-    var t;
-    if (Array.isArray(e)) _ce.each(e, function (e, t) {
-      r || mt.test(n) ? i(n, t) : Ct(n + "[" + ("object" == _typeof(t) && null != t ? e : "") + "]", t, r, i);
-    });else if (r || "object" !== x(e)) i(n, e);else for (t in e) Ct(n + "[" + t + "]", e[t], r, i);
-  }
-  _ce.param = function (e, t) {
-    var n,
-      r = [],
-      i = function i(e, t) {
-        var n = v(t) ? t() : t;
-        r[r.length] = encodeURIComponent(e) + "=" + encodeURIComponent(null == n ? "" : n);
-      };
-    if (null == e) return "";
-    if (Array.isArray(e) || e.jquery && !_ce.isPlainObject(e)) _ce.each(e, function () {
-      i(this.name, this.value);
-    });else for (n in e) Ct(n, e[n], t, i);
-    return r.join("&");
-  }, _ce.fn.extend({
-    serialize: function serialize() {
-      return _ce.param(this.serializeArray());
-    },
-    serializeArray: function serializeArray() {
-      return this.map(function () {
-        var e = _ce.prop(this, "elements");
-        return e ? _ce.makeArray(e) : this;
-      }).filter(function () {
-        var e = this.type;
-        return this.name && !_ce(this).is(":disabled") && wt.test(this.nodeName) && !xt.test(e) && (this.checked || !xe.test(e));
-      }).map(function (e, t) {
-        var n = _ce(this).val();
-        return null == n ? null : Array.isArray(n) ? _ce.map(n, function (e) {
-          return {
-            name: t.name,
-            value: e.replace(bt, "\r\n")
-          };
-        }) : {
-          name: t.name,
-          value: n.replace(bt, "\r\n")
-        };
-      }).get();
-    }
-  }), _ce.fn.extend({
-    wrapAll: function wrapAll(e) {
-      var t;
-      return this[0] && (v(e) && (e = e.call(this[0])), t = _ce(e, this[0].ownerDocument).eq(0).clone(!0), this[0].parentNode && t.insertBefore(this[0]), t.map(function () {
-        var e = this;
-        while (e.firstElementChild) e = e.firstElementChild;
-        return e;
-      }).append(this)), this;
-    },
-    wrapInner: function wrapInner(n) {
-      return v(n) ? this.each(function (e) {
-        _ce(this).wrapInner(n.call(this, e));
-      }) : this.each(function () {
-        var e = _ce(this),
-          t = e.contents();
-        t.length ? t.wrapAll(n) : e.append(n);
-      });
-    },
-    wrap: function wrap(t) {
-      var n = v(t);
-      return this.each(function (e) {
-        _ce(this).wrapAll(n ? t.call(this, e) : t);
-      });
-    },
-    unwrap: function unwrap(e) {
-      return this.parent(e).not("body").each(function () {
-        _ce(this).replaceWith(this.childNodes);
-      }), this;
-    }
-  }), _ce.expr.pseudos.hidden = function (e) {
-    return !_ce.expr.pseudos.visible(e);
-  }, _ce.expr.pseudos.visible = function (e) {
-    return !!(e.offsetWidth || e.offsetHeight || e.getClientRects().length);
-  }, le.createHTMLDocument = ((yt = m.implementation.createHTMLDocument("").body).innerHTML = "<form></form><form></form>", 2 === yt.childNodes.length), _ce.parseHTML = function (e, t, n) {
-    return "string" != typeof e ? [] : ("boolean" == typeof t && (n = t, t = !1), t || (le.createHTMLDocument ? ((r = (t = m.implementation.createHTMLDocument("")).createElement("base")).href = m.location.href, t.head.appendChild(r)) : t = m), o = !n && [], (i = C.exec(e)) ? [t.createElement(i[1])] : (i = Ae([e], t, o), o && o.length && _ce(o).remove(), _ce.merge([], i.childNodes)));
-    var r, i, o;
-  }, _ce.offset = {
-    setOffset: function setOffset(e, t, n) {
-      var r,
-        i,
-        o,
-        a,
-        s,
-        u,
-        l = _ce.css(e, "position"),
-        c = _ce(e),
-        f = {};
-      "static" === l && (e.style.position = "relative"), s = c.offset(), o = _ce.css(e, "top"), u = _ce.css(e, "left"), ("absolute" === l || "fixed" === l) && -1 < (o + u).indexOf("auto") ? (a = (r = c.position()).top, i = r.left) : (a = parseFloat(o) || 0, i = parseFloat(u) || 0), v(t) && (t = t.call(e, n, _ce.extend({}, s))), null != t.top && (f.top = t.top - s.top + a), null != t.left && (f.left = t.left - s.left + i), "using" in t ? t.using.call(e, f) : c.css(f);
-    }
-  }, _ce.fn.extend({
-    offset: function offset(t) {
-      if (arguments.length) return void 0 === t ? this : this.each(function (e) {
-        _ce.offset.setOffset(this, t, e);
-      });
-      var e,
-        n,
-        r = this[0];
-      return r ? r.getClientRects().length ? (e = r.getBoundingClientRect(), n = r.ownerDocument.defaultView, {
-        top: e.top + n.pageYOffset,
-        left: e.left + n.pageXOffset
-      }) : {
-        top: 0,
-        left: 0
-      } : void 0;
-    },
-    position: function position() {
-      if (this[0]) {
-        var e,
-          t,
-          n,
-          r = this[0],
-          i = {
-            top: 0,
-            left: 0
-          };
-        if ("fixed" === _ce.css(r, "position")) t = r.getBoundingClientRect();else {
-          t = this.offset(), n = r.ownerDocument, e = r.offsetParent || n.documentElement;
-          while (e && (e === n.body || e === n.documentElement) && "static" === _ce.css(e, "position")) e = e.parentNode;
-          e && e !== r && 1 === e.nodeType && ((i = _ce(e).offset()).top += _ce.css(e, "borderTopWidth", !0), i.left += _ce.css(e, "borderLeftWidth", !0));
-        }
-        return {
-          top: t.top - i.top - _ce.css(r, "marginTop", !0),
-          left: t.left - i.left - _ce.css(r, "marginLeft", !0)
-        };
-      }
-    },
-    offsetParent: function offsetParent() {
-      return this.map(function () {
-        var e = this.offsetParent;
-        while (e && "static" === _ce.css(e, "position")) e = e.offsetParent;
-        return e || K;
-      });
-    }
-  }), _ce.each({
-    scrollLeft: "pageXOffset",
-    scrollTop: "pageYOffset"
-  }, function (t, i) {
-    var o = "pageYOffset" === i;
-    _ce.fn[t] = function (e) {
-      return _R(this, function (e, t, n) {
-        var r;
-        if (y(e) ? r = e : 9 === e.nodeType && (r = e.defaultView), void 0 === n) return r ? r[i] : e[t];
-        r ? r.scrollTo(o ? r.pageXOffset : n, o ? n : r.pageYOffset) : e[t] = n;
-      }, t, e, arguments.length);
-    };
-  }), _ce.each(["top", "left"], function (e, n) {
-    _ce.cssHooks[n] = Qe(le.pixelPosition, function (e, t) {
-      if (t) return t = Ve(e, n), $e.test(t) ? _ce(e).position()[n] + "px" : t;
-    });
-  }), _ce.each({
-    Height: "height",
-    Width: "width"
-  }, function (a, s) {
-    _ce.each({
-      padding: "inner" + a,
-      content: s,
-      "": "outer" + a
-    }, function (r, o) {
-      _ce.fn[o] = function (e, t) {
-        var n = arguments.length && (r || "boolean" != typeof e),
-          i = r || (!0 === e || !0 === t ? "margin" : "border");
-        return _R(this, function (e, t, n) {
-          var r;
-          return y(e) ? 0 === o.indexOf("outer") ? e["inner" + a] : e.document.documentElement["client" + a] : 9 === e.nodeType ? (r = e.documentElement, Math.max(e.body["scroll" + a], r["scroll" + a], e.body["offset" + a], r["offset" + a], r["client" + a])) : void 0 === n ? _ce.css(e, t, i) : _ce.style(e, t, n, i);
-        }, s, n ? e : void 0, n);
-      };
-    });
-  }), _ce.fn.extend({
-    bind: function bind(e, t, n) {
-      return this.on(e, null, t, n);
-    },
-    unbind: function unbind(e, t) {
-      return this.off(e, null, t);
-    },
-    delegate: function delegate(e, t, n, r) {
-      return this.on(t, e, n, r);
-    },
-    undelegate: function undelegate(e, t, n) {
-      return 1 === arguments.length ? this.off(e, "**") : this.off(t, e || "**", n);
-    },
-    hover: function hover(e, t) {
-      return this.on("mouseenter", e).on("mouseleave", t || e);
-    }
-  }), _ce.each("blur focus focusin focusout resize scroll click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup contextmenu".split(" "), function (e, n) {
-    _ce.fn[n] = function (e, t) {
-      return 0 < arguments.length ? this.on(n, null, e, t) : this.trigger(n);
-    };
-  });
-  var Tt = /^[\s\uFEFF\xA0]+|([^\s\uFEFF\xA0])[\s\uFEFF\xA0]+$/g;
-  _ce.proxy = function (e, t) {
-    var n, r, i;
-    if ("string" == typeof t && (n = e[t], t = e, e = n), v(e)) return r = ae.call(arguments, 2), (i = function i() {
-      return e.apply(t || this, r.concat(ae.call(arguments)));
-    }).guid = e.guid = e.guid || _ce.guid++, i;
-  }, _ce.holdReady = function (e) {
-    e ? _ce.readyWait++ : _ce.ready(!0);
-  }, _ce.isArray = Array.isArray, _ce.parseJSON = JSON.parse, _ce.nodeName = fe, _ce.isFunction = v, _ce.isWindow = y, _ce.camelCase = B, _ce.type = x, _ce.now = Date.now, _ce.isNumeric = function (e) {
-    var t = _ce.type(e);
-    return ("number" === t || "string" === t) && !isNaN(e - parseFloat(e));
-  }, _ce.trim = function (e) {
-    return null == e ? "" : (e + "").replace(Tt, "$1");
-  }, "function" == typeof define && define.amd && define("jquery", [], function () {
-    return _ce;
-  });
-  var Et = ie.jQuery,
-    kt = ie.$;
-  return _ce.noConflict = function (e) {
-    return ie.$ === _ce && (ie.$ = kt), e && ie.jQuery === _ce && (ie.jQuery = Et), _ce;
-  }, "undefined" == typeof e && (ie.jQuery = ie.$ = _ce), _ce;
-});
-
-},{}],10:[function(require,module,exports){
+},{"./core/gameCoordinator.js":6,"./mods/implementations/flood-mod-imp.js":13,"./utilities/debugger.js":31}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
 var maze1 = {
   mazeArray: [['XXXXXXXXXXXXXXXXXXXXXXXXXXXX'], ['XooooooooooooXXooooooooooooX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XOXXXXoXXXXXoXXoXXXXXoXXXXOX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XooooooooooooooooooooooooooX'], ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'], ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'], ['XooooooXXooooXXooooXXooooooX'], ['XXXXXXoXXXXX XX XXXXXoXXXXXX'], ['XXXXXXoXXXXX XX XXXXXoXXXXXX'], ['XXXXXXoXX          XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX X      X XXoXXXXXX'], ['      o   X      X   o      '], ['XXXXXXoXX X      X XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX          XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XooooooooooooXXooooooooooooX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XOooXXooooooo  oooooooXXooOX'], ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'], ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'], ['XooooooXXooooXXooooXXooooooX'], ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'], ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'], ['XooooooooooooooooooooooooooX'], ['XXXXXXXXXXXXXXXXXXXXXXXXXXXX']],
   //In tile cordinates
@@ -6933,7 +4341,7 @@ var maze1 = {
     y2: 16.5
   }]
 };
-var _default = exports["default"] = maze1;
+exports["default"] = maze1;
 
 },{}],11:[function(require,module,exports){
 "use strict";
@@ -6947,10 +4355,6 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
@@ -6997,6 +4401,9 @@ function _assertClassBrand(e, t, n) {
   if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
   throw new TypeError("Private element is not present on this object");
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var _Maze_brand = /*#__PURE__*/new WeakSet();
 var Maze = /*#__PURE__*/function () {
   function Maze(mazePrp) {
@@ -7006,10 +4413,12 @@ var Maze = /*#__PURE__*/function () {
     _defineProperty(this, "width", void 0);
     _defineProperty(this, "height", void 0);
     _defineProperty(this, "mazeArray", void 0);
-    _defineProperty(this, "bounds", null);
+    _defineProperty(this, "bounds", void 0);
     _defineProperty(this, "rows", void 0);
     _defineProperty(this, "cols", void 0);
     _defineProperty(this, "tileSize", void 0);
+    _defineProperty(this, "ghostHouses", void 0);
+    _defineProperty(this, "pixelBounds", void 0);
     this.mazeArray = mazePrp.mazeArray;
     this.mazeArray.forEach(function (row, rowIndex) {
       _this.mazeArray[rowIndex] = row[0].split("");
@@ -7019,6 +4428,98 @@ var Maze = /*#__PURE__*/function () {
     this.ghostHouses = mazePrp.ghostHouses;
   }
   return _createClass(Maze, [{
+    key: "createTopBounds",
+    value: function createTopBounds(bounds, pixelBounds, holes, lastCol) {
+      if (holes.length > 0) {
+        bounds.top.push({
+          x: 1,
+          y: 0
+        });
+        for (var i = 0; i < holes.length; i++) {
+          if (holes[i]) {
+            bounds.top.push({
+              x: holes[i].x - 1,
+              y: 0
+            });
+            pixelBounds.top.push({
+              x: Math.floor(holes[i].x * this.tileSize),
+              y: 0
+            });
+          } else {
+            bounds.top.push({
+              x: lastCol,
+              y: 0
+            });
+            pixelBounds.top.push({
+              x: Math.floor(lastCol * this.tileSize),
+              y: 0
+            });
+          }
+        }
+      } else {
+        bounds.top.push({
+          x: 0,
+          y: 0
+        }, {
+          x: lastCol,
+          y: 0
+        });
+        pixelBounds.top.push({
+          x: 0,
+          y: 0
+        }, {
+          x: Math.floor(lastCol * this.tileSize),
+          y: 0
+        });
+      }
+    }
+  }, {
+    key: "createBottomBounds",
+    value: function createBottomBounds(bounds, pixelBounds, holes, lastRow, lastCol) {
+      if (holes.length > 0) {
+        bounds.bottom.push({
+          x: 0,
+          y: lastRow
+        });
+        for (var i = 0; i < holes.length; i++) {
+          if (holes[i]) {
+            bounds.bottom.push({
+              x: holes[i].x - 1,
+              y: lastRow
+            });
+            pixelBounds.top.push({
+              x: Math.floor((holes[i].x - 1) * this.tileSize),
+              y: lastRow * this.tileSize
+            });
+          } else {
+            bounds.bottom.push({
+              x: lastCol,
+              y: lastRow
+            });
+            pixelBounds.top.push({
+              x: Math.floor(lastCol * this.tileSize),
+              y: lastRow * this.tileSize
+            });
+          }
+        }
+      } else {
+        bounds.bottom.push({
+          x: 0,
+          y: lastRow
+        }, {
+          x: lastCol,
+          y: lastRow
+        });
+        pixelBounds.bottom.push({
+          x: 0,
+          y: lastRow * this.tileSize
+        }, {
+          x: lastCol * this.tileSize,
+          y: lastRow * this.tileSize
+        });
+      }
+    }
+  }, {
     key: "setDimensions",
     value: function setDimensions(width, height) {
       this.width = width;
@@ -7085,10 +4586,10 @@ function _calculateBounds() {
     }
     //Top bound
     if (row == 0) {
-      _assertClassBrand(_Maze_brand, this, _createTopBounds).call(this, bounds, pixelBounds, holes, lastCol);
+      this.createTopBounds(bounds, pixelBounds, holes, lastCol);
       //Bottom
     } else if (row == this.mazeArray.length - 1) {
-      _assertClassBrand(_Maze_brand, this, _createBottomBounds).call(this, bounds, pixelBounds, lastRow, lastCol);
+      this.createBottomBounds(bounds, pixelBounds, holes, lastRow, lastCol);
     }
     _assertClassBrand(_Maze_brand, this, _createLeftRightBounds).call(this, bounds, pixelBounds, holes, row, lastCol);
     holes.length = 0;
@@ -7133,95 +4634,7 @@ function _createLeftRightBounds(bounds, pixelBounds, holes, row, lastCol) {
     });
   }
 }
-function _createTopBounds(bounds, pixelBounds, holes, lastCol) {
-  if (holes.length > 0) {
-    bounds.top.push({
-      x: 1,
-      y: 0
-    });
-    for (var i = 0; i < holes.length; i++) {
-      if (holes[i]) {
-        bounds.top.push({
-          x: holes[i].x - 1,
-          y: 0
-        });
-        pixelBounds.top.push({
-          x: Math.floor(holes[i].x * this.tileSize),
-          y: 0
-        });
-      } else {
-        bounds.top.push({
-          x: lastCol,
-          y: 0
-        });
-        pixelBounds.top.push({
-          x: Math.floor(lastCol * this.tileSize),
-          y: 0
-        });
-      }
-    }
-  } else {
-    bounds.top.push({
-      x: 0,
-      y: 0
-    }, {
-      x: lastCol,
-      y: 0
-    });
-    pixelBounds.top.push({
-      x: 0,
-      y: 0
-    }, {
-      x: Math.floor(lastCol * this.tileSize),
-      y: 0
-    });
-  }
-}
-function _createBottomBounds(bounds, pixelBounds, holes, lastRow, lastCol) {
-  if (holes.length > 0) {
-    bounds.bottom.push({
-      x: 0,
-      y: lastRow
-    });
-    for (var i = 0; i < holes.length; i++) {
-      if (holes[i]) {
-        bounds.bottom.push({
-          x: holes[i].x - 1,
-          y: lastRow
-        });
-        pixelBounds.top.push({
-          x: Math.floor((holes[i].x - 1) * this.tileSize),
-          y: lastRow * this.tileSize
-        });
-      } else {
-        bounds.bottom.push({
-          x: lastCol,
-          y: lastRow
-        });
-        pixelBounds.top.push({
-          x: Math.floor(lastCol * this.tileSize),
-          y: lastRow * this.tileSize
-        });
-      }
-    }
-  } else {
-    bounds.bottom.push({
-      x: 0,
-      y: lastRow
-    }, {
-      x: lastCol,
-      y: lastRow
-    });
-    pixelBounds.bottom.push({
-      x: 0,
-      y: lastRow * this.tileSize
-    }, {
-      x: lastCol * this.tileSize,
-      y: lastRow * this.tileSize
-    });
-  }
-}
-var _default = exports["default"] = Maze;
+exports["default"] = Maze;
 
 },{}],12:[function(require,module,exports){
 "use strict";
@@ -7234,16 +4647,6 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _mod = _interopRequireDefault(require("./mod.js"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
 }
 function _defineProperties(e, r) {
   for (var t = 0; t < r.length; t++) {
@@ -7315,31 +4718,28 @@ function _setPrototypeOf(t, e) {
     return t.__proto__ = e, t;
   }, _setPrototypeOf(t, e);
 }
-var EmptyMod = /*#__PURE__*/function (_Mod) {
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var mod_js_1 = __importDefault(require("./mod.js"));
+var EmptyMod = /*#__PURE__*/function (_mod_js_1$default) {
   function EmptyMod(gameCoordinator) {
     _classCallCheck(this, EmptyMod);
     return _callSuper(this, EmptyMod, [gameCoordinator]);
   }
-  _inherits(EmptyMod, _Mod);
+  _inherits(EmptyMod, _mod_js_1$default);
   return _createClass(EmptyMod);
-}(_mod["default"]);
-var _default = exports["default"] = EmptyMod;
+}(mod_js_1["default"]);
+exports["default"] = EmptyMod;
 
 },{"./mod.js":28}],13:[function(require,module,exports){
-(function (process,global){(function (){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _mod = _interopRequireDefault(require("../mod.js"));
-var _flood = _interopRequireDefault(require("./mods/flood/app/scripts/core/flood.js"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
-}
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -7445,18 +4845,27 @@ function _toPrimitive(t, r) {
     throw new TypeError("@@toPrimitive must return a primitive value.");
   }
   return ("string" === r ? String : Number)(t);
-} //import Flood from '../../../../flood-pacman-bward/app/scripts/flood.js'
-//import Flood from 'flood-pacman-bward''
-var FloodModImp = /*#__PURE__*/function (_Mod) {
+}
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var mod_js_1 = __importDefault(require("../mod.js"));
+var flood_js_1 = __importDefault(require("./mods/flood/app/scripts/core/flood.js"));
+var FloodModImp = /*#__PURE__*/function (_mod_js_1$default) {
   function FloodModImp(gameCoodinator) {
     var _this;
     _classCallCheck(this, FloodModImp);
     _this = _callSuper(this, FloodModImp, [gameCoodinator]);
     _defineProperty(_this, "flood", void 0);
-    _this.flood = new _flood["default"](gameCoodinator);
+    _this.flood = new flood_js_1["default"](gameCoodinator);
     return _this;
   }
-  _inherits(FloodModImp, _Mod);
+  _inherits(FloodModImp, _mod_js_1$default);
   return _createClass(FloodModImp, [{
     key: "initialize",
     value: function initialize() {
@@ -7485,7 +4894,7 @@ var FloodModImp = /*#__PURE__*/function (_Mod) {
   }, {
     key: "update",
     value: function update(elapsedMs) {
-      _superPropGet(FloodModImp, "update", this, 3)([]);
+      _superPropGet(FloodModImp, "update", this, 3)([elapsedMs]);
       this.flood.update(elapsedMs);
     }
   }, {
@@ -7495,13 +4904,13 @@ var FloodModImp = /*#__PURE__*/function (_Mod) {
       this.flood.draw();
     }
   }]);
-}(_mod["default"]);
-if (!process.env.NYC_PROCESS_ID) global.window.FloodModImp = FloodModImp;
+}(mod_js_1["default"]); // if (!process.env.NYC_PROCESS_ID) 
+//   global.window.FloodModImp = FloodModImp
 //removeIf(production)
-var _default = exports["default"] = FloodModImp; //endRemoveIf
+exports["default"] = FloodModImp;
+//endRemoveIf
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../mod.js":28,"./mods/flood/app/scripts/core/flood.js":18,"_process":448}],14:[function(require,module,exports){
+},{"../mod.js":28,"./mods/flood/app/scripts/core/flood.js":18}],14:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -7513,10 +4922,6 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
@@ -7563,6 +4968,9 @@ function _assertClassBrand(e, t, n) {
   if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
   throw new TypeError("Private element is not present on this object");
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var _Animation_brand = /*#__PURE__*/new WeakSet();
 var Animation = /*#__PURE__*/function () {
   function Animation(interval, duration, callback, thisClass) {
@@ -7571,12 +4979,13 @@ var Animation = /*#__PURE__*/function () {
     _defineProperty(this, "startTime", 0);
     _defineProperty(this, "currentTime", 0);
     _defineProperty(this, "interval", 0);
-    _defineProperty(this, "duration", 0);
+    _defineProperty(this, "duration", null);
     _defineProperty(this, "playing", false);
     _defineProperty(this, "end", false);
     _defineProperty(this, "endTime", 0);
-    _defineProperty(this, "callback", null);
+    _defineProperty(this, "callback", void 0);
     _defineProperty(this, "args", []);
+    _defineProperty(this, "thisClass", void 0);
     this.interval = interval;
     this.duration = duration;
     this.callback = callback;
@@ -7643,10 +5052,13 @@ var Animation = /*#__PURE__*/function () {
         for (var _argName in args) {
           var arg = args[_argName];
           if (args instanceof Object) {
+            //@ts-ignore
             this.args.splice(index, index, args);
           } else {
             var obj = {};
+            //@ts-ignore
             obj[_argName] = arg;
+            //@ts-ignore
             this.args.splice(index, index, obj);
           }
         }
@@ -7659,21 +5071,11 @@ function _end() {
   this.end = true;
   this.playing = false;
 }
-var _default = exports["default"] = Animation;
+exports["default"] = Animation;
 
 },{}],15:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _animation = _interopRequireDefault(require("./animation.js"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
-}
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -7719,6 +5121,15 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var animation_js_1 = __importDefault(require("./animation.js"));
 var Animator = /*#__PURE__*/function () {
   function Animator(thisClass) {
     _classCallCheck(this, Animator);
@@ -7733,13 +5144,13 @@ var Animator = /*#__PURE__*/function () {
   return _createClass(Animator, [{
     key: "createAnimation",
     value: function createAnimation(name, interval, duration, callback) {
-      var an = new _animation["default"](interval, duration, callback, this.thisClass);
+      var an = new animation_js_1["default"](interval, duration, callback, this.thisClass);
       this.animations.set(name, an);
     }
     /**
      * Plays the animation with this name
-     * @param {String} name 
-     * @param {any} args 
+     * @param {String} name
+     * @param {any} args
      */
   }, {
     key: "play",
@@ -7750,7 +5161,7 @@ var Animator = /*#__PURE__*/function () {
     }
     /**
      * Stops the animation with this name
-     * @param {String} animationName 
+     * @param {String} animationName
      */
   }, {
     key: "stopAnimation",
@@ -7799,15 +5210,11 @@ var Animator = /*#__PURE__*/function () {
     }
   }]);
 }();
-var _default = exports["default"] = Animator;
+exports["default"] = Animator;
 
 },{"./animation.js":14}],16:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -7853,10 +5260,16 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var Breath = /*#__PURE__*/function () {
   function Breath(options) {
     _classCallCheck(this, Breath);
     _defineProperty(this, "stopped", false);
+    _defineProperty(this, "defaultBreathing", 0);
+    _defineProperty(this, "breathing", 0);
+    _defineProperty(this, "text", void 0);
     var defaultOptions = {
       breathing: 5,
       maxBreathing: 10,
@@ -7864,8 +5277,12 @@ var Breath = /*#__PURE__*/function () {
       invincible: false,
       elapsedTimeLastBreathMs: null
     };
-    for (var opt in options) defaultOptions[opt] = options[opt];
-    for (var _opt in defaultOptions) this[_opt] = defaultOptions[_opt];
+    for (var opt in options)
+    //@ts-ignore
+    defaultOptions[opt] = options[opt];
+    for (var _opt in defaultOptions)
+    //@ts-ignore
+    this[_opt] = defaultOptions[_opt];
     this.defaultBreathing = this.breathing;
   }
   return _createClass(Breath, [{
@@ -7886,7 +5303,7 @@ var Breath = /*#__PURE__*/function () {
     }
   }]);
 }();
-var _default = exports["default"] = Breath;
+exports["default"] = Breath;
 
 },{}],17:[function(require,module,exports){
 "use strict";
@@ -7899,21 +5316,6 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _ghost = _interopRequireDefault(require("../../../../../../../characters/ghost.js"));
-var _pacman = _interopRequireDefault(require("../../../../../../../characters/pacman.js"));
-var _animator = _interopRequireDefault(require("../animations/animator.js"));
-var _state = require("../states/state.js");
-var _util = require("../utils/util.js");
-var _breath = _interopRequireDefault(require("./breath.js"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
 }
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
@@ -7961,6 +5363,20 @@ function _assertClassBrand(e, t, n) {
   if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
   throw new TypeError("Private element is not present on this object");
 }
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ghost_js_1 = __importDefault(require("../../../../../../../characters/ghost.js"));
+var pacman_js_1 = __importDefault(require("../../../../../../../characters/pacman.js"));
+var animator_js_1 = __importDefault(require("../animations/animator.js"));
+var state_js_1 = require("../states/state.js");
+var breath_js_1 = __importDefault(require("./breath.js"));
+var util_js_1 = require("../utils/util.js");
 /** name spacing used to create the needed properties*/
 var breathNamespace = "breath";
 var _DrownManager_brand = /*#__PURE__*/new WeakSet();
@@ -7968,18 +5384,23 @@ var DrownManager = /*#__PURE__*/function () {
   function DrownManager(flood) {
     _classCallCheck(this, DrownManager);
     _classPrivateMethodInitSpec(this, _DrownManager_brand);
-    _defineProperty(this, "wave", null);
+    _defineProperty(this, "wave", void 0);
     _defineProperty(this, "waveTime", null);
     _defineProperty(this, "nextWaveTime", null);
     _defineProperty(this, "maxHeight", void 0);
     _defineProperty(this, "gc", void 0);
     _defineProperty(this, "animator", void 0);
+    _defineProperty(this, "flood", void 0);
+    _defineProperty(this, "gp", void 0);
+    _defineProperty(this, "pacman", void 0);
+    _defineProperty(this, "ghosts", void 0);
+    _defineProperty(this, "emitter", void 0);
     this.flood = flood;
     this.maxHeight = flood.maxHeight;
     this.gc = flood.gc;
     this.gp = flood.gp;
     this.gc.ghostCombo = 0;
-    this.animator = new _animator["default"]();
+    this.animator = new animator_js_1["default"](this);
   }
   return _createClass(DrownManager, [{
     key: "initialize",
@@ -7989,13 +5410,13 @@ var DrownManager = /*#__PURE__*/function () {
       this.pacman = this.flood.gc.pacman;
       this.ghosts = this.flood.gc.ghosts;
       this.emitter = this.gc.emitter;
-      _assertClassBrand(_DrownManager_brand, this, _createBreath).call(this, this.pacman, {
+      this.createBreath(this.pacman, {
         breathing: 5,
         maxBreathing: 10,
         decreaseVelocityPerMs: 0.8
       });
       this.ghosts.forEach(function (g) {
-        _assertClassBrand(_DrownManager_brand, _this, _createBreath).call(_this, g);
+        _this.createBreath(g);
       });
       this.animator.createAnimation("breath", 200, null, function (args) {
         var pacman = args.entity;
@@ -8003,13 +5424,24 @@ var DrownManager = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "createBreath",
+    value: function createBreath(entity, options) {
+      //@ts-ignore            
+      entity[breathNamespace] = new breath_js_1["default"](options);
+    }
+  }, {
     key: "resetEntitiesBreathing",
     value: function resetEntitiesBreathing() {
       var _this2 = this;
-      _assertClassBrand(_DrownManager_brand, this, _resetEntity).call(this, this.pacman);
+      this.resetEntity(this.pacman);
       this.ghosts.forEach(function (ghost) {
-        _assertClassBrand(_DrownManager_brand, _this2, _resetEntity).call(_this2, ghost);
+        _this2.resetEntity(ghost);
       });
+    }
+  }, {
+    key: "resetEntity",
+    value: function resetEntity(entity) {
+      entity[breathNamespace].reset();
     }
   }, {
     key: "stopDrown",
@@ -8029,14 +5461,14 @@ var DrownManager = /*#__PURE__*/function () {
     key: "killEntity",
     value: function killEntity(entity) {
       var breath = entity[breathNamespace];
-      if (entity instanceof _pacman["default"]) {
+      if (entity instanceof pacman_js_1["default"]) {
         // window.dispatchEvent(new Event('deathSequence'));
         this.emitter.emit("pacman-death");
         breath.stop();
         breath.reset();
         //this.terminateWave()
-        this.flood.changeState(_state.States.END_STATE);
-      } else if (entity instanceof _ghost["default"]) {
+        this.flood.changeState(state_js_1.States.END_STATE);
+      } else if (entity instanceof ghost_js_1["default"]) {
         var event = {
           ghost: entity
         };
@@ -8068,6 +5500,7 @@ var DrownManager = /*#__PURE__*/function () {
     value: function showBreathingStatus(entity) {
       var position = entity.position,
         measurement = entity.measurement;
+      //@ts-ignore
       var text = "Breathing ".concat(entity[breathNamespace].breathing);
       this.gc.displayText(position, text, 5000, measurement);
     }
@@ -8099,10 +5532,12 @@ var DrownManager = /*#__PURE__*/function () {
           return f.name == 'buble';
         });
         var pacman = this.gc.pacman;
-        var hitArea = (0, _util.enlarge)(pacman.sprite.hitArea.clone(), 2);
+        //@ts-ignore
+        var hitArea = (0, util_js_1.enlarge)(pacman.sprite.hitArea.clone(), 2);
         bubbles.forEach(function (b) {
           if (b.getBounds().contains(hitArea.x, hitArea.y)) {
             container.removeChild(b);
+            //@ts-ignore
             pacman[breathNamespace].breathing = pacman[breathNamespace].maxBreathing;
             _this4.showBreathingStatus(pacman);
             //console.log("play breath")
@@ -8113,19 +5548,13 @@ var DrownManager = /*#__PURE__*/function () {
     }
   }]);
 }();
-function _createBreath(entity, options) {
-  entity[breathNamespace] = new _breath["default"](options);
-}
-function _resetEntity(entity) {
-  entity[breathNamespace].reset();
-}
 function _tryDrownEntity(entity, elapsedMs) {
   var breath = entity[breathNamespace];
   var wave = this === null || this === void 0 ? void 0 : this.wave;
   if (!wave || !wave.started || breath.stopped) return;
   var sprite = entity.sprite.getBounds();
   var isInGhostHouse = false;
-  if (entity instanceof _ghost["default"]) {
+  if (entity instanceof ghost_js_1["default"]) {
     isInGhostHouse = entity.isInGhostHouse(entity.getGridPosition());
   }
   var isInsideTheWave = wave.getBounds().contains(sprite.x, sprite.y);
@@ -8148,10 +5577,9 @@ function _tryDrownEntity(entity, elapsedMs) {
     }
   }
 }
-var _default = exports["default"] = DrownManager;
+exports["default"] = DrownManager;
 
 },{"../../../../../../../characters/ghost.js":2,"../../../../../../../characters/pacman.js":3,"../animations/animator.js":15,"../states/state.js":26,"../utils/util.js":27,"./breath.js":16}],18:[function(require,module,exports){
-(function (process,global){(function (){
 "use strict";
 
 function _typeof(o) {
@@ -8162,26 +5590,6 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
-var _mod = _interopRequireDefault(require("../mod.js"));
-var _pacman = _interopRequireDefault(require("../../../../../../../characters/pacman.js"));
-var _breath = _interopRequireDefault(require("./breath.js"));
-var _idleState = _interopRequireDefault(require("../states/idleState.js"));
-var _state = require("../states/state.js");
-var _startState = _interopRequireDefault(require("../states/startState.js"));
-var _endState = _interopRequireDefault(require("../states/endState.js"));
-var _cancelState = _interopRequireDefault(require("../states/cancelState.js"));
-var _drownManager = _interopRequireDefault(require("./drownManager.js"));
-var _path = _interopRequireDefault(require("path"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
 }
 function _regenerator() {
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
@@ -8329,20 +5737,6 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 function _callSuper(t, o, e) {
   return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 }
@@ -8410,29 +5804,78 @@ function _classPrivateMethodInitSpec(e, a) {
 function _checkPrivateRedeclaration(e, t) {
   if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
 }
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : i + "";
+}
+function _toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
 function _assertClassBrand(e, t, n) {
   if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
   throw new TypeError("Private element is not present on this object");
 }
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pixi_js_1 = require("pixi.js");
+var idleState_js_1 = __importDefault(require("../states/idleState.js"));
+var startState_js_1 = __importDefault(require("../states/startState.js"));
+var endState_js_1 = __importDefault(require("../states/endState.js"));
+var cancelState_js_1 = __importDefault(require("../states/cancelState.js"));
+var drownManager_js_1 = __importDefault(require("./drownManager.js"));
+var mod_js_1 = __importDefault(require("../mod.js"));
+var state_js_1 = require("../states/state.js");
 /** name spacing used to create the needed properties*/
 var breathNamespace = "breath";
 var _Flood_brand = /*#__PURE__*/new WeakSet();
-var Flood = /*#__PURE__*/function (_Mod) {
+var Flood = /*#__PURE__*/function (_mod_js_1$default) {
   function Flood(gameCoordinator) {
     var _this2;
     _classCallCheck(this, Flood);
     _this2 = _callSuper(this, Flood, [gameCoordinator]);
     _classPrivateMethodInitSpec(_this2, _Flood_brand);
+    _defineProperty(_this2, "width", void 0);
+    _defineProperty(_this2, "maxHeight", void 0);
+    _defineProperty(_this2, "tileSize", void 0);
+    _defineProperty(_this2, "container", void 0);
+    _defineProperty(_this2, "nextWaveTime", void 0);
+    _defineProperty(_this2, "gp", void 0);
+    _defineProperty(_this2, "drownManager", void 0);
+    _defineProperty(_this2, "pacman", void 0);
+    _defineProperty(_this2, "ghosts", void 0);
+    _defineProperty(_this2, "states", void 0);
+    _defineProperty(_this2, "state", void 0);
     _this2.width = gameCoordinator.width;
     _this2.maxHeight = gameCoordinator.height;
     _this2.tileSize = _this2.gc.tileSize;
-    _this2.container = new _pixi.Container();
-    _this2.nextWaveTime;
-    _this2.gp = new _pixi.Graphics();
-    _this2.drownManager = new _drownManager["default"](_this2);
+    _this2.container = new pixi_js_1.Container();
+    _this2.nextWaveTime = null;
+    _this2.gp = new pixi_js_1.Graphics();
+    _this2.drownManager = new drownManager_js_1["default"](_this2);
     return _this2;
   }
-  _inherits(Flood, _Mod);
+  _inherits(Flood, _mod_js_1$default);
   return _createClass(Flood, [{
     key: "initialize",
     value: function () {
@@ -8445,9 +5888,9 @@ var Flood = /*#__PURE__*/function (_Mod) {
               console.log("lives for debugging ", this.gc.lives);
               this.ghosts = this.gc.ghosts;
               this.drownManager.initialize();
-              this.states = [new _idleState["default"](this.drownManager), new _startState["default"](this.drownManager), new _endState["default"](this.drownManager), new _cancelState["default"](this.drownManager)];
-              this.state = this.states[_state.States.IDLE_STATE];
-
+              this.states = [new idleState_js_1["default"](this.drownManager), new startState_js_1["default"](this.drownManager), new endState_js_1["default"](this.drownManager), new cancelState_js_1["default"](this.drownManager)];
+              //@ts-ignore
+              this.state = this.states[state_js_1.States.IDLE_STATE];
               //Assets.add({alias:"bubbles", src: "../../sprites/bubbles.png"})
               //await Assets.load(["bubbles"])
               _assertClassBrand(_Flood_brand, this, _registerListeners).call(this);
@@ -8465,6 +5908,7 @@ var Flood = /*#__PURE__*/function (_Mod) {
     key: "changeState",
     value: function changeState(state) {
       this.state.stop();
+      //@ts-ignore
       this.state = this.states[state];
       this.state.start();
     }
@@ -8479,7 +5923,8 @@ var Flood = /*#__PURE__*/function (_Mod) {
       //Gp is the graphics to draw
       this.container.removeChild(this.gp);
       this.container.addChild(this.gp);
-      this.state = this.states[_state.States.IDLE_STATE];
+      //@ts-ignore
+      this.state = this.states[state_js_1.States.IDLE_STATE];
       this.state.start();
     }
   }, {
@@ -8491,7 +5936,7 @@ var Flood = /*#__PURE__*/function (_Mod) {
   }, {
     key: "generateWave",
     value: function generateWave(timeToStartMS) {
-      this.changeState(_state.States.IDLE_STATE);
+      this.changeState(state_js_1.States.IDLE_STATE);
       this.state.generateWave(timeToStartMS);
     }
   }, {
@@ -8503,7 +5948,7 @@ var Flood = /*#__PURE__*/function (_Mod) {
       if (!this.started) return;
       this.drownManager.update(elapsedMs);
       this.state.update(elapsedMs);
-      if (!(this.state instanceof _cancelState["default"])) {
+      if (!(this.state instanceof cancelState_js_1["default"])) {
         //start to drown Pacman
         this.drownManager.tryDrownEntities(elapsedMs);
       }
@@ -8519,7 +5964,9 @@ var Flood = /*#__PURE__*/function (_Mod) {
       }
     }
   }]);
-}(_mod["default"]);
+}(mod_js_1["default"]); // if (!process.env.NYC_PROCESS_ID) 
+//   global.window.Flood = Flood
+//removeIf(production)
 function _registerListeners() {
   this.emitter = this.gc.emitter;
   _assertClassBrand(_Flood_brand, this, _changePacmanDeathSequence).call(this);
@@ -8535,29 +5982,23 @@ function _changePacmanDeathSequence() {
         detail: {
           restart: false,
           callbackAfter: function callbackAfter() {
-            _this.changeState(_state.States.CANCEL_STATE);
+            _this.changeState(state_js_1.States.CANCEL_STATE);
           }
         }
       };
+      //@ts-ignore
       _this3.gc.deathSequence(detail);
     } else {
       _this3.pacman.onDeath();
     }
   });
 }
-if (!process.env.NYC_PROCESS_ID) global.window.Flood = Flood;
-//removeIf(production)
-var _default = exports["default"] = Flood; //endRemoveIf
+exports["default"] = Flood;
+//endRemoveIf
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../../../../../../characters/pacman.js":3,"../mod.js":21,"../states/cancelState.js":22,"../states/endState.js":23,"../states/idleState.js":24,"../states/startState.js":25,"../states/state.js":26,"./breath.js":16,"./drownManager.js":17,"_process":448,"path":445,"pixi.js":447}],19:[function(require,module,exports){
+},{"../mod.js":21,"../states/cancelState.js":22,"../states/endState.js":23,"../states/idleState.js":24,"../states/startState.js":25,"../states/state.js":26,"./drownManager.js":17,"pixi.js":445}],19:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -8645,16 +6086,27 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
-var Wave = /*#__PURE__*/function (_Sprite) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pixi_js_1 = require("pixi.js");
+var Wave = /*#__PURE__*/function (_pixi_js_1$Sprite) {
   function Wave(drownManager, maze, width, height) {
     var _this;
     _classCallCheck(this, Wave);
-    _this = _callSuper(this, Wave, [_pixi.Texture.WHITE]);
+    _this = _callSuper(this, Wave, [pixi_js_1.Texture.WHITE]);
     _defineProperty(_this, "speedY", 15);
     _defineProperty(_this, "startTime", 0);
     _defineProperty(_this, "started", false);
     _defineProperty(_this, "decreasing", false);
     _defineProperty(_this, "lastTime", 0);
+    _defineProperty(_this, "maze", void 0);
+    _defineProperty(_this, "drownManager", void 0);
+    _defineProperty(_this, "gp", void 0);
+    _defineProperty(_this, "container", void 0);
+    _defineProperty(_this, "startTopY", void 0);
+    _defineProperty(_this, "bublesLocation", void 0);
+    _defineProperty(_this, "duration", void 0);
     _this.width = width;
     _this.height = height;
     _this.visible = false;
@@ -8703,7 +6155,7 @@ var Wave = /*#__PURE__*/function (_Sprite) {
     }
     return _this;
   }
-  _inherits(Wave, _Sprite);
+  _inherits(Wave, _pixi_js_1$Sprite);
   return _createClass(Wave, [{
     key: "increase",
     value: function increase(elapsedMs) {
@@ -8718,7 +6170,7 @@ var Wave = /*#__PURE__*/function (_Sprite) {
           var pixelBounds = this.maze.getPixelCoordinates(this.bublesLocation[i].col, this.bublesLocation[i].row);
           if (pixelBounds.y == this.y) {
             buble = this.bublesLocation[i];
-            var bubleSprite = new _pixi.Sprite(_pixi.Texture.WHITE);
+            var bubleSprite = new pixi_js_1.Sprite(pixi_js_1.Texture.WHITE);
             bubleSprite.tint = 0x002400;
             bubleSprite.alpha = 0.6;
             bubleSprite.name = "buble";
@@ -8878,10 +6330,9 @@ var Wave = /*#__PURE__*/function (_Sprite) {
         y = bounds.left[0].y;
         points.push(x, y);
       }
-      var poly = new _pixi.Polygon(points);
+      var poly = new pixi_js_1.Polygon(points);
       gp.beginFill(0x56DBE3, 0.5);
       gp.drawShape(poly);
-
       //Interval to draw the waves in mileseconds
       var shouldChange = Date.now() - this.lastTime >= 200;
       if (shouldChange) {
@@ -8896,10 +6347,10 @@ var Wave = /*#__PURE__*/function (_Sprite) {
       }
     }
   }]);
-}(_pixi.Sprite);
-var _default = exports["default"] = Wave;
+}(pixi_js_1.Sprite);
+exports["default"] = Wave;
 
-},{"pixi.js":447}],20:[function(require,module,exports){
+},{"pixi.js":445}],20:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) {
@@ -8939,6 +6390,9 @@ function _toPrimitive(t, r) {
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var LoaderManager = /*#__PURE__*/_createClass(function LoaderManager() {
   _classCallCheck(this, LoaderManager);
 });
@@ -8946,10 +6400,6 @@ var LoaderManager = /*#__PURE__*/_createClass(function LoaderManager() {
 },{}],21:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -8995,6 +6445,9 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Module class to pacmam-bward game
  */
@@ -9002,6 +6455,7 @@ var Mod = /*#__PURE__*/function () {
   function Mod(gameCoordinator) {
     _classCallCheck(this, Mod);
     _defineProperty(this, "emitter", void 0);
+    _defineProperty(this, "gc", void 0);
     _defineProperty(this, "started", false);
     _defineProperty(this, "paused", false);
     _defineProperty(this, "initialized", false);
@@ -9044,7 +6498,7 @@ var Mod = /*#__PURE__*/function () {
     value: function draw() {}
   }]);
 }();
-var _default = exports["default"] = Mod;
+exports["default"] = Mod;
 
 },{}],22:[function(require,module,exports){
 "use strict";
@@ -9058,11 +6512,6 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _state = require("./state.js");
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
@@ -9152,12 +6601,16 @@ function _setPrototypeOf(t, e) {
     return t.__proto__ = e, t;
   }, _setPrototypeOf(t, e);
 }
-var CancelState = /*#__PURE__*/function (_State) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var state_js_1 = require("./state.js");
+var CancelState = /*#__PURE__*/function (_state_js_1$State) {
   function CancelState(drownManager) {
     _classCallCheck(this, CancelState);
     return _callSuper(this, CancelState, [drownManager]);
   }
-  _inherits(CancelState, _State);
+  _inherits(CancelState, _state_js_1$State);
   return _createClass(CancelState, [{
     key: "start",
     value: function start() {
@@ -9169,6 +6622,7 @@ var CancelState = /*#__PURE__*/function (_State) {
     value: function endFlood() {
       var _this = this;
       var wave = this.drownManager.wave;
+      if (!wave) return;
       wave.height = -1;
       this.drownManager.wave.cancel();
       this.flood.container.removeChild(wave);
@@ -9197,7 +6651,6 @@ var CancelState = /*#__PURE__*/function (_State) {
       // this.flood.ghosts.forEach(g=>{
       //     g.moving = false
       // })
-
       if (wave.isDescreasing && wave.height < 5) this.endFlood();
     }
   }, {
@@ -9206,8 +6659,8 @@ var CancelState = /*#__PURE__*/function (_State) {
       if (!this.started) return;
     }
   }]);
-}(_state.State);
-var _default = exports["default"] = CancelState;
+}(state_js_1.State);
+exports["default"] = CancelState;
 
 },{"./state.js":26}],23:[function(require,module,exports){
 "use strict";
@@ -9221,11 +6674,6 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _state = require("./state.js");
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
@@ -9315,12 +6763,16 @@ function _setPrototypeOf(t, e) {
     return t.__proto__ = e, t;
   }, _setPrototypeOf(t, e);
 }
-var EndState = /*#__PURE__*/function (_State) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var state_js_1 = require("./state.js");
+var EndState = /*#__PURE__*/function (_state_js_1$State) {
   function EndState(drownManager) {
     _classCallCheck(this, EndState);
     return _callSuper(this, EndState, [drownManager]);
   }
-  _inherits(EndState, _State);
+  _inherits(EndState, _state_js_1$State);
   return _createClass(EndState, [{
     key: "terminateWave",
     value: function terminateWave() {
@@ -9331,7 +6783,7 @@ var EndState = /*#__PURE__*/function (_State) {
       this.drownManager.resetEntitiesBreathing();
       this.drownManager.nextWaveTime = null;
       this.drownManager.wave = null;
-      this.flood.changeState(_state.States.IDLE_STATE);
+      this.flood.changeState(state_js_1.States.IDLE_STATE);
     }
   }, {
     key: "update",
@@ -9349,8 +6801,8 @@ var EndState = /*#__PURE__*/function (_State) {
       if (!this.started) return;
     }
   }]);
-}(_state.State);
-var _default = exports["default"] = EndState;
+}(state_js_1.State);
+exports["default"] = EndState;
 
 },{"./state.js":26}],24:[function(require,module,exports){
 "use strict";
@@ -9363,17 +6815,6 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _wave = _interopRequireDefault(require("../core/wave.js"));
-var _state = require("./state.js");
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
 }
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
@@ -9464,18 +6905,28 @@ function _setPrototypeOf(t, e) {
     return t.__proto__ = e, t;
   }, _setPrototypeOf(t, e);
 }
-var IdleState = /*#__PURE__*/function (_State) {
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var wave_js_1 = __importDefault(require("../core/wave.js"));
+var state_js_1 = require("./state.js");
+var IdleState = /*#__PURE__*/function (_state_js_1$State) {
   function IdleState(drownManager) {
     _classCallCheck(this, IdleState);
     return _callSuper(this, IdleState, [drownManager]);
   }
-  _inherits(IdleState, _State);
+  _inherits(IdleState, _state_js_1$State);
   return _createClass(IdleState, [{
     key: "generateWave",
     value: function generateWave(timeToStartMS) {
       var maze = this.drownManager.gc.maze;
       var width = this.drownManager.gc.width;
-      this.drownManager.wave = new _wave["default"](this.drownManager, maze, width, 0);
+      this.drownManager.wave = new wave_js_1["default"](this.drownManager, maze, width, 0);
       var wave = this.drownManager.wave;
       //this.flood.container.children.length = 1        
       this.flood.container.addChild(wave);
@@ -9504,7 +6955,7 @@ var IdleState = /*#__PURE__*/function (_State) {
       var wave = this.drownManager.wave;
       if (wave && !wave.started) {
         if (this.drownManager.gc.allowKeyPresses && this.drownManager.nextWaveTime && Date.now() >= this.drownManager.nextWaveTime) {
-          this.flood.changeState(_state.States.START_STATE);
+          this.flood.changeState(state_js_1.States.START_STATE);
         }
       }
     }
@@ -9514,8 +6965,8 @@ var IdleState = /*#__PURE__*/function (_State) {
       if (!this.started) return;
     }
   }]);
-}(_state.State);
-var _default = exports["default"] = IdleState;
+}(state_js_1.State);
+exports["default"] = IdleState;
 
 },{"../core/wave.js":19,"./state.js":26}],25:[function(require,module,exports){
 "use strict";
@@ -9529,11 +6980,6 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _state = require("./state.js");
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
@@ -9623,12 +7069,16 @@ function _setPrototypeOf(t, e) {
     return t.__proto__ = e, t;
   }, _setPrototypeOf(t, e);
 }
-var StartState = /*#__PURE__*/function (_State) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var state_js_1 = require("./state.js");
+var StartState = /*#__PURE__*/function (_state_js_1$State) {
   function StartState(drownManager) {
     _classCallCheck(this, StartState);
     return _callSuper(this, StartState, [drownManager]);
   }
-  _inherits(StartState, _State);
+  _inherits(StartState, _state_js_1$State);
   return _createClass(StartState, [{
     key: "update",
     value: function update(elapsedMs) {
@@ -9643,7 +7093,7 @@ var StartState = /*#__PURE__*/function (_State) {
       }
       var isTimeLimited = Date.now() - wave.startTime >= wave.duration;
       wave.increase(elapsedMs);
-      if (wave.height >= this.drownManager.maxHeight || isTimeLimited) this.flood.changeState(_state.States.END_STATE);
+      if (wave.height >= this.drownManager.maxHeight || isTimeLimited) this.flood.changeState(state_js_1.States.END_STATE);
     }
   }, {
     key: "draw",
@@ -9651,16 +7101,12 @@ var StartState = /*#__PURE__*/function (_State) {
       if (!this.started) return;
     }
   }]);
-}(_state.State);
-var _default = exports["default"] = StartState;
+}(state_js_1.State);
+exports["default"] = StartState;
 
 },{"./state.js":26}],26:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.States = exports.State = void 0;
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -9706,16 +7152,23 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
-var States = exports.States = {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.States = exports.State = void 0;
+var States = {
   IDLE_STATE: 0,
   START_STATE: 1,
   END_STATE: 2,
   CANCEL_STATE: 3
 };
-var State = exports.State = /*#__PURE__*/function () {
+exports.States = States;
+var State = /*#__PURE__*/function () {
   function State(drownManager) {
     _classCallCheck(this, State);
-    _defineProperty(this, "flood", null);
+    _defineProperty(this, "drownManager", void 0);
+    _defineProperty(this, "started", false);
+    _defineProperty(this, "flood", void 0);
     this.drownManager = drownManager;
     this.started = false;
     this.flood = drownManager.flood;
@@ -9731,13 +7184,17 @@ var State = exports.State = /*#__PURE__*/function () {
       this.started = false;
     }
   }, {
+    key: "generateWave",
+    value: function generateWave(timeToStartMS) {}
+  }, {
     key: "update",
-    value: function update() {}
+    value: function update(elapsedMs) {}
   }, {
     key: "draw",
     value: function draw() {}
   }]);
 }();
+exports.State = State;
 
 },{}],27:[function(require,module,exports){
 "use strict";
@@ -9746,11 +7203,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.enlarge = enlarge;
-var _pixi = require("pixi.js");
 /**
- * 
- * @param {Rectangle} rectangle 
- * @param {Number} times 
+ *
+ * @param {Rectangle} rectangle
+ * @param {Number} times
  */
 function enlarge(rectangle) {
   var times = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
@@ -9761,13 +7217,9 @@ function enlarge(rectangle) {
   return rectangle;
 }
 
-},{"pixi.js":447}],28:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -9813,6 +7265,9 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Module class to pacmam-bward game
  */
@@ -9824,7 +7279,9 @@ var Mod = /*#__PURE__*/function () {
     _defineProperty(this, "paused", false);
     _defineProperty(this, "initialized", false);
     _defineProperty(this, "scale", 1);
+    _defineProperty(this, "gc", void 0);
     this.gc = gameCoordinator;
+    this.emitter = this.gc.emitter;
   }
   return _createClass(Mod, [{
     key: "initialize",
@@ -9862,10 +7319,9 @@ var Mod = /*#__PURE__*/function () {
     value: function draw() {}
   }]);
 }();
-var _default = exports["default"] = Mod;
+exports["default"] = Mod;
 
 },{}],29:[function(require,module,exports){
-(function (process,global){(function (){
 "use strict";
 
 function _typeof(o) {
@@ -9876,17 +7332,6 @@ function _typeof(o) {
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
-var _entity = _interopRequireDefault(require("../characters/entity.js"));
-function _interopRequireDefault(e) {
-  return e && e.__esModule ? e : {
-    "default": e
-  };
 }
 function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
@@ -9901,20 +7346,6 @@ function _createClass(e, r, t) {
   return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
     writable: !1
   }), e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
 }
 function _callSuper(t, o, e) {
   return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
@@ -9977,11 +7408,54 @@ function _setPrototypeOf(t, e) {
     return t.__proto__ = e, t;
   }, _setPrototypeOf(t, e);
 }
-var Pickup = /*#__PURE__*/function (_Entity) {
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : i + "";
+}
+function _toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pixi_js_1 = require("pixi.js");
+var entity_js_1 = __importDefault(require("../characters/entity.js"));
+var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
   function Pickup(type, column, row, points, gameCoordinator) {
     var _this;
     _classCallCheck(this, Pickup);
-    _this = _callSuper(this, Pickup, [gameCoordinator, "pickup", null]);
+    _this = _callSuper(this, Pickup, [gameCoordinator, "pickup", undefined]);
+    _defineProperty(_this, "type", void 0);
+    _defineProperty(_this, "pacman", void 0);
+    _defineProperty(_this, "mazeDiv", void 0);
+    _defineProperty(_this, "points", void 0);
+    _defineProperty(_this, "nearPacman", void 0);
+    _defineProperty(_this, "sprites", void 0);
+    _defineProperty(_this, "fruitImages", void 0);
+    _defineProperty(_this, "size", void 0);
+    _defineProperty(_this, "x", void 0);
+    _defineProperty(_this, "y", void 0);
+    _defineProperty(_this, "center", void 0);
     _this.type = type;
     _this.pacman = gameCoordinator.pacman;
     _this.mazeDiv = gameCoordinator.mazeDiv;
@@ -10001,18 +7475,15 @@ var Pickup = /*#__PURE__*/function (_Entity) {
     _this.setStyleMeasurements(type, gameCoordinator.scaledTileSize, column, row, points);
     return _this;
   }
-
   /**
    * Resets the pickup's visibility
    */
-  _inherits(Pickup, _Entity);
+  _inherits(Pickup, _entity_js_1$default);
   return _createClass(Pickup, [{
     key: "reset",
     value: function reset() {
       this.sprite.visible = this.type === 'fruit' ? false : true;
-      this.animationTarget.style.visibility = this.type === 'fruit' ? 'hidden' : 'visible';
     }
-
     /**
      * Sets various style measurements for the pickup depending on its type
      * @param {('pacdot'|'powerPellet'|'fruit')} type - The classification of pickup
@@ -10041,41 +7512,13 @@ var Pickup = /*#__PURE__*/function (_Entity) {
         x: column * scaledTileSize,
         y: row * scaledTileSize
       };
-      this.animationTarget = document.createElement('div');
-      this.animationTarget.style.position = 'absolute';
-      this.animationTarget.style.backgroundSize = "".concat(this.size, "px");
       this.setSprite(type);
       this.sprite.visible = false;
       this.sprite.position.set(this.x, this.y);
-      this.animationTarget.style.backgroundImage = this.determineImage2(type, points);
-      this.animationTarget.style.height = "".concat(this.size, "px");
-      this.animationTarget.style.width = "".concat(this.size, "px");
-      this.animationTarget.style.top = "".concat(this.y, "px");
-      this.animationTarget.style.left = "".concat(this.x, "px");
-      this.mazeDiv.appendChild(this.animationTarget);
-      this.animationTarget.style.visibility = "hidden";
       if (type === 'powerPellet') {
-        this.animationTarget.classList.add('power-pellet');
+        //Blink effect of the pellets
       }
       this.reset();
-    }
-
-    /**
-     * Determines the Pickup image based on type and point value
-     * @param {('pacdot'|'powerPellet'|'fruit')} type - The classification of pickup
-     * @param {Number} points
-     * @returns {String}
-     */
-  }, {
-    key: "determineImage2",
-    value: function determineImage2(type, points) {
-      var image = '';
-      if (type === 'fruit') {
-        image = this.fruitImages[points] || 'cherry';
-      } else {
-        image = type;
-      }
-      return "url(app/style/graphics/spriteSheets/pickups/".concat(image, ".svg)");
     }
   }, {
     key: "getFruitName",
@@ -10132,7 +7575,7 @@ var Pickup = /*#__PURE__*/function (_Entity) {
     key: "setSprite",
     value: function setSprite(type) {
       var texture = this.getTexture(type);
-      if (!this.sprite) this.sprite = new _pixi.Sprite(texture);else this.sprite.texture = texture;
+      if (!this.sprite) this.sprite = new pixi_js_1.Sprite(texture);else this.sprite.texture = texture;
     }
     /**
      * Shows a bonus fruit, resetting its point value and image
@@ -10142,13 +7585,10 @@ var Pickup = /*#__PURE__*/function (_Entity) {
     key: "showFruit",
     value: function showFruit(points) {
       this.points = points;
-      this.animationTarget.style.backgroundImage = this.determineImage2(this.type, points);
       var tx = this.gameCoordinator.am.getTexture(this.getFruitName(points));
       this.sprite.texture = tx;
       this.sprite.visible = true;
-      this.animationTarget.style.visibility = 'visible';
     }
-
     /**
      * Makes the fruit invisible (happens if Pacman was too slow)
      */
@@ -10156,13 +7596,12 @@ var Pickup = /*#__PURE__*/function (_Entity) {
     key: "hideFruit",
     value: function hideFruit() {
       this.sprite.visible = false;
-      this.animationTarget.style.visibility = 'hidden';
     }
-
     /**
      * Returns true if the Pickup is touching a bounding box at Pacman's center
      * @param {({ x: number, y: number, size: number})} pickup
      * @param {({ x: number, y: number, size: number})} originalPacman
+     * @returns {boolean}
      */
   }, {
     key: "checkForCollision",
@@ -10173,7 +7612,6 @@ var Pickup = /*#__PURE__*/function (_Entity) {
       pacman.size /= 2;
       return pickup.x < pacman.x + pacman.size && pickup.x + pickup.size > pacman.x && pickup.y < pacman.y + pacman.size && pickup.y + pickup.size > pacman.y;
     }
-
     /**
      * Checks to see if the pickup is close enough to Pacman to be considered for collision detection
      * @param {number} maxDistance - The maximum distance Pacman can travel per cycle
@@ -10184,16 +7622,13 @@ var Pickup = /*#__PURE__*/function (_Entity) {
     key: "checkPacmanProximity",
     value: function checkPacmanProximity(maxDistance, pacmanCenter, debugging) {
       if (this.sprite.visible) {
-        //if (this.animationTarget.style.visibility !== 'hidden') {
         var distance = Math.sqrt(Math.pow(this.center.x - pacmanCenter.x, 2) + Math.pow(this.center.y - pacmanCenter.y, 2));
         this.nearPacman = distance <= maxDistance;
         if (debugging) {
           this.sprite.tint = this.nearPacman ? '0x00ff00' : '0xff0000';
-          this.animationTarget.style.background = this.nearPacman ? 'lime' : 'red';
         }
       }
     }
-
     /**
      * Checks if the pickup is visible and close to Pacman
      * @returns {Boolean}
@@ -10201,11 +7636,8 @@ var Pickup = /*#__PURE__*/function (_Entity) {
   }, {
     key: "shouldCheckForCollision",
     value: function shouldCheckForCollision() {
-      return this.sprite.visible && this.nearPacman
-      //return this.animationTarget.style.visibility !== 'hidden'
-      && this.nearPacman;
+      return this.sprite.visible && this.nearPacman;
     }
-
     /**
      * If the Pickup is still visible, it checks to see if it is colliding with Pacman.
      * It will turn itself invisible and cease collision-detection after the first
@@ -10213,9 +7645,9 @@ var Pickup = /*#__PURE__*/function (_Entity) {
      */
   }, {
     key: "update",
-    value: function update() {
+    value: function update(elapsedMs) {
       if (this.shouldCheckForCollision()) {
-        _superPropGet(Pickup, "update", this, 3)([]);
+        _superPropGet(Pickup, "update", this, 3)([elapsedMs]);
         if (this.checkForCollision({
           x: this.x,
           y: this.y,
@@ -10226,7 +7658,6 @@ var Pickup = /*#__PURE__*/function (_Entity) {
           size: this.pacman.measurement
         })) {
           this.sprite.visible = false;
-          this.animationTarget.style.visibility = 'hidden';
           this.emitter.emit("item-taken", this);
           window.dispatchEvent(new CustomEvent('awardPoints', {
             detail: {
@@ -10244,21 +7675,13 @@ var Pickup = /*#__PURE__*/function (_Entity) {
       }
     }
   }]);
-}(_entity["default"]); //Just to avoid problems with NYC coverage test
-if (!process.env.NYC_PROCESS_ID) global.window.Pickup = Pickup;
-// removeIf(production)
-//module.exports = Pickup;
-var _default = exports["default"] = Pickup; // endRemoveIf(production)
+}(entity_js_1["default"]); // removeIf(production)
+exports["default"] = Pickup;
+// endRemoveIf(production)
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../characters/entity.js":1,"_process":448,"pixi.js":447}],30:[function(require,module,exports){
-(function (process,global){(function (){
+},{"../characters/entity.js":1,"pixi.js":445}],30:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -10282,6 +7705,14 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == _typeof(i) ? i : i + "";
@@ -10296,17 +7727,20 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var CharacterUtil = /*#__PURE__*/function () {
   function CharacterUtil() {
     _classCallCheck(this, CharacterUtil);
+    _defineProperty(this, "directions", void 0);
     this.directions = {
-      up: 'up',
-      down: 'down',
-      left: 'left',
-      right: 'right'
+      up: "up",
+      down: "down",
+      left: "left",
+      right: "right"
     };
   }
-
   /**
    * Check if a given character has moved more than five in-game tiles during a frame.
    * If so, we want to temporarily hide the object to avoid 'animation stutter'.
@@ -10326,7 +7760,6 @@ var CharacterUtil = /*#__PURE__*/function () {
       }
       return stutter ? 'hidden' : 'visible';
     }
-
     /**
      * Check which CSS property needs to be changed given the character's current direction
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -10343,7 +7776,6 @@ var CharacterUtil = /*#__PURE__*/function () {
           return 'left';
       }
     }
-
     /**
      * Calculate the velocity for the character's next frame.
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -10361,7 +7793,6 @@ var CharacterUtil = /*#__PURE__*/function () {
           return velocityPerMs;
       }
     }
-
     /**
      * Determine the next value which will be used to draw the character's position on screen
      * @param {number} interp - The percentage of the desired timestamp between frames
@@ -10375,7 +7806,6 @@ var CharacterUtil = /*#__PURE__*/function () {
     value: function calculateNewDrawValue(interp, prop, oldPosition, position) {
       return oldPosition[prop] + (position[prop] - oldPosition[prop]) * interp;
     }
-
     /**
      * Convert the character's css position to a row-column on the maze array
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -10390,7 +7820,6 @@ var CharacterUtil = /*#__PURE__*/function () {
         y: position.top / scaledTileSize + 0.5
       };
     }
-
     /**
      * Check to see if a character's disired direction results in turning around
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -10402,7 +7831,6 @@ var CharacterUtil = /*#__PURE__*/function () {
     value: function turningAround(direction, desiredDirection) {
       return desiredDirection === this.getOppositeDirection(direction);
     }
-
     /**
      * Calculate the opposite of a given direction
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -10422,7 +7850,6 @@ var CharacterUtil = /*#__PURE__*/function () {
           return this.directions.left;
       }
     }
-
     /**
      * Calculate the proper rounding function to assist with collision detection
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -10439,7 +7866,6 @@ var CharacterUtil = /*#__PURE__*/function () {
           return Math.ceil;
       }
     }
-
     /**
      * Check to see if the character's next frame results in moving to a new tile on the maze array
      * @param {({x: number, y: number})} oldPosition - Position during the previous frame
@@ -10451,7 +7877,6 @@ var CharacterUtil = /*#__PURE__*/function () {
     value: function changingGridPosition(oldPosition, position) {
       return Math.floor(oldPosition.x) !== Math.floor(position.x) || Math.floor(oldPosition.y) !== Math.floor(position.y);
     }
-
     /**
      * Check to see if the character is attempting to run into a wall of the maze
      * @param {({x: number, y: number})} desiredNewGridPosition - Character's target tile
@@ -10462,7 +7887,7 @@ var CharacterUtil = /*#__PURE__*/function () {
   }, {
     key: "checkForWallCollision",
     value: function checkForWallCollision(desiredNewGridPosition, mazeArray, direction) {
-      var roundingFunction = this.determineRoundingFunction(direction, this.directions);
+      var roundingFunction = this.determineRoundingFunction(direction);
       var desiredX = roundingFunction(desiredNewGridPosition.x);
       var desiredY = roundingFunction(desiredNewGridPosition.y);
       var newGridValue;
@@ -10471,7 +7896,6 @@ var CharacterUtil = /*#__PURE__*/function () {
       }
       return newGridValue === 'X';
     }
-
     /**
      * Returns an object containing the new position and grid position based upon a direction
      * @param {({top: number, left: number})} position - css position during the current frame
@@ -10492,7 +7916,6 @@ var CharacterUtil = /*#__PURE__*/function () {
         newGridPosition: newGridPosition
       };
     }
-
     /**
      * Calculates the css position when snapping the character to the x-y grid
      * @param {({x: number, y: number})} position - The character's position during the current frame
@@ -10504,7 +7927,7 @@ var CharacterUtil = /*#__PURE__*/function () {
     key: "snapToGrid",
     value: function snapToGrid(position, direction, scaledTileSize) {
       var newPosition = Object.assign({}, position);
-      var roundingFunction = this.determineRoundingFunction(direction, this.directions);
+      var roundingFunction = this.determineRoundingFunction(direction);
       switch (direction) {
         case this.directions.up:
         case this.directions.down:
@@ -10519,7 +7942,6 @@ var CharacterUtil = /*#__PURE__*/function () {
         left: (newPosition.x - 0.5) * scaledTileSize
       };
     }
-
     /**
      * Returns a modified position if the character needs to warp
      * @param {({top: number, left: number})} position - css position during the current frame
@@ -10539,7 +7961,6 @@ var CharacterUtil = /*#__PURE__*/function () {
       }
       return newPosition;
     }
-
     /**
      * Advances spritesheet by one frame if needed
      * @param {Object} character - The character which needs to be animated
@@ -10548,49 +7969,30 @@ var CharacterUtil = /*#__PURE__*/function () {
     key: "advanceSpriteSheet",
     value: function advanceSpriteSheet(character) {
       var msSinceLastSprite = character.msSinceLastSprite,
-        animationTarget = character.animationTarget,
-        backgroundOffsetPixels = character.backgroundOffsetPixels,
         frame = character.frame;
       var updatedProperties = {
         msSinceLastSprite: msSinceLastSprite,
-        animationTarget: animationTarget,
-        backgroundOffsetPixels: backgroundOffsetPixels,
         frame: frame
       };
       var ready = character.msSinceLastSprite > character.msBetweenSprites && character.animate;
       if (ready) {
         updatedProperties.msSinceLastSprite = 0;
-        if (character.backgroundOffsetPixels < character.measurement * (character.spriteFrames - 1)) {
-          updatedProperties.backgroundOffsetPixels += character.measurement;
+        if (character.frame < character.spriteFrames - 1) {
           updatedProperties.frame += 1;
         } else if (character.loopAnimation) {
           updatedProperties.frame = 0;
-          updatedProperties.backgroundOffsetPixels = 0;
         }
-        var style = "-".concat(updatedProperties.backgroundOffsetPixels, "px 0px");
-        updatedProperties.animationTarget.style.backgroundPosition = style;
       }
       return updatedProperties;
     }
   }]);
-}(); //Just to avoid problems with NYC coverage test
-if (!process.env.NYC_PROCESS_ID) global.window.CharacterUtil = CharacterUtil;
+}(); // removeIf(production)
+exports["default"] = CharacterUtil;
+// endRemoveIf(production)
 
-// removeIf(production)
-// if (typeof module != undefined)
-//   module.exports = CharacterUtil;
-var _default = exports["default"] = CharacterUtil; // endRemoveIf(production)
-
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":448}],31:[function(require,module,exports){
-(function (process,global){(function (){
+},{}],31:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _pixi = require("pixi.js");
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -10614,6 +8016,14 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == _typeof(i) ? i : i + "";
@@ -10628,9 +8038,23 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var Debugger = /*#__PURE__*/function () {
   function Debugger(gameCoordinator) {
     _classCallCheck(this, Debugger);
+    _defineProperty(this, "gc", void 0);
+    _defineProperty(this, "overflowMask", void 0);
+    _defineProperty(this, "mazeDiv", void 0);
+    _defineProperty(this, "mazeArray", void 0);
+    _defineProperty(this, "tileSize", void 0);
+    _defineProperty(this, "pacmanImmortal", void 0);
+    _defineProperty(this, "printMazeGrid", void 0);
+    _defineProperty(this, "infoPanel", void 0);
+    _defineProperty(this, "canvas", void 0);
+    _defineProperty(this, "shouldPrintGrid", void 0);
+    _defineProperty(this, "printing", void 0);
     this.gc = gameCoordinator;
     this.overflowMask = $("#overflow-mask");
     this.mazeDiv = $(this.gc.mazeDiv);
@@ -10641,7 +8065,7 @@ var Debugger = /*#__PURE__*/function () {
     this.createCanvas();
     this.handleInput();
     this.configInfoPanel();
-    window.dbg = this;
+    window.debug = this;
   }
   return _createClass(Debugger, [{
     key: "handleInput",
@@ -10675,14 +8099,12 @@ var Debugger = /*#__PURE__*/function () {
       canvas.height(this.overflowMask.height());
       this.canvas.width = this.overflowMask.width();
       this.canvas.height = this.overflowMask.height();
-
       // let canvasP = document.createElement('canvas')
       // canvasP.width = 400
       // canvasP.height = 300
       // document.body.appendChild(canvasP)
       // $(canvasP).css("position", "absolute")
       // .css("top", "0px").css("left", "0px")
-
       // this.renderer = new Renderer({
       //      width: 400,
       //      height: 500, 
@@ -10740,7 +8162,7 @@ var Debugger = /*#__PURE__*/function () {
       var height = this.mazeDiv.height();
       var ctx = this.canvas.getContext("2d");
       ctx.strokeStyle = 'green';
-      ctx.lineWidth = '1';
+      ctx.lineWidth = 1;
       var x = mazeX,
         y = mazeY;
       ctx.clearRect(mazeX, mazeY, width, height);
@@ -10754,7 +8176,7 @@ var Debugger = /*#__PURE__*/function () {
         ctx.moveTo(x, y);
         ctx.lineTo(width + mazeX, y);
         row.forEach(function (col, colIndex) {
-          //ctx.strokeRect(x,y, this.tileSize, this.tileSize) 
+          //ctx!.strokeRect(x,y, this.tileSize, this.tileSize) 
           ctx.moveTo(x, y);
           ctx.lineTo(x, y + _this2.tileSize);
           x += _this2.tileSize;
@@ -10785,7 +8207,6 @@ var Debugger = /*#__PURE__*/function () {
       var width = this.mazeDiv.width();
       var height = this.mazeDiv.height();
       var ctx = this.canvas.getContext("2d");
-      ctx = this.canvas.getContext("2d");
       ctx.clearRect(mazeX - 1, mazeY - 1, width + 2, height + 2);
     }
   }, {
@@ -10967,21 +8388,15 @@ var Debugger = /*#__PURE__*/function () {
       infoPanel.info.direction = pacman.direction;
     }
   }]);
-}();
-if (!process.env.NYC_PROCESS_ID) global.window.Debugger = Debugger;
-
+}(); // if (!process.env.NYC_PROCESS_ID) 
+//     global.window.Debugger = Debugger
 //removeIf(production)
-var _default = exports["default"] = Debugger; //endRemoveIf
+exports["default"] = Debugger;
+//endRemoveIf
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":448,"pixi.js":447}],32:[function(require,module,exports){
-(function (process,global){(function (){
+},{}],32:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -11137,6 +8552,14 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == _typeof(i) ? i : i + "";
@@ -11151,9 +8574,25 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var SoundManager = /*#__PURE__*/function () {
   function SoundManager() {
     _classCallCheck(this, SoundManager);
+    _defineProperty(this, "baseUrl", void 0);
+    _defineProperty(this, "fileFormat", void 0);
+    _defineProperty(this, "masterVolume", void 0);
+    _defineProperty(this, "paused", void 0);
+    _defineProperty(this, "cutscene", void 0);
+    _defineProperty(this, "ambience", void 0);
+    _defineProperty(this, "soundEffect", void 0);
+    _defineProperty(this, "dotPlayer", void 0);
+    _defineProperty(this, "queuedDotSound", false);
+    _defineProperty(this, "dotSound", void 0);
+    _defineProperty(this, "fetchingAmbience", void 0);
+    _defineProperty(this, "currentAmbience", void 0);
+    _defineProperty(this, "ambienceSource", void 0);
     this.baseUrl = 'app/style/audio/';
     this.fileFormat = 'mp3';
     this.masterVolume = 1;
@@ -11162,7 +8601,6 @@ var SoundManager = /*#__PURE__*/function () {
     var AudioContext = window.AudioContext || window.webkitAudioContext;
     this.ambience = new AudioContext();
   }
-
   /**
    * Sets the cutscene flag to determine if players should be able to resume ambience
    * @param {Boolean} newValue
@@ -11172,7 +8610,6 @@ var SoundManager = /*#__PURE__*/function () {
     value: function setCutscene(newValue) {
       this.cutscene = newValue;
     }
-
     /**
      * Sets the master volume for all sounds and stops/resumes ambience
      * @param {(0|1)} newVolume
@@ -11193,7 +8630,6 @@ var SoundManager = /*#__PURE__*/function () {
         this.resumeAmbience(this.paused);
       }
     }
-
     /**
      * Plays a single sound effect
      * @param {String} sound
@@ -11205,7 +8641,6 @@ var SoundManager = /*#__PURE__*/function () {
       this.soundEffect.volume = this.masterVolume;
       this.soundEffect.play();
     }
-
     /**
      * Special method for eating dots. The dots should alternate between two
      * sound effects, but not too quickly.
@@ -11223,7 +8658,6 @@ var SoundManager = /*#__PURE__*/function () {
         this.dotPlayer.play();
       }
     }
-
     /**
      * Deletes the dotSound player and plays another dot sound if needed
      */
@@ -11235,7 +8669,6 @@ var SoundManager = /*#__PURE__*/function () {
         this.playDotSound();
       }
     }
-
     /**
      * Loops an ambient sound
      * @param {String} sound
@@ -11306,11 +8739,10 @@ var SoundManager = /*#__PURE__*/function () {
         if (paused) {
           this.setAmbience('pause_beat', true);
         } else {
-          this.setAmbience(this.currentAmbience);
+          this.setAmbience(this.currentAmbience, false);
         }
       }
     }
-
     /**
      * Stops the ambience
      */
@@ -11323,20 +8755,16 @@ var SoundManager = /*#__PURE__*/function () {
     }
   }]);
 }(); //Just to avoid problems with NYC coverage test
-if (!process.env.NYC_PROCESS_ID) global.window.SoundManager = SoundManager;
+// if (!process.env.NYC_PROCESS_ID) 
+//   global.window.SoundManager = SoundManager
 // removeIf(production)
 //module.exports = SoundManager;
-var _default = exports["default"] = SoundManager; // endRemoveIf(production)
+exports["default"] = SoundManager;
+// endRemoveIf(production)
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":448}],33:[function(require,module,exports){
-(function (process,global){(function (){
+},{}],33:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
 function _typeof(o) {
   "@babel/helpers - typeof";
 
@@ -11360,6 +8788,14 @@ function _createClass(e, r, t) {
     writable: !1
   }), e;
 }
+function _defineProperty(e, r, t) {
+  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == _typeof(i) ? i : i + "";
@@ -11374,14 +8810,22 @@ function _toPrimitive(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var Timer = /*#__PURE__*/function () {
   function Timer(callback, delay) {
     _classCallCheck(this, Timer);
+    _defineProperty(this, "callback", void 0);
+    _defineProperty(this, "remaining", void 0);
+    _defineProperty(this, "start", void 0);
+    _defineProperty(this, "timerId", void 0);
+    _defineProperty(this, "oldTimerId", void 0);
+    _defineProperty(this, "pausedBySystem", void 0);
     this.callback = callback;
     this.remaining = delay;
-    this.resume();
+    this.resume(false);
   }
-
   /**
    * Pauses the timer marks whether the pause came from the player
    * or the system
@@ -11391,13 +8835,12 @@ var Timer = /*#__PURE__*/function () {
     key: "pause",
     value: function pause(systemPause) {
       window.clearTimeout(this.timerId);
-      this.remaining -= new Date() - this.start;
+      this.remaining -= new Date().valueOf() - this.start.valueOf();
       this.oldTimerId = this.timerId;
       if (systemPause) {
         this.pausedBySystem = true;
       }
     }
-
     /**
      * Creates a new setTimeout based upon the remaining time, giving the
      * illusion of 'resuming' the old setTimeout
@@ -11429,13 +8872,14 @@ var Timer = /*#__PURE__*/function () {
     }
   }]);
 }(); //Just to avoid problems with NYC coverage test
-if (!process.env.NYC_PROCESS_ID) global.window.Timer = Timer;
+// if (!process.env.NYC_PROCESS_ID) 
+//   global.window.Timer = Timer
 // removeIf(production)
 //module.exports = Timer;
-var _default = exports["default"] = Timer; // endRemoveIf(production)
+exports["default"] = Timer;
+// endRemoveIf(production)
 
-}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":448}],34:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), events = require("@pixi/events"), accessibleTarget = require("./accessibleTarget.js");
 display.DisplayObject.mixin(accessibleTarget.accessibleTarget);
@@ -31464,7 +28908,7 @@ const isMobileCall = isMobileJs.default ?? isMobileJs, isMobile = isMobileCall(g
 exports.isMobile = isMobile;
 
 
-},{"ismobilejs":434}],329:[function(require,module,exports){
+},{"ismobilejs":433}],329:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite");
 class AnimatedSprite extends sprite.Sprite {
@@ -36320,7 +33764,7 @@ const url = {
 exports.url = url;
 
 
-},{"./logging/deprecation.js":390,"url":459}],403:[function(require,module,exports){
+},{"./logging/deprecation.js":390,"url":456}],403:[function(require,module,exports){
 
 },{}],404:[function(require,module,exports){
 'use strict';
@@ -36334,7 +33778,7 @@ var $reflectApply = require('./reflectApply');
 /** @type {import('./actualApply')} */
 module.exports = $reflectApply || bind.call($call, $apply);
 
-},{"./functionApply":405,"./functionCall":406,"./reflectApply":408,"function-bind":424}],405:[function(require,module,exports){
+},{"./functionApply":405,"./functionCall":406,"./reflectApply":408,"function-bind":423}],405:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./functionApply')} */
@@ -36363,7 +33807,7 @@ module.exports = function callBindBasic(args) {
 	return $actualApply(bind, $call, args);
 };
 
-},{"./actualApply":404,"./functionCall":406,"es-errors/type":418,"function-bind":424}],408:[function(require,module,exports){
+},{"./actualApply":404,"./functionCall":406,"es-errors/type":418,"function-bind":423}],408:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./reflectApply')} */
@@ -36390,7 +33834,7 @@ module.exports = function callBoundIntrinsic(name, allowMissing) {
 	return intrinsic;
 };
 
-},{"call-bind-apply-helpers":407,"get-intrinsic":425}],410:[function(require,module,exports){
+},{"call-bind-apply-helpers":407,"get-intrinsic":424}],410:[function(require,module,exports){
 'use strict';
 
 var callBind = require('call-bind-apply-helpers');
@@ -36422,7 +33866,7 @@ module.exports = desc && typeof desc.get === 'function'
 		}
 		: false;
 
-},{"call-bind-apply-helpers":407,"gopd":430}],411:[function(require,module,exports){
+},{"call-bind-apply-helpers":407,"gopd":429}],411:[function(require,module,exports){
 'use strict';
 
 module.exports = earcut;
@@ -37508,505 +34952,6 @@ if ('undefined' !== typeof module) {
 }
 
 },{}],422:[function(require,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-'use strict';
-
-var R = typeof Reflect === 'object' ? Reflect : null
-var ReflectApply = R && typeof R.apply === 'function'
-  ? R.apply
-  : function ReflectApply(target, receiver, args) {
-    return Function.prototype.apply.call(target, receiver, args);
-  }
-
-var ReflectOwnKeys
-if (R && typeof R.ownKeys === 'function') {
-  ReflectOwnKeys = R.ownKeys
-} else if (Object.getOwnPropertySymbols) {
-  ReflectOwnKeys = function ReflectOwnKeys(target) {
-    return Object.getOwnPropertyNames(target)
-      .concat(Object.getOwnPropertySymbols(target));
-  };
-} else {
-  ReflectOwnKeys = function ReflectOwnKeys(target) {
-    return Object.getOwnPropertyNames(target);
-  };
-}
-
-function ProcessEmitWarning(warning) {
-  if (console && console.warn) console.warn(warning);
-}
-
-var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
-  return value !== value;
-}
-
-function EventEmitter() {
-  EventEmitter.init.call(this);
-}
-module.exports = EventEmitter;
-module.exports.once = once;
-
-// Backwards-compat with node 0.10.x
-EventEmitter.EventEmitter = EventEmitter;
-
-EventEmitter.prototype._events = undefined;
-EventEmitter.prototype._eventsCount = 0;
-EventEmitter.prototype._maxListeners = undefined;
-
-// By default EventEmitters will print a warning if more than 10 listeners are
-// added to it. This is a useful default which helps finding memory leaks.
-var defaultMaxListeners = 10;
-
-function checkListener(listener) {
-  if (typeof listener !== 'function') {
-    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
-  }
-}
-
-Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
-  enumerable: true,
-  get: function() {
-    return defaultMaxListeners;
-  },
-  set: function(arg) {
-    if (typeof arg !== 'number' || arg < 0 || NumberIsNaN(arg)) {
-      throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
-    }
-    defaultMaxListeners = arg;
-  }
-});
-
-EventEmitter.init = function() {
-
-  if (this._events === undefined ||
-      this._events === Object.getPrototypeOf(this)._events) {
-    this._events = Object.create(null);
-    this._eventsCount = 0;
-  }
-
-  this._maxListeners = this._maxListeners || undefined;
-};
-
-// Obviously not all Emitters should be limited to 10. This function allows
-// that to be increased. Set to zero for unlimited.
-EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
-  if (typeof n !== 'number' || n < 0 || NumberIsNaN(n)) {
-    throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + n + '.');
-  }
-  this._maxListeners = n;
-  return this;
-};
-
-function _getMaxListeners(that) {
-  if (that._maxListeners === undefined)
-    return EventEmitter.defaultMaxListeners;
-  return that._maxListeners;
-}
-
-EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
-  return _getMaxListeners(this);
-};
-
-EventEmitter.prototype.emit = function emit(type) {
-  var args = [];
-  for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
-  var doError = (type === 'error');
-
-  var events = this._events;
-  if (events !== undefined)
-    doError = (doError && events.error === undefined);
-  else if (!doError)
-    return false;
-
-  // If there is no 'error' event listener then throw.
-  if (doError) {
-    var er;
-    if (args.length > 0)
-      er = args[0];
-    if (er instanceof Error) {
-      // Note: The comments on the `throw` lines are intentional, they show
-      // up in Node's output if this results in an unhandled exception.
-      throw er; // Unhandled 'error' event
-    }
-    // At least give some kind of context to the user
-    var err = new Error('Unhandled error.' + (er ? ' (' + er.message + ')' : ''));
-    err.context = er;
-    throw err; // Unhandled 'error' event
-  }
-
-  var handler = events[type];
-
-  if (handler === undefined)
-    return false;
-
-  if (typeof handler === 'function') {
-    ReflectApply(handler, this, args);
-  } else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
-      ReflectApply(listeners[i], this, args);
-  }
-
-  return true;
-};
-
-function _addListener(target, type, listener, prepend) {
-  var m;
-  var events;
-  var existing;
-
-  checkListener(listener);
-
-  events = target._events;
-  if (events === undefined) {
-    events = target._events = Object.create(null);
-    target._eventsCount = 0;
-  } else {
-    // To avoid recursion in the case that type === "newListener"! Before
-    // adding it to the listeners, first emit "newListener".
-    if (events.newListener !== undefined) {
-      target.emit('newListener', type,
-                  listener.listener ? listener.listener : listener);
-
-      // Re-assign `events` because a newListener handler could have caused the
-      // this._events to be assigned to a new object
-      events = target._events;
-    }
-    existing = events[type];
-  }
-
-  if (existing === undefined) {
-    // Optimize the case of one listener. Don't need the extra array object.
-    existing = events[type] = listener;
-    ++target._eventsCount;
-  } else {
-    if (typeof existing === 'function') {
-      // Adding the second element, need to change to array.
-      existing = events[type] =
-        prepend ? [listener, existing] : [existing, listener];
-      // If we've already got an array, just append.
-    } else if (prepend) {
-      existing.unshift(listener);
-    } else {
-      existing.push(listener);
-    }
-
-    // Check for listener leak
-    m = _getMaxListeners(target);
-    if (m > 0 && existing.length > m && !existing.warned) {
-      existing.warned = true;
-      // No error code for this since it is a Warning
-      // eslint-disable-next-line no-restricted-syntax
-      var w = new Error('Possible EventEmitter memory leak detected. ' +
-                          existing.length + ' ' + String(type) + ' listeners ' +
-                          'added. Use emitter.setMaxListeners() to ' +
-                          'increase limit');
-      w.name = 'MaxListenersExceededWarning';
-      w.emitter = target;
-      w.type = type;
-      w.count = existing.length;
-      ProcessEmitWarning(w);
-    }
-  }
-
-  return target;
-}
-
-EventEmitter.prototype.addListener = function addListener(type, listener) {
-  return _addListener(this, type, listener, false);
-};
-
-EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-EventEmitter.prototype.prependListener =
-    function prependListener(type, listener) {
-      return _addListener(this, type, listener, true);
-    };
-
-function onceWrapper() {
-  if (!this.fired) {
-    this.target.removeListener(this.type, this.wrapFn);
-    this.fired = true;
-    if (arguments.length === 0)
-      return this.listener.call(this.target);
-    return this.listener.apply(this.target, arguments);
-  }
-}
-
-function _onceWrap(target, type, listener) {
-  var state = { fired: false, wrapFn: undefined, target: target, type: type, listener: listener };
-  var wrapped = onceWrapper.bind(state);
-  wrapped.listener = listener;
-  state.wrapFn = wrapped;
-  return wrapped;
-}
-
-EventEmitter.prototype.once = function once(type, listener) {
-  checkListener(listener);
-  this.on(type, _onceWrap(this, type, listener));
-  return this;
-};
-
-EventEmitter.prototype.prependOnceListener =
-    function prependOnceListener(type, listener) {
-      checkListener(listener);
-      this.prependListener(type, _onceWrap(this, type, listener));
-      return this;
-    };
-
-// Emits a 'removeListener' event if and only if the listener was removed.
-EventEmitter.prototype.removeListener =
-    function removeListener(type, listener) {
-      var list, events, position, i, originalListener;
-
-      checkListener(listener);
-
-      events = this._events;
-      if (events === undefined)
-        return this;
-
-      list = events[type];
-      if (list === undefined)
-        return this;
-
-      if (list === listener || list.listener === listener) {
-        if (--this._eventsCount === 0)
-          this._events = Object.create(null);
-        else {
-          delete events[type];
-          if (events.removeListener)
-            this.emit('removeListener', type, list.listener || listener);
-        }
-      } else if (typeof list !== 'function') {
-        position = -1;
-
-        for (i = list.length - 1; i >= 0; i--) {
-          if (list[i] === listener || list[i].listener === listener) {
-            originalListener = list[i].listener;
-            position = i;
-            break;
-          }
-        }
-
-        if (position < 0)
-          return this;
-
-        if (position === 0)
-          list.shift();
-        else {
-          spliceOne(list, position);
-        }
-
-        if (list.length === 1)
-          events[type] = list[0];
-
-        if (events.removeListener !== undefined)
-          this.emit('removeListener', type, originalListener || listener);
-      }
-
-      return this;
-    };
-
-EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-
-EventEmitter.prototype.removeAllListeners =
-    function removeAllListeners(type) {
-      var listeners, events, i;
-
-      events = this._events;
-      if (events === undefined)
-        return this;
-
-      // not listening for removeListener, no need to emit
-      if (events.removeListener === undefined) {
-        if (arguments.length === 0) {
-          this._events = Object.create(null);
-          this._eventsCount = 0;
-        } else if (events[type] !== undefined) {
-          if (--this._eventsCount === 0)
-            this._events = Object.create(null);
-          else
-            delete events[type];
-        }
-        return this;
-      }
-
-      // emit removeListener for all listeners on all events
-      if (arguments.length === 0) {
-        var keys = Object.keys(events);
-        var key;
-        for (i = 0; i < keys.length; ++i) {
-          key = keys[i];
-          if (key === 'removeListener') continue;
-          this.removeAllListeners(key);
-        }
-        this.removeAllListeners('removeListener');
-        this._events = Object.create(null);
-        this._eventsCount = 0;
-        return this;
-      }
-
-      listeners = events[type];
-
-      if (typeof listeners === 'function') {
-        this.removeListener(type, listeners);
-      } else if (listeners !== undefined) {
-        // LIFO order
-        for (i = listeners.length - 1; i >= 0; i--) {
-          this.removeListener(type, listeners[i]);
-        }
-      }
-
-      return this;
-    };
-
-function _listeners(target, type, unwrap) {
-  var events = target._events;
-
-  if (events === undefined)
-    return [];
-
-  var evlistener = events[type];
-  if (evlistener === undefined)
-    return [];
-
-  if (typeof evlistener === 'function')
-    return unwrap ? [evlistener.listener || evlistener] : [evlistener];
-
-  return unwrap ?
-    unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
-}
-
-EventEmitter.prototype.listeners = function listeners(type) {
-  return _listeners(this, type, true);
-};
-
-EventEmitter.prototype.rawListeners = function rawListeners(type) {
-  return _listeners(this, type, false);
-};
-
-EventEmitter.listenerCount = function(emitter, type) {
-  if (typeof emitter.listenerCount === 'function') {
-    return emitter.listenerCount(type);
-  } else {
-    return listenerCount.call(emitter, type);
-  }
-};
-
-EventEmitter.prototype.listenerCount = listenerCount;
-function listenerCount(type) {
-  var events = this._events;
-
-  if (events !== undefined) {
-    var evlistener = events[type];
-
-    if (typeof evlistener === 'function') {
-      return 1;
-    } else if (evlistener !== undefined) {
-      return evlistener.length;
-    }
-  }
-
-  return 0;
-}
-
-EventEmitter.prototype.eventNames = function eventNames() {
-  return this._eventsCount > 0 ? ReflectOwnKeys(this._events) : [];
-};
-
-function arrayClone(arr, n) {
-  var copy = new Array(n);
-  for (var i = 0; i < n; ++i)
-    copy[i] = arr[i];
-  return copy;
-}
-
-function spliceOne(list, index) {
-  for (; index + 1 < list.length; index++)
-    list[index] = list[index + 1];
-  list.pop();
-}
-
-function unwrapListeners(arr) {
-  var ret = new Array(arr.length);
-  for (var i = 0; i < ret.length; ++i) {
-    ret[i] = arr[i].listener || arr[i];
-  }
-  return ret;
-}
-
-function once(emitter, name) {
-  return new Promise(function (resolve, reject) {
-    function errorListener(err) {
-      emitter.removeListener(name, resolver);
-      reject(err);
-    }
-
-    function resolver() {
-      if (typeof emitter.removeListener === 'function') {
-        emitter.removeListener('error', errorListener);
-      }
-      resolve([].slice.call(arguments));
-    };
-
-    eventTargetAgnosticAddListener(emitter, name, resolver, { once: true });
-    if (name !== 'error') {
-      addErrorHandlerIfEventEmitter(emitter, errorListener, { once: true });
-    }
-  });
-}
-
-function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
-  if (typeof emitter.on === 'function') {
-    eventTargetAgnosticAddListener(emitter, 'error', handler, flags);
-  }
-}
-
-function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
-  if (typeof emitter.on === 'function') {
-    if (flags.once) {
-      emitter.once(name, listener);
-    } else {
-      emitter.on(name, listener);
-    }
-  } else if (typeof emitter.addEventListener === 'function') {
-    // EventTarget does not have `error` event semantics like Node
-    // EventEmitters, we do not listen for `error` events here.
-    emitter.addEventListener(name, function wrapListener(arg) {
-      // IE does not have builtin `{ once: true }` support so we
-      // have to do it manually.
-      if (flags.once) {
-        emitter.removeEventListener(name, wrapListener);
-      }
-      listener(arg);
-    });
-  } else {
-    throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
-  }
-}
-
-},{}],423:[function(require,module,exports){
 'use strict';
 
 /* eslint no-invalid-this: 1 */
@@ -38092,14 +35037,14 @@ module.exports = function bind(that) {
     return bound;
 };
 
-},{}],424:[function(require,module,exports){
+},{}],423:[function(require,module,exports){
 'use strict';
 
 var implementation = require('./implementation');
 
 module.exports = Function.prototype.bind || implementation;
 
-},{"./implementation":423}],425:[function(require,module,exports){
+},{"./implementation":422}],424:[function(require,module,exports){
 'use strict';
 
 var undefined;
@@ -38479,7 +35424,7 @@ module.exports = function GetIntrinsic(name, allowMissing) {
 	return value;
 };
 
-},{"call-bind-apply-helpers/functionApply":405,"call-bind-apply-helpers/functionCall":406,"es-define-property":412,"es-errors":414,"es-errors/eval":413,"es-errors/range":415,"es-errors/ref":416,"es-errors/syntax":417,"es-errors/type":418,"es-errors/uri":419,"es-object-atoms":420,"function-bind":424,"get-proto":428,"get-proto/Object.getPrototypeOf":426,"get-proto/Reflect.getPrototypeOf":427,"gopd":430,"has-symbols":431,"hasown":433,"math-intrinsics/abs":436,"math-intrinsics/floor":437,"math-intrinsics/max":439,"math-intrinsics/min":440,"math-intrinsics/pow":441,"math-intrinsics/round":442,"math-intrinsics/sign":443}],426:[function(require,module,exports){
+},{"call-bind-apply-helpers/functionApply":405,"call-bind-apply-helpers/functionCall":406,"es-define-property":412,"es-errors":414,"es-errors/eval":413,"es-errors/range":415,"es-errors/ref":416,"es-errors/syntax":417,"es-errors/type":418,"es-errors/uri":419,"es-object-atoms":420,"function-bind":423,"get-proto":427,"get-proto/Object.getPrototypeOf":425,"get-proto/Reflect.getPrototypeOf":426,"gopd":429,"has-symbols":430,"hasown":432,"math-intrinsics/abs":435,"math-intrinsics/floor":436,"math-intrinsics/max":438,"math-intrinsics/min":439,"math-intrinsics/pow":440,"math-intrinsics/round":441,"math-intrinsics/sign":442}],425:[function(require,module,exports){
 'use strict';
 
 var $Object = require('es-object-atoms');
@@ -38487,13 +35432,13 @@ var $Object = require('es-object-atoms');
 /** @type {import('./Object.getPrototypeOf')} */
 module.exports = $Object.getPrototypeOf || null;
 
-},{"es-object-atoms":420}],427:[function(require,module,exports){
+},{"es-object-atoms":420}],426:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./Reflect.getPrototypeOf')} */
 module.exports = (typeof Reflect !== 'undefined' && Reflect.getPrototypeOf) || null;
 
-},{}],428:[function(require,module,exports){
+},{}],427:[function(require,module,exports){
 'use strict';
 
 var reflectGetProto = require('./Reflect.getPrototypeOf');
@@ -38522,13 +35467,13 @@ module.exports = reflectGetProto
 			}
 			: null;
 
-},{"./Object.getPrototypeOf":426,"./Reflect.getPrototypeOf":427,"dunder-proto/get":410}],429:[function(require,module,exports){
+},{"./Object.getPrototypeOf":425,"./Reflect.getPrototypeOf":426,"dunder-proto/get":410}],428:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./gOPD')} */
 module.exports = Object.getOwnPropertyDescriptor;
 
-},{}],430:[function(require,module,exports){
+},{}],429:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
@@ -38545,7 +35490,7 @@ if ($gOPD) {
 
 module.exports = $gOPD;
 
-},{"./gOPD":429}],431:[function(require,module,exports){
+},{"./gOPD":428}],430:[function(require,module,exports){
 'use strict';
 
 var origSymbol = typeof Symbol !== 'undefined' && Symbol;
@@ -38561,7 +35506,7 @@ module.exports = function hasNativeSymbols() {
 	return hasSymbolSham();
 };
 
-},{"./shams":432}],432:[function(require,module,exports){
+},{"./shams":431}],431:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./shams')} */
@@ -38608,7 +35553,7 @@ module.exports = function hasSymbols() {
 	return true;
 };
 
-},{}],433:[function(require,module,exports){
+},{}],432:[function(require,module,exports){
 'use strict';
 
 var call = Function.prototype.call;
@@ -38618,7 +35563,7 @@ var bind = require('function-bind');
 /** @type {import('.')} */
 module.exports = bind.call(call, $hasOwn);
 
-},{"function-bind":424}],434:[function(require,module,exports){
+},{"function-bind":423}],433:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -38628,7 +35573,7 @@ __export(require("./isMobile"));
 var isMobile_1 = require("./isMobile");
 exports["default"] = isMobile_1["default"];
 
-},{"./isMobile":435}],435:[function(require,module,exports){
+},{"./isMobile":434}],434:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 var appleIphone = /iPhone/i;
@@ -38757,19 +35702,19 @@ function isMobile(param) {
 }
 exports["default"] = isMobile;
 
-},{}],436:[function(require,module,exports){
+},{}],435:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./abs')} */
 module.exports = Math.abs;
 
-},{}],437:[function(require,module,exports){
+},{}],436:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./floor')} */
 module.exports = Math.floor;
 
-},{}],438:[function(require,module,exports){
+},{}],437:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./isNaN')} */
@@ -38777,31 +35722,31 @@ module.exports = Number.isNaN || function isNaN(a) {
 	return a !== a;
 };
 
-},{}],439:[function(require,module,exports){
+},{}],438:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./max')} */
 module.exports = Math.max;
 
-},{}],440:[function(require,module,exports){
+},{}],439:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./min')} */
 module.exports = Math.min;
 
-},{}],441:[function(require,module,exports){
+},{}],440:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./pow')} */
 module.exports = Math.pow;
 
-},{}],442:[function(require,module,exports){
+},{}],441:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./round')} */
 module.exports = Math.round;
 
-},{}],443:[function(require,module,exports){
+},{}],442:[function(require,module,exports){
 'use strict';
 
 var $isNaN = require('./isNaN');
@@ -38814,7 +35759,7 @@ module.exports = function sign(number) {
 	return number < 0 ? -1 : +1;
 };
 
-},{"./isNaN":438}],444:[function(require,module,exports){
+},{"./isNaN":437}],443:[function(require,module,exports){
 (function (global){(function (){
 var hasMap = typeof Map === 'function' && Map.prototype;
 var mapSizeDescriptor = Object.getOwnPropertyDescriptor && hasMap ? Object.getOwnPropertyDescriptor(Map.prototype, 'size') : null;
@@ -39362,540 +36307,7 @@ function arrObjKeys(obj, inspect) {
 }
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./util.inspect":403}],445:[function(require,module,exports){
-(function (process){(function (){
-// 'path' module extracted from Node.js v8.11.1 (only the posix part)
-// transplited with Babel
-
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-'use strict';
-
-function assertPath(path) {
-  if (typeof path !== 'string') {
-    throw new TypeError('Path must be a string. Received ' + JSON.stringify(path));
-  }
-}
-
-// Resolves . and .. elements in a path with directory names
-function normalizeStringPosix(path, allowAboveRoot) {
-  var res = '';
-  var lastSegmentLength = 0;
-  var lastSlash = -1;
-  var dots = 0;
-  var code;
-  for (var i = 0; i <= path.length; ++i) {
-    if (i < path.length)
-      code = path.charCodeAt(i);
-    else if (code === 47 /*/*/)
-      break;
-    else
-      code = 47 /*/*/;
-    if (code === 47 /*/*/) {
-      if (lastSlash === i - 1 || dots === 1) {
-        // NOOP
-      } else if (lastSlash !== i - 1 && dots === 2) {
-        if (res.length < 2 || lastSegmentLength !== 2 || res.charCodeAt(res.length - 1) !== 46 /*.*/ || res.charCodeAt(res.length - 2) !== 46 /*.*/) {
-          if (res.length > 2) {
-            var lastSlashIndex = res.lastIndexOf('/');
-            if (lastSlashIndex !== res.length - 1) {
-              if (lastSlashIndex === -1) {
-                res = '';
-                lastSegmentLength = 0;
-              } else {
-                res = res.slice(0, lastSlashIndex);
-                lastSegmentLength = res.length - 1 - res.lastIndexOf('/');
-              }
-              lastSlash = i;
-              dots = 0;
-              continue;
-            }
-          } else if (res.length === 2 || res.length === 1) {
-            res = '';
-            lastSegmentLength = 0;
-            lastSlash = i;
-            dots = 0;
-            continue;
-          }
-        }
-        if (allowAboveRoot) {
-          if (res.length > 0)
-            res += '/..';
-          else
-            res = '..';
-          lastSegmentLength = 2;
-        }
-      } else {
-        if (res.length > 0)
-          res += '/' + path.slice(lastSlash + 1, i);
-        else
-          res = path.slice(lastSlash + 1, i);
-        lastSegmentLength = i - lastSlash - 1;
-      }
-      lastSlash = i;
-      dots = 0;
-    } else if (code === 46 /*.*/ && dots !== -1) {
-      ++dots;
-    } else {
-      dots = -1;
-    }
-  }
-  return res;
-}
-
-function _format(sep, pathObject) {
-  var dir = pathObject.dir || pathObject.root;
-  var base = pathObject.base || (pathObject.name || '') + (pathObject.ext || '');
-  if (!dir) {
-    return base;
-  }
-  if (dir === pathObject.root) {
-    return dir + base;
-  }
-  return dir + sep + base;
-}
-
-var posix = {
-  // path.resolve([from ...], to)
-  resolve: function resolve() {
-    var resolvedPath = '';
-    var resolvedAbsolute = false;
-    var cwd;
-
-    for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-      var path;
-      if (i >= 0)
-        path = arguments[i];
-      else {
-        if (cwd === undefined)
-          cwd = process.cwd();
-        path = cwd;
-      }
-
-      assertPath(path);
-
-      // Skip empty entries
-      if (path.length === 0) {
-        continue;
-      }
-
-      resolvedPath = path + '/' + resolvedPath;
-      resolvedAbsolute = path.charCodeAt(0) === 47 /*/*/;
-    }
-
-    // At this point the path should be resolved to a full absolute path, but
-    // handle relative paths to be safe (might happen when process.cwd() fails)
-
-    // Normalize the path
-    resolvedPath = normalizeStringPosix(resolvedPath, !resolvedAbsolute);
-
-    if (resolvedAbsolute) {
-      if (resolvedPath.length > 0)
-        return '/' + resolvedPath;
-      else
-        return '/';
-    } else if (resolvedPath.length > 0) {
-      return resolvedPath;
-    } else {
-      return '.';
-    }
-  },
-
-  normalize: function normalize(path) {
-    assertPath(path);
-
-    if (path.length === 0) return '.';
-
-    var isAbsolute = path.charCodeAt(0) === 47 /*/*/;
-    var trailingSeparator = path.charCodeAt(path.length - 1) === 47 /*/*/;
-
-    // Normalize the path
-    path = normalizeStringPosix(path, !isAbsolute);
-
-    if (path.length === 0 && !isAbsolute) path = '.';
-    if (path.length > 0 && trailingSeparator) path += '/';
-
-    if (isAbsolute) return '/' + path;
-    return path;
-  },
-
-  isAbsolute: function isAbsolute(path) {
-    assertPath(path);
-    return path.length > 0 && path.charCodeAt(0) === 47 /*/*/;
-  },
-
-  join: function join() {
-    if (arguments.length === 0)
-      return '.';
-    var joined;
-    for (var i = 0; i < arguments.length; ++i) {
-      var arg = arguments[i];
-      assertPath(arg);
-      if (arg.length > 0) {
-        if (joined === undefined)
-          joined = arg;
-        else
-          joined += '/' + arg;
-      }
-    }
-    if (joined === undefined)
-      return '.';
-    return posix.normalize(joined);
-  },
-
-  relative: function relative(from, to) {
-    assertPath(from);
-    assertPath(to);
-
-    if (from === to) return '';
-
-    from = posix.resolve(from);
-    to = posix.resolve(to);
-
-    if (from === to) return '';
-
-    // Trim any leading backslashes
-    var fromStart = 1;
-    for (; fromStart < from.length; ++fromStart) {
-      if (from.charCodeAt(fromStart) !== 47 /*/*/)
-        break;
-    }
-    var fromEnd = from.length;
-    var fromLen = fromEnd - fromStart;
-
-    // Trim any leading backslashes
-    var toStart = 1;
-    for (; toStart < to.length; ++toStart) {
-      if (to.charCodeAt(toStart) !== 47 /*/*/)
-        break;
-    }
-    var toEnd = to.length;
-    var toLen = toEnd - toStart;
-
-    // Compare paths to find the longest common path from root
-    var length = fromLen < toLen ? fromLen : toLen;
-    var lastCommonSep = -1;
-    var i = 0;
-    for (; i <= length; ++i) {
-      if (i === length) {
-        if (toLen > length) {
-          if (to.charCodeAt(toStart + i) === 47 /*/*/) {
-            // We get here if `from` is the exact base path for `to`.
-            // For example: from='/foo/bar'; to='/foo/bar/baz'
-            return to.slice(toStart + i + 1);
-          } else if (i === 0) {
-            // We get here if `from` is the root
-            // For example: from='/'; to='/foo'
-            return to.slice(toStart + i);
-          }
-        } else if (fromLen > length) {
-          if (from.charCodeAt(fromStart + i) === 47 /*/*/) {
-            // We get here if `to` is the exact base path for `from`.
-            // For example: from='/foo/bar/baz'; to='/foo/bar'
-            lastCommonSep = i;
-          } else if (i === 0) {
-            // We get here if `to` is the root.
-            // For example: from='/foo'; to='/'
-            lastCommonSep = 0;
-          }
-        }
-        break;
-      }
-      var fromCode = from.charCodeAt(fromStart + i);
-      var toCode = to.charCodeAt(toStart + i);
-      if (fromCode !== toCode)
-        break;
-      else if (fromCode === 47 /*/*/)
-        lastCommonSep = i;
-    }
-
-    var out = '';
-    // Generate the relative path based on the path difference between `to`
-    // and `from`
-    for (i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i) {
-      if (i === fromEnd || from.charCodeAt(i) === 47 /*/*/) {
-        if (out.length === 0)
-          out += '..';
-        else
-          out += '/..';
-      }
-    }
-
-    // Lastly, append the rest of the destination (`to`) path that comes after
-    // the common path parts
-    if (out.length > 0)
-      return out + to.slice(toStart + lastCommonSep);
-    else {
-      toStart += lastCommonSep;
-      if (to.charCodeAt(toStart) === 47 /*/*/)
-        ++toStart;
-      return to.slice(toStart);
-    }
-  },
-
-  _makeLong: function _makeLong(path) {
-    return path;
-  },
-
-  dirname: function dirname(path) {
-    assertPath(path);
-    if (path.length === 0) return '.';
-    var code = path.charCodeAt(0);
-    var hasRoot = code === 47 /*/*/;
-    var end = -1;
-    var matchedSlash = true;
-    for (var i = path.length - 1; i >= 1; --i) {
-      code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          if (!matchedSlash) {
-            end = i;
-            break;
-          }
-        } else {
-        // We saw the first non-path separator
-        matchedSlash = false;
-      }
-    }
-
-    if (end === -1) return hasRoot ? '/' : '.';
-    if (hasRoot && end === 1) return '//';
-    return path.slice(0, end);
-  },
-
-  basename: function basename(path, ext) {
-    if (ext !== undefined && typeof ext !== 'string') throw new TypeError('"ext" argument must be a string');
-    assertPath(path);
-
-    var start = 0;
-    var end = -1;
-    var matchedSlash = true;
-    var i;
-
-    if (ext !== undefined && ext.length > 0 && ext.length <= path.length) {
-      if (ext.length === path.length && ext === path) return '';
-      var extIdx = ext.length - 1;
-      var firstNonSlashEnd = -1;
-      for (i = path.length - 1; i >= 0; --i) {
-        var code = path.charCodeAt(i);
-        if (code === 47 /*/*/) {
-            // If we reached a path separator that was not part of a set of path
-            // separators at the end of the string, stop now
-            if (!matchedSlash) {
-              start = i + 1;
-              break;
-            }
-          } else {
-          if (firstNonSlashEnd === -1) {
-            // We saw the first non-path separator, remember this index in case
-            // we need it if the extension ends up not matching
-            matchedSlash = false;
-            firstNonSlashEnd = i + 1;
-          }
-          if (extIdx >= 0) {
-            // Try to match the explicit extension
-            if (code === ext.charCodeAt(extIdx)) {
-              if (--extIdx === -1) {
-                // We matched the extension, so mark this as the end of our path
-                // component
-                end = i;
-              }
-            } else {
-              // Extension does not match, so our result is the entire path
-              // component
-              extIdx = -1;
-              end = firstNonSlashEnd;
-            }
-          }
-        }
-      }
-
-      if (start === end) end = firstNonSlashEnd;else if (end === -1) end = path.length;
-      return path.slice(start, end);
-    } else {
-      for (i = path.length - 1; i >= 0; --i) {
-        if (path.charCodeAt(i) === 47 /*/*/) {
-            // If we reached a path separator that was not part of a set of path
-            // separators at the end of the string, stop now
-            if (!matchedSlash) {
-              start = i + 1;
-              break;
-            }
-          } else if (end === -1) {
-          // We saw the first non-path separator, mark this as the end of our
-          // path component
-          matchedSlash = false;
-          end = i + 1;
-        }
-      }
-
-      if (end === -1) return '';
-      return path.slice(start, end);
-    }
-  },
-
-  extname: function extname(path) {
-    assertPath(path);
-    var startDot = -1;
-    var startPart = 0;
-    var end = -1;
-    var matchedSlash = true;
-    // Track the state of characters (if any) we see before our first dot and
-    // after any path separator we find
-    var preDotState = 0;
-    for (var i = path.length - 1; i >= 0; --i) {
-      var code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          // If we reached a path separator that was not part of a set of path
-          // separators at the end of the string, stop now
-          if (!matchedSlash) {
-            startPart = i + 1;
-            break;
-          }
-          continue;
-        }
-      if (end === -1) {
-        // We saw the first non-path separator, mark this as the end of our
-        // extension
-        matchedSlash = false;
-        end = i + 1;
-      }
-      if (code === 46 /*.*/) {
-          // If this is our first dot, mark it as the start of our extension
-          if (startDot === -1)
-            startDot = i;
-          else if (preDotState !== 1)
-            preDotState = 1;
-      } else if (startDot !== -1) {
-        // We saw a non-dot and non-path separator before our dot, so we should
-        // have a good chance at having a non-empty extension
-        preDotState = -1;
-      }
-    }
-
-    if (startDot === -1 || end === -1 ||
-        // We saw a non-dot character immediately before the dot
-        preDotState === 0 ||
-        // The (right-most) trimmed path component is exactly '..'
-        preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-      return '';
-    }
-    return path.slice(startDot, end);
-  },
-
-  format: function format(pathObject) {
-    if (pathObject === null || typeof pathObject !== 'object') {
-      throw new TypeError('The "pathObject" argument must be of type Object. Received type ' + typeof pathObject);
-    }
-    return _format('/', pathObject);
-  },
-
-  parse: function parse(path) {
-    assertPath(path);
-
-    var ret = { root: '', dir: '', base: '', ext: '', name: '' };
-    if (path.length === 0) return ret;
-    var code = path.charCodeAt(0);
-    var isAbsolute = code === 47 /*/*/;
-    var start;
-    if (isAbsolute) {
-      ret.root = '/';
-      start = 1;
-    } else {
-      start = 0;
-    }
-    var startDot = -1;
-    var startPart = 0;
-    var end = -1;
-    var matchedSlash = true;
-    var i = path.length - 1;
-
-    // Track the state of characters (if any) we see before our first dot and
-    // after any path separator we find
-    var preDotState = 0;
-
-    // Get non-dir info
-    for (; i >= start; --i) {
-      code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          // If we reached a path separator that was not part of a set of path
-          // separators at the end of the string, stop now
-          if (!matchedSlash) {
-            startPart = i + 1;
-            break;
-          }
-          continue;
-        }
-      if (end === -1) {
-        // We saw the first non-path separator, mark this as the end of our
-        // extension
-        matchedSlash = false;
-        end = i + 1;
-      }
-      if (code === 46 /*.*/) {
-          // If this is our first dot, mark it as the start of our extension
-          if (startDot === -1) startDot = i;else if (preDotState !== 1) preDotState = 1;
-        } else if (startDot !== -1) {
-        // We saw a non-dot and non-path separator before our dot, so we should
-        // have a good chance at having a non-empty extension
-        preDotState = -1;
-      }
-    }
-
-    if (startDot === -1 || end === -1 ||
-    // We saw a non-dot character immediately before the dot
-    preDotState === 0 ||
-    // The (right-most) trimmed path component is exactly '..'
-    preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-      if (end !== -1) {
-        if (startPart === 0 && isAbsolute) ret.base = ret.name = path.slice(1, end);else ret.base = ret.name = path.slice(startPart, end);
-      }
-    } else {
-      if (startPart === 0 && isAbsolute) {
-        ret.name = path.slice(1, startDot);
-        ret.base = path.slice(1, end);
-      } else {
-        ret.name = path.slice(startPart, startDot);
-        ret.base = path.slice(startPart, end);
-      }
-      ret.ext = path.slice(startDot, end);
-    }
-
-    if (startPart > 0) ret.dir = path.slice(0, startPart - 1);else if (isAbsolute) ret.dir = '/';
-
-    return ret;
-  },
-
-  sep: '/',
-  delimiter: ':',
-  win32: null,
-  posix: null
-};
-
-posix.posix = posix;
-
-module.exports = posix;
-
-}).call(this)}).call(this,require('_process'))
-},{"_process":448}],446:[function(require,module,exports){
+},{"./util.inspect":403}],444:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), filterAlpha = require("@pixi/filter-alpha"), filterBlur = require("@pixi/filter-blur"), filterColorMatrix = require("@pixi/filter-color-matrix"), filterDisplacement = require("@pixi/filter-displacement"), filterFxaa = require("@pixi/filter-fxaa"), filterNoise = require("@pixi/filter-noise");
 const filters = {
@@ -39959,7 +36371,7 @@ Object.entries(filters).forEach(([key, FilterClass]) => {
 exports.filters = filters;
 
 
-},{"@pixi/core":147,"@pixi/filter-alpha":241,"@pixi/filter-blur":246,"@pixi/filter-color-matrix":249,"@pixi/filter-displacement":253,"@pixi/filter-fxaa":257,"@pixi/filter-noise":259}],447:[function(require,module,exports){
+},{"@pixi/core":147,"@pixi/filter-alpha":241,"@pixi/filter-blur":246,"@pixi/filter-color-matrix":249,"@pixi/filter-displacement":253,"@pixi/filter-fxaa":257,"@pixi/filter-noise":259}],445:[function(require,module,exports){
 "use strict";
 require("@pixi/mixin-cache-as-bitmap");
 require("@pixi/mixin-get-child-by-name");
@@ -40176,193 +36588,7 @@ Object.keys(textHtml).forEach(function(k) {
 });
 
 
-},{"./filters.js":446,"@pixi/accessibility":36,"@pixi/app":39,"@pixi/assets":60,"@pixi/compressed-textures":93,"@pixi/core":147,"@pixi/display":224,"@pixi/events":235,"@pixi/extract":238,"@pixi/filter-alpha":241,"@pixi/filter-blur":246,"@pixi/filter-color-matrix":249,"@pixi/filter-displacement":253,"@pixi/filter-fxaa":257,"@pixi/filter-noise":259,"@pixi/graphics":265,"@pixi/mesh":303,"@pixi/mesh-extras":298,"@pixi/mixin-cache-as-bitmap":306,"@pixi/mixin-get-child-by-name":307,"@pixi/mixin-get-global-position":308,"@pixi/particle-container":312,"@pixi/prepare":319,"@pixi/sprite":340,"@pixi/sprite-animated":330,"@pixi/sprite-tiling":333,"@pixi/spritesheet":342,"@pixi/text":369,"@pixi/text-bitmap":352,"@pixi/text-html":364}],448:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],449:[function(require,module,exports){
+},{"./filters.js":444,"@pixi/accessibility":36,"@pixi/app":39,"@pixi/assets":60,"@pixi/compressed-textures":93,"@pixi/core":147,"@pixi/display":224,"@pixi/events":235,"@pixi/extract":238,"@pixi/filter-alpha":241,"@pixi/filter-blur":246,"@pixi/filter-color-matrix":249,"@pixi/filter-displacement":253,"@pixi/filter-fxaa":257,"@pixi/filter-noise":259,"@pixi/graphics":265,"@pixi/mesh":303,"@pixi/mesh-extras":298,"@pixi/mixin-cache-as-bitmap":306,"@pixi/mixin-get-child-by-name":307,"@pixi/mixin-get-global-position":308,"@pixi/particle-container":312,"@pixi/prepare":319,"@pixi/sprite":340,"@pixi/sprite-animated":330,"@pixi/sprite-tiling":333,"@pixi/spritesheet":342,"@pixi/text":369,"@pixi/text-bitmap":352,"@pixi/text-html":364}],446:[function(require,module,exports){
 'use strict';
 
 var inspect = require('object-inspect');
@@ -40477,7 +36703,7 @@ module.exports = function getSideChannelList() {
 	return channel;
 };
 
-},{"es-errors/type":418,"object-inspect":444}],450:[function(require,module,exports){
+},{"es-errors/type":418,"object-inspect":443}],447:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -40547,7 +36773,7 @@ module.exports = !!$Map && /** @type {Exclude<import('.'), false>} */ function g
 	return channel;
 };
 
-},{"call-bound":409,"es-errors/type":418,"get-intrinsic":425,"object-inspect":444}],451:[function(require,module,exports){
+},{"call-bound":409,"es-errors/type":418,"get-intrinsic":424,"object-inspect":443}],448:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -40633,7 +36859,7 @@ module.exports = $WeakMap
 	}
 	: getSideChannelMap;
 
-},{"call-bound":409,"es-errors/type":418,"get-intrinsic":425,"object-inspect":444,"side-channel-map":450}],452:[function(require,module,exports){
+},{"call-bound":409,"es-errors/type":418,"get-intrinsic":424,"object-inspect":443,"side-channel-map":447}],449:[function(require,module,exports){
 'use strict';
 
 var $TypeError = require('es-errors/type');
@@ -40678,7 +36904,7 @@ module.exports = function getSideChannel() {
 	return channel;
 };
 
-},{"es-errors/type":418,"object-inspect":444,"side-channel-list":449,"side-channel-map":450,"side-channel-weakmap":451}],453:[function(require,module,exports){
+},{"es-errors/type":418,"object-inspect":443,"side-channel-list":446,"side-channel-map":447,"side-channel-weakmap":448}],450:[function(require,module,exports){
 (function (global){(function (){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -41215,7 +37441,7 @@ module.exports = function getSideChannel() {
 }(this));
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],454:[function(require,module,exports){
+},{}],451:[function(require,module,exports){
 'use strict';
 
 var replace = String.prototype.replace;
@@ -41240,7 +37466,7 @@ module.exports = {
     RFC3986: Format.RFC3986
 };
 
-},{}],455:[function(require,module,exports){
+},{}],452:[function(require,module,exports){
 'use strict';
 
 var stringify = require('./stringify');
@@ -41253,7 +37479,7 @@ module.exports = {
     stringify: stringify
 };
 
-},{"./formats":454,"./parse":456,"./stringify":457}],456:[function(require,module,exports){
+},{"./formats":451,"./parse":453,"./stringify":454}],453:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -41583,7 +37809,7 @@ module.exports = function (str, opts) {
     return utils.compact(obj);
 };
 
-},{"./utils":458}],457:[function(require,module,exports){
+},{"./utils":455}],454:[function(require,module,exports){
 'use strict';
 
 var getSideChannel = require('side-channel');
@@ -41941,7 +38167,7 @@ module.exports = function (object, opts) {
     return joined.length > 0 ? prefix + joined : '';
 };
 
-},{"./formats":454,"./utils":458,"side-channel":452}],458:[function(require,module,exports){
+},{"./formats":451,"./utils":455,"side-channel":449}],455:[function(require,module,exports){
 'use strict';
 
 var formats = require('./formats');
@@ -42211,7 +38437,7 @@ module.exports = {
     merge: merge
 };
 
-},{"./formats":454}],459:[function(require,module,exports){
+},{"./formats":451}],456:[function(require,module,exports){
 /*
  * Copyright Joyent, Inc. and other Node contributors.
  *
@@ -42989,4 +39215,4 @@ exports.format = urlFormat;
 
 exports.Url = Url;
 
-},{"punycode/":453,"qs":455}]},{},[8,1,2,3,4,5,6,7,9,10,11,12,28,29,30,31,32,33,13,20,21,14,15,16,17,18,19,22,23,24,25,26,27]);
+},{"punycode/":450,"qs":452}]},{},[9,1,2,3,4,5,6,7,8,10,11,12,28,29,30,31,32,33,13,20,21,14,15,16,17,18,19,22,23,24,25,26,27]);

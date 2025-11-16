@@ -1,0 +1,41 @@
+import { IHitArea, Sprite } from "pixi.js";
+import GameCoordinator from "../core/gameCoordinator.js";
+import CharacterUtil from "../utilities/characterUtil.js";
+import EventEmitter from "eventemitter3";
+import { Coordinate, Position } from "./types.js";
+declare class Entity {
+    name: string;
+    allowCollision: boolean;
+    emitter: EventEmitter;
+    gameCoordinator: GameCoordinator;
+    scaledTileSize: number;
+    characterUtil?: undefined | CharacterUtil;
+    position: Position;
+    oldPosition: Position;
+    sprite: Sprite | null;
+    hitArea: IHitArea | null;
+    msSinceLastSprite: number;
+    animationTarget: any;
+    backgroundOffsetPixels: any;
+    frame: number;
+    msBetweenSprites: number;
+    animate: boolean;
+    measurement: number;
+    spriteFrames: number;
+    loopAnimation: boolean;
+    mazeArray: any;
+    moving: boolean;
+    display: boolean;
+    level: number;
+    direction: string;
+    constructor(gameCoordinator: GameCoordinator, name: string, characterUtil?: CharacterUtil);
+    getGridPosition(): Coordinate | undefined;
+    registerEventListeners(): void;
+    onReset(): void;
+    onDeath(): void;
+    reset(): void;
+    update(elapsedMs: number): void;
+    draw(interp: number): void;
+}
+export default Entity;
+//# sourceMappingURL=entity.d.ts.map

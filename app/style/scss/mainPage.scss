@@ -96,6 +96,7 @@ body {
   }
 
   .top {
+    //display: none;
     ._25 {
       width: 25%;
     }
@@ -131,17 +132,6 @@ body {
   }
 }
 
-.row-top-view {
-  position: absolute;
-  left:900px;
-  top: 20px; 
-} 
-
-.row-bottom-view {
-  left: 900px; 
-  top: 570px;
-  position: absolute;
-}
 @media (orientation: landscape) {
   .game-ui {
     height: 100%;
@@ -274,7 +264,7 @@ body {
 ._25 { left: 25%; }
 ._30 { left: 30%; }
 ._35 { left: 35%; }
-._40 { left: 40%; }
+._40 { left: 40%; } 
 ._45 { left: 45%; }
 ._50 { left: 50%; }
 ._55 { left: 55%; }

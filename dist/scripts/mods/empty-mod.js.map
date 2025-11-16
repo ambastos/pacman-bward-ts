@@ -1,0 +1,1 @@
+{"version":3,"file":"empty-mod.js","sourceRoot":"","sources":["../../../app/scripts/mods/empty-mod.ts"],"names":[],"mappings":"AACA,OAAO,GAAG,MAAM,UAAU,CAAC;AAE3B,MAAM,QAAS,SAAQ,GAAG;IACtB,YAAY,eAA+B;QACvC,KAAK,CAAC,eAAe,CAAC,CAAA;IAC1B,CAAC;CAEJ;AACD,eAAe,QAAQ,CAAA"}

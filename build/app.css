@@ -124,18 +124,6 @@ body {
   flex-direction: row-reverse;
 }
 
-.row-top-view {
-  position: absolute;
-  left: 900px;
-  top: 20px;
-}
-
-.row-bottom-view {
-  left: 900px;
-  top: 570px;
-  position: absolute;
-}
-
 @media (orientation: landscape) {
   .game-ui {
     height: 100%;
@@ -455,7 +443,7 @@ body {
 }
 
 .view {
-  position: absolute;
+  /*position: absolute;*/
 }
 .pacman {
   margin: 0;

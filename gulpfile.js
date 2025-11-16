@@ -9,8 +9,11 @@ import browserify from 'browserify'
 import babelify from 'babelify'
 import source from 'vinyl-source-stream'
 import buffer from 'vinyl-source-buffer'
-import path from 'path'
+import path, { resolve } from 'path'
 import fs from 'fs'
+import tsify from 'tsify'
+import ts from 'gulp-typescript'
+const tsProject = ts.createProject('tsconfig.json');
 
 const sassProcessor = sass(s)
 
@@ -21,19 +24,35 @@ function styles() {
     .pipe(gulp.dest('build'));
 }
 
-function scripts(cb) {
+async function buildTs() {
+  tsProject.src()
+    .pipe(tsProject())
+    .js.pipe(gulp.dest('dist/temp'))
+    
+}
+
+async function scripts(cb) {
+  await buildTs()
   const dir = path.resolve()
-  const basedir = path.join(dir, "app/scripts")
+  const basedir = path.join(dir, "dist/temp")
   const files = []
   fs.readdirSync(basedir,{recursive: true}).forEach(f=>{
-    if (f.endsWith(".js")) {
+    if (f.endsWith(".ts") || f.endsWith(".js")) {
       files.push(path.join(basedir, f))
     }
-  })
+  })  
 
   gulp.src("app/scripts/libraries/**/*.js")  
   .pipe(gulp.dest("build/libraries"))
-  
+  // browserify(files)
+  // .plugin(tsify, {target: 'es5'})
+  // .transform(babelify, {presets:['@babel/preset-env']})
+  // .bundle()
+  // .on("error",(error)=>{
+  //   throw error
+  // })
+  // .pipe(source('app.js'))
+  // .pipe(gulp.dest('build'))
   const r = browserify(files)
   .transform(babelify, {presets:['@babel/preset-env']})
   .bundle()
@@ -47,14 +66,15 @@ function scripts(cb) {
   .pipe(gulp.dest('./build'))
   .pipe(buffer())
   cb() 
-
 }
 
 function watch() {
+  //gulp.watch('app/scripts/**/*.ts' ,buildTs) 
   gulp.watch('app/style/**/*.scss', styles);
-  gulp.watch('app/scripts/**/*.js', scripts);
+  gulp.watch('app/scripts/**/*.ts', gulp.series(scripts));
 }
 
-const buildFiles = gulp.parallel(styles, scripts);
+const buildFiles = gulp.series(styles, scripts);
+gulp.task('default', gulp.series(buildFiles))
 
-export {watch, buildFiles}
+export {watch, buildTs, buildFiles}
