@@ -15,7 +15,7 @@ class IdleState extends state_js_1.State {
         this.drownManager.wave = new wave_js_1.default(this.drownManager, maze, width, 0);
         const wave = this.drownManager.wave;
         //this.flood.container.children.length = 1        
-        this.flood.container.addChild(wave);
+        this.flood.container.addChildAt(wave, 0);
         let waveTimeMs;
         if (timeToStartMS >= 0)
             waveTimeMs = timeToStartMS;

@@ -53,7 +53,10 @@ class Flood extends Mod{
         this.#registerListeners()
     }
     #registerListeners() {
-        this.emitter = this.gc.emitter
+       this.emitter = this.gc.emitter
+       this.emitter.on("game-over",()=>{
+        this.stop()
+       })
        this.#changePacmanDeathSequence() 
     }  
     #changePacmanDeathSequence() {
@@ -126,9 +129,6 @@ class Flood extends Mod{
         }
     }
 }
-
-// if (!process.env.NYC_PROCESS_ID) 
-//   global.window.Flood = Flood
 //removeIf(production)
 export default Flood
 //endRemoveIf

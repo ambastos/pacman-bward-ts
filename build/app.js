@@ -5392,6 +5392,7 @@ var DrownManager = /*#__PURE__*/function () {
     _defineProperty(this, "animator", void 0);
     _defineProperty(this, "flood", void 0);
     _defineProperty(this, "gp", void 0);
+    _defineProperty(this, "container", void 0);
     _defineProperty(this, "pacman", void 0);
     _defineProperty(this, "ghosts", void 0);
     _defineProperty(this, "emitter", void 0);
@@ -5401,6 +5402,7 @@ var DrownManager = /*#__PURE__*/function () {
     this.gp = flood.gp;
     this.gc.ghostCombo = 0;
     this.animator = new animator_js_1["default"](this);
+    this.container = flood.container;
   }
   return _createClass(DrownManager, [{
     key: "initialize",
@@ -5510,6 +5512,7 @@ var DrownManager = /*#__PURE__*/function () {
       if (this.wave) {
         this.gp.clear();
         this.gc.stage.removeChild(this.wave);
+        this.container.children.length = 0;
       }
     }
   }, {
@@ -5527,7 +5530,7 @@ var DrownManager = /*#__PURE__*/function () {
       var _this4 = this;
       if (this.wave) {
         this.animator.update();
-        var container = this.gc.stage;
+        var container = this.container;
         var bubbles = container.children.filter(function (f) {
           return f.name == 'buble';
         });
@@ -5964,15 +5967,17 @@ var Flood = /*#__PURE__*/function (_mod_js_1$default) {
       }
     }
   }]);
-}(mod_js_1["default"]); // if (!process.env.NYC_PROCESS_ID) 
-//   global.window.Flood = Flood
-//removeIf(production)
+}(mod_js_1["default"]); //removeIf(production)
 function _registerListeners() {
+  var _this3 = this;
   this.emitter = this.gc.emitter;
+  this.emitter.on("game-over", function () {
+    _this3.stop();
+  });
   _assertClassBrand(_Flood_brand, this, _changePacmanDeathSequence).call(this);
 }
 function _changePacmanDeathSequence() {
-  var _this3 = this;
+  var _this4 = this;
   this.gc.emitter.removeAllListeners("pacman-death");
   var _this = this;
   this.gc.emitter.on("pacman-death", function () {
@@ -5987,9 +5992,9 @@ function _changePacmanDeathSequence() {
         }
       };
       //@ts-ignore
-      _this3.gc.deathSequence(detail);
+      _this4.gc.deathSequence(detail);
     } else {
-      _this3.pacman.onDeath();
+      _this4.pacman.onDeath();
     }
   });
 }
@@ -6114,10 +6119,10 @@ var Wave = /*#__PURE__*/function (_pixi_js_1$Sprite) {
     //this.tint = "0x56DBE3"
     _this.maze = maze;
     _this.drownManager = drownManager;
-    /**@param{Graphics} */
     _this.gp = _this.drownManager.gp;
-    _this.container = _this.drownManager.gc.stage;
-    _this.gp.parent.setChildIndex(_this.gp, _this.gp.parent.children.length - 1);
+    _this.container = _this.drownManager.flood.container;
+    //if (this.container.children.length > 0) 
+    _this.container.addChild(_this.gp);
     _this.startTopY = Math.PI * 2;
     var numberOfBubles = Math.ceil(Math.random() * 3);
     var wayCells = _this.maze.mazeArray.map(function (f, i, a) {
@@ -6929,7 +6934,7 @@ var IdleState = /*#__PURE__*/function (_state_js_1$State) {
       this.drownManager.wave = new wave_js_1["default"](this.drownManager, maze, width, 0);
       var wave = this.drownManager.wave;
       //this.flood.container.children.length = 1        
-      this.flood.container.addChild(wave);
+      this.flood.container.addChildAt(wave, 0);
       var waveTimeMs;
       if (timeToStartMS >= 0) waveTimeMs = timeToStartMS;else while ((waveTimeMs = Math.random() * 15) <= 10) {}
       //between 15 and 40 seconds to generate a new wave     

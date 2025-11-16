@@ -20,6 +20,7 @@ class DrownManager {
     animator;
     flood;
     gp;
+    container;
     pacman;
     ghosts;
     emitter;
@@ -30,6 +31,7 @@ class DrownManager {
         this.gp = flood.gp;
         this.gc.ghostCombo = 0;
         this.animator = new animator_js_1.default(this);
+        this.container = flood.container;
     }
     initialize() {
         this.gc = this.flood.gc;
@@ -143,6 +145,7 @@ class DrownManager {
         if (this.wave) {
             this.gp.clear();
             this.gc.stage.removeChild(this.wave);
+            this.container.children.length = 0;
         }
     }
     stop() {
@@ -155,7 +158,7 @@ class DrownManager {
     update(elapsedMs) {
         if (this.wave) {
             this.animator.update();
-            const container = this.gc.stage;
+            const container = this.container;
             const bubbles = container.children.filter((f) => {
                 return f.name == 'buble';
             });

@@ -1,4 +1,4 @@
-import { Graphics } from "pixi.js"
+import { Container, Graphics } from "pixi.js"
 import Ghost from "../../../../../../../characters/ghost.js"
 import Pacman from "../../../../../../../characters/pacman.js"
 import GameCoordinator from "../../../../../../../core/gameCoordinator.js"
@@ -22,6 +22,7 @@ class DrownManager {
     animator:Animator
     flood:Flood
     gp:Graphics
+    container: Container
     pacman!:Pacman    
     ghosts!:Ghost[]
     emitter!:EventEmitter
@@ -32,6 +33,7 @@ class DrownManager {
         this.gp = flood.gp
         this.gc.ghostCombo = 0   
         this.animator = new Animator(this)
+        this.container = flood.container
     }
     initialize() {
         this.gc = this.flood.gc        
@@ -145,6 +147,7 @@ class DrownManager {
         if (this.wave) { 
             this.gp.clear()
             this.gc.stage.removeChild(this.wave)
+            this.container.children.length = 0
         }        
     }
     stop() {
@@ -157,7 +160,7 @@ class DrownManager {
     update(elapsedMs: number) {
         if (this.wave) {
             this.animator.update()
-            const container = this.gc.stage
+            const container = this. container
             const bubbles = container.children.filter((f)=>{
                 return f.name == 'buble'
             })

@@ -1,4 +1,4 @@
-import { Graphics, Polygon, Sprite, Texture } from "pixi.js"
+import { Container, DisplayObject, Graphics, Polygon, Sprite, Texture } from "pixi.js"
 import Maze from "../../../../../../../mazes/maze.js"
 import DrownManager from "./drownManager.js"
 
@@ -10,8 +10,8 @@ class Wave extends Sprite {
     lastTime = 0
     maze: Maze 
     drownManager: DrownManager
-    gp: any
-    container: any
+    gp: Graphics
+    container: Container
     startTopY: number
     bublesLocation!: any[]
     duration!:number
@@ -22,15 +22,14 @@ class Wave extends Sprite {
         this.visible = false   
         this.alpha = 0  
         //this.tint = "0x56DBE3"
-        this.maze = maze            
-        this.drownManager = drownManager        
-        /**@param{Graphics} */
-        this.gp = this.drownManager.gp
-        this.container = this.drownManager.gc.stage 
+        this.maze = maze                             
+        this.drownManager = drownManager                 
+        this.gp = this.drownManager.gp 
+        this.container = this.drownManager.flood.container
+        //if (this.container.children.length > 0) 
+        this.container.addChild(this.gp)
 
-        this.gp.parent.setChildIndex(this.gp, this.gp.parent.children.length-1)
         this.startTopY = Math.PI * 2
-
         let numberOfBubles = Math.ceil(Math.random() * 3) 
         let wayCells = this.maze.mazeArray.map((f: any[],i: any, a: any)=>{ 
             var rr = f.map((g: string,j: any)=>{   
@@ -95,8 +94,8 @@ class Wave extends Sprite {
                     this.bublesLocation[i].col,this.bublesLocation[i].row
                 )
                 if (pixelBounds.y <= this.y) {                      
-                    const buble = this.container.children.find((f: { name: string; y: number })=>{
-                        if (f.name == 'buble') {
+                    const buble = this.container.children.find((f: DisplayObject)=>{
+                        if (f.name == 'buble') { 
                             if (f.y <= this.y)
                                 return f
                         }
@@ -116,9 +115,9 @@ class Wave extends Sprite {
     }
     cancel() {
         this.started = false
-        const bubles = this.container.children.filter((f: { name: string })=>f.name=='buble')
+        const bubles = this.container.children.filter((f: DisplayObject)=>f.name=='buble')
         for (let i = bubles.length -1; i >= 0; i--) {
-            this.container.removeChild(bubles[i])
+            this.container.removeChild(bubles[i] as DisplayObject)
         }
     }
     show() {

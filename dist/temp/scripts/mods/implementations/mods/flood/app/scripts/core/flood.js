@@ -52,6 +52,9 @@ class Flood extends mod_js_1.default {
     }
     #registerListeners() {
         this.emitter = this.gc.emitter;
+        this.emitter.on("game-over", () => {
+            this.stop();
+        });
         this.#changePacmanDeathSequence();
     }
     #changePacmanDeathSequence() {
@@ -124,8 +127,6 @@ class Flood extends mod_js_1.default {
         }
     }
 }
-// if (!process.env.NYC_PROCESS_ID) 
-//   global.window.Flood = Flood
 //removeIf(production)
 exports.default = Flood;
 //endRemoveIf

@@ -23,10 +23,10 @@ class Wave extends pixi_js_1.Sprite {
         //this.tint = "0x56DBE3"
         this.maze = maze;
         this.drownManager = drownManager;
-        /**@param{Graphics} */
         this.gp = this.drownManager.gp;
-        this.container = this.drownManager.gc.stage;
-        this.gp.parent.setChildIndex(this.gp, this.gp.parent.children.length - 1);
+        this.container = this.drownManager.flood.container;
+        //if (this.container.children.length > 0) 
+        this.container.addChild(this.gp);
         this.startTopY = Math.PI * 2;
         let numberOfBubles = Math.ceil(Math.random() * 3);
         let wayCells = this.maze.mazeArray.map((f, i, a) => {
