@@ -6,7 +6,7 @@ import CharacterUtil from "../utilities/characterUtil.js";
 class Pacman extends Entity{
   velocityPerMs!:number
   pacmanArrow:any
-  spriteArrow!:Sprite | null
+  spriteArrow!:Sprite | undefined
   specialAnimation!:boolean
   desiredDirection!: string;
   defaultPosition!: { top: number; left: number; };
@@ -16,8 +16,8 @@ class Pacman extends Entity{
     this.scaledTileSize = gameCoordinator.scaledTileSize;
     this.mazeArray = gameCoordinator.mazeArray;
     this.characterUtil = characterUtil;
-    this.sprite = null
-    this.spriteArrow = null
+    this.sprite = undefined
+    this.spriteArrow = undefined
     this.reset();
   }
 
@@ -158,16 +158,16 @@ class Pacman extends Entity{
     if (!this.sprite)
       this.sprite = new Sprite(texture)
     else
-      this.sprite.texture = texture
-    
+      this.sprite.texture = texture as Texture
+    this.sprite.zIndex = 1
   }
   setArrowSprite(direction: string, frameX: number, death?: boolean) {    
     const textureArrow = this.getArrowTexture(direction, death)
     if (!this.spriteArrow) 
-      this.spriteArrow = new Sprite(textureArrow)
+      this.spriteArrow = new Sprite(textureArrow as Texture)
     else 
-      this.spriteArrow.texture = textureArrow
-    
+      this.spriteArrow.texture = textureArrow as Texture
+    this.spriteArrow.zIndex = 1    
   }
   prepDeathAnimation() {
     this.loopAnimation = false;

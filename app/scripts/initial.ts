@@ -2,8 +2,8 @@
 // import Debugger from "./utilities/debugger.js";
 // import FloodModImp from "../mods/implementations/flood-mod-imp.js";
 
+import FloodModImp from "../mods/implementations/flood-mod-imp.js"
 import GameCoordinator from "./core/gameCoordinator.js"
-import FloodModImp from "./mods/implementations/flood-mod-imp.js"
 import Debugger from "./utilities/debugger.js"
 
   window.onload = () =>{

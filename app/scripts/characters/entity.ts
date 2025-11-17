@@ -13,7 +13,7 @@ class Entity {
     characterUtil?:undefined | CharacterUtil
     position!: Position
     oldPosition!:Position
-    sprite!:Sprite | null
+    sprite!:Sprite | undefined
     hitArea!:IHitArea | null
     msSinceLastSprite:number=0
     frame:number = 0

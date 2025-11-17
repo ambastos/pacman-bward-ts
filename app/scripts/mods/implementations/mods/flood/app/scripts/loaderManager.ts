@@ -1,5 +1,0 @@
-class LoaderManager {
-    constructor() {
-        
-    }
-}

@@ -6,8 +6,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const flood_mod_imp_js_1 = __importDefault(require("../mods/implementations/flood-mod-imp.js"));
 const gameCoordinator_js_1 = __importDefault(require("./core/gameCoordinator.js"));
-const flood_mod_imp_js_1 = __importDefault(require("./mods/implementations/flood-mod-imp.js"));
 const debugger_js_1 = __importDefault(require("./utilities/debugger.js"));
 window.onload = () => {
     window.gc = new gameCoordinator_js_1.default();

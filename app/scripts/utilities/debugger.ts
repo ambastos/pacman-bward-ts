@@ -174,12 +174,11 @@ class Debugger {
         ctx!.strokeStyle = 'red'
         ctx!.strokeRect(pacX, pacY, this.tileSize, this.tileSize)
     }
-
     clearGrid() {
         const mazeX = this.mazeDiv.offset().left
         const mazeY = this.mazeDiv.offset().top
         const width = this.mazeDiv.width()
-        const height = this.mazeDiv.height()
+        const height = this.mazeDiv.height() 
         let ctx = this.canvas.getContext("2d") 
         ctx!.clearRect(mazeX-1,mazeY-1, width+2, height+2)
     }

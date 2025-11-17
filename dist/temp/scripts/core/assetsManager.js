@@ -157,16 +157,114 @@ class AssetsManager {
             "5000",
             "extra_life"
         ];
+        const audioBase = 'app/style/audio/';
+        const audioSources = [
+            `${audioBase}game_start.mp3`,
+            `${audioBase}pause.mp3`,
+            `${audioBase}pause_beat.mp3`,
+            `${audioBase}siren_1.mp3`,
+            `${audioBase}siren_2.mp3`,
+            `${audioBase}siren_3.mp3`,
+            `${audioBase}power_up.mp3`,
+            `${audioBase}extra_life.mp3`,
+            `${audioBase}eyes.mp3`,
+            `${audioBase}eat_ghost.mp3`,
+            `${audioBase}death.mp3`,
+            `${audioBase}fruit.mp3`,
+            `${audioBase}dot_1.mp3`,
+            `${audioBase}dot_2.mp3`,
+        ];
+        const loadingContainer = document.getElementById('loading-container');
+        const loadingPacman = document.getElementById('loading-pacman');
+        const loadingDotMask = document.getElementById('loading-dot-mask');
+        const containerWidth = loadingContainer.scrollWidth
+            - loadingPacman.scrollWidth;
+        const gc = this.gameCoordinator;
+        const gameCoordRef = this.gameCoordinator;
+        const modResources = gc.mod.getResources();
+        const totalSources = imageAliases.length + modResources.length + audioSources.length;
+        gc.remainingSources = totalSources;
+        loadingPacman.style.left = '0';
+        loadingDotMask.style.width = '0';
+        let loadedSources = 0;
+        //load images
         await pixi_js_1.Assets.load(imageAliases, (progress) => {
             //console.log("loading assets", progress)
+            gameCoordRef.remainingSources -= 1;
+            loadedSources += 1;
+            const percent = 1 - gameCoordRef.remainingSources / totalSources;
+            loadingPacman.style.left = `${percent * containerWidth}px`;
+            loadingDotMask.style.width = loadingPacman.style.left;
         });
-        //put the audios here:      
+        //initialize the current mod 
+        await gc.mod.loadAssets((progress) => {
+            gameCoordRef.remainingSources -= 1;
+            loadedSources += 1;
+            const percent = 1 - gameCoordRef.remainingSources / totalSources;
+        });
         this.createTextures();
+        this.createElements(audioSources, "audio", totalSources, gc)
+            .then(() => {
+            loadingContainer.style.opacity = "0";
+            setTimeout(() => {
+                loadingContainer.remove();
+                gc.mainMenu.style.opacity = "1";
+                gc.mainMenu.style.visibility = 'visible';
+            }, 1500);
+        });
+    }
+    /**
+     * Iterates through a list of sources and updates the loading bar as the assets load in
+     * @param {String[]} sources
+     * @param {('img'|'audio')} type
+     * @param {Number} totalSources
+     * @param {Object} gameCoord
+     * @returns {Promise}
+     */
+    createElements(sources, type, totalSources, gameCoord) {
+        const loadingContainer = document.getElementById('loading-container');
+        const preloadDiv = document.getElementById('preload-div');
+        const loadingPacman = document.getElementById('loading-pacman');
+        const containerWidth = loadingContainer.scrollWidth
+            - loadingPacman.scrollWidth;
+        const loadingDotMask = document.getElementById('loading-dot-mask');
+        const gameCoordRef = gameCoord;
+        return new Promise((resolve, reject) => {
+            let loadedSources = 0;
+            sources.forEach((source) => {
+                const element = type === 'img' ? new Image() : new Audio();
+                preloadDiv.appendChild(element);
+                const elementReady = () => {
+                    gameCoordRef.remainingSources -= 1;
+                    loadedSources += 1;
+                    const percent = 1 - gameCoordRef.remainingSources / totalSources;
+                    loadingPacman.style.left = `${percent * containerWidth}px`;
+                    loadingDotMask.style.width = loadingPacman.style.left;
+                    if (loadedSources === sources.length) {
+                        resolve();
+                    }
+                };
+                if (type === 'img') {
+                    element.onload = elementReady;
+                    element.onerror = reject;
+                }
+                else {
+                    element.addEventListener('canplaythrough', elementReady);
+                    element.onerror = reject;
+                }
+                element.src = source;
+                if (type === 'audio') {
+                    element.load();
+                }
+            });
+        });
     }
     createTextures() {
         //the maze background sprite
         this.textures.set("mazeBlue", pixi_js_1.Texture.from("maze_blue"));
         this.textures.set("mazeWhite", pixi_js_1.Texture.from("maze_white"));
+        this.gameCoordinator.mazeSprite = new pixi_js_1.Sprite(pixi_js_1.Texture.from("maze_blue"));
+        this.gameCoordinator.stage.addChild(this.gameCoordinator.mazeSprite);
         this.createPacmanSprite();
         this.createGhostsSprites();
         this.createPickupsSprite();

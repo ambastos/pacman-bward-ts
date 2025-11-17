@@ -18,8 +18,8 @@ class Pacman extends entity_js_1.default {
         this.scaledTileSize = gameCoordinator.scaledTileSize;
         this.mazeArray = gameCoordinator.mazeArray;
         this.characterUtil = characterUtil;
-        this.sprite = null;
-        this.spriteArrow = null;
+        this.sprite = undefined;
+        this.spriteArrow = undefined;
         this.reset();
     }
     /**
@@ -150,6 +150,7 @@ class Pacman extends entity_js_1.default {
             this.sprite = new pixi_js_1.Sprite(texture);
         else
             this.sprite.texture = texture;
+        this.sprite.zIndex = 1;
     }
     setArrowSprite(direction, frameX, death) {
         const textureArrow = this.getArrowTexture(direction, death);
@@ -157,6 +158,7 @@ class Pacman extends entity_js_1.default {
             this.spriteArrow = new pixi_js_1.Sprite(textureArrow);
         else
             this.spriteArrow.texture = textureArrow;
+        this.spriteArrow.zIndex = 1;
     }
     prepDeathAnimation() {
         this.loopAnimation = false;

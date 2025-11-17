@@ -54,6 +54,7 @@
     "@types/assert": "^1.5.11",
     "@types/jquery": "^3.5.33",
     "@types/mocha": "^10.0.10",
+    "@types/node": "^24.10.1",
     "@types/sinon": "^20.0.0",
     "babelify": "^10.0.0",
     "browserify": "^17.0.1",

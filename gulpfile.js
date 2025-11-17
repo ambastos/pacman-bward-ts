@@ -3,7 +3,6 @@ import gulp from 'gulp'
 import * as s from 'sass'
 import sass from 'gulp-sass'
 import concat from 'gulp-concat'
-import {build} from 'esbuild'
 
 import browserify from 'browserify'
 import babelify from 'babelify'
@@ -11,7 +10,6 @@ import source from 'vinyl-source-stream'
 import buffer from 'vinyl-source-buffer'
 import path, { resolve } from 'path'
 import fs from 'fs'
-import tsify from 'tsify'
 import ts from 'gulp-typescript'
 const tsProject = ts.createProject('tsconfig.json');
 
@@ -64,14 +62,14 @@ async function scripts(cb) {
   })
   .pipe(source('app.js'))
   .pipe(gulp.dest('./build'))
-  .pipe(buffer())
-  cb() 
+  //.pipe(buffer())
+  cb()  
 }
 
 function watch() {
   //gulp.watch('app/scripts/**/*.ts' ,buildTs) 
   gulp.watch('app/style/**/*.scss', styles);
-  gulp.watch('app/scripts/**/*.ts', gulp.series(scripts));
+  gulp.watch(['app/scripts/**/*.ts', 'app/mods/**/*.ts'], gulp.series(scripts));
 }
 
 const buildFiles = gulp.series(styles, scripts);

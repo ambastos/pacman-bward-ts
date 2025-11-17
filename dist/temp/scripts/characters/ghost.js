@@ -35,7 +35,7 @@ class Ghost extends entity_js_1.default {
         this.level = level;
         this.characterUtil = characterUtil;
         this.blinky = blinky;
-        this.sprite = null;
+        this.sprite = undefined;
         this.reset();
     }
     /**
@@ -252,6 +252,7 @@ class Ghost extends entity_js_1.default {
             this.sprite = new pixi_js_1.Sprite(texture);
         else
             this.sprite.texture = texture;
+        this.sprite.zIndex = 1;
     }
     /**
      * Checks to see if the ghost is currently in the 'tunnels' on the outer edges of the maze

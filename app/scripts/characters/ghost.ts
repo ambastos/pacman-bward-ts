@@ -7,7 +7,6 @@ import { Coordinate, Position } from "./types.js";
 
 class Ghost extends Entity{
     pacman:Pacman
-    level:number
     blinky:Ghost | undefined;    
     defaultSpeed!:any    
     cruiseElroy!:any
@@ -38,7 +37,7 @@ class Ghost extends Entity{
     this.level = level;
     this.characterUtil = characterUtil;
     this.blinky = blinky;
-    this.sprite = null
+    this.sprite = undefined
 
     this.reset();    
     
@@ -270,7 +269,8 @@ class Ghost extends Entity{
       if (!this.sprite)
         this.sprite = new Sprite(texture)
       else
-        this.sprite.texture = texture
+        this.sprite.texture = texture  as Texture      
+      this.sprite.zIndex = 1
   }
   /**
    * Checks to see if the ghost is currently in the 'tunnels' on the outer edges of the maze
