@@ -1,5 +1,6 @@
 
-import gulp from 'gulp'
+import gulp, { src } from 'gulp'
+import cache from 'gulp-cached'
 import * as s from 'sass'
 import sass from 'gulp-sass'
 import concat from 'gulp-concat'
@@ -22,15 +23,14 @@ function styles() {
     .pipe(gulp.dest('build'));
 }
 
-async function buildTs() {
-  tsProject.src()
+async function buildTs(cb) {
+  tsProject.src()    
     .pipe(tsProject())
     .js.pipe(gulp.dest('dist/temp'))
-    
+    cb()
 }
 
 async function scripts(cb) {
-  await buildTs()
   const dir = path.resolve()
   const basedir = path.join(dir, "dist/temp")
   const files = []
@@ -62,17 +62,22 @@ async function scripts(cb) {
   })
   .pipe(source('app.js'))
   .pipe(gulp.dest('./build'))
-  //.pipe(buffer())
+  .pipe(buffer())
   cb()  
 }
-
-function watch() {
+  
+function watch(cb) {
   //gulp.watch('app/scripts/**/*.ts' ,buildTs) 
-  gulp.watch('app/style/**/*.scss', styles);
-  gulp.watch(['app/scripts/**/*.ts', 'app/mods/**/*.ts'], gulp.series(scripts));
+  //gulp.watch('app/style/**/*.scss', styles);
+
+  gulp.watch(['app/scripts/**/*.ts', 'app/mods/**/*.ts'],
+    {delay: 600,
+      queue:true
+    },
+    gulp.series(styles, buildTs, scripts));
 }
 
-const buildFiles = gulp.series(styles, scripts);
-gulp.task('default', gulp.series(buildFiles))
+const buildFiles = gulp.series(styles, buildTs, scripts);
+gulp.task('default', buildFiles)
 
-export {watch, buildTs, buildFiles}
+export {watch, buildTs}

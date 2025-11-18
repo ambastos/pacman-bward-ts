@@ -1,12 +1,12 @@
-import { Application, BaseTexture, Sprite, Texture, Container, Text,
+import {
+  Application, BaseTexture, Sprite, Texture, Container, Text,
   SCALE_MODES
- } from "pixi.js";
+} from "pixi.js";
 import * as PIXI from 'pixi.js'
 import EventEmitter from "eventemitter3"
 import Maze from "../mazes/maze.js";
 import MazeManager from "./mazeManagert.js";
 import SoundManager from "../utilities/soundManager.js";
-import { Position } from "../characters/types.js";
 import AssetsManager from "./assetsManager.js";
 import Ghost from "../characters/ghost.js";
 import Pacman from "../characters/pacman.js";
@@ -14,88 +14,88 @@ import Pickup from "../pickups/pickup.js";
 import CharacterUtil from "../utilities/characterUtil.js";
 import Entity from "../characters/entity.js";
 import GameEngine from "./gameEngine.js";
-import Timer from "../utilities/timer.js"; 
+import Timer from "../utilities/timer.js";
 import Mod from "../../mods/mod.js";
 import EmptyMod from "../../mods/empty-mod.js";
 //global.window.Assets = Assets
 //import path from 'path'
 const options = {
-    transparent: false,
-    resolution: 1,
-    antialias: false,      
+  transparent: false,
+  resolution: 1,
+  antialias: false,
 }
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST
 class GameCoordinator {
-    mod:Mod
-    gameUi:any
-    rowTop:any
-    mazeDiv:any
-    mazeCover:any
-    mainMenu:HTMLElement | null
-    gameStartButton:any
-    pauseButton:any
-    soundButton:any
-    leftCover:any
-    rightCover:any
-    pausedText:any
-    bottomRow:any
-    movementButtons:any
-    maxFps:number
-    tileSize:number
-    scale:number
-    scaledTileSize :number
-    height:number
-    width:number
-    maze:Maze | undefined
-    mazeArray:any
-    firstGame:boolean; 
-    movementKeys:any
-    fruitPoints:any
-    emitter!:EventEmitter
-    soundManager!:SoundManager
-    eyeGhosts!:number
-    ghostCombo!:number
-    am!:AssetsManager
-    mazeSprite!:Sprite
-    stage!: Container
-    remainingSources!:number
-    activeTimers!:Timer[];
-    points:number = 0;
-    level:number = 1;
-    lives:number = 2;
-    extraLifeGiven:boolean = false;
-    remainingDots:number = 0;
-    allowKeyPresses = true;
-    allowPacmanMovement = false;
-    allowPause = false;
-    cutscene = true;
-    highScore!:string | null
-    pacman!:Pacman 
-    blinky!:Ghost
-    pinky!:Ghost
-    inky!:Ghost
-    clyde!:Ghost
-    fruit!:Pickup
-    entityList!:Entity [] ;
-    ghosts!:Ghost[]
-    scaredGhosts!:Ghost[];    
-    idleGhosts!:Ghost[];
-    pickups!:Pickup[]
-    gameEngine!:GameEngine
-    renderer!: PIXI.Renderer
-    ghostCycleTimer!:Timer
-    endIdleTimer!:Timer
-    fruitTimer!:Timer
-    ghostFlashTimer!:Timer
-    topRender!:RendererTop    
-    bottomRender!:RendererBottom  
-    view!:any 
+  mod: Mod
+  gameUi: any
+  rowTop: any
+  mazeDiv: any
+  mazeCover: any
+  mainMenu: HTMLElement | null
+  gameStartButton: any
+  pauseButton: any
+  soundButton: any
+  leftCover: any
+  rightCover: any
+  pausedText: any
+  bottomRow: any
+  movementButtons: any
+  maxFps: number
+  tileSize: number
+  scale: number
+  scaledTileSize: number
+  height: number
+  width: number
+  maze: Maze | undefined
+  mazeArray: any
+  firstGame: boolean;
+  movementKeys: any
+  fruitPoints: any
+  emitter!: EventEmitter
+  soundManager!: SoundManager
+  eyeGhosts!: number
+  ghostCombo!: number
+  am!: AssetsManager
+  mazeSprite!: Sprite
+  stage!: Container
+  remainingSources!: number
+  activeTimers!: Timer[];
+  points: number = 0;
+  level: number = 1;
+  lives: number = 2;
+  extraLifeGiven: boolean = false;
+  remainingDots: number = 0;
+  allowKeyPresses = true;
+  allowPacmanMovement = false;
+  allowPause = false;
+  cutscene = true;
+  highScore!: string | null
+  pacman!: Pacman
+  blinky!: Ghost
+  pinky!: Ghost
+  inky!: Ghost
+  clyde!: Ghost
+  fruit!: Pickup
+  entityList!: Entity[];
+  ghosts!: Ghost[]
+  scaredGhosts!: Ghost[];
+  idleGhosts!: Ghost[];
+  pickups!: Pickup[]
+  gameEngine!: GameEngine
+  renderer!: PIXI.Renderer
+  ghostCycleTimer!: Timer
+  endIdleTimer!: Timer
+  fruitTimer!: Timer
+  ghostFlashTimer!: Timer
+  topRender!: RendererTop
+  bottomRender!: RendererBottom
+  view!: any
   constructor() {
     //super(options)
     this.mod = new EmptyMod(this)
     this.gameUi = document.getElementById('game-ui');
-    this.rowTop = document.getElementById('row-top');   
+    this.rowTop = document.getElementById('row-top');
     this.mazeDiv = document.getElementById('maze');
     this.mazeCover = document.getElementById('maze-cover');
     this.mainMenu = document.getElementById('main-menu-container');
@@ -105,29 +105,29 @@ class GameCoordinator {
     this.leftCover = document.getElementById('left-cover');
     this.rightCover = document.getElementById('right-cover');
     this.pausedText = document.getElementById('paused-text');
-    
+
     this.bottomRow = document.getElementById('bottom-row');
     this.movementButtons = document.getElementById('movement-buttons');
 
-    const mm = new MazeManager()    
-    this.maze = mm.get("maze1") 
+    const mm = new MazeManager()
+    this.maze = mm.get("maze1")
     this.mazeArray = this.maze!.mazeArray
 
     this.maxFps = 120;
-    this.tileSize = 8; 
+    this.tileSize = 8;
     this.scale = this.determineScale(1);
     //this.scaledTileSize = this.tileSize * this.scale;
     this.scaledTileSize = this.tileSize * 1;
     this.height = this.scaledTileSize * 31
     this.width = this.scaledTileSize * 28
-    this.maze!.setDimensions(this.width, this.height) 
+    this.maze!.setDimensions(this.width, this.height)
 
     //PIXI
     window['PIXI'] = PIXI
 
-    this.firstGame = true; 
+    this.firstGame = true;
     this.createUi()
-    this.movementKeys = { 
+    this.movementKeys = {
       // WASD
       87: 'up',
       83: 'down',
@@ -153,39 +153,39 @@ class GameCoordinator {
     };
 
     this.gameStartButton.addEventListener(
-    'click',
-    this.startButtonClick.bind(this),
+      'click',
+      this.startButtonClick.bind(this),
     );
     this.pauseButton.addEventListener('click', this.handlePauseKey.bind(this));
     this.soundButton.addEventListener(
-    'click',
-    this.soundButtonClick.bind(this),
+      'click',
+      this.soundButtonClick.bind(this),
     );
 
     let head = document.getElementsByTagName('head')[0];
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'build/app.css'; 
+    link.href = 'build/app.css';
 
     link.onload = this.preloadAssets.bind(this);
 
     head?.appendChild(link);
-    
+
   }
-  
+
   /**
    * Included to accpet a new mod to the game
    * @param {Mod} mod
    */
   setMod(mod: Mod) {
-    this.mod = mod 
+    this.mod = mod
   }
 
   /**
    * Recursive method which determines the largest possible scale the game's graphics can use
    * @param {Number} scale
    */
-  determineScale(scale:number):number {
+  determineScale(scale: number): number {
     const availableScreenHeight = Math.min(
       document.documentElement.clientHeight,
       window.innerHeight || 0,
@@ -215,7 +215,7 @@ class GameCoordinator {
   /**
    * Reveals the game underneath the loading covers and starts gameplay
    */
-  startButtonClick():void {
+  startButtonClick(): void {
     this.leftCover.style.left = '-50%';
     this.rightCover.style.right = '-50%';
     this.mainMenu!.style.opacity = "0";
@@ -246,7 +246,7 @@ class GameCoordinator {
   /**
    * Sets the icon for the sound button
    */
-  setSoundButtonIcon(newVolume:number) {
+  setSoundButtonIcon(newVolume: number) {
     this.soundButton.innerHTML = newVolume === 0 ? 'volume_off' : 'volume_up';
   }
 
@@ -259,7 +259,7 @@ class GameCoordinator {
     loadingContainer!.style.opacity = "0";
     setTimeout(() => {
       loadingContainer!.remove();
-      errorMessage!.style.opacity = 1+ "" ;
+      errorMessage!.style.opacity = 1 + "";
       errorMessage!.style.visibility = 'visible';
     }, 1500);
   }
@@ -268,8 +268,8 @@ class GameCoordinator {
    * Load all assets into a hidden Div to pre-load them into memory.
    */
   async preloadAssets() {
-     this.am = new AssetsManager(this)
-     await this.am.load()    
+    this.am = new AssetsManager(this)
+    await this.am.load()
   }
 
   /**
@@ -288,7 +288,7 @@ class GameCoordinator {
     this.cutscene = true;
     this.highScore = localStorage.getItem('highScore');
 
-    if (this.firstGame) {      
+    if (this.firstGame) {
       setInterval(() => {
         this.collisionDetectionLoop();
       }, 500);
@@ -325,7 +325,7 @@ class GameCoordinator {
       this.fruit = new Pickup(
         'fruit',
         13.5,
-        17,        
+        17,
         100,
         this
       );
@@ -345,23 +345,23 @@ class GameCoordinator {
     this.scaredGhosts = [];
     this.eyeGhosts = 0;
 
-    if (this.firstGame) {      
+    if (this.firstGame) {
 
       //add dots,  pacman, ghosts sprites to the stage
       this.drawMaze(this.mazeArray, this.entityList);
-      this.pickups.forEach(p=>{
-          //@ts-ignore
-          this.stage.addChild(p.sprite)
+      this.pickups.forEach(p => {
+        //@ts-ignore
+        this.stage.addChild(p.sprite)
       })
       //@ts-ignore
       this.stage.addChild(this.pacman.sprite)
       //@ts-ignore
       this.stage.addChild(this.pacman.spriteArrow)
-      this.ghosts.forEach(g=>{
+      this.ghosts.forEach(g => {
         //@ts-ignore
         this.stage.addChild(g.sprite)
       })
-      this.soundManager = new SoundManager();      
+      this.soundManager = new SoundManager();
       this.setUiDimensions();
     } else {
       this.pacman.reset();
@@ -382,10 +382,10 @@ class GameCoordinator {
     this.clearDisplay("fruitsDisplay")
 
     const vp = localStorage.getItem('volumePreference')
-    const volumePreference:number = vp ? Number(vp) : 1
+    const volumePreference: number = vp ? Number(vp) : 1
     this.setSoundButtonIcon(volumePreference);
     this.soundManager.setMasterVolume(volumePreference);
-    
+
   }
 
   /**
@@ -405,23 +405,23 @@ class GameCoordinator {
    * @param {Array} mazeArray - 2D array representing the game board
    * @param {Array} entityList - List of entities to be used throughout the game
    */
-  drawMaze(mazeArray:any, entityList:Entity[]) {
+  drawMaze(mazeArray: any, entityList: Entity[]) {
     this.pickups = [this.fruit];
-  
-    this.mazeDiv.style.height = `${this.height* this.scale}px`;
-    this.mazeDiv.style.width = `${this.width* this.scale}px`;
+
+    this.mazeDiv.style.height = `${this.height * this.scale}px`;
+    this.mazeDiv.style.width = `${this.width * this.scale}px`;
     this.gameUi.style.width = `${this.width * this.scale}px`;
     this.bottomRow.style.minHeight = `${this.scaledTileSize * 2}px`;
 
-    mazeArray.forEach((row:[], rowIndex:number) => {
-      row.forEach((block:string, columnIndex:number) => {        
+    mazeArray.forEach((row: [], rowIndex: number) => {
+      row.forEach((block: string, columnIndex: number) => {
         if (block === 'o' || block === 'O') {
           const type = block === 'o' ? 'pacdot' : 'powerPellet';
           const points = block === 'o' ? 10 : 50;
-          const dot:Pickup = new Pickup(
-            type,            
+          const dot: Pickup = new Pickup(
+            type,
             columnIndex,
-            rowIndex,            
+            rowIndex,
             points,
             this
           );
@@ -431,42 +431,42 @@ class GameCoordinator {
         }
       });
     });
-  } 
+  }
 
   createUi() {
     this.topRender = new RendererTop(this, {
       backgroundColor: 0x0000ff,
       width: this.width * this.scale,
-      height: this.height * 0.09 * this.scale 
-    } as PIXI.IRendererOptions) 
+      height: this.height * 0.09 * this.scale
+    } as PIXI.IRendererOptions)
     this.topRender.update()
 
-    this.bottomRender = new RendererBottom(this,{
+    this.bottomRender = new RendererBottom(this, {
       backgroundColor: 0x0000ff,
       width: this.width * this.scale,
       height: this.height * 0.06 * this.scale
     } as PIXI.IRendererOptions)
     this.bottomRender.update()
 
-     //canvas view     
+    //canvas view     
     this.view = document.createElement("canvas")
     this.view.width = (this.tileSize * 28) * this.scale
     this.view.height = (this.tileSize * 31) * this.scale
     this.mazeDiv.appendChild(this.view)
-    this.view.classList.add("view") 
+    this.view.classList.add("view")
 
     this.stage = new Container()
     this.stage.sortableChildren = true
     this.stage.scale.set(this.scale)
     const opts = {
-      view: this.view, 
+      view: this.view,
       width: this.view.width,
       height: this.view.height
     }
-    for (let opt in options ) 
+    for (let opt in options)
       //@ts-ignore
       opts[opt] = options[opt]
-    
+
     this.renderer = new PIXI.Renderer(opts)
   }
 
@@ -492,8 +492,8 @@ class GameCoordinator {
     if (this.pacman.position) {
       const maxDistance = this.pacman.velocityPerMs * 750;
       const pacmanCenter = {
-        x: this.pacman.position.left + this.scaledTileSize,
-        y: this.pacman.position.top + this.scaledTileSize,
+        x: this.pacman.position.x + this.scaledTileSize,
+        y: this.pacman.position.y + this.scaledTileSize,
       };
 
       // Set this flag to TRUE to see how two-phase collision detection works!
@@ -509,7 +509,7 @@ class GameCoordinator {
    * Displays "Ready!" and allows Pacman to move after a breif delay
    * @param {Boolean} initialStart - Special condition for the game's beginning
    */
-  startGameplay(initialStart?:boolean) {
+  startGameplay(initialStart?: boolean) {
     if (initialStart) {
       this.soundManager.play('game_start');
     }
@@ -518,19 +518,19 @@ class GameCoordinator {
     this.eyeGhosts = 0;
     this.allowPacmanMovement = false;
 
-    const left = this.scaledTileSize * 11;
-    const top = this.scaledTileSize * 16.5;
+    const x = this.scaledTileSize * 11;
+    const y = this.scaledTileSize * 16.5;
     const duration = initialStart ? 4500 : 2000;
     const width = this.scaledTileSize * 6;
     const height = this.scaledTileSize * 2;
 
-    this.displayText({ left, top }, 'ready', duration, width, height);
+    this.displayText({ x, y } as PIXI.ObservablePoint, 'ready', duration, width, height);
     this.updateExtraLivesDisplay();
 
     new Timer(() => {
 
       //for mods. start the mod 
-      this.mod.start() 
+      this.mod.start()
 
       this.allowPause = true;
       this.cutscene = false;
@@ -548,15 +548,15 @@ class GameCoordinator {
       this.ghostCycle('scatter');
 
       this.idleGhosts = [this.pinky, this.inky, this.clyde];
-      this.releaseGhost();  
-      this.emitter.emit("post-start")    
+      this.releaseGhost();
+      this.emitter.emit("post-start")
     }, duration);
   }
   /**
    * Clears out all children nodes from a given display element
    * @param {String} displayName
-   */  
-  clearDisplay(displayName:string) {
+   */
+  clearDisplay(displayName: string) {
     const display = this.bottomRender.container.getChildByName(displayName)
     //@ts-ignore
     if (display) display.children.length = 0
@@ -568,12 +568,12 @@ class GameCoordinator {
   updateHightScore() {
     this.topRender.update()
   }
-  
+
   /**
    * Displays extra life images equal to the number of remaining lives
    */
   updateExtraLivesDisplay() {
-    this.clearDisplay("livesDisplay") 
+    this.clearDisplay("livesDisplay")
 
     const livesDisplay = this.bottomRender.container.getChildByName("livesDisplay")
     let tx = this.am.getTexture("extra_life")
@@ -589,11 +589,11 @@ class GameCoordinator {
    * Displays a rolling log of the seven most-recently eaten fruit
    * @param {number} points
    */
-  updateFruitsDisplay(points:number) {
+  updateFruitsDisplay(points: number) {
     const name = this.fruit.getFruitName(points)
     const fruitsDisplay = this.bottomRender.container.getChildByName("fruitsDisplay")
     //@ts-ignore
-    if (fruitsDisplay!.length ==7) {
+    if (fruitsDisplay!.length == 7) {
       //@ts-ignore
       const first = fruitsDisplay!.getChildAt(0)
       if (first) fruitsDisplay!.removeChild(first)
@@ -601,8 +601,8 @@ class GameCoordinator {
     const fruitSp = new Sprite(this.am.getTexture(name))
     let x = 0
     //@ts-ignore
-    fruitsDisplay!.children.forEach(f=>x+=f.width)
-    x+=fruitSp.width
+    fruitsDisplay!.children.forEach(f => x += f.width)
+    x += fruitSp.width
     fruitSp.position.x = this.width - x
     //@ts-ignore
     fruitsDisplay!.addChild(fruitSp)
@@ -612,7 +612,7 @@ class GameCoordinator {
    * Cycles the ghosts between 'chase' and 'scatter' mode
    * @param {('chase'|'scatter')} mode
    */
-  ghostCycle(mode:string) {
+  ghostCycle(mode: string) {
     const delay = mode === 'scatter' ? 7000 : 20000;
     const nextMode = mode === 'scatter' ? 'chase' : 'scatter';
 
@@ -646,16 +646,16 @@ class GameCoordinator {
     //events: 
     //  load, start, post-start, pacman-death, post-death, ghost-eaten-<ghostName>, item-taken (item as argument),
     //  advance-level, game-over, speed-up-blinky, create-fruit
-    this.emitter = new EventEmitter()        
-    this.entityList.forEach((e)=>{
+    this.emitter = new EventEmitter()
+    this.entityList.forEach((e) => {
       e.emitter = this.emitter
       e.registerEventListeners()
     })
-    this.emitter.on("start", this.startGameplay.bind(this)) 
+    this.emitter.on("start", this.startGameplay.bind(this))
     this.emitter.on("advance-level", this.advanceLevel.bind(this))
     this.emitter.on("speed-up-blinky", this.speedUpBlinky.bind(this))
     this.emitter.on("create-fruit", this.createFruit.bind(this))
-    this.emitter.on("game-over", this.gameOver.bind(this)) 
+    this.emitter.on("game-over", this.gameOver.bind(this))
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     //@ts-ignore
     window.addEventListener('awardPoints', this.awardPoints.bind(this));
@@ -687,7 +687,7 @@ class GameCoordinator {
    * Calls Pacman's changeDirection event if certain conditions are met
    * @param {({'up'|'down'|'left'|'right'})} direction
    */
-  changeDirection(direction:string) {
+  changeDirection(direction: string) {
     if (this.allowKeyPresses && this.gameEngine.running) {
       this.pacman.changeDirection(direction, this.allowPacmanMovement);
     }
@@ -697,7 +697,7 @@ class GameCoordinator {
    * Calls various class functions depending upon the pressed key
    * @param {Event} e - The keydown event to evaluate
    */
-  handleKeyDown(e:KeyboardEvent) {
+  handleKeyDown(e: KeyboardEvent) {
     if (e.keyCode === 27) {
       // ESC key
       this.handlePauseKey();
@@ -752,7 +752,7 @@ class GameCoordinator {
    * Adds points to the player's total
    * @param {({ detail: { points: Number }})} e - Contains a quantity of points to add
    */
-  awardPoints(e:CustomEvent) {
+  awardPoints(e: CustomEvent) {
     this.points += e.detail.points;
     this.updatePoints()
     if (this.points > (Number(this.highScore) || 0)) {
@@ -769,16 +769,16 @@ class GameCoordinator {
     }
 
     if (e.detail.type === 'fruit') {
-      const left = e.detail.points >= 1000
+      const x = e.detail.points >= 1000
         ? this.scaledTileSize * 12.5
         : this.scaledTileSize * 13;
-      const top = this.scaledTileSize * 16.5;
+      const y = this.scaledTileSize * 16.5;
       const width = e.detail.points >= 1000
         ? this.scaledTileSize * 3
         : this.scaledTileSize * 2;
       const height = this.scaledTileSize * 2;
 
-      this.displayText({ left, top }, e.detail.points, 2000, width, height);
+      this.displayText({ x: x, y: y } as PIXI.ObservablePoint, e.detail.points, 2000, width, height);
       this.soundManager.play('fruit');
       this.updateFruitsDisplay(e.detail.points)
     }
@@ -791,7 +791,7 @@ class GameCoordinator {
   /**
    * Changed to suport events details values to change the behavior of this method 
    */
-  deathSequence(event:CustomEvent) {
+  deathSequence(event: CustomEvent) {
     this.allowPause = false;
     this.cutscene = true;
     this.soundManager.setCutscene(this.cutscene);
@@ -819,8 +819,8 @@ class GameCoordinator {
       if (this.lives > 0) {
         this.lives -= 1;
 
-      let callbackAfter = (event?.detail?.callbackAfter)
-      if (callbackAfter)
+        let callbackAfter = (event?.detail?.callbackAfter)
+        if (callbackAfter)
           callbackAfter()
         new Timer(() => {
           this.emitter.emit("post-death")
@@ -833,9 +833,9 @@ class GameCoordinator {
               ghost.reset();
             });
             this.fruit.hideFruit();
-            let shouldRestart =  (event?.detail?.restart) === undefined ?  true : (event.detail.restart)
-            
-            if (shouldRestart )
+            let shouldRestart = (event?.detail?.restart) === undefined ? true : (event.detail.restart)
+
+            if (shouldRestart)
               this.emitter.emit("start")
           }, 500);
         }, 2250);
@@ -851,15 +851,15 @@ class GameCoordinator {
   gameOver() {
     localStorage.setItem('highScore', this.highScore!);
 
-    new Timer(() => {      
+    new Timer(() => {
       //for mods
       this.mod.stop()
 
       this.displayText(
         {
-          left: this.scaledTileSize * 9,
-          top: this.scaledTileSize * 16.5,
-        },
+          x: this.scaledTileSize * 9,
+          y: this.scaledTileSize * 16.5,
+        } as PIXI.ObservablePoint,
         'game_over',
         4000,
         this.scaledTileSize * 10,
@@ -928,7 +928,7 @@ class GameCoordinator {
    * @param {Number} remainingDots
    * @returns {String}
    */
-  determineSiren(remainingDots:number):string {
+  determineSiren(remainingDots: number): string {
     let sirenNum;
 
     if (remainingDots > 40) {
@@ -981,7 +981,7 @@ class GameCoordinator {
               this.mazeSprite.texture = Texture.from("maze_white")
               new Timer(() => {
                 this.mazeSprite.texture = Texture.from("maze_blue")
-                new Timer(() => {                  
+                new Timer(() => {
                   this.mazeSprite.visible = false
                   new Timer(() => {
                     this.mazeSprite.visible = true
@@ -1020,7 +1020,7 @@ class GameCoordinator {
    * @param {Number} flashes - Total number of elapsed flashes
    * @param {Number} maxFlashes - Total flashes to show
    */
-  flashGhosts(flashes:number, maxFlashes:number) {
+  flashGhosts(flashes: number, maxFlashes: number) {
     if (flashes === maxFlashes) {
       this.scaredGhosts.forEach((ghost) => {
         ghost.endScared();
@@ -1080,7 +1080,7 @@ class GameCoordinator {
    * Upon eating a ghost, award points and temporarily pause movement
    * @param {CustomEvent} e - Contains a target ghost object
    */
-  eatGhost(e:CustomEvent) {
+  eatGhost(e: CustomEvent) {
     const pauseDuration = 1000;
     const { position, measurement } = e.detail.ghost;
 
@@ -1159,20 +1159,20 @@ class GameCoordinator {
    * @param {Number} width - Image width in pixels
    * @param {Number} height - Image height in pixels
    */
-  displayText(position:Position, amount:any, duration:number, width:number, height?:number) {
-    let textSp 
+  displayText(position: PIXI.ObservablePoint, amount: any, duration: number, width: number, height?: number) {
+    let textSp
     const texture = this.am.getTexture(amount)
     if (texture)
       textSp = new Sprite(texture)
-    else 
+    else
       textSp = new Text(amount, {
         fontFamily: "Press Start 2P",
         fontSize: 6,
         fill: 0xffffff
       })
-    textSp.width = width  
+    textSp.width = width
     textSp.height = height || width
-    textSp.position.set(position.left, position.top)
+    textSp.position.set(position.x, position.y)
 
     this.stage.addChild(textSp)
 
@@ -1185,7 +1185,7 @@ class GameCoordinator {
    * Pushes a Timer to the activeTimers array
    * @param {({ detail: { timer: Object }})} e
    */
-  addTimer(e: CustomEvent):void {
+  addTimer(e: CustomEvent): void {
     this.activeTimers.push(e.detail.timer);
   }
 
@@ -1194,7 +1194,7 @@ class GameCoordinator {
    * @param {({ detail: { timer: Object }})} e
    * @returns {Boolean}
    */
-  timerExists(e:CustomEvent):boolean {
+  timerExists(e: CustomEvent): boolean {
     return !!(e.detail.timer || {}).timerId;
   }
 
@@ -1202,7 +1202,7 @@ class GameCoordinator {
    * Pauses a timer
    * @param {({ detail: { timer: Object }})} e
    */
-  pauseTimer(e:CustomEvent) {
+  pauseTimer(e: CustomEvent) {
     if (this.timerExists(e)) {
       e.detail.timer.pause(true);
     }
@@ -1212,7 +1212,7 @@ class GameCoordinator {
    * Resumes a timer
    * @param {({ detail: { timer: Object }})} e
    */
-  resumeTimer(e:CustomEvent) {
+  resumeTimer(e: CustomEvent) {
     if (this.timerExists(e)) {
       e.detail.timer.resume(true);
     }
@@ -1222,7 +1222,7 @@ class GameCoordinator {
    * Removes a Timer from activeTimers
    * @param {({ detail: { timer: Object }})} e
    */
-  removeTimer(e:CustomEvent) {
+  removeTimer(e: CustomEvent) {
     if (this.timerExists(e)) {
       window.clearTimeout(e.detail.timer.timerId);
       this.activeTimers = this.activeTimers.filter(
@@ -1236,20 +1236,20 @@ export default GameCoordinator
 // endRemoveIf(production)
 
 class RendererTop extends PIXI.Renderer {
-  container:Container = new Container()
-  player1Label:Text
-  points:Text
-  highScoreLabel:Text
-  highScore:Text
-  gc:GameCoordinator
-  constructor(gameCoordinator:GameCoordinator, options:PIXI.IRendererOptions) {
-    super(options) 
-    this.gc = gameCoordinator   
+  container: Container = new Container()
+  player1Label: Text
+  points: Text
+  highScoreLabel: Text
+  highScore: Text
+  gc: GameCoordinator
+  constructor(gameCoordinator: GameCoordinator, options: PIXI.IRendererOptions) {
+    super(options)
+    this.gc = gameCoordinator
     const textStyle = {
       fontFamily: "Press Start 2P, sans-serif",
       fontSize: 8,
       //fontWeight: "bold",
-      fill: "0xffffff",      
+      fill: "0xffffff",
     }
     this.player1Label = new Text("", textStyle)
     this.points = new Text("", textStyle)
@@ -1262,10 +1262,10 @@ class RendererTop extends PIXI.Renderer {
     //@ts-ignore
     //this.view.classList.add("row-top-view")
     //@ts-ignore
-    this.gc.rowTop.appendChild(this.view) 
+    this.gc.rowTop.appendChild(this.view)
     this.container.scale.set(this.gc.scale)
   }
-  update() { 
+  update() {
     this.player1Label.text = ""
     this.player1Label.style.align = "left"
     this.player1Label.text = "1UP"
@@ -1273,49 +1273,49 @@ class RendererTop extends PIXI.Renderer {
     this.points.text = this.gc.points
     this.points.style.align = "right"
     this.highScoreLabel.style.align = "center"
-    this.highScoreLabel.text = ""  
+    this.highScoreLabel.text = ""
     this.highScoreLabel.text = "HIGH SCORE"
     this.highScore.style.align = "center"
     this.highScore.text = this.gc.highScore ? this.gc.highScore : 0
- 
+
     let x = 0, y = 2
     //text.scale.set(0.333) 
-    x = this.gc.width * 0.10 - this.player1Label.width * 0.5    
-    this.player1Label.position.set(x,y)
+    x = this.gc.width * 0.10 - this.player1Label.width * 0.5
+    this.player1Label.position.set(x, y)
     const line2y = this.view.height / (2 * this.gc.scale) * 0.9
     y = line2y
     x = this.gc.width * 0.20 - this.points.width * 0.5
-    this.points.position.set(x, y)   
+    this.points.position.set(x, y)
     //text.scale.set(0.333)
-    x = this.gc.width * 0.50 - this.highScoreLabel.width * 0.5    
+    x = this.gc.width * 0.50 - this.highScoreLabel.width * 0.5
     y = 2
-    this.highScoreLabel.position.set(x,y)    
+    this.highScoreLabel.position.set(x, y)
     x = this.gc.width * 0.50 - this.highScore.width * 0.5
     y = line2y
-    this.highScore.position.set(x, y)  
+    this.highScore.position.set(x, y)
   }
 }
 
 class RendererBottom extends PIXI.Renderer {
-  gc:GameCoordinator
+  gc: GameCoordinator
   container = new Container()
-  constructor(gameCoordinator:GameCoordinator, options:PIXI.IRendererOptions) {
+  constructor(gameCoordinator: GameCoordinator, options: PIXI.IRendererOptions) {
     super(options)
-    this.gc = gameCoordinator   
+    this.gc = gameCoordinator
     //@ts-ignore
- //   this.view.classList.add("row-bottom-view")
+    //   this.view.classList.add("row-bottom-view")
     this.container.scale.set(this.gc.scale)
     const livesDisplay = new Container()
     livesDisplay.name = "livesDisplay"
     this.container.addChild(livesDisplay)
-    const fruitsDisplay = new Container() 
-    fruitsDisplay.name = "fruitsDisplay" 
+    const fruitsDisplay = new Container()
+    fruitsDisplay.name = "fruitsDisplay"
     fruitsDisplay.x = this.container.width
     this.container.addChild(fruitsDisplay)
     //@ts-ignore
-    this.gc.bottomRow.appendChild(this.view) 
+    this.gc.bottomRow.appendChild(this.view)
   }
   update() {
-    
+
   }
 }

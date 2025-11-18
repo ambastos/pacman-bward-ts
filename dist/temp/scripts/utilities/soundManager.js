@@ -136,10 +136,6 @@ class SoundManager {
         }
     }
 }
-//Just to avoid problems with NYC coverage test
-// if (!process.env.NYC_PROCESS_ID) 
-//   global.window.SoundManager = SoundManager
 // removeIf(production)
-//module.exports = SoundManager;
 exports.default = SoundManager;
 // endRemoveIf(production)

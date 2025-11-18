@@ -1,23 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const pixi_js_1 = require("pixi.js");
-class Entity {
-    name;
+const utils_js_1 = require("../utilities/utils.js");
+class Entity extends pixi_js_1.Sprite {
     allowCollision = true;
     emitter;
     gameCoordinator;
     scaledTileSize;
     characterUtil;
-    position;
-    oldPosition;
+    defaultPosition = (0, utils_js_1.createObservablePoint)(this, 0, 0);
+    oldPosition = (0, utils_js_1.createObservablePoint)(this, 0, 0);
     sprite;
     hitArea;
     msSinceLastSprite = 0;
-    frame = 0;
     msBetweenSprites = 0;
+    frame = 0;
+    spriteFrames = 0;
     animate = false;
     measurement = 0;
-    spriteFrames = 0;
     loopAnimation = false;
     mazeArray;
     moving;
@@ -25,6 +25,7 @@ class Entity {
     level;
     direction;
     constructor(gameCoordinator, name, characterUtil) {
+        super();
         this.gameCoordinator = gameCoordinator;
         this.name = name;
         this.scaledTileSize = gameCoordinator.scaledTileSize;

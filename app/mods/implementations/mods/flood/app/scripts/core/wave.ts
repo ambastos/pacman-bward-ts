@@ -50,10 +50,10 @@ class Wave extends Sprite {
             let col = cols[indexCol]
             this.bubblesLocation.push({
                 row: row, 
-                col: col
-            }) 
-        }
-        this.entitiesManager.tryToGenerateEntity() 
+                col: col  
+            })  
+        } 
+        //this.entitiesManager.tryToGenerateEntity() 
     }
     increase(elapsedMs: number) {
         if (this.visible) {
@@ -76,12 +76,12 @@ class Wave extends Sprite {
                 bubleSprite.name = "bubble"
                 //bubleSprite.tint = 0x002400
                 //bubleSprite.alpha = 0.6 
-                bubleSprite.height = tileSize
+                bubleSprite.height = tileSize  
                 bubleSprite.width = tileSize
                 bubleSprite.position.set(pixelBounds.x, pixelBounds.y)
-                this.addElement(bubleSprite)
+                this.addElement(bubleSprite)    
                 //this.container.addChild(bubleSprite)
-            }
+            } 
         }
     }
     decrease(elapsedMs: number) {

@@ -427,8 +427,8 @@ class GameCoordinator {
         if (this.pacman.position) {
             const maxDistance = this.pacman.velocityPerMs * 750;
             const pacmanCenter = {
-                x: this.pacman.position.left + this.scaledTileSize,
-                y: this.pacman.position.top + this.scaledTileSize,
+                x: this.pacman.position.x + this.scaledTileSize,
+                y: this.pacman.position.y + this.scaledTileSize,
             };
             // Set this flag to TRUE to see how two-phase collision detection works!
             const debugging = false;
@@ -448,12 +448,12 @@ class GameCoordinator {
         this.scaredGhosts = [];
         this.eyeGhosts = 0;
         this.allowPacmanMovement = false;
-        const left = this.scaledTileSize * 11;
-        const top = this.scaledTileSize * 16.5;
+        const x = this.scaledTileSize * 11;
+        const y = this.scaledTileSize * 16.5;
         const duration = initialStart ? 4500 : 2000;
         const width = this.scaledTileSize * 6;
         const height = this.scaledTileSize * 2;
-        this.displayText({ left, top }, 'ready', duration, width, height);
+        this.displayText({ x, y }, 'ready', duration, width, height);
         this.updateExtraLivesDisplay();
         new timer_js_1.default(() => {
             //for mods. start the mod 
@@ -675,15 +675,15 @@ class GameCoordinator {
             this.updateExtraLivesDisplay();
         }
         if (e.detail.type === 'fruit') {
-            const left = e.detail.points >= 1000
+            const x = e.detail.points >= 1000
                 ? this.scaledTileSize * 12.5
                 : this.scaledTileSize * 13;
-            const top = this.scaledTileSize * 16.5;
+            const y = this.scaledTileSize * 16.5;
             const width = e.detail.points >= 1000
                 ? this.scaledTileSize * 3
                 : this.scaledTileSize * 2;
             const height = this.scaledTileSize * 2;
-            this.displayText({ left, top }, e.detail.points, 2000, width, height);
+            this.displayText({ x: x, y: y }, e.detail.points, 2000, width, height);
             this.soundManager.play('fruit');
             this.updateFruitsDisplay(e.detail.points);
         }
@@ -753,8 +753,8 @@ class GameCoordinator {
             //for mods
             this.mod.stop();
             this.displayText({
-                left: this.scaledTileSize * 9,
-                top: this.scaledTileSize * 16.5,
+                x: this.scaledTileSize * 9,
+                y: this.scaledTileSize * 16.5,
             }, 'game_over', 4000, this.scaledTileSize * 10, this.scaledTileSize * 2);
             this.fruit.hideFruit();
             new timer_js_1.default(() => {
@@ -1023,7 +1023,7 @@ class GameCoordinator {
             });
         textSp.width = width;
         textSp.height = height || width;
-        textSp.position.set(position.left, position.top);
+        textSp.position.set(position.x, position.y);
         this.stage.addChild(textSp);
         new timer_js_1.default(() => {
             this.stage.removeChild(textSp);

@@ -14,8 +14,6 @@ class Pickup extends entity_js_1.default {
     sprites;
     fruitImages;
     size;
-    x;
-    y;
     center;
     constructor(type, column, row, points, gameCoordinator) {
         super(gameCoordinator, "pickup", undefined);
@@ -202,8 +200,8 @@ class Pickup extends entity_js_1.default {
                 y: this.y,
                 size: this.size,
             }, {
-                x: this.pacman.position.left,
-                y: this.pacman.position.top,
+                x: this.pacman.position.x,
+                y: this.pacman.position.y,
                 size: this.pacman.measurement,
             })) {
                 this.sprite.visible = false;

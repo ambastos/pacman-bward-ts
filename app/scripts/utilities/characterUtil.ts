@@ -1,5 +1,6 @@
+import { ObservablePoint } from "pixi.js";
 import Entity from "../characters/entity.js";
-import { Coordinate, Position } from "../characters/types.js";
+import { copyPosition, createObservablePoint } from "./utils.js";
 
 class CharacterUtil {
   directions  
@@ -8,7 +9,7 @@ class CharacterUtil {
       up: "up",
       down: "down",
       left: "left",
-      right: "right",
+      right: "right", 
     }
   }
 
@@ -19,17 +20,17 @@ class CharacterUtil {
    * @param {({top: number, left: number})} oldPosition - Position during the previous frame
    * @returns {('hidden'|'visible')} - The new 'visibility' css property value for the character.
    */
-  checkForStutter(position:Position, oldPosition:Position):string {
+  checkForStutter(position:ObservablePoint, oldPosition:ObservablePoint):string {
     let stutter = false;
-    const threshold = 5;
+    const threshold = 5; 
 
     if (position && oldPosition) {
-      if (Math.abs(position.top - oldPosition.top) > threshold
-        || Math.abs(position.left - oldPosition.left) > threshold) {
+      if (Math.abs(position.y - oldPosition.y) > threshold
+        || Math.abs(position.x - oldPosition.x) > threshold) {
         stutter = true;
       }
     }
-
+    console.log("a") 
     return stutter ? 'hidden' : 'visible';
   }
 
@@ -38,13 +39,13 @@ class CharacterUtil {
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
    * @returns {('top'|'left')}
    */
-  getPropertyToChange(direction: string):string {
+  getPropertyToChange(direction: string):"x" | "y" {
     switch (direction) {
       case this.directions.up:
       case this.directions.down:
-        return 'top';
+        return "y";
       default:
-        return 'left';
+        return "x";
     }
   }
 
@@ -72,7 +73,8 @@ class CharacterUtil {
    * @param {({top: number, left: number})} position - Position during the current frame
    * @returns {number} - New value for css positioning
    */
-  calculateNewDrawValue(interp:number, prop:string, oldPosition:any, position:any):number {    
+  calculateNewDrawValue(interp:number, prop:"x"|"y",
+    oldPosition:ObservablePoint, position:ObservablePoint):number {    
     return oldPosition[prop] + (position[prop] - oldPosition[prop]) * interp;
   }
 
@@ -82,11 +84,12 @@ class CharacterUtil {
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({x: number, y: number})}
    */
-  determineGridPosition(position:Position, scaledTileSize:number):Coordinate {
-    return {
-      x: (position.left / scaledTileSize) + 0.5,
-      y: (position.top / scaledTileSize) + 0.5,
-    };
+  determineGridPosition(position:ObservablePoint, scaledTileSize:number):ObservablePoint {
+    return createObservablePoint(
+      this,
+      (position.x / scaledTileSize) + 0.5,
+      (position.y / scaledTileSize) + 0.5,
+    );
   }
 
   /**
@@ -116,7 +119,7 @@ class CharacterUtil {
         return this.directions.left;
     }
   }
-
+ 
   /**
    * Calculate the proper rounding function to assist with collision detection
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -138,7 +141,7 @@ class CharacterUtil {
    * @param {({x: number, y: number})} position - Position during the current frame
    * @returns {boolean}
    */
-  changingGridPosition(oldPosition:Coordinate, position:Coordinate):boolean {
+  changingGridPosition(oldPosition:ObservablePoint, position:ObservablePoint):boolean {
     return (
       Math.floor(oldPosition.x) !== Math.floor(position.x)
             || Math.floor(oldPosition.y) !== Math.floor(position.y)
@@ -152,7 +155,7 @@ class CharacterUtil {
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
    * @returns {boolean}
    */
-  checkForWallCollision(desiredNewGridPosition:Coordinate, mazeArray:[], direction:string):boolean {
+  checkForWallCollision(desiredNewGridPosition:ObservablePoint, mazeArray:[], direction:string):boolean {
     const roundingFunction = this.determineRoundingFunction(
       direction,
     );
@@ -178,10 +181,10 @@ class CharacterUtil {
    * @returns {object}
    */
   determineNewPositions(
-    position:any, direction:string, velocityPerMs:number, elapsedMs:number, 
+    position:ObservablePoint, direction:string, velocityPerMs:number, elapsedMs:number, 
       scaledTileSize:number,
   ):any {
-    const newPosition = Object.assign({}, position);
+    const newPosition = createObservablePoint(this, position.x, position.y)
     newPosition[this.getPropertyToChange(direction)]
       += this.getVelocity(direction, velocityPerMs) * elapsedMs;
     const newGridPosition = this.determineGridPosition(
@@ -201,14 +204,14 @@ class CharacterUtil {
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({top: number, left: number})}
    */
-  snapToGrid(position:Coordinate, direction:string, scaledTileSize:number):Position {
-    const newPosition = Object.assign({}, position);
+  snapToGrid(position:ObservablePoint, direction:string, scaledTileSize:number):ObservablePoint {
+    const newPosition = copyPosition(this, position );
     const roundingFunction = this.determineRoundingFunction(
       direction,
     );
 
     switch (direction) {
-      case this.directions.up:
+      case this.directions.up:   
       case this.directions.down:
         newPosition.y = roundingFunction(newPosition.y);
         break;
@@ -216,11 +219,11 @@ class CharacterUtil {
         newPosition.x = roundingFunction(newPosition.x);
         break;
     }
-
-    return {
-      top: (newPosition.y - 0.5) * scaledTileSize,
-      left: (newPosition.x - 0.5) * scaledTileSize,
-    };
+    return createObservablePoint(
+      this,
+      (newPosition.x - 0.5) * scaledTileSize,
+      (newPosition.y - 0.5) * scaledTileSize
+    )
   }
 
   /**
@@ -230,13 +233,13 @@ class CharacterUtil {
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({top: number, left: number})}
    */
-  handleWarp(position:Position, scaledTileSize:number, mazeArray:any):Position{
-    const newPosition = Object.assign({}, position);
+  handleWarp(position:ObservablePoint, scaledTileSize:number, mazeArray:any):ObservablePoint{
+    const newPosition = createObservablePoint(this, position.x, position.y);
     const gridPosition = this.determineGridPosition(position, scaledTileSize);
     if (gridPosition.x < -0.75) {
-      newPosition.left = (scaledTileSize * (mazeArray[0].length - 0.75));
+      newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
     } else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
-      newPosition.left = (scaledTileSize * -1.25);
+      newPosition.x = (scaledTileSize * -1.25);
     }
     return newPosition;
   }
@@ -264,7 +267,7 @@ class CharacterUtil {
       } else if (character.loopAnimation) {
         updatedProperties.frame =0
       }
-    }
+    }  
     return updatedProperties;
   }
 }

@@ -1,19 +1,20 @@
-import { Container, Rectangle, RenderTexture, Sprite, Texture } from "pixi.js";
+import {  ObservablePoint, Sprite, Texture } from "pixi.js";
 import Entity from "./entity.js";
 import GameCoordinator from "../core/gameCoordinator.js";
 import CharacterUtil from "../utilities/characterUtil.js";
+import { copyPosition } from "../utilities/utils.js";
+import _ from 'lodash'
 
 class Pacman extends Entity{
   velocityPerMs!:number
   pacmanArrow:any
   spriteArrow!:Sprite | undefined
-  specialAnimation!:boolean
-  desiredDirection!: string;
-  defaultPosition!: { top: number; left: number; };
+  specialAnimation!:boolean 
+  desiredDirection!: string;  
   death!: boolean;
   constructor(gameCoordinator:GameCoordinator, characterUtil:CharacterUtil) {
     super(gameCoordinator, "pacman", characterUtil)
-    this.scaledTileSize = gameCoordinator.scaledTileSize;
+    this.scaledTileSize = gameCoordinator.scaledTileSize;  
     this.mazeArray = gameCoordinator.mazeArray;
     this.characterUtil = characterUtil;
     this.sprite = undefined
@@ -80,13 +81,14 @@ class Pacman extends Entity{
    * @param {number} scaledTileSize - The dimensions of a single tile
    */
   setDefaultPosition(scaledTileSize: number) {
-    this.defaultPosition = {
-      top: scaledTileSize * 22.5,
-      left: scaledTileSize * 13,
-    };    
-    this.position = Object.assign({}, this.defaultPosition);
-    this.oldPosition = Object.assign({}, this.position);
-    this.sprite?.position.set(this.position.left, this.position.top)
+    this.defaultPosition.set(
+      scaledTileSize * 13,
+      scaledTileSize * 22.5   
+    )
+    this.position.set(this.defaultPosition.x, this.defaultPosition.y);
+    this.oldPosition.set(this.position.x, this.position.y)
+    //this.oldPosition = Object.assign({}, this.position);
+    this.sprite?.position.set(this.position.x, this.position.y)
   }
 
   /**
@@ -232,7 +234,7 @@ class Pacman extends Entity{
    * @param {number} elapsedMs - The amount of MS that have passed since the last update
    * @returns {({ top: number, left: number})}
    */
-  handleUnsnappedMovement(gridPosition: { x: number; y: number; }, elapsedMs: number) {
+  handleUnsnappedMovement(gridPosition: ObservablePoint, elapsedMs: number):ObservablePoint {
     const desired = this.characterUtil!.determineNewPositions(
       this.position, this.desiredDirection, this.velocityPerMs,
       elapsedMs, this.scaledTileSize,
@@ -267,17 +269,17 @@ class Pacman extends Entity{
    * @param {number} interp - The animation accuracy as a percentage
    */
   draw(interp: number) {
-    const newTop = this.characterUtil!.calculateNewDrawValue(
-      interp, 'top', this.oldPosition, this.position,
+    const newY = this.characterUtil!.calculateNewDrawValue(
+      interp, 'y', this.oldPosition, this.position,
     );
-    const newLeft = this.characterUtil!.calculateNewDrawValue(
-      interp, 'left', this.oldPosition, this.position,
+    const newX = this.characterUtil!.calculateNewDrawValue(
+      interp, 'x', this.oldPosition, this.position,
     );
 
-    this.sprite!.position.set(newLeft, newTop)  
-    const arrowLeft = newLeft-this.gameCoordinator.tileSize
-    const arrowTop = newTop-this.gameCoordinator.tileSize
-    this.spriteArrow!.position.set(arrowLeft, arrowTop)
+    this.sprite!.position.set(newX, newY)  
+    const arrowX = newX-this.gameCoordinator.tileSize
+    const arrowY = newY-this.gameCoordinator.tileSize
+    this.spriteArrow!.position.set(arrowX, arrowY)
 
     const updatedProperties = this.characterUtil!.advanceSpriteSheet(this);
 
@@ -294,22 +296,32 @@ class Pacman extends Entity{
    */
   update(elapsedMs: number) {
     super.update(elapsedMs)
-    this.oldPosition = Object.assign({}, this.position);
+    this.oldPosition.set(this.position.x, this.position.y)
 
     if (this.moving) {
       const gridPosition = this.characterUtil!.determineGridPosition(
         this.position, this.scaledTileSize,
       );
-
-      if (JSON.stringify(this.position) === JSON.stringify(
-        this.characterUtil!.snapToGrid(
+      // const posString = JSON.stringify(this.position.copyTo(new Point))
+      const snapToGrid =this.characterUtil!.snapToGrid(
           gridPosition, this.direction, this.scaledTileSize,
-        ),
-      )) {
+        )
+ 
+      if (this.position.equals(snapToGrid) 
+      ) {
         this.position = this.handleSnappedMovement(elapsedMs);
       } else {
         this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
       }
+      // if (JSON.stringify(this.position, replacer ) === JSON.stringify(
+      //   this.characterUtil!.snapToGrid(
+      //     gridPosition, this.direction, this.scaledTileSize,
+      //   ),replacer
+      // )) {
+      //   this.position = this.handleSnappedMovement(elapsedMs);
+      // } else {
+      //   this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
+      // }
 
       this.position = this.characterUtil!.handleWarp(
         this.position, this.scaledTileSize, this.mazeArray,

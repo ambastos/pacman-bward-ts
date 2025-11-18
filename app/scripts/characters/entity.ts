@@ -1,26 +1,25 @@
-import { Container, DisplayObject, IHitArea, Rectangle, Sprite } from "pixi.js"
+import { Container, DisplayObject, IHitArea, ObservablePoint, Rectangle, Sprite } from "pixi.js"
 import GameCoordinator from "../core/gameCoordinator.js"
 import CharacterUtil from "../utilities/characterUtil.js"
 import EventEmitter from "eventemitter3"
-import { Coordinate, Position } from "./types.js"
+import { createObservablePoint } from "../utilities/utils.js"
 
-class Entity {
-    name
+class Entity extends Sprite {
     allowCollision = true
     emitter:EventEmitter
     gameCoordinator:GameCoordinator
     scaledTileSize:number
     characterUtil?:undefined | CharacterUtil
-    position!: Position
-    oldPosition!:Position
+    defaultPosition = createObservablePoint(this,0,0);
+    oldPosition = createObservablePoint(this,0,0); 
     sprite!:Sprite | undefined
     hitArea!:IHitArea | null
     msSinceLastSprite:number=0
-    frame:number = 0
     msBetweenSprites:number = 0
-    animate:boolean= false
-    measurement:number = 0
+    frame:number = 0
     spriteFrames:number = 0
+    animate:boolean= false
+    measurement:number = 0 
     loopAnimation:boolean = false
     mazeArray:any
     moving!:boolean
@@ -28,17 +27,18 @@ class Entity {
     level!:number
     direction!:string
     constructor(gameCoordinator: GameCoordinator, name: string, characterUtil?: CharacterUtil) {
+        super()
         this.gameCoordinator = gameCoordinator
         this.name = name
         this.scaledTileSize = gameCoordinator.scaledTileSize        
         this.characterUtil = characterUtil
         this.emitter = gameCoordinator.emitter
     }
-    getGridPosition():Coordinate | undefined {
+    getGridPosition():ObservablePoint | undefined {
         return this.characterUtil?.determineGridPosition(
             this.position, this.scaledTileSize)
     }
-    registerEventListeners() {
+    registerEventListeners() {   
         
     }
     onReset() {

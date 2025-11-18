@@ -11,7 +11,6 @@ class Pacman extends entity_js_1.default {
     spriteArrow;
     specialAnimation;
     desiredDirection;
-    defaultPosition;
     death;
     constructor(gameCoordinator, characterUtil) {
         super(gameCoordinator, "pacman", characterUtil);
@@ -76,13 +75,11 @@ class Pacman extends entity_js_1.default {
      * @param {number} scaledTileSize - The dimensions of a single tile
      */
     setDefaultPosition(scaledTileSize) {
-        this.defaultPosition = {
-            top: scaledTileSize * 22.5,
-            left: scaledTileSize * 13,
-        };
-        this.position = Object.assign({}, this.defaultPosition);
-        this.oldPosition = Object.assign({}, this.position);
-        this.sprite?.position.set(this.position.left, this.position.top);
+        this.defaultPosition.set(scaledTileSize * 13, scaledTileSize * 22.5);
+        this.position.set(this.defaultPosition.x, this.defaultPosition.y);
+        this.oldPosition.set(this.position.x, this.position.y);
+        //this.oldPosition = Object.assign({}, this.position);
+        this.sprite?.position.set(this.position.x, this.position.y);
     }
     /**
      * Calculates how fast Pacman should move in a millisecond
@@ -231,12 +228,12 @@ class Pacman extends entity_js_1.default {
      * @param {number} interp - The animation accuracy as a percentage
      */
     draw(interp) {
-        const newTop = this.characterUtil.calculateNewDrawValue(interp, 'top', this.oldPosition, this.position);
-        const newLeft = this.characterUtil.calculateNewDrawValue(interp, 'left', this.oldPosition, this.position);
-        this.sprite.position.set(newLeft, newTop);
-        const arrowLeft = newLeft - this.gameCoordinator.tileSize;
-        const arrowTop = newTop - this.gameCoordinator.tileSize;
-        this.spriteArrow.position.set(arrowLeft, arrowTop);
+        const newY = this.characterUtil.calculateNewDrawValue(interp, 'y', this.oldPosition, this.position);
+        const newX = this.characterUtil.calculateNewDrawValue(interp, 'x', this.oldPosition, this.position);
+        this.sprite.position.set(newX, newY);
+        const arrowX = newX - this.gameCoordinator.tileSize;
+        const arrowY = newY - this.gameCoordinator.tileSize;
+        this.spriteArrow.position.set(arrowX, arrowY);
         const updatedProperties = this.characterUtil.advanceSpriteSheet(this);
         this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
         this.frame = updatedProperties.frame;
@@ -250,15 +247,26 @@ class Pacman extends entity_js_1.default {
      */
     update(elapsedMs) {
         super.update(elapsedMs);
-        this.oldPosition = Object.assign({}, this.position);
+        this.oldPosition.set(this.position.x, this.position.y);
         if (this.moving) {
             const gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize);
-            if (JSON.stringify(this.position) === JSON.stringify(this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize))) {
+            // const posString = JSON.stringify(this.position.copyTo(new Point))
+            const snapToGrid = this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize);
+            if (this.position.equals(snapToGrid)) {
                 this.position = this.handleSnappedMovement(elapsedMs);
             }
             else {
                 this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
             }
+            // if (JSON.stringify(this.position, replacer ) === JSON.stringify(
+            //   this.characterUtil!.snapToGrid(
+            //     gridPosition, this.direction, this.scaledTileSize,
+            //   ),replacer
+            // )) {
+            //   this.position = this.handleSnappedMovement(elapsedMs);
+            // } else {
+            //   this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
+            // }
             this.position = this.characterUtil.handleWarp(this.position, this.scaledTileSize, this.mazeArray);
         }
         if (this.moving || this.specialAnimation) {

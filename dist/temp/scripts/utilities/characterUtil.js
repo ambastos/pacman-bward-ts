@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const utils_js_1 = require("./utils.js");
 class CharacterUtil {
     directions;
     constructor() {
@@ -21,11 +22,12 @@ class CharacterUtil {
         let stutter = false;
         const threshold = 5;
         if (position && oldPosition) {
-            if (Math.abs(position.top - oldPosition.top) > threshold
-                || Math.abs(position.left - oldPosition.left) > threshold) {
+            if (Math.abs(position.y - oldPosition.y) > threshold
+                || Math.abs(position.x - oldPosition.x) > threshold) {
                 stutter = true;
             }
         }
+        console.log("a");
         return stutter ? 'hidden' : 'visible';
     }
     /**
@@ -37,9 +39,9 @@ class CharacterUtil {
         switch (direction) {
             case this.directions.up:
             case this.directions.down:
-                return 'top';
+                return "y";
             default:
-                return 'left';
+                return "x";
         }
     }
     /**
@@ -75,10 +77,7 @@ class CharacterUtil {
      * @returns {({x: number, y: number})}
      */
     determineGridPosition(position, scaledTileSize) {
-        return {
-            x: (position.left / scaledTileSize) + 0.5,
-            y: (position.top / scaledTileSize) + 0.5,
-        };
+        return (0, utils_js_1.createObservablePoint)(this, (position.x / scaledTileSize) + 0.5, (position.y / scaledTileSize) + 0.5);
     }
     /**
      * Check to see if a character's disired direction results in turning around
@@ -157,7 +156,7 @@ class CharacterUtil {
      * @returns {object}
      */
     determineNewPositions(position, direction, velocityPerMs, elapsedMs, scaledTileSize) {
-        const newPosition = Object.assign({}, position);
+        const newPosition = (0, utils_js_1.createObservablePoint)(this, position.x, position.y);
         newPosition[this.getPropertyToChange(direction)]
             += this.getVelocity(direction, velocityPerMs) * elapsedMs;
         const newGridPosition = this.determineGridPosition(newPosition, scaledTileSize);
@@ -174,7 +173,7 @@ class CharacterUtil {
      * @returns {({top: number, left: number})}
      */
     snapToGrid(position, direction, scaledTileSize) {
-        const newPosition = Object.assign({}, position);
+        const newPosition = (0, utils_js_1.copyPosition)(this, position);
         const roundingFunction = this.determineRoundingFunction(direction);
         switch (direction) {
             case this.directions.up:
@@ -185,10 +184,7 @@ class CharacterUtil {
                 newPosition.x = roundingFunction(newPosition.x);
                 break;
         }
-        return {
-            top: (newPosition.y - 0.5) * scaledTileSize,
-            left: (newPosition.x - 0.5) * scaledTileSize,
-        };
+        return (0, utils_js_1.createObservablePoint)(this, (newPosition.x - 0.5) * scaledTileSize, (newPosition.y - 0.5) * scaledTileSize);
     }
     /**
      * Returns a modified position if the character needs to warp
@@ -198,13 +194,13 @@ class CharacterUtil {
      * @returns {({top: number, left: number})}
      */
     handleWarp(position, scaledTileSize, mazeArray) {
-        const newPosition = Object.assign({}, position);
+        const newPosition = (0, utils_js_1.createObservablePoint)(this, position.x, position.y);
         const gridPosition = this.determineGridPosition(position, scaledTileSize);
         if (gridPosition.x < -0.75) {
-            newPosition.left = (scaledTileSize * (mazeArray[0].length - 0.75));
+            newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
         }
         else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
-            newPosition.left = (scaledTileSize * -1.25);
+            newPosition.x = (scaledTileSize * -1.25);
         }
         return newPosition;
     }

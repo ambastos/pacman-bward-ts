@@ -12,8 +12,6 @@ class Pickup extends Entity {
   sprites:[] | null   
   fruitImages:any
   size!:number
-  x!:number
-  y!:number
   center:any
   constructor(type:string, column:number, row:number, 
     points:number, gameCoordinator:GameCoordinator) {
@@ -137,7 +135,7 @@ class Pickup extends Entity {
     if(!this.sprite)
       this.sprite = new Sprite(texture)
     else
-      this.sprite.texture = texture
+      this.sprite.texture = texture as Texture   
   }
   /**
    * Shows a bonus fruit, resetting its point value and image
@@ -146,7 +144,7 @@ class Pickup extends Entity {
   showFruit(points:number) {
     this.points = points;
     const tx = this.gameCoordinator.am.getTexture(this.getFruitName(points))
-    this.sprite!.texture = tx
+    this.sprite!.texture = tx as Texture
     this.sprite!.visible = true
   }
 
@@ -221,8 +219,8 @@ class Pickup extends Entity {
           y: this.y,
           size: this.size,
         }, {
-          x: this.pacman.position.left,
-          y: this.pacman.position.top,
+          x: this.pacman.position.x,
+          y: this.pacman.position.y,
           size: this.pacman.measurement,
         },
       )) {

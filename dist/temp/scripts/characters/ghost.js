@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const pixi_js_1 = require("pixi.js");
 const entity_js_1 = __importDefault(require("./entity.js"));
+const utils_js_1 = require("../utilities/utils.js");
 class Ghost extends entity_js_1.default {
     pacman;
-    level;
     blinky;
     defaultSpeed;
     cruiseElroy;
@@ -23,7 +23,6 @@ class Ghost extends entity_js_1.default {
     velocityPerMs;
     emotion;
     scaredColor;
-    defaultPosition;
     defaultDirection;
     paused;
     constructor(gameCoordinator, name, level, characterUtil, blinky) {
@@ -133,41 +132,27 @@ class Ghost extends entity_js_1.default {
      * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
      */
     setDefaultPosition(scaledTileSize, name) {
+        const f = () => { };
         switch (name) {
             case 'blinky':
-                this.defaultPosition = {
-                    top: scaledTileSize * 10.5,
-                    left: scaledTileSize * 13,
-                };
+                this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, scaledTileSize * 13, scaledTileSize * 10.5);
                 break;
             case 'pinky':
-                this.defaultPosition = {
-                    top: scaledTileSize * 13.5,
-                    left: scaledTileSize * 13,
-                };
+                this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, scaledTileSize * 13, scaledTileSize * 13.5);
                 break;
             case 'inky':
-                this.defaultPosition = {
-                    top: scaledTileSize * 13.5,
-                    left: scaledTileSize * 11,
-                };
+                this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, scaledTileSize * 11, scaledTileSize * 13.5);
                 break;
             case 'clyde':
-                this.defaultPosition = {
-                    top: scaledTileSize * 13.5,
-                    left: scaledTileSize * 15,
-                };
+                this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, scaledTileSize * 15, scaledTileSize * 13.5);
                 break;
             default:
-                this.defaultPosition = {
-                    top: 0,
-                    left: 0,
-                };
+                this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, 0, 0);
                 break;
         }
-        this.position = Object.assign({}, this.defaultPosition);
-        this.oldPosition = Object.assign({}, this.position);
-        this.sprite?.position.set(this.position.left, this.position.top);
+        this.position = (0, utils_js_1.createObservablePoint)(this, this.defaultPosition.x, this.defaultPosition.y);
+        this.oldPosition = (0, utils_js_1.createObservablePoint)(this, this.position.x, this.position.y);
+        this.sprite?.position.set(this.position.x, this.position.y);
     }
     /**
      * Chooses a movement Spritesheet depending upon direction
@@ -328,7 +313,7 @@ class Ghost extends entity_js_1.default {
      * @param {number} spaces
      */
     getPositionInFrontOfPacman(pacmanGridPosition, spaces) {
-        const target = Object.assign({}, pacmanGridPosition);
+        const target = (0, utils_js_1.copyPosition)(this, pacmanGridPosition);
         const pacDirection = this.pacman.direction;
         const propToChange = (pacDirection === 'up' || pacDirection === 'down')
             ? 'y' : 'x';
@@ -355,10 +340,7 @@ class Ghost extends entity_js_1.default {
     determineInkyTarget(pacmanGridPosition) {
         const blinkyGridPosition = this.characterUtil.determineGridPosition(this.blinky.position, this.scaledTileSize);
         const pivotPoint = this.getPositionInFrontOfPacman(pacmanGridPosition, 2);
-        return {
-            x: pivotPoint.x + (pivotPoint.x - blinkyGridPosition.x),
-            y: pivotPoint.y + (pivotPoint.y - blinkyGridPosition.y),
-        };
+        return (0, utils_js_1.createObservablePoint)(this, pivotPoint.x + (pivotPoint.x - blinkyGridPosition.x), pivotPoint.y + (pivotPoint.y - blinkyGridPosition.y));
     }
     /**
      * Clyde targets Pacman when the two are far apart, but retreats to the
@@ -382,7 +364,7 @@ class Ghost extends entity_js_1.default {
     getTarget(name, gridPosition, pacmanGridPosition, mode) {
         // Ghosts return to the ghost-house after eaten
         if (mode === 'eyes') {
-            return { x: 13.5, y: 10 };
+            return (0, utils_js_1.createObservablePoint)(this, 13.5, 10);
         }
         // Ghosts run from Pacman if scared
         if (mode === 'scared') {
@@ -393,15 +375,16 @@ class Ghost extends entity_js_1.default {
             switch (name) {
                 case 'blinky':
                     // Blinky will chase Pacman, even in Scatter mode, if he's in Cruise Elroy form
-                    return (this.cruiseElroy ? pacmanGridPosition : { x: 27, y: 0 });
+                    //{ x: 27, y: 0 }
+                    return (this.cruiseElroy ? pacmanGridPosition : (0, utils_js_1.createObservablePoint)(this, 27, 0));
                 case 'pinky':
-                    return { x: 0, y: 0 };
+                    return (0, utils_js_1.createObservablePoint)(this, 0, 0);
                 case 'inky':
-                    return { x: 27, y: 30 };
+                    return (0, utils_js_1.createObservablePoint)(this, 27, 30);
                 case 'clyde':
-                    return { x: 0, y: 30 };
+                    return (0, utils_js_1.createObservablePoint)(this, 0, 30);
                 default:
-                    return { x: 0, y: 0 };
+                    return (0, utils_js_1.createObservablePoint)(this, 0, 0);
             }
         }
         switch (name) {
@@ -473,7 +456,7 @@ class Ghost extends entity_js_1.default {
      * @returns {({ top: number, left: number})}
      */
     handleIdleMovement(elapsedMs, position, velocity) {
-        const newPosition = Object.assign({}, this.position);
+        const newPosition = (0, utils_js_1.copyPosition)(this, this.position);
         if (position.y <= 13.5) {
             this.direction = this.characterUtil.directions.down;
         }
@@ -483,16 +466,16 @@ class Ghost extends entity_js_1.default {
         if (this.idleMode === 'leaving') {
             if (position.x === 13.5 && (position.y > 10.8 && position.y < 11)) {
                 this.idleMode = undefined;
-                newPosition.top = this.scaledTileSize * 10.5;
+                newPosition.y = this.scaledTileSize * 10.5;
                 this.direction = this.characterUtil.directions.left;
                 window.dispatchEvent(new Event('releaseGhost'));
             }
             else if (position.x > 13.4 && position.x < 13.6) {
-                newPosition.left = this.scaledTileSize * 13;
+                newPosition.x = this.scaledTileSize * 13;
                 this.direction = this.characterUtil.directions.up;
             }
             else if (position.y > 13.9 && position.y < 14.1) {
-                newPosition.top = this.scaledTileSize * 13.5;
+                newPosition.y = this.scaledTileSize * 13.5;
                 this.direction = (position.x < 13.5)
                     ? this.characterUtil.directions.right
                     : this.characterUtil.directions.left;
@@ -517,7 +500,7 @@ class Ghost extends entity_js_1.default {
      * @returns {({ top: number, left: number})}
      */
     handleSnappedMovement(elapsedMs, gridPosition, velocity, pacmanGridPosition) {
-        const newPosition = Object.assign({}, this.position);
+        const newPosition = (0, utils_js_1.copyPosition)(this, this.position);
         this.direction = this.determineDirection(this.name, gridPosition, pacmanGridPosition, this.direction, this.mazeArray, this.mode);
         newPosition[this.characterUtil.getPropertyToChange(this.direction)]
             += this.characterUtil.getVelocity(this.direction, velocity) * elapsedMs;
@@ -562,7 +545,7 @@ class Ghost extends entity_js_1.default {
      * @returns {({x: number, y: number})}
      */
     handleGhostHouse(gridPosition) {
-        const gridPositionCopy = Object.assign({}, gridPosition);
+        const gridPositionCopy = (0, utils_js_1.copyPosition)(this, gridPosition);
         if (this.enteringGhostHouse(this.mode, gridPosition)) {
             this.direction = this.characterUtil.directions.down;
             gridPositionCopy.x = 13.5;
@@ -607,10 +590,11 @@ class Ghost extends entity_js_1.default {
         const gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize);
         const pacmanGridPosition = this.characterUtil.determineGridPosition(this.pacman.position, this.scaledTileSize);
         const velocity = this.determineVelocity(gridPosition, this.mode);
+        const snapToGrid = this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize);
         if (this.idleMode) {
             newPosition = this.handleIdleMovement(elapsedMs, gridPosition, velocity);
         }
-        else if (JSON.stringify(this.position) === JSON.stringify(this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize))) {
+        else if (this.position.equals(snapToGrid)) {
             newPosition = this.handleSnappedMovement(elapsedMs, gridPosition, velocity, pacmanGridPosition);
         }
         else {
@@ -745,9 +729,9 @@ class Ghost extends entity_js_1.default {
      * @param {number} interp - The animation accuracy as a percentage
      */
     draw(interp) {
-        const newTop = this.characterUtil.calculateNewDrawValue(interp, 'top', this.oldPosition, this.position);
-        const newLeft = this.characterUtil.calculateNewDrawValue(interp, 'left', this.oldPosition, this.position);
-        this.sprite.position.set(newLeft, newTop);
+        const newY = this.characterUtil.calculateNewDrawValue(interp, 'y', this.oldPosition, this.position);
+        const newX = this.characterUtil.calculateNewDrawValue(interp, 'x', this.oldPosition, this.position);
+        this.sprite.position.set(newX, newY);
         this.sprite.visible = this.display;
         const updatedProperties = this.characterUtil.advanceSpriteSheet(this);
         this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
@@ -766,7 +750,7 @@ class Ghost extends entity_js_1.default {
      */
     update(elapsedMs) {
         super.update(elapsedMs);
-        this.oldPosition = Object.assign({}, this.position);
+        this.oldPosition = (0, utils_js_1.createObservablePoint)(this, this.position.x, this.position.y);
         if (this.moving) {
             this.position = this.handleMovement(elapsedMs);
             this.setSpriteSheet(this.name, this.direction, this.mode);
