@@ -1,4 +1,3 @@
-import { Sprite } from "pixi.js"
 import Animator from "../animations/animator.js"
 import Flood from "../core/flood.js"
 

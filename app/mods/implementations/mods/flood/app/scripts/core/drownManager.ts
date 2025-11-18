@@ -80,12 +80,12 @@ class DrownManager {
         const wave = this?.wave
         if (!wave || !wave.started || breath.stopped) return
 
-        const sprite = entity.sprite.getBounds()
+        const bounds = entity.getBounds()
         let isInGhostHouse = false
         if (entity instanceof Ghost) {
             isInGhostHouse = entity.isInGhostHouse(entity.getGridPosition())
         }
-        const isInsideTheWave = wave.getBounds().contains(sprite.x, sprite.y)
+        const isInsideTheWave = wave.getBounds().contains(bounds.x, bounds.y)
         if (entity.allowCollision && !isInGhostHouse && isInsideTheWave){
             breath.elapsedTimeLastBreathMs+=elapsedMs
             if (breath.elapsedTimeLastBreathMs >=1000) {
@@ -161,10 +161,10 @@ class DrownManager {
         if (this.wave) {
             this.animator.update()
             const container = this.wave.container
-            const bubbles = this.wave.getElements("bubble")            
+            const bubbles = this.wave.getElementsBy("bubble")            
             const pacman = this.gc.pacman 
             //@ts-ignore
-            const hitArea = enlarge(pacman.sprite!.hitArea!.clone(),2)
+            const hitArea = enlarge(pacman.hitArea.clone(),2)
             bubbles.forEach((b)=>{
                 if (b.getBounds().contains(hitArea.x, hitArea.y)) {
                     this.emitter.emit("bubble-swallow") 

@@ -19,6 +19,7 @@ class Wave extends Sprite {
     bubblesLocation!: any[]
     duration!:number
     elements:unknown[] = []
+    queuedList:any[] = []
     constructor(drownManager: DrownManager, maze: Maze, width: number, height: number) {        
         super(Texture.WHITE)           
         this.width = width
@@ -38,50 +39,82 @@ class Wave extends Sprite {
         this.container.addChild(this.gp)
 
         this.startTopY = Math.PI * 2
+
+        this.generateBubbles()
+        //this.entitiesManager.tryToGenerateEntity() 
+    }
+    private queueElement(type:string, element:Sprite) {
+        const id = Date.now()
+        element.name = type
+        Object.defineProperty(element,"id",{value:id})
+        this.queuedList.push(element)
+    }
+    private queuedElementsBy(type:string) {   
+        return this.queuedList.filter(f=>{return f.name == type})
+    }
+    private dequeueElement(element:any):boolean {   
+        const contains =  this.queuedList.lastIndexOf(element) > -1
+        this.queuedList = this.queuedList.filter(f=>f.id != element.id)
+        return contains
+    }
+    addElement(element:any) { 
+        this.elements.push(element)
+        this.container.addChild(element)  
+    }    
+    removeElement(element:any) {
+        this.elements.splice(this.elements.indexOf(element), 1)
+        this.container.removeChild(element)
+    }
+    clearElements() {
+        this.elements.forEach((el:any)=>{
+            this.container.removeChild(el)
+        })
+        this.elements.length = 0
+    }
+    getElementsBy(type:string):any[] {
+        const elements = this.elements.filter((f:any)=>{
+            return f.name == 'bubble'
+        })
+        return elements
+    }
+    private generateBubbles() { 
         let numberOfBubles = Math.ceil(Math.random() * 3)
         let wayCells = getMazeWays(this.maze)
-        let rows = wayCells.map((m: { row:number })=>m.row)
-        this.bubblesLocation = []
-        for (let i=1; i <= numberOfBubles;i++) {
-            let indexRow = Math.floor(Math.random() * (rows.length -1))
+        let rows = wayCells.map((m: { row:number })=>m.row)  
+        const tileSize = this.maze.tileSize
+        for (let i = 1; i <= numberOfBubles; i++) {
+            let indexRow = Math.floor(Math.random() * (rows.length - 1))
             let row = rows[indexRow]
-            let cols =  wayCells.find((f: { row: number })=>f.row == row)!.cols
-            let indexCol =  Math.floor(Math.random() * (cols.length - 1))
+            let cols = wayCells.find((f: { row: number} ) => f.row == row)!.cols
+            let indexCol = Math.floor(Math.random() * (cols.length - 1))
             let col = cols[indexCol]
-            this.bubblesLocation.push({
-                row: row, 
-                col: col  
-            })  
-        } 
-        //this.entitiesManager.tryToGenerateEntity() 
+            const pixelBounds = this.maze.getPixelCoordinates(row!, col!)
+
+            const bubble = new Sprite(this.drownManager.flood.am.getTexture("bubbles"))
+            //bubleSprite.tint = 0x002400
+            //bubleSprite.alpha = 0.6 
+            bubble.height = tileSize
+            bubble.width = tileSize
+            bubble.position.set(pixelBounds.x, pixelBounds.y)
+            this.queueElement("bubble", bubble)
+        }
+    }
+    private getGeneratedBubbles() {
+        const bubbles =  this.queuedElementsBy("bubble")
+        for (let i = 0; i < bubbles.length; i++) {
+            const bubble = bubbles[i]
+            if (bubble.position.y == this.y) {  
+                this.addElement(bubble)    
+                this.dequeueElement(bubble)
+            }
+        }
     }
     increase(elapsedMs: number) {
         if (this.visible) {
             this.height+=this.speedY * (elapsedMs/1000)
             this.decreasing = false
             this.updatePosition()
-            this.generateBubbles()             
-        }
-    }
-    private generateBubbles() {
-        let buble
-        const tileSize = this.maze.tileSize
-        for (let i = 0; i < this.bubblesLocation.length; i++) {
-            const pixelBounds = this.maze.getPixelCoordinates(
-                this.bubblesLocation[i].col, this.bubblesLocation[i].row
-            )
-            if (pixelBounds.y == this.y) {
-                buble = this.bubblesLocation[i]
-                const bubleSprite = new Sprite(this.drownManager.flood.am.getTexture("bubbles"))
-                bubleSprite.name = "bubble"
-                //bubleSprite.tint = 0x002400
-                //bubleSprite.alpha = 0.6 
-                bubleSprite.height = tileSize  
-                bubleSprite.width = tileSize
-                bubleSprite.position.set(pixelBounds.x, pixelBounds.y)
-                this.addElement(bubleSprite)    
-                //this.container.addChild(bubleSprite)
-            } 
+            this.getGeneratedBubbles()      
         }
     }
     decrease(elapsedMs: number) {
@@ -90,38 +123,14 @@ class Wave extends Sprite {
             this.decreasing = true
             this.updatePosition()            
             //console.log("decrease wave: ", this.height, this.position)
-            for (let i=0;i< this.bubblesLocation.length; i++) {
-                const pixelBounds = this.maze.getPixelCoordinates(
-                    this.bubblesLocation[i].col,this.bubblesLocation[i].row
-                )
-                if (pixelBounds.y <= this.y) {                      
-                    const bubble = this.container.children.find((f: DisplayObject)=>{
-                        if (f.name == 'bubble') { 
-                            if (f.y <= this.y)
-                                return f
-                        }
-                    })
-                    if (bubble)
-                        this.container.removeChild(bubble)
+            const bubbles =  this.getElementsBy("bubble")
+            for (let i=0;i< bubbles.length; i++) {                
+                const bubble = bubbles[i] 
+                if (bubble.y <= this.y) {                                          
+                    this.removeElement(bubble)
                 }
             } 
         }
-    }
-    addElement(element:any) {
-        this.elements.push(element)
-        this.container.addChild(element)
-    }    
-    clearElements() {
-        this.elements.forEach((el:any)=>{
-            this.container.removeChild(el)
-        })
-        this.elements.length = 0
-    }
-    getElements(type:string):DisplayObject[] {
-        const elements = this.container.children.filter((f)=>{
-            return f.name == 'bubble'
-        })
-        return elements
     }
     updatePosition() {
        this.y = this.maze.height - this.height
