@@ -21,8 +21,7 @@ class Mod {
     getResources():string[] {
         return []
     }
-    //@ts-ignore
-    async loadAssets(callback:unknown):Promise<Record<string, any>> | null {
+    async loadAssets(callback:unknown):Promise<Record<string, any> | null> {
       return null
     }
     reset() {

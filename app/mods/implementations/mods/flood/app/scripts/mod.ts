@@ -20,7 +20,7 @@ class Mod {
     getResources() {
         return []
     }
-    async loadAssets(callback:unknown):Promise<unknown> {
+    async loadAssets(callback:unknown):Promise<Record<string, any>|null> {
       return null
     }
     reset() {

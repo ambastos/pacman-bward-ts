@@ -12,11 +12,12 @@ import Ghost from "../characters/ghost.ts";
 import Pacman from "../characters/pacman.ts";
 import Pickup from "../pickups/pickup.ts";
 import CharacterUtil from "../utilities/characterUtil.ts";
-import Entity from "../characters/entity.ts";
+import StaticEntity from "../characters/staticEntity.ts";
 import GameEngine from "./gameEngine.ts";
 import Timer from "../utilities/timer.ts";
 import Mod from "../../mods/mod.ts";
 import EmptyMod from "../../mods/empty-mod.ts";
+import MovableEntity from "../characters/movableEntity.ts";
 //global.window.Assets = Assets
 //import path from 'path'
 const options = {
@@ -77,7 +78,7 @@ class GameCoordinator {
   inky!: Ghost
   clyde!: Ghost
   fruit!: Pickup
-  entityList!: Entity[];
+  entityList!: StaticEntity[];
   ghosts!: Ghost[]
   scaredGhosts!: Ghost[];
   idleGhosts!: Ghost[];
@@ -350,16 +351,12 @@ class GameCoordinator {
       //add dots,  pacman, ghosts sprites to the stage
       this.drawMaze(this.mazeArray, this.entityList);
       this.pickups.forEach(p => {
-        //@ts-ignore
-        this.stage.addChild(p.sprite)
+        this.stage.addChild(p.sprite!)
       })
-      //@ts-ignore
-      this.stage.addChild(this.pacman.sprite)
-      //@ts-ignore
-      this.stage.addChild(this.pacman.spriteArrow)
+      this.stage.addChild(this.pacman)
+      this.stage.addChild(this.pacman.spriteArrow!)
       this.ghosts.forEach(g => {
-        //@ts-ignore
-        this.stage.addChild(g.sprite)
+        this.stage.addChild(g.sprite!)
       })
       this.soundManager = new SoundManager();
       this.setUiDimensions();
@@ -405,7 +402,7 @@ class GameCoordinator {
    * @param {Array} mazeArray - 2D array representing the game board
    * @param {Array} entityList - List of entities to be used throughout the game
    */
-  drawMaze(mazeArray: any, entityList: Entity[]) {
+  drawMaze(mazeArray: any, entityList: StaticEntity[]) {
     this.pickups = [this.fruit];
 
     this.mazeDiv.style.height = `${this.height * this.scale}px`;
@@ -494,7 +491,7 @@ class GameCoordinator {
       const pacmanCenter = {
         x: this.pacman.position.x + this.scaledTileSize,
         y: this.pacman.position.y + this.scaledTileSize,
-      };
+      } as PIXI.ObservablePoint;
 
       // Set this flag to TRUE to see how two-phase collision detection works!
       const debugging = false;
@@ -955,9 +952,12 @@ class GameCoordinator {
     //stop the current mod    
     this.mod.stop()
 
-    this.entityList.forEach((entity) => {
+    this.entityList.forEach((entity:StaticEntity) => {
       const entityRef = entity;
-      entityRef.moving = false;
+      if (entity instanceof MovableEntity) {
+        entityRef as MovableEntity
+        entity.moving = false
+      }
     });
 
     this.removeTimer({ detail: { timer: this.fruitTimer } } as CustomEvent);
@@ -988,9 +988,10 @@ class GameCoordinator {
                     this.mazeCover.style.visibility = 'hidden';
                     this.level += 1;
                     this.allowKeyPresses = true;
-                    this.entityList.forEach((entity) => {
+                    this.entityList.forEach((entity) => { 
                       const entityRef = entity;
-                      if (entityRef.level) {
+                      if (entityRef instanceof MovableEntity) {
+                        entityRef as MovableEntity
                         entityRef.level = this.level;
                       }
                       entityRef.reset();

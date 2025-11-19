@@ -4,14 +4,12 @@ import CharacterUtil from "../utilities/characterUtil.ts"
 import EventEmitter from "eventemitter3"
 import { createObservablePoint } from "../utilities/utils.ts"
 
-class Entity extends Sprite {
+class StaticEntity extends Sprite {
     allowCollision = true
     emitter:EventEmitter
     gameCoordinator:GameCoordinator
     scaledTileSize:number
-    characterUtil?:undefined | CharacterUtil
-    defaultPosition = createObservablePoint(this,0,0);
-    oldPosition = createObservablePoint(this,0,0); 
+    characterUtil?:undefined | CharacterUtil    
     sprite!:Sprite | undefined
     hitArea!:IHitArea | null
     msSinceLastSprite:number=0
@@ -22,10 +20,7 @@ class Entity extends Sprite {
     measurement:number = 0 
     loopAnimation:boolean = false
     mazeArray:any
-    moving!:boolean
-    display!:boolean
-    level!:number
-    direction!:string
+    display!:boolean    
     constructor(gameCoordinator: GameCoordinator, name: string, characterUtil?: CharacterUtil) {
         super()
         this.gameCoordinator = gameCoordinator
@@ -51,17 +46,14 @@ class Entity extends Sprite {
 
     }
     update(elapsedMs:number) {
-        if (this.sprite) {
-            const half = this.scaledTileSize * 0.5
-            const x = this.sprite.x + this.sprite.width * 0.5 - half
-            const y = this.sprite.y + this.sprite.height * 0.5 - half  
-            this.sprite.hitArea = 
-                new Rectangle(x, y, this.scaledTileSize, this.scaledTileSize) 
-            this.hitArea = this.sprite.hitArea
-        }
+        const half = this.scaledTileSize * 0.5
+        const x = this.x + this.width * 0.5 - half
+        const y = this.y + this.height * 0.5 - half  
+        this.hitArea = 
+            new Rectangle(x, y, this.scaledTileSize, this.scaledTileSize) 
     }
     draw(interp:number) {
 
     }
 }
-export default Entity
+export default StaticEntity

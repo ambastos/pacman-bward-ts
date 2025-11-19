@@ -1,4 +1,4 @@
-import { autoDetectRenderer, Container, Renderer } from "pixi.js"
+
 
 class Debugger {
     gc: any

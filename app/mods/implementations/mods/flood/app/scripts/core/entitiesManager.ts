@@ -23,12 +23,12 @@ class EntitiesManager {
                     arr.push({row:f.row, col: col})
                 })
                 return arr 
-            }).flat() 
+            }).flat()
             const index =  Math.floor(Math.random() * (cells.length -1)) 
             const sonic = new Sonic(this.wave.drownManager.flood)
             const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
             sonic.position.set(coords.x, coords.y   )
-            this.entities.push(sonic) 
+            this.wave.queueElement("entity", sonic)
         } 
     }
 }

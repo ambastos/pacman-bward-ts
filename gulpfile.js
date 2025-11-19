@@ -110,9 +110,8 @@ function bundleFiles() {
     .pipe(gulp.dest('dist'))
 }
 
-gulp.task("default", async function(cb) {
-  console.log("OLA")
-  await browserify().add("app/scripts/initial.ts")  
+gulp.task("default", async function() {
+  return browserify().add("app/scripts/initial.ts")  
   .transform(babelify, {
     presets:['@babel/preset-typescript', '@babel/preset-env'],
     extensions:[".ts", ".js"]
@@ -124,7 +123,6 @@ gulp.task("default", async function(cb) {
   .on("error",(err)=>{
     console.error(err.toString())
   })  
-  cb()
 })
 
 gulp.task("run", gulp.series(bundleFiles));

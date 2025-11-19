@@ -41,18 +41,18 @@ class Wave extends Sprite {
         this.startTopY = Math.PI * 2
 
         this.generateBubbles()
-        //this.entitiesManager.tryToGenerateEntity() 
+        this.entitiesManager.tryToGenerateEntity() 
     }
-    private queueElement(type:string, element:Sprite) {
+    queueElement(type:string, element:Sprite) {
         const id = Date.now()
         element.name = type
         Object.defineProperty(element,"id",{value:id})
         this.queuedList.push(element) 
     }
-    private queuedElementsBy(type:string) {   
+    queuedElementsBy(type:string) {   
         return this.queuedList.filter(f=>{return f.name == type})
     }
-    private dequeueElement(element:any):boolean {   
+    protected dequeueElement(element:any):boolean {   
         const contains =  this.queuedList.lastIndexOf(element) > -1
         this.queuedList = this.queuedList.filter(f=>f.id != element.id)
         return contains
@@ -73,7 +73,7 @@ class Wave extends Sprite {
     }
     getElementsBy(type:string):any[] {
         const elements = this.elements.filter((f:any)=>{
-            return f.name == 'bubble'
+            return f.name == type
         })
         return elements
     }

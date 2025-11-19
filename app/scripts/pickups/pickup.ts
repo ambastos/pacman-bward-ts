@@ -1,9 +1,9 @@
-import { Container, RenderTexture, Sprite, Texture } from "pixi.js";
-import Entity from "../characters/entity.ts";
+import { Container, ObservablePoint, RenderTexture, Sprite, Texture } from "pixi.js";
+import StaticEntity from "../characters/staticEntity.ts";
 import GameCoordinator from "../core/gameCoordinator.ts";
 import Pacman from "../characters/pacman.ts";
 
-class Pickup extends Entity {
+class Pickup extends StaticEntity {
   type:string
   pacman:Pacman
   mazeDiv:any
@@ -161,7 +161,7 @@ class Pickup extends Entity {
    * @param {({ x: number, y: number, size: number})} originalPacman
    * @returns {boolean}
    */
-  checkForCollision(pickup: { x: any; y: any; size: any; }, 
+  checkForCollision(pickup: { x: number; y: number; size: number; }, 
       originalPacman: { x: number; y: number; size: number; }):boolean {
     const pacman = Object.assign({}, originalPacman);
 
@@ -181,7 +181,7 @@ class Pickup extends Entity {
    * @param {({ x:number, y:number })} pacmanCenter - The center of Pacman's hitbox
    * @param {Boolean} debugging - Flag to change the appearance of pickups for testing
    */
-  checkPacmanProximity(maxDistance: number, pacmanCenter: { x: any; y: any; }, debugging: boolean) {
+  checkPacmanProximity(maxDistance: number, pacmanCenter: ObservablePoint, debugging: boolean) {
     if (this.sprite!.visible) {
       const distance = Math.sqrt(
         ((this.center.x - pacmanCenter.x) ** 2)

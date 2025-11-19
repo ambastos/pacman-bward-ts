@@ -1,4 +1,4 @@
-import Entity from "../characters/entity.ts";
+import StaticEntity from "../characters/staticEntity.ts";
 import GameCoordinator from "./gameCoordinator.ts";
 
 class GameEngine {
@@ -9,13 +9,13 @@ class GameEngine {
   fpsDisplay: any;
   elapsedMs: number;
   lastFrameTimeMs: number;
-  entityList: Entity[];
+  entityList: StaticEntity[];
   maxFps: number;
   timestep: number;
   frameId: number;
   running: boolean;
   started: boolean;
-  constructor(gameCoordinator: GameCoordinator, maxFps: number, entityList: Entity[]) {
+  constructor(gameCoordinator: GameCoordinator, maxFps: number, entityList: StaticEntity[]) {
     this.gameCoordinator = gameCoordinator
     this.fpsDisplay = document.getElementById('fps-display');
     this.elapsedMs = 0;

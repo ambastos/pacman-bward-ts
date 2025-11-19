@@ -1,11 +1,12 @@
 import {  ObservablePoint, Sprite, Texture } from "pixi.js";
-import Entity from "./entity.ts";
+import StaticEntity from "./staticEntity.ts";
 import GameCoordinator from "../core/gameCoordinator.ts";
 import CharacterUtil from "../utilities/characterUtil.ts";
 import { copyPosition } from "../utilities/utils.ts";
 import _ from 'lodash'
+import MovableEntity from "./movableEntity.ts";
 
-class Pacman extends Entity{
+class Pacman extends MovableEntity{
   velocityPerMs!:number
   pacmanArrow:any
   spriteArrow!:Sprite | undefined
@@ -17,7 +18,6 @@ class Pacman extends Entity{
     this.scaledTileSize = gameCoordinator.scaledTileSize;  
     this.mazeArray = gameCoordinator.mazeArray;
     this.characterUtil = characterUtil;
-    this.sprite = undefined
     this.spriteArrow = undefined
     this.reset();
   }
@@ -72,7 +72,7 @@ class Pacman extends Entity{
     this.measurement = scaledTileSize * 2;
 
     let frameX = scaledTileSize / spriteFrames
-    this.setSprite(this.direction, frameX)
+    this.setTexture(this.direction, frameX)
     this.setArrowSprite(this.direction, frameX)
   }
 
@@ -88,7 +88,7 @@ class Pacman extends Entity{
     this.position.set(this.defaultPosition.x, this.defaultPosition.y);
     this.oldPosition.set(this.position.x, this.position.y)
     //this.oldPosition = Object.assign({}, this.position);
-    this.sprite?.position.set(this.position.x, this.position.y)
+    //this.sprite?.position.set(this.position.x, this.position.y)
   }
 
   /**
@@ -107,7 +107,7 @@ class Pacman extends Entity{
    */
   setSpriteSheet(direction: string) {    
     this.death = false
-    this.setSprite(direction, 0)
+    this.setTexture(direction, 0)
     this.setArrowSprite(direction, 0)
   }
 
@@ -155,13 +155,11 @@ class Pacman extends Entity{
       return this.gameCoordinator.am.getTexture("pacman", 
         frameX, frameY, w, w)
   }
-  setSprite(direction: string, frameX: number, death?: boolean) {    
-    const texture = this.getTexture(direction, frameX, death)    
-    if (!this.sprite)
-      this.sprite = new Sprite(texture)
-    else
-      this.sprite.texture = texture as Texture
-    this.sprite.zIndex = 1
+  setTexture(direction: string, frameX: number, death?: boolean) {    
+    const texture = this.getTexture(direction, frameX, death)        
+    this.texture = texture as Texture
+    this.tint = 0x00ff00
+    this.zIndex = 1
   }
   setArrowSprite(direction: string, frameX: number, death?: boolean) {    
     const textureArrow = this.getArrowTexture(direction, death)
@@ -179,7 +177,7 @@ class Pacman extends Entity{
 
     this.frame = 0
     this.death = true
-    this.setSprite(this.direction, this.frame,  this.death)
+    this.setTexture(this.direction, this.frame,  this.death)
     this.spriteArrow!.visible = false
     this.setArrowSprite(this.direction, this.frame,  this.death)
   }
@@ -276,7 +274,8 @@ class Pacman extends Entity{
       interp, 'x', this.oldPosition, this.position,
     );
 
-    this.sprite!.position.set(newX, newY)  
+    //this.sprite!.position.set(newX, newY)  
+    //this.position.set(newX, newY)
     const arrowX = newX-this.gameCoordinator.tileSize
     const arrowY = newY-this.gameCoordinator.tileSize
     this.spriteArrow!.position.set(arrowX, arrowY)
@@ -285,8 +284,8 @@ class Pacman extends Entity{
 
     this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
     this.frame = updatedProperties.frame
-    this.setSprite(this.direction, updatedProperties.frame, this.death)
-    this.sprite!.visible = this.display
+    this.setTexture(this.direction, updatedProperties.frame, this.death)
+    this.visible = this.display
     this.spriteArrow!.visible = this.display
   }
 

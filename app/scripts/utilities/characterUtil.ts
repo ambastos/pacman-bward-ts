@@ -1,5 +1,5 @@
 import { ObservablePoint } from "pixi.js";
-import Entity from "../characters/entity.ts";
+import StaticEntity from "../characters/staticEntity.ts";
 import { copyPosition, createObservablePoint } from "./utils.ts";
 
 class CharacterUtil { 
@@ -184,7 +184,7 @@ class CharacterUtil {
     position:ObservablePoint, direction:string, velocityPerMs:number, elapsedMs:number, 
       scaledTileSize:number,
   ):any {
-    const newPosition = createObservablePoint(this, position.x, position.y)
+    const newPosition = copyPosition(this, position)
     newPosition[this.getPropertyToChange(direction)]
       += this.getVelocity(direction, velocityPerMs) * elapsedMs;
     const newGridPosition = this.determineGridPosition(
@@ -248,7 +248,7 @@ class CharacterUtil {
    * Advances spritesheet by one frame if needed
    * @param {Object} character - The character which needs to be animated
    */
-  advanceSpriteSheet(character:Entity):any {
+  advanceSpriteSheet(character:StaticEntity):any {
     const {
       msSinceLastSprite,
       frame,

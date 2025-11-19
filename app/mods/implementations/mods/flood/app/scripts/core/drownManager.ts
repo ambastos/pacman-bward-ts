@@ -9,7 +9,7 @@ import { enlarge } from "../utils/util.ts"
 import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts"
 import Pacman from "../../../../../../../scripts/characters/pacman.ts"
 import Ghost from "../../../../../../../scripts/characters/ghost.ts"
-import Entity from "../../../../../../../scripts/characters/entity.ts"
+import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -53,7 +53,7 @@ class DrownManager {
             //console.log("animation", args)
         })
     }
-    private createBreath(entity:Entity, options?:any) {   
+    private createBreath(entity:MovableEntity, options?:any) {   
         //@ts-ignore            
         entity[breathNamespace] = new Breath(options)
     }
@@ -80,12 +80,12 @@ class DrownManager {
         const wave = this?.wave
         if (!wave || !wave.started || breath.stopped) return
 
-        const bounds = entity.getBounds()
+        const hitArea = enlarge(entity.hitArea.clone(),2)
         let isInGhostHouse = false
         if (entity instanceof Ghost) {
             isInGhostHouse = entity.isInGhostHouse(entity.getGridPosition())
         }
-        const isInsideTheWave = wave.getBounds().contains(bounds.x, bounds.y)
+        const isInsideTheWave = wave.getBounds().contains(hitArea.x, hitArea.y)
         if (entity.allowCollision && !isInGhostHouse && isInsideTheWave){
             breath.elapsedTimeLastBreathMs+=elapsedMs
             if (breath.elapsedTimeLastBreathMs >=1000) {

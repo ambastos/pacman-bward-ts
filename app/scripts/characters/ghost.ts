@@ -1,11 +1,12 @@
 import { Container, ObservablePoint, Rectangle, RenderTexture, Sprite, Texture } from "pixi.js";
-import Entity from "./entity.ts";
+import StaticEntity from "./staticEntity.ts";
 import GameCoordinator from "../core/gameCoordinator.ts";
 import CharacterUtil from "../utilities/characterUtil.ts";
 import Pacman from "./pacman.ts";
 import { copyPosition, createObservablePoint } from "../utilities/utils.ts";
+import MovableEntity from "./movableEntity.ts";
 
-class Ghost extends Entity{
+class Ghost extends MovableEntity{
     pacman:Pacman
     blinky:Ghost | undefined;    
     defaultSpeed!:any    
@@ -203,12 +204,12 @@ class Ghost extends Entity{
     if (mode === 'scared') {
       this.frame = 0
       let scared = this.scaredColor == "blue" ? "scared" : "scaredWhite"
-      this.setSprite(this.name!, this.direction,scared,this.frame)
+      this.setTexture(this.name!, this.direction,scared,this.frame)
     } else if (mode === 'eyes') {
       this.frame = 0
-      this.setSprite(this.name!, this.direction,"eyes",this.frame)
+      this.setTexture(this.name!, this.direction,"eyes",this.frame)
     } else {
-      this.setSprite(this.name!, this.direction,this.emotion,this.frame)
+      this.setTexture(this.name!, this.direction,this.emotion,this.frame)
     }
   }
   getTexture(name:string, direction:string, emotion:string, frameX:number ) {
@@ -264,7 +265,7 @@ class Ghost extends Entity{
     let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale    
     return this.gameCoordinator.am.getTexture("ghosts", frameX, frameY, w, w)
   }
-  setSprite(name:string, direction:string, emotion:string, frameX:number):void {
+  setTexture(name:string, direction:string, emotion:string, frameX:number):void {
       const texture = this.getTexture(name, direction, emotion,frameX)
       if (!this.sprite)
         this.sprite = new Sprite(texture)
@@ -919,7 +920,7 @@ class Ghost extends Entity{
       emotion = scared
     else if (this.mode == 'eyes')
       emotion = 'eyes'
-    this.setSprite(this.name!, this.direction, emotion, updatedProperties.frame)
+    this.setTexture(this.name!, this.direction, emotion, updatedProperties.frame)
   }
 
   /**
