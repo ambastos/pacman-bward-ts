@@ -1,233 +1,73 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var mod_js_1 = __importDefault(require("./mod.js"));
-var EmptyMod = /*#__PURE__*/function (_mod_js_1$default) {
+exports["default"] = void 0;
+var _mod = _interopRequireDefault(require("./mod.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+var EmptyMod = /*#__PURE__*/function (_Mod) {
   function EmptyMod(gameCoordinator) {
     _classCallCheck(this, EmptyMod);
     return _callSuper(this, EmptyMod, [gameCoordinator]);
   }
-  _inherits(EmptyMod, _mod_js_1$default);
+  _inherits(EmptyMod, _Mod);
   return _createClass(EmptyMod);
-}(mod_js_1["default"]);
-exports["default"] = EmptyMod;
+}(_mod["default"]);
+var _default = exports["default"] = EmptyMod;
 
-},{"./mod.js":20}],2:[function(require,module,exports){
+},{"./mod.ts":19}],2:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var mod_js_1 = __importDefault(require("../mod.js"));
-var flood_js_1 = __importDefault(require("./mods/flood/app/scripts/core/flood.js"));
-var FloodModImp = /*#__PURE__*/function (_mod_js_1$default) {
+exports["default"] = void 0;
+var _mod = _interopRequireDefault(require("../mod.ts"));
+var _flood = _interopRequireDefault(require("./mods/flood/app/scripts/core/flood.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _superPropGet(t, o, e, r) { var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+function _get() { return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) { var p = _superPropBase(e, t); if (p) { var n = Object.getOwnPropertyDescriptor(p, t); return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value; } }, _get.apply(null, arguments); }
+function _superPropBase(t, o) { for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t));); return t; }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); } //import Flood from '../../../../flood-pacman-bward/app/scripts/flood.js'
+//import Flood from 'flood-pacman-bward''
+var FloodModImp = /*#__PURE__*/function (_Mod) {
   function FloodModImp(gameCoodinator) {
     var _this;
     _classCallCheck(this, FloodModImp);
     _this = _callSuper(this, FloodModImp, [gameCoodinator]);
     _defineProperty(_this, "flood", void 0);
-    _this.flood = new flood_js_1["default"](gameCoodinator);
+    _this.flood = new _flood["default"](gameCoodinator);
     return _this;
   }
-  _inherits(FloodModImp, _mod_js_1$default);
+  _inherits(FloodModImp, _Mod);
   return _createClass(FloodModImp, [{
     key: "initialize",
     value: function initialize() {
@@ -276,73 +116,28 @@ var FloodModImp = /*#__PURE__*/function (_mod_js_1$default) {
       this.flood.draw();
     }
   }]);
-}(mod_js_1["default"]); // if (!process.env.NYC_PROCESS_ID) 
+}(_mod["default"]); // if (!process.env.NYC_PROCESS_ID) 
 //   global.window.FloodModImp = FloodModImp
 //removeIf(production)
-exports["default"] = FloodModImp;
-//endRemoveIf
+var _default = exports["default"] = FloodModImp; //endRemoveIf
 
-},{"../mod.js":20,"./mods/flood/app/scripts/core/flood.js":9}],3:[function(require,module,exports){
+},{"../mod.ts":19,"./mods/flood/app/scripts/core/flood.ts":9}],3:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _classPrivateMethodInitSpec(e, a) {
-  _checkPrivateRedeclaration(e, a), a.add(e);
-}
-function _checkPrivateRedeclaration(e, t) {
-  if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _assertClassBrand(e, t, n) {
-  if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-  throw new TypeError("Private element is not present on this object");
-}
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _classPrivateMethodInitSpec(e, a) { _checkPrivateRedeclaration(e, a), a.add(e); }
+function _checkPrivateRedeclaration(e, t) { if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object"); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _assertClassBrand(e, t, n) { if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n; throw new TypeError("Private element is not present on this object"); }
 var _Animation_brand = /*#__PURE__*/new WeakSet();
 var Animation = /*#__PURE__*/function () {
   function Animation(interval, duration, callback, thisClass) {
@@ -443,65 +238,24 @@ function _end() {
   this.end = true;
   this.playing = false;
 }
-exports["default"] = Animation;
+var _default = exports["default"] = Animation;
 
 },{}],4:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var animation_js_1 = __importDefault(require("./animation.js"));
+exports["default"] = void 0;
+var _animation = _interopRequireDefault(require("./animation.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var Animator = /*#__PURE__*/function () {
   function Animator(thisClass) {
     _classCallCheck(this, Animator);
@@ -516,13 +270,13 @@ var Animator = /*#__PURE__*/function () {
   return _createClass(Animator, [{
     key: "createAnimation",
     value: function createAnimation(name, interval, duration, callback) {
-      var an = new animation_js_1["default"](interval, duration, callback, this.thisClass);
+      var an = new _animation["default"](interval, duration, callback, this.thisClass);
       this.animations.set(name, an);
     }
     /**
      * Plays the animation with this name
-     * @param {String} name
-     * @param {any} args
+     * @param {String} name 
+     * @param {any} args 
      */
   }, {
     key: "play",
@@ -533,7 +287,7 @@ var Animator = /*#__PURE__*/function () {
     }
     /**
      * Stops the animation with this name
-     * @param {String} animationName
+     * @param {String} animationName 
      */
   }, {
     key: "stopAnimation",
@@ -582,192 +336,27 @@ var Animator = /*#__PURE__*/function () {
     }
   }]);
 }();
-exports["default"] = Animator;
+var _default = exports["default"] = Animator;
 
-},{"./animation.js":3}],5:[function(require,module,exports){
+},{"./animation.ts":3}],5:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _regenerator() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
-    t,
-    r = "function" == typeof Symbol ? Symbol : {},
-    n = r.iterator || "@@iterator",
-    o = r.toStringTag || "@@toStringTag";
-  function i(r, n, o, i) {
-    var c = n && n.prototype instanceof Generator ? n : Generator,
-      u = Object.create(c.prototype);
-    return _regeneratorDefine2(u, "_invoke", function (r, n, o) {
-      var i,
-        c,
-        u,
-        f = 0,
-        p = o || [],
-        y = !1,
-        G = {
-          p: 0,
-          n: 0,
-          v: e,
-          a: d,
-          f: d.bind(e, 4),
-          d: function d(t, r) {
-            return i = t, c = 0, u = e, G.n = r, a;
-          }
-        };
-      function d(r, n) {
-        for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
-          var o,
-            i = p[t],
-            d = G.p,
-            l = i[2];
-          r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0));
-        }
-        if (o || r > 1) return a;
-        throw y = !0, n;
-      }
-      return function (o, p, l) {
-        if (f > 1) throw TypeError("Generator is already running");
-        for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) {
-          i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
-          try {
-            if (f = 2, i) {
-              if (c || (o = "next"), t = i[o]) {
-                if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
-                if (!t.done) return t;
-                u = t.value, c < 2 && (c = 0);
-              } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1);
-              i = e;
-            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
-          } catch (t) {
-            i = e, c = 1, u = t;
-          } finally {
-            f = 1;
-          }
-        }
-        return {
-          value: t,
-          done: y
-        };
-      };
-    }(r, o, i), !0), u;
-  }
-  var a = {};
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-  t = Object.getPrototypeOf;
-  var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () {
-      return this;
-    }), t),
-    u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
-  function f(e) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e;
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () {
-    return this;
-  }), _regeneratorDefine2(u, "toString", function () {
-    return "[object Generator]";
-  }), (_regenerator = function _regenerator() {
-    return {
-      w: i,
-      m: f
-    };
-  })();
-}
-function _regeneratorDefine2(e, r, n, t) {
-  var i = Object.defineProperty;
-  try {
-    i({}, "", {});
-  } catch (e) {
-    i = 0;
-  }
-  _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) {
-    function o(r, n) {
-      _regeneratorDefine2(e, r, function (e) {
-        return this._invoke(r, n, e);
-      });
-    }
-    r ? i ? i(e, r, {
-      value: n,
-      enumerable: !t,
-      configurable: !t,
-      writable: !t
-    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
-  }, _regeneratorDefine2(e, r, n, t);
-}
-function asyncGeneratorStep(n, t, e, r, o, a, c) {
-  try {
-    var i = n[a](c),
-      u = i.value;
-  } catch (n) {
-    return void e(n);
-  }
-  i.done ? t(u) : Promise.resolve(u).then(r, o);
-}
-function _asyncToGenerator(n) {
-  return function () {
-    var t = this,
-      e = arguments;
-    return new Promise(function (r, o) {
-      var a = n.apply(t, e);
-      function _next(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-      }
-      function _throw(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-      }
-      _next(void 0);
-    });
-  };
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var pixi_js_1 = require("pixi.js");
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var AssetsManager = /*#__PURE__*/function () {
   function AssetsManager(flood) {
     _classCallCheck(this, AssetsManager);
@@ -788,17 +377,17 @@ var AssetsManager = /*#__PURE__*/function () {
           while (1) switch (_context.n) {
             case 0:
               path = 'app/mods/implementations/mods/flood/app/sprites/';
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "bubbles",
                 src: "".concat(path, "bubbles.png")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "sonic",
                 src: "".concat(path, "sonic_sprites.png")
               });
               resources = this.getResources();
               _context.n = 1;
-              return pixi_js_1.Assets.load(resources, callbackProgress);
+              return _pixi.Assets.load(resources, callbackProgress);
             case 1:
               textures = _context.v;
               //Add textures to the main assetsManager cache
@@ -819,59 +408,22 @@ var AssetsManager = /*#__PURE__*/function () {
     }
   }]);
 }();
-exports["default"] = AssetsManager;
+var _default = exports["default"] = AssetsManager;
 
-},{"pixi.js":449}],6:[function(require,module,exports){
+},{"pixi.js":446}],6:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var Breath = /*#__PURE__*/function () {
   function Breath(options) {
     _classCallCheck(this, Breath);
@@ -912,80 +464,32 @@ var Breath = /*#__PURE__*/function () {
     }
   }]);
 }();
-exports["default"] = Breath;
+var _default = exports["default"] = Breath;
 
 },{}],7:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _classPrivateMethodInitSpec(e, a) {
-  _checkPrivateRedeclaration(e, a), a.add(e);
-}
-function _checkPrivateRedeclaration(e, t) {
-  if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _assertClassBrand(e, t, n) {
-  if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-  throw new TypeError("Private element is not present on this object");
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var animator_js_1 = __importDefault(require("../animations/animator.js"));
-var state_js_1 = require("../states/state.js");
-var breath_js_1 = __importDefault(require("./breath.js"));
-var util_js_1 = require("../utils/util.js");
-var pacman_js_1 = __importDefault(require("../../../../../../../scripts/characters/pacman.js"));
-var ghost_js_1 = __importDefault(require("../../../../../../../scripts/characters/ghost.js"));
+exports["default"] = void 0;
+var _animator = _interopRequireDefault(require("../animations/animator.ts"));
+var _state = require("../states/state.ts");
+var _breath = _interopRequireDefault(require("./breath.ts"));
+var _util = require("../utils/util.ts");
+var _pacman = _interopRequireDefault(require("../../../../../../../scripts/characters/pacman.ts"));
+var _ghost = _interopRequireDefault(require("../../../../../../../scripts/characters/ghost.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _classPrivateMethodInitSpec(e, a) { _checkPrivateRedeclaration(e, a), a.add(e); }
+function _checkPrivateRedeclaration(e, t) { if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object"); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _assertClassBrand(e, t, n) { if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n; throw new TypeError("Private element is not present on this object"); }
 /** name spacing used to create the needed properties*/
 var breathNamespace = "breath";
 var _DrownManager_brand = /*#__PURE__*/new WeakSet();
@@ -1010,7 +514,7 @@ var DrownManager = /*#__PURE__*/function () {
     this.gc = flood.gc;
     this.gp = flood.gp;
     this.gc.ghostCombo = 0;
-    this.animator = new animator_js_1["default"](this);
+    this.animator = new _animator["default"](this);
     this.container = flood.container;
   }
   return _createClass(DrownManager, [{
@@ -1038,7 +542,7 @@ var DrownManager = /*#__PURE__*/function () {
     key: "createBreath",
     value: function createBreath(entity, options) {
       //@ts-ignore            
-      entity[breathNamespace] = new breath_js_1["default"](options);
+      entity[breathNamespace] = new _breath["default"](options);
     }
   }, {
     key: "resetEntitiesBreathing",
@@ -1072,14 +576,14 @@ var DrownManager = /*#__PURE__*/function () {
     key: "killEntity",
     value: function killEntity(entity) {
       var breath = entity[breathNamespace];
-      if (entity instanceof pacman_js_1["default"]) {
+      if (entity instanceof _pacman["default"]) {
         // window.dispatchEvent(new Event('deathSequence'));
         this.emitter.emit("pacman-death");
         breath.stop();
         breath.reset();
         //this.terminateWave()
-        this.flood.changeState(state_js_1.States.END_STATE);
-      } else if (entity instanceof ghost_js_1["default"]) {
+        this.flood.changeState(_state.States.END_STATE);
+      } else if (entity instanceof _ghost["default"]) {
         var event = {
           ghost: entity
         };
@@ -1140,10 +644,10 @@ var DrownManager = /*#__PURE__*/function () {
       if (this.wave) {
         this.animator.update();
         var container = this.wave.container;
-        var bubbles = this.wave.getElements("bubble");
+        var bubbles = this.wave.getElementsBy("bubble");
         var pacman = this.gc.pacman;
         //@ts-ignore
-        var hitArea = (0, util_js_1.enlarge)(pacman.sprite.hitArea.clone(), 2);
+        var hitArea = (0, _util.enlarge)(pacman.hitArea.clone(), 2);
         bubbles.forEach(function (b) {
           if (b.getBounds().contains(hitArea.x, hitArea.y)) {
             _this4.emitter.emit("bubble-swallow");
@@ -1166,12 +670,12 @@ function _tryDrownEntity(entity, elapsedMs) {
   var breath = entity[breathNamespace];
   var wave = this === null || this === void 0 ? void 0 : this.wave;
   if (!wave || !wave.started || breath.stopped) return;
-  var sprite = entity.sprite.getBounds();
+  var bounds = entity.getBounds();
   var isInGhostHouse = false;
-  if (entity instanceof ghost_js_1["default"]) {
+  if (entity instanceof _ghost["default"]) {
     isInGhostHouse = entity.isInGhostHouse(entity.getGridPosition());
   }
-  var isInsideTheWave = wave.getBounds().contains(sprite.x, sprite.y);
+  var isInsideTheWave = wave.getBounds().contains(bounds.x, bounds.y);
   if (entity.allowCollision && !isInGhostHouse && isInsideTheWave) {
     breath.elapsedTimeLastBreathMs += elapsedMs;
     if (breath.elapsedTimeLastBreathMs >= 1000) {
@@ -1191,66 +695,25 @@ function _tryDrownEntity(entity, elapsedMs) {
     }
   }
 }
-exports["default"] = DrownManager;
+var _default = exports["default"] = DrownManager;
 
-},{"../../../../../../../scripts/characters/ghost.js":22,"../../../../../../../scripts/characters/pacman.js":23,"../animations/animator.js":4,"../states/state.js":18,"../utils/util.js":19,"./breath.js":6}],8:[function(require,module,exports){
+},{"../../../../../../../scripts/characters/ghost.ts":21,"../../../../../../../scripts/characters/pacman.ts":22,"../animations/animator.ts":4,"../states/state.ts":17,"../utils/util.ts":18,"./breath.ts":6}],8:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var sonic_js_1 = __importDefault(require("../entities/sonic.js"));
-var util_js_1 = require("../utils/util.js");
+exports["default"] = void 0;
+var _sonic = _interopRequireDefault(require("../entities/sonic.ts"));
+var _util = require("../utils/util.ts");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var EntitiesManager = /*#__PURE__*/function () {
   function EntitiesManager(wave) {
     _classCallCheck(this, EntitiesManager);
@@ -1265,7 +728,7 @@ var EntitiesManager = /*#__PURE__*/function () {
     value: function tryToGenerateEntity() {
       var random = Math.random();
       if (random > 0) {
-        var ways = (0, util_js_1.getMazeWays)(this.wave.maze);
+        var ways = (0, _util.getMazeWays)(this.wave.maze);
         var cells = ways.map(function (f, index) {
           var arr = [];
           f.cols.forEach(function (col) {
@@ -1277,7 +740,7 @@ var EntitiesManager = /*#__PURE__*/function () {
           return arr;
         }).flat();
         var index = Math.floor(Math.random() * (cells.length - 1));
-        var sonic = new sonic_js_1["default"](this.wave.drownManager.flood);
+        var sonic = new _sonic["default"](this.wave.drownManager.flood);
         var coords = this.wave.maze.getPixelCoordinates(cells[index].row, cells[index].col);
         sonic.position.set(coords.x, coords.y);
         this.entities.push(sonic);
@@ -1285,280 +748,53 @@ var EntitiesManager = /*#__PURE__*/function () {
     }
   }]);
 }();
-exports["default"] = EntitiesManager;
+var _default = exports["default"] = EntitiesManager;
 
-},{"../entities/sonic.js":12,"../utils/util.js":19}],9:[function(require,module,exports){
+},{"../entities/sonic.ts":11,"../utils/util.ts":18}],9:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _regenerator() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
-    t,
-    r = "function" == typeof Symbol ? Symbol : {},
-    n = r.iterator || "@@iterator",
-    o = r.toStringTag || "@@toStringTag";
-  function i(r, n, o, i) {
-    var c = n && n.prototype instanceof Generator ? n : Generator,
-      u = Object.create(c.prototype);
-    return _regeneratorDefine2(u, "_invoke", function (r, n, o) {
-      var i,
-        c,
-        u,
-        f = 0,
-        p = o || [],
-        y = !1,
-        G = {
-          p: 0,
-          n: 0,
-          v: e,
-          a: d,
-          f: d.bind(e, 4),
-          d: function d(t, r) {
-            return i = t, c = 0, u = e, G.n = r, a;
-          }
-        };
-      function d(r, n) {
-        for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
-          var o,
-            i = p[t],
-            d = G.p,
-            l = i[2];
-          r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0));
-        }
-        if (o || r > 1) return a;
-        throw y = !0, n;
-      }
-      return function (o, p, l) {
-        if (f > 1) throw TypeError("Generator is already running");
-        for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) {
-          i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
-          try {
-            if (f = 2, i) {
-              if (c || (o = "next"), t = i[o]) {
-                if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
-                if (!t.done) return t;
-                u = t.value, c < 2 && (c = 0);
-              } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1);
-              i = e;
-            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
-          } catch (t) {
-            i = e, c = 1, u = t;
-          } finally {
-            f = 1;
-          }
-        }
-        return {
-          value: t,
-          done: y
-        };
-      };
-    }(r, o, i), !0), u;
-  }
-  var a = {};
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-  t = Object.getPrototypeOf;
-  var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () {
-      return this;
-    }), t),
-    u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
-  function f(e) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e;
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () {
-    return this;
-  }), _regeneratorDefine2(u, "toString", function () {
-    return "[object Generator]";
-  }), (_regenerator = function _regenerator() {
-    return {
-      w: i,
-      m: f
-    };
-  })();
-}
-function _regeneratorDefine2(e, r, n, t) {
-  var i = Object.defineProperty;
-  try {
-    i({}, "", {});
-  } catch (e) {
-    i = 0;
-  }
-  _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) {
-    function o(r, n) {
-      _regeneratorDefine2(e, r, function (e) {
-        return this._invoke(r, n, e);
-      });
-    }
-    r ? i ? i(e, r, {
-      value: n,
-      enumerable: !t,
-      configurable: !t,
-      writable: !t
-    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
-  }, _regeneratorDefine2(e, r, n, t);
-}
-function asyncGeneratorStep(n, t, e, r, o, a, c) {
-  try {
-    var i = n[a](c),
-      u = i.value;
-  } catch (n) {
-    return void e(n);
-  }
-  i.done ? t(u) : Promise.resolve(u).then(r, o);
-}
-function _asyncToGenerator(n) {
-  return function () {
-    var t = this,
-      e = arguments;
-    return new Promise(function (r, o) {
-      var a = n.apply(t, e);
-      function _next(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-      }
-      function _throw(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-      }
-      _next(void 0);
-    });
-  };
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _classPrivateMethodInitSpec(e, a) {
-  _checkPrivateRedeclaration(e, a), a.add(e);
-}
-function _checkPrivateRedeclaration(e, t) {
-  if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _assertClassBrand(e, t, n) {
-  if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-  throw new TypeError("Private element is not present on this object");
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var pixi_js_1 = require("pixi.js");
-var idleState_js_1 = __importDefault(require("../states/idleState.js"));
-var startState_js_1 = __importDefault(require("../states/startState.js"));
-var endState_js_1 = __importDefault(require("../states/endState.js"));
-var cancelState_js_1 = __importDefault(require("../states/cancelState.js"));
-var drownManager_js_1 = __importDefault(require("./drownManager.js"));
-var mod_js_1 = __importDefault(require("../mod.js"));
-var state_js_1 = require("../states/state.js");
-var assetsManager_js_1 = __importDefault(require("./assetsManager.js"));
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+var _idleState = _interopRequireDefault(require("../states/idleState.ts"));
+var _startState = _interopRequireDefault(require("../states/startState.ts"));
+var _endState = _interopRequireDefault(require("../states/endState.ts"));
+var _cancelState = _interopRequireDefault(require("../states/cancelState.ts"));
+var _drownManager = _interopRequireDefault(require("./drownManager.ts"));
+var _mod = _interopRequireDefault(require("../mod.ts"));
+var _state = require("../states/state.ts");
+var _assetsManager = _interopRequireDefault(require("./assetsManager.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _superPropGet(t, o, e, r) { var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+function _get() { return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) { var p = _superPropBase(e, t); if (p) { var n = Object.getOwnPropertyDescriptor(p, t); return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value; } }, _get.apply(null, arguments); }
+function _superPropBase(t, o) { for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t));); return t; }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _classPrivateMethodInitSpec(e, a) { _checkPrivateRedeclaration(e, a), a.add(e); }
+function _checkPrivateRedeclaration(e, t) { if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object"); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _assertClassBrand(e, t, n) { if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n; throw new TypeError("Private element is not present on this object"); }
 /** name spacing used to create the needed properties*/
 var breathNamespace = "breath";
 var _Flood_brand = /*#__PURE__*/new WeakSet();
-var Flood = /*#__PURE__*/function (_mod_js_1$default) {
+var Flood = /*#__PURE__*/function (_Mod) {
   function Flood(gameCoordinator) {
     var _this2;
     _classCallCheck(this, Flood);
@@ -1579,14 +815,15 @@ var Flood = /*#__PURE__*/function (_mod_js_1$default) {
     _this2.width = gameCoordinator.width;
     _this2.maxHeight = gameCoordinator.height;
     _this2.tileSize = _this2.gc.tileSize;
-    _this2.container = new pixi_js_1.Container();
+    _this2.container = new _pixi.Container();
     _this2.nextWaveTime = null;
-    _this2.am = new assetsManager_js_1["default"](_this2);
-    _this2.gp = new pixi_js_1.Graphics();
-    _this2.drownManager = new drownManager_js_1["default"](_this2);
+    _this2.am = new _assetsManager["default"](_this2);
+    _this2.gp = new _pixi.Graphics();
+    _this2.drownManager = new _drownManager["default"](_this2);
+    console.log("Flood mod is active!");
     return _this2;
   }
-  _inherits(Flood, _mod_js_1$default);
+  _inherits(Flood, _Mod);
   return _createClass(Flood, [{
     key: "initialize",
     value: function () {
@@ -1599,9 +836,10 @@ var Flood = /*#__PURE__*/function (_mod_js_1$default) {
               console.log("lives for debugging ", this.gc.lives);
               this.ghosts = this.gc.ghosts;
               this.drownManager.initialize();
-              this.states = [new idleState_js_1["default"](this.drownManager), new startState_js_1["default"](this.drownManager), new endState_js_1["default"](this.drownManager), new cancelState_js_1["default"](this.drownManager)];
+              this.states = [new _idleState["default"](this.drownManager), new _startState["default"](this.drownManager), new _endState["default"](this.drownManager), new _cancelState["default"](this.drownManager)];
               //@ts-ignore
-              this.state = this.states[state_js_1.States.IDLE_STATE];
+              this.state = this.states[_state.States.IDLE_STATE];
+
               //Assets.add({alias:"bubbles", src: "../../sprites/bubbles.png"})
               //await Assets.load(["bubbles"])
               _assertClassBrand(_Flood_brand, this, _registerListeners).call(this);
@@ -1635,7 +873,7 @@ var Flood = /*#__PURE__*/function (_mod_js_1$default) {
       this.container.removeChild(this.gp);
       this.container.addChild(this.gp);
       //@ts-ignore
-      this.state = this.states[state_js_1.States.IDLE_STATE];
+      this.state = this.states[_state.States.IDLE_STATE];
       this.state.start();
     }
   }, {
@@ -1648,7 +886,7 @@ var Flood = /*#__PURE__*/function (_mod_js_1$default) {
   }, {
     key: "generateWave",
     value: function generateWave(timeToStartMS) {
-      this.changeState(state_js_1.States.IDLE_STATE);
+      this.changeState(_state.States.IDLE_STATE);
       this.state.generateWave(timeToStartMS);
     }
   }, {
@@ -1660,7 +898,7 @@ var Flood = /*#__PURE__*/function (_mod_js_1$default) {
       if (!this.started) return;
       this.drownManager.update(elapsedMs);
       this.state.update(elapsedMs);
-      if (!(this.state instanceof cancelState_js_1["default"])) {
+      if (!(this.state instanceof _cancelState["default"])) {
         //start to drown Pacman
         this.drownManager.tryDrownEntities(elapsedMs);
       }
@@ -1676,7 +914,7 @@ var Flood = /*#__PURE__*/function (_mod_js_1$default) {
       }
     }
   }]);
-}(mod_js_1["default"]); //removeIf(production)
+}(_mod["default"]); //removeIf(production)
 function _registerListeners() {
   var _this3 = this;
   this.emitter = this.gc.emitter;
@@ -1696,7 +934,7 @@ function _changePacmanDeathSequence() {
         detail: {
           restart: false,
           callbackAfter: function callbackAfter() {
-            _this.changeState(state_js_1.States.CANCEL_STATE);
+            _this.changeState(_state.States.CANCEL_STATE);
           }
         }
       };
@@ -1707,115 +945,38 @@ function _changePacmanDeathSequence() {
     }
   });
 }
-exports["default"] = Flood;
-//endRemoveIf
+var _default = exports["default"] = Flood; //endRemoveIf
 
-},{"../mod.js":13,"../states/cancelState.js":14,"../states/endState.js":15,"../states/idleState.js":16,"../states/startState.js":17,"../states/state.js":18,"./assetsManager.js":5,"./drownManager.js":7,"pixi.js":449}],10:[function(require,module,exports){
+},{"../mod.ts":12,"../states/cancelState.ts":13,"../states/endState.ts":14,"../states/idleState.ts":15,"../states/startState.ts":16,"../states/state.ts":17,"./assetsManager.ts":5,"./drownManager.ts":7,"pixi.js":446}],10:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var pixi_js_1 = require("pixi.js");
-var entitiesManager_js_1 = __importDefault(require("./entitiesManager.js"));
-var util_js_1 = require("../utils/util.js");
-var Wave = /*#__PURE__*/function (_pixi_js_1$Sprite) {
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+var _entitiesManager = _interopRequireDefault(require("./entitiesManager.ts"));
+var _util = require("../utils/util.ts");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var Wave = /*#__PURE__*/function (_Sprite) {
   function Wave(drownManager, maze, width, height) {
     var _this;
     _classCallCheck(this, Wave);
-    _this = _callSuper(this, Wave, [pixi_js_1.Texture.WHITE]);
+    _this = _callSuper(this, Wave, [_pixi.Texture.WHITE]);
     _defineProperty(_this, "speedY", 15);
     _defineProperty(_this, "startTime", 0);
     _defineProperty(_this, "started", false);
@@ -1830,6 +991,7 @@ var Wave = /*#__PURE__*/function (_pixi_js_1$Sprite) {
     _defineProperty(_this, "bubblesLocation", void 0);
     _defineProperty(_this, "duration", void 0);
     _defineProperty(_this, "elements", []);
+    _defineProperty(_this, "queuedList", []);
     _this.width = width;
     _this.height = height;
     _this.visible = false;
@@ -1839,90 +1001,42 @@ var Wave = /*#__PURE__*/function (_pixi_js_1$Sprite) {
     _this.maze = maze;
     _this.drownManager = drownManager;
     _this.gp = _this.drownManager.gp;
-    _this.entitiesManager = new entitiesManager_js_1["default"](_this);
+    _this.entitiesManager = new _entitiesManager["default"](_this);
     _this.gp.zIndex = _this.zIndex;
     _this.container = _this.drownManager.gc.stage;
     //if (this.container.children.length > 0) 
     _this.container.addChild(_this.gp);
     _this.startTopY = Math.PI * 2;
-    var numberOfBubles = Math.ceil(Math.random() * 3);
-    var wayCells = (0, util_js_1.getMazeWays)(_this.maze);
-    var rows = wayCells.map(function (m) {
-      return m.row;
-    });
-    _this.bubblesLocation = [];
-    var _loop = function _loop() {
-      var indexRow = Math.floor(Math.random() * (rows.length - 1));
-      var row = rows[indexRow];
-      var cols = wayCells.find(function (f) {
-        return f.row == row;
-      }).cols;
-      var indexCol = Math.floor(Math.random() * (cols.length - 1));
-      var col = cols[indexCol];
-      _this.bubblesLocation.push({
-        row: row,
-        col: col
-      });
-    };
-    for (var i = 1; i <= numberOfBubles; i++) {
-      _loop();
-    }
+    _this.generateBubbles();
     //this.entitiesManager.tryToGenerateEntity() 
     return _this;
   }
-  _inherits(Wave, _pixi_js_1$Sprite);
+  _inherits(Wave, _Sprite);
   return _createClass(Wave, [{
-    key: "increase",
-    value: function increase(elapsedMs) {
-      if (this.visible) {
-        this.height += this.speedY * (elapsedMs / 1000);
-        this.decreasing = false;
-        this.updatePosition();
-        this.generateBubbles();
-      }
+    key: "queueElement",
+    value: function queueElement(type, element) {
+      var id = Date.now();
+      element.name = type;
+      Object.defineProperty(element, "id", {
+        value: id
+      });
+      this.queuedList.push(element);
     }
   }, {
-    key: "generateBubbles",
-    value: function generateBubbles() {
-      var buble;
-      var tileSize = this.maze.tileSize;
-      for (var i = 0; i < this.bubblesLocation.length; i++) {
-        var pixelBounds = this.maze.getPixelCoordinates(this.bubblesLocation[i].col, this.bubblesLocation[i].row);
-        if (pixelBounds.y == this.y) {
-          buble = this.bubblesLocation[i];
-          var bubleSprite = new pixi_js_1.Sprite(this.drownManager.flood.am.getTexture("bubbles"));
-          bubleSprite.name = "bubble";
-          //bubleSprite.tint = 0x002400
-          //bubleSprite.alpha = 0.6 
-          bubleSprite.height = tileSize;
-          bubleSprite.width = tileSize;
-          bubleSprite.position.set(pixelBounds.x, pixelBounds.y);
-          this.addElement(bubleSprite);
-          //this.container.addChild(bubleSprite)
-        }
-      }
+    key: "queuedElementsBy",
+    value: function queuedElementsBy(type) {
+      return this.queuedList.filter(function (f) {
+        return f.name == type;
+      });
     }
   }, {
-    key: "decrease",
-    value: function decrease(elapsedMs) {
-      var _this2 = this;
-      if (this.visible) {
-        this.height -= this.speedY * 1.3 * (elapsedMs / 1000);
-        this.decreasing = true;
-        this.updatePosition();
-        //console.log("decrease wave: ", this.height, this.position)
-        for (var i = 0; i < this.bubblesLocation.length; i++) {
-          var pixelBounds = this.maze.getPixelCoordinates(this.bubblesLocation[i].col, this.bubblesLocation[i].row);
-          if (pixelBounds.y <= this.y) {
-            var bubble = this.container.children.find(function (f) {
-              if (f.name == 'bubble') {
-                if (f.y <= _this2.y) return f;
-              }
-            });
-            if (bubble) this.container.removeChild(bubble);
-          }
-        }
-      }
+    key: "dequeueElement",
+    value: function dequeueElement(element) {
+      var contains = this.queuedList.lastIndexOf(element) > -1;
+      this.queuedList = this.queuedList.filter(function (f) {
+        return f.id != element.id;
+      });
+      return contains;
     }
   }, {
     key: "addElement",
@@ -1931,21 +1045,97 @@ var Wave = /*#__PURE__*/function (_pixi_js_1$Sprite) {
       this.container.addChild(element);
     }
   }, {
+    key: "removeElement",
+    value: function removeElement(element) {
+      this.elements.splice(this.elements.indexOf(element), 1);
+      this.container.removeChild(element);
+    }
+  }, {
     key: "clearElements",
     value: function clearElements() {
-      var _this3 = this;
+      var _this2 = this;
       this.elements.forEach(function (el) {
-        _this3.container.removeChild(el);
+        _this2.container.removeChild(el);
       });
       this.elements.length = 0;
     }
   }, {
-    key: "getElements",
-    value: function getElements(type) {
-      var elements = this.container.children.filter(function (f) {
+    key: "getElementsBy",
+    value: function getElementsBy(type) {
+      var elements = this.elements.filter(function (f) {
         return f.name == 'bubble';
       });
       return elements;
+    }
+  }, {
+    key: "generateBubbles",
+    value: function generateBubbles() {
+      var _this3 = this;
+      var numberOfBubles = Math.ceil(Math.random() * 3);
+      var wayCells = (0, _util.getMazeWays)(this.maze);
+      var rows = wayCells.map(function (m) {
+        return m.row;
+      });
+      var tileSize = this.maze.tileSize;
+      var _loop = function _loop() {
+        var indexRow = Math.floor(Math.random() * (rows.length - 1));
+        var row = rows[indexRow];
+        var cols = wayCells.find(function (f) {
+          return f.row == row;
+        }).cols;
+        var indexCol = Math.floor(Math.random() * (cols.length - 1));
+        var col = cols[indexCol];
+        var pixelBounds = _this3.maze.getPixelCoordinates(col, row);
+        var bubble = new _pixi.Sprite(_this3.drownManager.flood.am.getTexture("bubbles"));
+        //bubleSprite.tint = 0x002400
+        //bubleSprite.alpha = 0.6 
+        bubble.height = tileSize;
+        bubble.width = tileSize;
+        bubble.position.set(pixelBounds.x, pixelBounds.y);
+        _this3.queueElement("bubble", bubble);
+      };
+      for (var i = 1; i <= numberOfBubles; i++) {
+        _loop();
+      }
+    }
+  }, {
+    key: "getGeneratedBubbles",
+    value: function getGeneratedBubbles() {
+      var bubbles = this.queuedElementsBy("bubble");
+      for (var i = 0; i < bubbles.length; i++) {
+        var bubble = bubbles[i];
+        if (bubble.position.y == this.y) {
+          this.addElement(bubble);
+          this.dequeueElement(bubble);
+        }
+      }
+    }
+  }, {
+    key: "increase",
+    value: function increase(elapsedMs) {
+      if (this.visible) {
+        this.height += this.speedY * (elapsedMs / 1000);
+        this.decreasing = false;
+        this.updatePosition();
+        this.getGeneratedBubbles();
+      }
+    }
+  }, {
+    key: "decrease",
+    value: function decrease(elapsedMs) {
+      if (this.visible) {
+        this.height -= this.speedY * 1.3 * (elapsedMs / 1000);
+        this.decreasing = true;
+        this.updatePosition();
+        //console.log("decrease wave: ", this.height, this.position)
+        var bubbles = this.getElementsBy("bubble");
+        for (var i = 0; i < bubbles.length; i++) {
+          var bubble = bubbles[i];
+          if (bubble.y <= this.y) {
+            this.removeElement(bubble);
+          }
+        }
+      }
     }
   }, {
     key: "updatePosition",
@@ -2072,9 +1262,10 @@ var Wave = /*#__PURE__*/function (_pixi_js_1$Sprite) {
         y = bounds.left[0].y;
         points.push(x, y);
       }
-      var poly = new pixi_js_1.Polygon(points);
+      var poly = new _pixi.Polygon(points);
       gp.beginFill(0x56DBE3, 0.5);
       gp.drawShape(poly);
+
       //Interval to draw the waves in mileseconds
       var shouldChange = Date.now() - this.lastTime >= 200;
       if (shouldChange) {
@@ -2089,117 +1280,34 @@ var Wave = /*#__PURE__*/function (_pixi_js_1$Sprite) {
       }
     }
   }]);
-}(pixi_js_1.Sprite);
-exports["default"] = Wave;
+}(_pixi.Sprite);
+var _default = exports["default"] = Wave;
 
-},{"../utils/util.js":19,"./entitiesManager.js":8,"pixi.js":449}],11:[function(require,module,exports){
+},{"../utils/util.ts":18,"./entitiesManager.ts":8,"pixi.js":446}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-},{}],12:[function(require,module,exports){
-"use strict";
-
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var pixi_js_1 = require("pixi.js");
-var animator_js_1 = __importDefault(require("../animations/animator.js"));
-var Sonic = /*#__PURE__*/function (_pixi_js_1$Sprite) {
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+var _animator = _interopRequireDefault(require("../animations/animator.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var Sonic = /*#__PURE__*/function (_Sprite) {
   function Sonic(flood) {
     var _this;
     _classCallCheck(this, Sonic);
@@ -2209,7 +1317,7 @@ var Sonic = /*#__PURE__*/function (_pixi_js_1$Sprite) {
     _this.flood = flood;
     _this.scale.set(flood.scale);
     _this.setTexture(0, 1, 32, 32);
-    _this.animator = new animator_js_1["default"](_this);
+    _this.animator = new _animator["default"](_this);
     _this.animator.createAnimation("run", 200, 10000, function () {
       //TODO improve it using the functions in characterUtil(snapToGrid, etc)
       var an = _this.animator.animations.get("run");
@@ -2224,7 +1332,7 @@ var Sonic = /*#__PURE__*/function (_pixi_js_1$Sprite) {
     //this.animator.play("run")
     return _this;
   }
-  _inherits(Sonic, _pixi_js_1$Sprite);
+  _inherits(Sonic, _Sprite);
   return _createClass(Sonic, [{
     key: "setTexture",
     value: function setTexture(frameX, frameY, width, height) {
@@ -2236,192 +1344,27 @@ var Sonic = /*#__PURE__*/function (_pixi_js_1$Sprite) {
       //this.animator.play("run") 
     }
   }]);
-}(pixi_js_1.Sprite);
-exports["default"] = Sonic;
+}(_pixi.Sprite);
+var _default = exports["default"] = Sonic;
 
-},{"../animations/animator.js":4,"pixi.js":449}],13:[function(require,module,exports){
+},{"../animations/animator.ts":4,"pixi.js":446}],12:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _regenerator() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
-    t,
-    r = "function" == typeof Symbol ? Symbol : {},
-    n = r.iterator || "@@iterator",
-    o = r.toStringTag || "@@toStringTag";
-  function i(r, n, o, i) {
-    var c = n && n.prototype instanceof Generator ? n : Generator,
-      u = Object.create(c.prototype);
-    return _regeneratorDefine2(u, "_invoke", function (r, n, o) {
-      var i,
-        c,
-        u,
-        f = 0,
-        p = o || [],
-        y = !1,
-        G = {
-          p: 0,
-          n: 0,
-          v: e,
-          a: d,
-          f: d.bind(e, 4),
-          d: function d(t, r) {
-            return i = t, c = 0, u = e, G.n = r, a;
-          }
-        };
-      function d(r, n) {
-        for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
-          var o,
-            i = p[t],
-            d = G.p,
-            l = i[2];
-          r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0));
-        }
-        if (o || r > 1) return a;
-        throw y = !0, n;
-      }
-      return function (o, p, l) {
-        if (f > 1) throw TypeError("Generator is already running");
-        for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) {
-          i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
-          try {
-            if (f = 2, i) {
-              if (c || (o = "next"), t = i[o]) {
-                if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
-                if (!t.done) return t;
-                u = t.value, c < 2 && (c = 0);
-              } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1);
-              i = e;
-            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
-          } catch (t) {
-            i = e, c = 1, u = t;
-          } finally {
-            f = 1;
-          }
-        }
-        return {
-          value: t,
-          done: y
-        };
-      };
-    }(r, o, i), !0), u;
-  }
-  var a = {};
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-  t = Object.getPrototypeOf;
-  var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () {
-      return this;
-    }), t),
-    u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
-  function f(e) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e;
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () {
-    return this;
-  }), _regeneratorDefine2(u, "toString", function () {
-    return "[object Generator]";
-  }), (_regenerator = function _regenerator() {
-    return {
-      w: i,
-      m: f
-    };
-  })();
-}
-function _regeneratorDefine2(e, r, n, t) {
-  var i = Object.defineProperty;
-  try {
-    i({}, "", {});
-  } catch (e) {
-    i = 0;
-  }
-  _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) {
-    function o(r, n) {
-      _regeneratorDefine2(e, r, function (e) {
-        return this._invoke(r, n, e);
-      });
-    }
-    r ? i ? i(e, r, {
-      value: n,
-      enumerable: !t,
-      configurable: !t,
-      writable: !t
-    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
-  }, _regeneratorDefine2(e, r, n, t);
-}
-function asyncGeneratorStep(n, t, e, r, o, a, c) {
-  try {
-    var i = n[a](c),
-      u = i.value;
-  } catch (n) {
-    return void e(n);
-  }
-  i.done ? t(u) : Promise.resolve(u).then(r, o);
-}
-function _asyncToGenerator(n) {
-  return function () {
-    var t = this,
-      e = arguments;
-    return new Promise(function (r, o) {
-      var a = n.apply(t, e);
-      function _next(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-      }
-      function _throw(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-      }
-      _next(void 0);
-    });
-  };
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /**
  * Module class to pacmam-bward game
  */
@@ -2493,119 +1436,38 @@ var Mod = /*#__PURE__*/function () {
     value: function draw() {}
   }]);
 }();
-exports["default"] = Mod;
+var _default = exports["default"] = Mod;
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var state_js_1 = require("./state.js");
-var CancelState = /*#__PURE__*/function (_state_js_1$State) {
+exports["default"] = void 0;
+var _state = require("./state.ts");
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _superPropGet(t, o, e, r) { var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+function _get() { return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) { var p = _superPropBase(e, t); if (p) { var n = Object.getOwnPropertyDescriptor(p, t); return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value; } }, _get.apply(null, arguments); }
+function _superPropBase(t, o) { for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t));); return t; }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+var CancelState = /*#__PURE__*/function (_State) {
   function CancelState(drownManager) {
     _classCallCheck(this, CancelState);
     return _callSuper(this, CancelState, [drownManager]);
   }
-  _inherits(CancelState, _state_js_1$State);
+  _inherits(CancelState, _State);
   return _createClass(CancelState, [{
     key: "start",
     value: function start() {
@@ -2646,6 +1508,7 @@ var CancelState = /*#__PURE__*/function (_state_js_1$State) {
       // this.flood.ghosts.forEach(g=>{
       //     g.moving = false
       // })
+
       if (wave.isDescreasing && wave.height < 5) this.endFlood();
     }
   }, {
@@ -2654,120 +1517,39 @@ var CancelState = /*#__PURE__*/function (_state_js_1$State) {
       if (!this.started) return;
     }
   }]);
-}(state_js_1.State);
-exports["default"] = CancelState;
+}(_state.State);
+var _default = exports["default"] = CancelState;
 
-},{"./state.js":18}],15:[function(require,module,exports){
+},{"./state.ts":17}],14:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var state_js_1 = require("./state.js");
-var EndState = /*#__PURE__*/function (_state_js_1$State) {
+exports["default"] = void 0;
+var _state = require("./state.ts");
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _superPropGet(t, o, e, r) { var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+function _get() { return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) { var p = _superPropBase(e, t); if (p) { var n = Object.getOwnPropertyDescriptor(p, t); return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value; } }, _get.apply(null, arguments); }
+function _superPropBase(t, o) { for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t));); return t; }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+var EndState = /*#__PURE__*/function (_State) {
   function EndState(drownManager) {
     _classCallCheck(this, EndState);
     return _callSuper(this, EndState, [drownManager]);
   }
-  _inherits(EndState, _state_js_1$State);
+  _inherits(EndState, _State);
   return _createClass(EndState, [{
     key: "terminateWave",
     value: function terminateWave() {
@@ -2779,7 +1561,7 @@ var EndState = /*#__PURE__*/function (_state_js_1$State) {
       this.drownManager.resetEntitiesBreathing();
       this.drownManager.nextWaveTime = null;
       this.drownManager.wave = null;
-      this.flood.changeState(state_js_1.States.IDLE_STATE);
+      this.flood.changeState(_state.States.IDLE_STATE);
     }
   }, {
     key: "update",
@@ -2797,132 +1579,47 @@ var EndState = /*#__PURE__*/function (_state_js_1$State) {
       if (!this.started) return;
     }
   }]);
-}(state_js_1.State);
-exports["default"] = EndState;
+}(_state.State);
+var _default = exports["default"] = EndState;
 
-},{"./state.js":18}],16:[function(require,module,exports){
+},{"./state.ts":17}],15:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var wave_js_1 = __importDefault(require("../core/wave.js"));
-var state_js_1 = require("./state.js");
-var IdleState = /*#__PURE__*/function (_state_js_1$State) {
+exports["default"] = void 0;
+var _wave = _interopRequireDefault(require("../core/wave.ts"));
+var _state = require("./state.ts");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _superPropGet(t, o, e, r) { var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+function _get() { return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) { var p = _superPropBase(e, t); if (p) { var n = Object.getOwnPropertyDescriptor(p, t); return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value; } }, _get.apply(null, arguments); }
+function _superPropBase(t, o) { for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t));); return t; }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+var IdleState = /*#__PURE__*/function (_State) {
   function IdleState(drownManager) {
     _classCallCheck(this, IdleState);
     return _callSuper(this, IdleState, [drownManager]);
   }
-  _inherits(IdleState, _state_js_1$State);
+  _inherits(IdleState, _State);
   return _createClass(IdleState, [{
     key: "generateWave",
     value: function generateWave(timeToStartMS) {
       var maze = this.drownManager.gc.maze;
       var width = this.drownManager.gc.width;
-      this.drownManager.wave = new wave_js_1["default"](this.drownManager, maze, width, 0);
+      this.drownManager.wave = new _wave["default"](this.drownManager, maze, width, 0);
       var wave = this.drownManager.wave;
       //this.flood.container.children.length = 1        
       this.flood.container.addChildAt(wave, 0);
@@ -2951,7 +1648,7 @@ var IdleState = /*#__PURE__*/function (_state_js_1$State) {
       var wave = this.drownManager.wave;
       if (wave && !wave.started) {
         if (this.drownManager.gc.gameEngine.started && this.drownManager.gc.allowKeyPresses && this.drownManager.nextWaveTime && Date.now() >= this.drownManager.nextWaveTime) {
-          this.flood.changeState(state_js_1.States.START_STATE);
+          this.flood.changeState(_state.States.START_STATE);
         }
       }
     }
@@ -2961,120 +1658,39 @@ var IdleState = /*#__PURE__*/function (_state_js_1$State) {
       if (!this.started) return;
     }
   }]);
-}(state_js_1.State);
-exports["default"] = IdleState;
+}(_state.State);
+var _default = exports["default"] = IdleState;
 
-},{"../core/wave.js":10,"./state.js":18}],17:[function(require,module,exports){
+},{"../core/wave.ts":10,"./state.ts":17}],16:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var state_js_1 = require("./state.js");
-var StartState = /*#__PURE__*/function (_state_js_1$State) {
+exports["default"] = void 0;
+var _state = require("./state.ts");
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _superPropGet(t, o, e, r) { var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+function _get() { return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) { var p = _superPropBase(e, t); if (p) { var n = Object.getOwnPropertyDescriptor(p, t); return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value; } }, _get.apply(null, arguments); }
+function _superPropBase(t, o) { for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t));); return t; }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+var StartState = /*#__PURE__*/function (_State) {
   function StartState(drownManager) {
     _classCallCheck(this, StartState);
     return _callSuper(this, StartState, [drownManager]);
   }
-  _inherits(StartState, _state_js_1$State);
+  _inherits(StartState, _State);
   return _createClass(StartState, [{
     key: "update",
     value: function update(elapsedMs) {
@@ -3089,7 +1705,7 @@ var StartState = /*#__PURE__*/function (_state_js_1$State) {
       }
       var isTimeLimited = Date.now() - wave.startTime >= wave.duration;
       wave.increase(elapsedMs);
-      if (wave.height >= this.drownManager.maxHeight || isTimeLimited) this.flood.changeState(state_js_1.States.END_STATE);
+      if (wave.height >= this.drownManager.maxHeight || isTimeLimited) this.flood.changeState(_state.States.END_STATE);
     }
   }, {
     key: "draw",
@@ -3097,69 +1713,30 @@ var StartState = /*#__PURE__*/function (_state_js_1$State) {
       if (!this.started) return;
     }
   }]);
-}(state_js_1.State);
-exports["default"] = StartState;
+}(_state.State);
+var _default = exports["default"] = StartState;
 
-},{"./state.js":18}],18:[function(require,module,exports){
+},{"./state.ts":17}],17:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.States = exports.State = void 0;
-var States = {
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var States = exports.States = {
   IDLE_STATE: 0,
   START_STATE: 1,
   END_STATE: 2,
   CANCEL_STATE: 3
 };
-exports.States = States;
-var State = /*#__PURE__*/function () {
+var State = exports.State = /*#__PURE__*/function () {
   function State(drownManager) {
     _classCallCheck(this, State);
     _defineProperty(this, "drownManager", void 0);
@@ -3190,9 +1767,8 @@ var State = /*#__PURE__*/function () {
     value: function draw() {}
   }]);
 }();
-exports.State = State;
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3201,9 +1777,9 @@ Object.defineProperty(exports, "__esModule", {
 exports.enlarge = enlarge;
 exports.getMazeWays = getMazeWays;
 /**
- *
- * @param {Rectangle} rectangle
- * @param {Number} times
+ * 
+ * @param {Rectangle} rectangle 
+ * @param {Number} times 
  */
 function enlarge(rectangle) {
   var times = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
@@ -3229,189 +1805,24 @@ function getMazeWays(maze) {
   });
 }
 
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _regenerator() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
-    t,
-    r = "function" == typeof Symbol ? Symbol : {},
-    n = r.iterator || "@@iterator",
-    o = r.toStringTag || "@@toStringTag";
-  function i(r, n, o, i) {
-    var c = n && n.prototype instanceof Generator ? n : Generator,
-      u = Object.create(c.prototype);
-    return _regeneratorDefine2(u, "_invoke", function (r, n, o) {
-      var i,
-        c,
-        u,
-        f = 0,
-        p = o || [],
-        y = !1,
-        G = {
-          p: 0,
-          n: 0,
-          v: e,
-          a: d,
-          f: d.bind(e, 4),
-          d: function d(t, r) {
-            return i = t, c = 0, u = e, G.n = r, a;
-          }
-        };
-      function d(r, n) {
-        for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
-          var o,
-            i = p[t],
-            d = G.p,
-            l = i[2];
-          r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0));
-        }
-        if (o || r > 1) return a;
-        throw y = !0, n;
-      }
-      return function (o, p, l) {
-        if (f > 1) throw TypeError("Generator is already running");
-        for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) {
-          i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
-          try {
-            if (f = 2, i) {
-              if (c || (o = "next"), t = i[o]) {
-                if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
-                if (!t.done) return t;
-                u = t.value, c < 2 && (c = 0);
-              } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1);
-              i = e;
-            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
-          } catch (t) {
-            i = e, c = 1, u = t;
-          } finally {
-            f = 1;
-          }
-        }
-        return {
-          value: t,
-          done: y
-        };
-      };
-    }(r, o, i), !0), u;
-  }
-  var a = {};
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-  t = Object.getPrototypeOf;
-  var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () {
-      return this;
-    }), t),
-    u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
-  function f(e) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e;
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () {
-    return this;
-  }), _regeneratorDefine2(u, "toString", function () {
-    return "[object Generator]";
-  }), (_regenerator = function _regenerator() {
-    return {
-      w: i,
-      m: f
-    };
-  })();
-}
-function _regeneratorDefine2(e, r, n, t) {
-  var i = Object.defineProperty;
-  try {
-    i({}, "", {});
-  } catch (e) {
-    i = 0;
-  }
-  _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) {
-    function o(r, n) {
-      _regeneratorDefine2(e, r, function (e) {
-        return this._invoke(r, n, e);
-      });
-    }
-    r ? i ? i(e, r, {
-      value: n,
-      enumerable: !t,
-      configurable: !t,
-      writable: !t
-    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
-  }, _regeneratorDefine2(e, r, n, t);
-}
-function asyncGeneratorStep(n, t, e, r, o, a, c) {
-  try {
-    var i = n[a](c),
-      u = i.value;
-  } catch (n) {
-    return void e(n);
-  }
-  i.done ? t(u) : Promise.resolve(u).then(r, o);
-}
-function _asyncToGenerator(n) {
-  return function () {
-    var t = this,
-      e = arguments;
-    return new Promise(function (r, o) {
-      var a = n.apply(t, e);
-      function _next(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-      }
-      function _throw(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-      }
-      _next(void 0);
-    });
-  };
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /**
  * Module class to pacmam-bward game
  */
@@ -3437,6 +1848,7 @@ var Mod = /*#__PURE__*/function () {
     value: function getResources() {
       return [];
     }
+    //@ts-ignore
   }, {
     key: "loadAssets",
     value: function () {
@@ -3484,104 +1896,32 @@ var Mod = /*#__PURE__*/function () {
     value: function draw() {}
   }]);
 }();
-exports["default"] = Mod;
+var _default = exports["default"] = Mod;
 
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var pixi_js_1 = require("pixi.js");
-var utils_js_1 = require("../utilities/utils.js");
-var Entity = /*#__PURE__*/function (_pixi_js_1$Sprite) {
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+var _utils = require("../utilities/utils.ts");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var Entity = /*#__PURE__*/function (_Sprite) {
   function Entity(gameCoordinator, name, characterUtil) {
     var _this;
     _classCallCheck(this, Entity);
@@ -3591,8 +1931,8 @@ var Entity = /*#__PURE__*/function (_pixi_js_1$Sprite) {
     _defineProperty(_this, "gameCoordinator", void 0);
     _defineProperty(_this, "scaledTileSize", void 0);
     _defineProperty(_this, "characterUtil", void 0);
-    _defineProperty(_this, "defaultPosition", (0, utils_js_1.createObservablePoint)(_this, 0, 0));
-    _defineProperty(_this, "oldPosition", (0, utils_js_1.createObservablePoint)(_this, 0, 0));
+    _defineProperty(_this, "defaultPosition", (0, _utils.createObservablePoint)(_this, 0, 0));
+    _defineProperty(_this, "oldPosition", (0, _utils.createObservablePoint)(_this, 0, 0));
     _defineProperty(_this, "sprite", void 0);
     _defineProperty(_this, "hitArea", void 0);
     _defineProperty(_this, "msSinceLastSprite", 0);
@@ -3614,7 +1954,7 @@ var Entity = /*#__PURE__*/function (_pixi_js_1$Sprite) {
     _this.emitter = gameCoordinator.emitter;
     return _this;
   }
-  _inherits(Entity, _pixi_js_1$Sprite);
+  _inherits(Entity, _Sprite);
   return _createClass(Entity, [{
     key: "getGridPosition",
     value: function getGridPosition() {
@@ -3640,7 +1980,7 @@ var Entity = /*#__PURE__*/function (_pixi_js_1$Sprite) {
         var half = this.scaledTileSize * 0.5;
         var x = this.sprite.x + this.sprite.width * 0.5 - half;
         var y = this.sprite.y + this.sprite.height * 0.5 - half;
-        this.sprite.hitArea = new pixi_js_1.Rectangle(x, y, this.scaledTileSize, this.scaledTileSize);
+        this.sprite.hitArea = new _pixi.Rectangle(x, y, this.scaledTileSize, this.scaledTileSize);
         this.hitArea = this.sprite.hitArea;
       }
     }
@@ -3648,178 +1988,44 @@ var Entity = /*#__PURE__*/function (_pixi_js_1$Sprite) {
     key: "draw",
     value: function draw(interp) {}
   }]);
-}(pixi_js_1.Sprite);
-exports["default"] = Entity;
+}(_pixi.Sprite);
+var _default = exports["default"] = Entity;
 
-},{"../utilities/utils.js":37,"pixi.js":449}],22:[function(require,module,exports){
+},{"../utilities/utils.ts":34,"pixi.js":446}],21:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _slicedToArray(r, e) {
-  return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
-}
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-function _unsupportedIterableToArray(r, a) {
-  if (r) {
-    if ("string" == typeof r) return _arrayLikeToArray(r, a);
-    var t = {}.toString.call(r).slice(8, -1);
-    return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
-  }
-}
-function _arrayLikeToArray(r, a) {
-  (null == a || a > r.length) && (a = r.length);
-  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
-  return n;
-}
-function _iterableToArrayLimit(r, l) {
-  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
-  if (null != t) {
-    var e,
-      n,
-      i,
-      u,
-      a = [],
-      f = !0,
-      o = !1;
-    try {
-      if (i = (t = t.call(r)).next, 0 === l) {
-        if (Object(t) !== t) return;
-        f = !1;
-      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
-    } catch (r) {
-      o = !0, n = r;
-    } finally {
-      try {
-        if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return;
-      } finally {
-        if (o) throw n;
-      }
-    }
-    return a;
-  }
-}
-function _arrayWithHoles(r) {
-  if (Array.isArray(r)) return r;
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var pixi_js_1 = require("pixi.js");
-var entity_js_1 = __importDefault(require("./entity.js"));
-var utils_js_1 = require("../utilities/utils.js");
-var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+var _entity = _interopRequireDefault(require("./entity.ts"));
+var _utils = require("../utilities/utils.ts");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _superPropGet(t, o, e, r) { var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+function _get() { return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) { var p = _superPropBase(e, t); if (p) { var n = Object.getOwnPropertyDescriptor(p, t); return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value; } }, _get.apply(null, arguments); }
+function _superPropBase(t, o) { for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t));); return t; }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var Ghost = /*#__PURE__*/function (_Entity) {
   function Ghost(gameCoordinator, name, level, characterUtil, blinky) {
     var _this;
     _classCallCheck(this, Ghost);
@@ -3853,11 +2059,12 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     _this.reset();
     return _this;
   }
+
   /**
    * Rests the character to its default state
    * @param {Boolean} fullGameReset
    */
-  _inherits(Ghost, _entity_js_1$default);
+  _inherits(Ghost, _Entity);
   return _createClass(Ghost, [{
     key: "reset",
     value: function reset(fullGameReset) {
@@ -3890,6 +2097,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
         this.idleMode = 'idle';
       }
     }
+
     /**
      * Sets various properties related to the ghost's movement
      * @param {Object} pacman - Pacman's speed is used as the base for the ghosts' speeds
@@ -3930,6 +2138,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       }
       this.direction = this.defaultDirection;
     }
+
     /**
      * Sets values pertaining to the ghost's spritesheet animation
      */
@@ -3944,6 +2153,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       this.frame = 0;
       this.spriteFrames = 2;
     }
+
     /**
      * Sets css property values for the ghost
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -3955,6 +2165,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       // The ghosts are the size of 2x2 game tiles.
       this.measurement = scaledTileSize * 2;
     }
+
     /**
      * Sets the default position and direction for the ghosts at the game's start
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -3967,25 +2178,26 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       var f = function f() {};
       switch (name) {
         case 'blinky':
-          this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, scaledTileSize * 13, scaledTileSize * 10.5);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 13, scaledTileSize * 10.5);
           break;
         case 'pinky':
-          this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, scaledTileSize * 13, scaledTileSize * 13.5);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 13, scaledTileSize * 13.5);
           break;
         case 'inky':
-          this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, scaledTileSize * 11, scaledTileSize * 13.5);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 11, scaledTileSize * 13.5);
           break;
         case 'clyde':
-          this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, scaledTileSize * 15, scaledTileSize * 13.5);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 15, scaledTileSize * 13.5);
           break;
         default:
-          this.defaultPosition = (0, utils_js_1.createObservablePoint)(this, 0, 0);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, 0, 0);
           break;
       }
-      this.position = (0, utils_js_1.createObservablePoint)(this, this.defaultPosition.x, this.defaultPosition.y);
-      this.oldPosition = (0, utils_js_1.createObservablePoint)(this, this.position.x, this.position.y);
+      this.position = (0, _utils.createObservablePoint)(this, this.defaultPosition.x, this.defaultPosition.y);
+      this.oldPosition = (0, _utils.createObservablePoint)(this, this.position.x, this.position.y);
       (_this$sprite = this.sprite) === null || _this$sprite === void 0 || _this$sprite.position.set(this.position.x, this.position.y);
     }
+
     /**
      * Chooses a movement Spritesheet depending upon direction
      * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
@@ -4069,7 +2281,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     key: "setSprite",
     value: function setSprite(name, direction, emotion, frameX) {
       var texture = this.getTexture(name, direction, emotion, frameX);
-      if (!this.sprite) this.sprite = new pixi_js_1.Sprite(texture);else this.sprite.texture = texture;
+      if (!this.sprite) this.sprite = new _pixi.Sprite(texture);else this.sprite.texture = texture;
       this.sprite.zIndex = 1;
     }
     /**
@@ -4082,6 +2294,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function isInTunnel(gridPosition) {
       return gridPosition.y === 14 && (gridPosition.x < 6 || gridPosition.x > 21);
     }
+
     /**
      * Checks to see if the ghost is currently in the 'Ghost House' in the center of the maze
      * @param {({x: number, y: number})} gridPosition - The current x-y position on the 2D Maze Array
@@ -4092,6 +2305,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function isInGhostHouse(gridPosition) {
       return gridPosition.x > 9 && gridPosition.x < 18 && gridPosition.y > 11 && gridPosition.y < 17;
     }
+
     /**
      * Checks to see if the tile at the given coordinates of the Maze is an open position
      * @param {Array} mazeArray - 2D array representing the game board
@@ -4111,6 +2325,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       }
       return tile;
     }
+
     /**
      * Returns a list of all of the possible moves for the ghost to make on the next turn
      * @param {({x: number, y: number})} gridPosition - The current x-y position on the 2D Maze Array
@@ -4129,6 +2344,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
         left: this.getTile(mazeArray, y, x - 1),
         right: this.getTile(mazeArray, y, x + 1)
       };
+
       // Ghosts are not allowed to turn around at crossroads
       possibleMoves[this.characterUtil.getOppositeDirection(direction)] = undefined;
       Object.keys(possibleMoves).forEach(function (tile) {
@@ -4138,6 +2354,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       });
       return possibleMoves;
     }
+
     /**
      * Uses the Pythagorean Theorem to measure the distance between a given postion and Pacman
      * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
@@ -4149,6 +2366,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function calculateDistance(position, pacman) {
       return Math.sqrt(Math.pow(position.x - pacman.x, 2) + Math.pow(position.y - pacman.y, 2));
     }
+
     /**
      * Gets a position a number of spaces in front of Pacman's direction
      * @param {({x: number, y: number})} pacmanGridPosition
@@ -4157,13 +2375,14 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
   }, {
     key: "getPositionInFrontOfPacman",
     value: function getPositionInFrontOfPacman(pacmanGridPosition, spaces) {
-      var target = (0, utils_js_1.copyPosition)(this, pacmanGridPosition);
+      var target = (0, _utils.copyPosition)(this, pacmanGridPosition);
       var pacDirection = this.pacman.direction;
       var propToChange = pacDirection === 'up' || pacDirection === 'down' ? 'y' : 'x';
       var tileOffset = pacDirection === 'up' || pacDirection === 'left' ? spaces * -1 : spaces;
       target[propToChange] += tileOffset;
       return target;
     }
+
     /**
      * Determines Pinky's target, which is four tiles in front of Pacman's direction
      * @param {({x: number, y: number})} pacmanGridPosition
@@ -4174,6 +2393,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function determinePinkyTarget(pacmanGridPosition) {
       return this.getPositionInFrontOfPacman(pacmanGridPosition, 4);
     }
+
     /**
      * Determines Inky's target, which is a mirror image of Blinky's position
      * reflected across a point two tiles in front of Pacman's direction.
@@ -4186,8 +2406,9 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function determineInkyTarget(pacmanGridPosition) {
       var blinkyGridPosition = this.characterUtil.determineGridPosition(this.blinky.position, this.scaledTileSize);
       var pivotPoint = this.getPositionInFrontOfPacman(pacmanGridPosition, 2);
-      return (0, utils_js_1.createObservablePoint)(this, pivotPoint.x + (pivotPoint.x - blinkyGridPosition.x), pivotPoint.y + (pivotPoint.y - blinkyGridPosition.y));
+      return (0, _utils.createObservablePoint)(this, pivotPoint.x + (pivotPoint.x - blinkyGridPosition.x), pivotPoint.y + (pivotPoint.y - blinkyGridPosition.y));
     }
+
     /**
      * Clyde targets Pacman when the two are far apart, but retreats to the
      * lower-left corner when the two are within eight tiles of each other
@@ -4204,6 +2425,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
         y: 30
       };
     }
+
     /**
      * Determines the appropriate target for the ghost's AI
      * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
@@ -4217,27 +2439,29 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function getTarget(name, gridPosition, pacmanGridPosition, mode) {
       // Ghosts return to the ghost-house after eaten
       if (mode === 'eyes') {
-        return (0, utils_js_1.createObservablePoint)(this, 13.5, 10);
+        return (0, _utils.createObservablePoint)(this, 13.5, 10);
       }
+
       // Ghosts run from Pacman if scared
       if (mode === 'scared') {
         return pacmanGridPosition;
       }
+
       // Ghosts seek out corners in Scatter mode
       if (mode === 'scatter') {
         switch (name) {
           case 'blinky':
             // Blinky will chase Pacman, even in Scatter mode, if he's in Cruise Elroy form
             //{ x: 27, y: 0 }
-            return this.cruiseElroy ? pacmanGridPosition : (0, utils_js_1.createObservablePoint)(this, 27, 0);
+            return this.cruiseElroy ? pacmanGridPosition : (0, _utils.createObservablePoint)(this, 27, 0);
           case 'pinky':
-            return (0, utils_js_1.createObservablePoint)(this, 0, 0);
+            return (0, _utils.createObservablePoint)(this, 0, 0);
           case 'inky':
-            return (0, utils_js_1.createObservablePoint)(this, 27, 30);
+            return (0, _utils.createObservablePoint)(this, 27, 30);
           case 'clyde':
-            return (0, utils_js_1.createObservablePoint)(this, 0, 30);
+            return (0, _utils.createObservablePoint)(this, 0, 30);
           default:
-            return (0, utils_js_1.createObservablePoint)(this, 0, 0);
+            return (0, _utils.createObservablePoint)(this, 0, 0);
         }
       }
       switch (name) {
@@ -4255,6 +2479,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
           return pacmanGridPosition;
       }
     }
+
     /**
      * Calls the appropriate function to determine the best move depending on the ghost's name
      * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
@@ -4281,6 +2506,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       });
       return bestMove;
     }
+
     /**
      * Determines the best direction for the ghost to travel in during the current frame
      * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
@@ -4305,6 +2531,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       }
       return newDirection;
     }
+
     /**
      * Handles movement for idle Ghosts in the Ghost House
      * @param {*} elapsedMs
@@ -4315,7 +2542,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
   }, {
     key: "handleIdleMovement",
     value: function handleIdleMovement(elapsedMs, position, velocity) {
-      var newPosition = (0, utils_js_1.copyPosition)(this, this.position);
+      var newPosition = (0, _utils.copyPosition)(this, this.position);
       if (position.y <= 13.5) {
         this.direction = this.characterUtil.directions.down;
       } else if (position.y >= 14.5) {
@@ -4338,6 +2565,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       newPosition[this.characterUtil.getPropertyToChange(this.direction)] += this.characterUtil.getVelocity(this.direction, velocity) * elapsedMs;
       return newPosition;
     }
+
     /**
      * Sets idleMode to 'leaving', allowing the ghost to leave the Ghost House
      */
@@ -4346,6 +2574,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function endIdleMode() {
       this.idleMode = 'leaving';
     }
+
     /**
      * Handle the ghost's movement when it is snapped to the x-y grid of the Maze Array
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -4357,11 +2586,12 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
   }, {
     key: "handleSnappedMovement",
     value: function handleSnappedMovement(elapsedMs, gridPosition, velocity, pacmanGridPosition) {
-      var newPosition = (0, utils_js_1.copyPosition)(this, this.position);
+      var newPosition = (0, _utils.copyPosition)(this, this.position);
       this.direction = this.determineDirection(this.name, gridPosition, pacmanGridPosition, this.direction, this.mazeArray, this.mode);
       newPosition[this.characterUtil.getPropertyToChange(this.direction)] += this.characterUtil.getVelocity(this.direction, velocity) * elapsedMs;
       return newPosition;
     }
+
     /**
      * Determines if an eaten ghost is at the entrance of the Ghost House
      * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
@@ -4373,6 +2603,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function enteringGhostHouse(mode, position) {
       return mode === 'eyes' && position.y === 11 && position.x > 13.4 && position.x < 13.6;
     }
+
     /**
      * Determines if an eaten ghost has reached the center of the Ghost House
      * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
@@ -4384,6 +2615,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function enteredGhostHouse(mode, position) {
       return mode === 'eyes' && position.x === 13.5 && position.y > 13.8 && position.y < 14.2;
     }
+
     /**
      * Determines if a restored ghost is at the exit of the Ghost House
      * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
@@ -4395,6 +2627,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function leavingGhostHouse(mode, position) {
       return mode !== 'eyes' && position.x === 13.5 && position.y > 10.8 && position.y < 11;
     }
+
     /**
      * Handles entering and leaving the Ghost House after a ghost is eaten
      * @param {({x: number, y: number})} gridPosition - x-y position during the current frame
@@ -4403,7 +2636,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
   }, {
     key: "handleGhostHouse",
     value: function handleGhostHouse(gridPosition) {
-      var gridPositionCopy = (0, utils_js_1.copyPosition)(this, gridPosition);
+      var gridPositionCopy = (0, _utils.copyPosition)(this, gridPosition);
       if (this.enteringGhostHouse(this.mode, gridPosition)) {
         this.direction = this.characterUtil.directions.down;
         gridPositionCopy.x = 13.5;
@@ -4423,6 +2656,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       }
       return gridPositionCopy;
     }
+
     /**
      * Handle the ghost's movement when it is inbetween tiles on the x-y grid of the Maze Array
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -4440,6 +2674,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       }
       return desired.newPosition;
     }
+
     /**
      * Determines the new Ghost position
      * @param {number} elapsedMs
@@ -4464,6 +2699,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       this.checkCollision(gridPosition, pacmanGridPosition);
       return newPosition;
     }
+
     /**
      * Changes the defaultMode to chase or scatter, and turns the ghost around
      * if needed
@@ -4481,6 +2717,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
         }
       }
     }
+
     /**
      * Toggles a scared ghost between blue and white, then updates its spritsheet
      */
@@ -4490,6 +2727,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       this.scaredColor = this.scaredColor === 'blue' ? 'white' : 'blue';
       this.setSpriteSheet(this.name, this.direction, this.mode);
     }
+
     /**
      * Sets the ghost's mode to SCARED, turns the ghost around,
      * and changes spritesheets accordingly
@@ -4507,6 +2745,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
         this.setSpriteSheet("scared", this.direction, this.mode);
       }
     }
+
     /**
      * Returns the scared ghost to chase/scatter mode and sets its spritesheet
      */
@@ -4516,6 +2755,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       this.mode = this.defaultMode;
       this.setSpriteSheet(this.name, this.direction, this.mode);
     }
+
     /**
      * Speeds up the ghost (used for Blinky as Pacdots are eaten)
      */
@@ -4529,6 +2769,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
         this.defaultSpeed = this.fastSpeed;
       }
     }
+
     /**
      * Resets defaultSpeed to slow and updates the spritesheet
      */
@@ -4539,6 +2780,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       this.cruiseElroy = false;
       this.setSpriteSheet(this.name, this.direction, this.mode);
     }
+
     /**
      * Sets a flag to indicate when the ghost should pause its movement
      * @param {Boolean} newValue
@@ -4548,6 +2790,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     value: function pause(newValue) {
       this.paused = newValue;
     }
+
     /**
      * Checks if the ghost contacts Pacman - starts the death sequence if so
      * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
@@ -4569,6 +2812,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
         }
       }
     }
+
     /**
      * Determines the appropriate speed for the ghost
      * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
@@ -4618,6 +2862,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       if (this.mode == "scared") emotion = scared;else if (this.mode == 'eyes') emotion = 'eyes';
       this.setSprite(this.name, this.direction, emotion, updatedProperties.frame);
     }
+
     /**
      * Handles movement logic for the ghost
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -4626,7 +2871,7 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
     key: "update",
     value: function update(elapsedMs) {
       _superPropGet(Ghost, "update", this, 3)([elapsedMs]);
-      this.oldPosition = (0, utils_js_1.createObservablePoint)(this, this.position.x, this.position.y);
+      this.oldPosition = (0, _utils.createObservablePoint)(this, this.position.x, this.position.y);
       if (this.moving) {
         this.position = this.handleMovement(elapsedMs);
         this.setSpriteSheet(this.name, this.direction, this.mode);
@@ -4634,130 +2879,37 @@ var Ghost = /*#__PURE__*/function (_entity_js_1$default) {
       }
     }
   }]);
-}(entity_js_1["default"]); //removeIf(production)
-exports["default"] = Ghost;
-//endRemoveIf(production)
+}(_entity["default"]); //removeIf(production)
+var _default = exports["default"] = Ghost; //endRemoveIf(production)
 
-},{"../utilities/utils.js":37,"./entity.js":21,"pixi.js":449}],23:[function(require,module,exports){
+},{"../utilities/utils.ts":34,"./entity.ts":20,"pixi.js":446}],22:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var pixi_js_1 = require("pixi.js");
-var entity_js_1 = __importDefault(require("./entity.js"));
-var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+var _entity = _interopRequireDefault(require("./entity.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _superPropGet(t, o, e, r) { var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+function _get() { return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) { var p = _superPropBase(e, t); if (p) { var n = Object.getOwnPropertyDescriptor(p, t); return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value; } }, _get.apply(null, arguments); }
+function _superPropBase(t, o) { for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t));); return t; }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var Pacman = /*#__PURE__*/function (_Entity) {
   function Pacman(gameCoordinator, characterUtil) {
     var _this;
     _classCallCheck(this, Pacman);
@@ -4776,10 +2928,11 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
     _this.reset();
     return _this;
   }
+
   /**
    * Rests the character to its default state
    */
-  _inherits(Pacman, _entity_js_1$default);
+  _inherits(Pacman, _Entity);
   return _createClass(Pacman, [{
     key: "reset",
     value: function reset() {
@@ -4808,6 +2961,7 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
       this.moving = false;
       this.allowCollision = true;
     }
+
     /**
      * Sets values pertaining to Pacman's spritesheet animation
      */
@@ -4823,6 +2977,7 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
       this.spriteFrames = 4;
       this.frame = 0;
     }
+
     /**
      * Sets css property values for Pacman and Pacman's Arrow
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -4836,6 +2991,7 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
       this.setSprite(this.direction, frameX);
       this.setArrowSprite(this.direction, frameX);
     }
+
     /**
      * Sets the default position and direction for Pacman at the game's start
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -4850,6 +3006,7 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
       //this.oldPosition = Object.assign({}, this.position);
       (_this$sprite = this.sprite) === null || _this$sprite === void 0 || _this$sprite.position.set(this.position.x, this.position.y);
     }
+
     /**
      * Calculates how fast Pacman should move in a millisecond
      * @param {number} scaledTileSize - The dimensions of a single tile
@@ -4861,6 +3018,7 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
       var velocityPerSecond = scaledTileSize * 11;
       return velocityPerSecond / 1000;
     }
+
     /**
      * Chooses a movement Spritesheet depending upon direction
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -4920,14 +3078,14 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
     key: "setSprite",
     value: function setSprite(direction, frameX, death) {
       var texture = this.getTexture(direction, frameX, death);
-      if (!this.sprite) this.sprite = new pixi_js_1.Sprite(texture);else this.sprite.texture = texture;
+      if (!this.sprite) this.sprite = new _pixi.Sprite(texture);else this.sprite.texture = texture;
       this.sprite.zIndex = 1;
     }
   }, {
     key: "setArrowSprite",
     value: function setArrowSprite(direction, frameX, death) {
       var textureArrow = this.getArrowTexture(direction, death);
-      if (!this.spriteArrow) this.spriteArrow = new pixi_js_1.Sprite(textureArrow);else this.spriteArrow.texture = textureArrow;
+      if (!this.spriteArrow) this.spriteArrow = new _pixi.Sprite(textureArrow);else this.spriteArrow.texture = textureArrow;
       this.spriteArrow.zIndex = 1;
     }
   }, {
@@ -4943,6 +3101,7 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
       this.spriteArrow.visible = false;
       this.setArrowSprite(this.direction, this.frame, this.death);
     }
+
     /**
      * Changes Pacman's desiredDirection, updates the PacmanArrow sprite, and sets moving to true
      * @param {Event} e - The keydown event to evaluate
@@ -4978,6 +3137,7 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
       this.setSpriteSheet(this.direction);
       return desired.newPosition;
     }
+
     /**
      * Handle Pacman's movement when he is inbetween tiles on the x-y grid of the Maze Array
      * @param {({x: number, y: number})} gridPosition - x-y position during the current frame
@@ -5026,6 +3186,7 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
       this.sprite.visible = this.display;
       this.spriteArrow.visible = this.display;
     }
+
     /**
      * Handles movement logic for Pacman
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -5053,6 +3214,7 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
         // } else {
         //   this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
         // }
+
         this.position = this.characterUtil.handleWarp(this.position, this.scaledTileSize, this.mazeArray);
       }
       if (this.moving || this.specialAnimation) {
@@ -5060,201 +3222,28 @@ var Pacman = /*#__PURE__*/function (_entity_js_1$default) {
       }
     }
   }]);
-}(entity_js_1["default"]); // removeIf(production)
-exports["default"] = Pacman;
-// endRemoveIf(production)
+}(_entity["default"]); // removeIf(production)
+var _default = exports["default"] = Pacman; // endRemoveIf(production)
 
-},{"./entity.js":21,"pixi.js":449}],24:[function(require,module,exports){
+},{"./entity.ts":20,"pixi.js":446}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-},{}],25:[function(require,module,exports){
-"use strict";
-
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _regenerator() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
-    t,
-    r = "function" == typeof Symbol ? Symbol : {},
-    n = r.iterator || "@@iterator",
-    o = r.toStringTag || "@@toStringTag";
-  function i(r, n, o, i) {
-    var c = n && n.prototype instanceof Generator ? n : Generator,
-      u = Object.create(c.prototype);
-    return _regeneratorDefine2(u, "_invoke", function (r, n, o) {
-      var i,
-        c,
-        u,
-        f = 0,
-        p = o || [],
-        y = !1,
-        G = {
-          p: 0,
-          n: 0,
-          v: e,
-          a: d,
-          f: d.bind(e, 4),
-          d: function d(t, r) {
-            return i = t, c = 0, u = e, G.n = r, a;
-          }
-        };
-      function d(r, n) {
-        for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
-          var o,
-            i = p[t],
-            d = G.p,
-            l = i[2];
-          r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0));
-        }
-        if (o || r > 1) return a;
-        throw y = !0, n;
-      }
-      return function (o, p, l) {
-        if (f > 1) throw TypeError("Generator is already running");
-        for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) {
-          i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
-          try {
-            if (f = 2, i) {
-              if (c || (o = "next"), t = i[o]) {
-                if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
-                if (!t.done) return t;
-                u = t.value, c < 2 && (c = 0);
-              } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1);
-              i = e;
-            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
-          } catch (t) {
-            i = e, c = 1, u = t;
-          } finally {
-            f = 1;
-          }
-        }
-        return {
-          value: t,
-          done: y
-        };
-      };
-    }(r, o, i), !0), u;
-  }
-  var a = {};
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-  t = Object.getPrototypeOf;
-  var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () {
-      return this;
-    }), t),
-    u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
-  function f(e) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e;
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () {
-    return this;
-  }), _regeneratorDefine2(u, "toString", function () {
-    return "[object Generator]";
-  }), (_regenerator = function _regenerator() {
-    return {
-      w: i,
-      m: f
-    };
-  })();
-}
-function _regeneratorDefine2(e, r, n, t) {
-  var i = Object.defineProperty;
-  try {
-    i({}, "", {});
-  } catch (e) {
-    i = 0;
-  }
-  _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) {
-    function o(r, n) {
-      _regeneratorDefine2(e, r, function (e) {
-        return this._invoke(r, n, e);
-      });
-    }
-    r ? i ? i(e, r, {
-      value: n,
-      enumerable: !t,
-      configurable: !t,
-      writable: !t
-    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
-  }, _regeneratorDefine2(e, r, n, t);
-}
-function asyncGeneratorStep(n, t, e, r, o, a, c) {
-  try {
-    var i = n[a](c),
-      u = i.value;
-  } catch (n) {
-    return void e(n);
-  }
-  i.done ? t(u) : Promise.resolve(u).then(r, o);
-}
-function _asyncToGenerator(n) {
-  return function () {
-    var t = this,
-      e = arguments;
-    return new Promise(function (r, o) {
-      var a = n.apply(t, e);
-      function _next(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-      }
-      function _throw(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-      }
-      _next(void 0);
-    });
-  };
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var pixi_js_1 = require("pixi.js");
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var AssetsManager = /*#__PURE__*/function () {
   function AssetsManager(gameCoordinator) {
     _classCallCheck(this, AssetsManager);
@@ -5272,282 +3261,293 @@ var AssetsManager = /*#__PURE__*/function () {
           while (1) switch (_context.n) {
             case 0:
               imgBase = 'app/style/graphics/spriteSheets/';
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "maze_blue",
                 src: "".concat(imgBase, "maze/maze_blue.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "maze_white",
                 src: "".concat(imgBase, "maze/maze_white.svg")
               });
+
               // Pacman
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "arrow_down",
                 src: "".concat(imgBase, "characters/pacman/arrow_down.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "arrow_left",
                 src: "".concat(imgBase, "characters/pacman/arrow_left.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "arrow_right",
                 src: "".concat(imgBase, "characters/pacman/arrow_right.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "arrow_up",
                 src: "".concat(imgBase, "characters/pacman/arrow_up.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pacman_death",
                 src: "".concat(imgBase, "characters/pacman/pacman_death.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pacman_error",
                 src: "".concat(imgBase, "characters/pacman/pacman_error.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pacman_down",
                 src: "".concat(imgBase, "characters/pacman/pacman_down.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pacman_left",
                 src: "".concat(imgBase, "characters/pacman/pacman_left.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pacman_right",
                 src: "".concat(imgBase, "characters/pacman/pacman_right.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pacman_up",
                 src: "".concat(imgBase, "characters/pacman/pacman_up.svg")
               });
+
               // Blinky
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_down_angry",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_down_angry.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_down_annoyed",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_down_annoyed.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_down",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_down.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_left_angry",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_left_angry.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_left_annoyed",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_left_annoyed.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_left",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_left.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_right_angry",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_right_angry.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_right_annoyed",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_right_annoyed.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_right",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_right.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_up_angry",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_up_angry.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_up_annoyed",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_up_annoyed.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "blinky_up",
                 src: "".concat(imgBase, "characters/ghosts/blinky/blinky_up.svg")
               });
+
               // Clyde
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "clyde_down",
                 src: "".concat(imgBase, "characters/ghosts/clyde/clyde_down.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "clyde_left",
                 src: "".concat(imgBase, "characters/ghosts/clyde/clyde_left.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "clyde_right",
                 src: "".concat(imgBase, "characters/ghosts/clyde/clyde_right.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "clyde_up",
                 src: "".concat(imgBase, "characters/ghosts/clyde/clyde_up.svg")
               });
+
               // Inky
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "inky_down",
                 src: "".concat(imgBase, "characters/ghosts/inky/inky_down.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "inky_left",
                 src: "".concat(imgBase, "characters/ghosts/inky/inky_left.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "inky_right",
                 src: "".concat(imgBase, "characters/ghosts/inky/inky_right.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "inky_up",
                 src: "".concat(imgBase, "characters/ghosts/inky/inky_up.svg")
               });
+
               // Pinky
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pinky_down",
                 src: "".concat(imgBase, "characters/ghosts/pinky/pinky_down.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pinky_left",
                 src: "".concat(imgBase, "characters/ghosts/pinky/pinky_left.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pinky_right",
                 src: "".concat(imgBase, "characters/ghosts/pinky/pinky_right.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pinky_up",
                 src: "".concat(imgBase, "characters/ghosts/pinky/pinky_up.svg")
               });
+
               // Ghosts Common
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "eyes_down",
                 src: "".concat(imgBase, "characters/ghosts/eyes_down.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "eyes_left",
                 src: "".concat(imgBase, "characters/ghosts/eyes_left.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "eyes_right",
                 src: "".concat(imgBase, "characters/ghosts/eyes_right.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "eyes_up",
                 src: "".concat(imgBase, "characters/ghosts/eyes_up.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "scared_blue",
                 src: "".concat(imgBase, "characters/ghosts/scared_blue.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "scared_white",
                 src: "".concat(imgBase, "characters/ghosts/scared_white.svg")
               });
+
               // Dots
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "pacdot",
                 src: "".concat(imgBase, "pickups/pacdot.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "powerPellet",
                 src: "".concat(imgBase, "pickups/powerPellet.svg")
               });
+
               // Fruit
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "apple",
                 src: "".concat(imgBase, "pickups/apple.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "bell",
                 src: "".concat(imgBase, "pickups/bell.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "cherry",
                 src: "".concat(imgBase, "pickups/cherry.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "galaxian",
                 src: "".concat(imgBase, "pickups/galaxian.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "key",
                 src: "".concat(imgBase, "pickups/key.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "melon",
                 src: "".concat(imgBase, "pickups/melon.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "orange",
                 src: "".concat(imgBase, "pickups/orange.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "strawberry",
                 src: "".concat(imgBase, "pickups/strawberry.svg")
               });
+
               // Text
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "ready",
                 src: "".concat(imgBase, "text/ready.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "game_over",
                 src: "".concat(imgBase, "text/game_over.svg")
               });
+
               // Points
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "100",
                 src: "".concat(imgBase, "text/100.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "200",
                 src: "".concat(imgBase, "text/200.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "300",
                 src: "".concat(imgBase, "text/300.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "400",
                 src: "".concat(imgBase, "text/400.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "500",
                 src: "".concat(imgBase, "text/500.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "700",
                 src: "".concat(imgBase, "text/700.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "800",
                 src: "".concat(imgBase, "text/800.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "1000",
                 src: "".concat(imgBase, "text/1000.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "1600",
                 src: "".concat(imgBase, "text/1600.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "2000",
                 src: "".concat(imgBase, "text/2000.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "3000",
                 src: "".concat(imgBase, "text/3000.svg")
               });
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "5000",
                 src: "".concat(imgBase, "text/5000.svg")
               });
+
               // Misc
-              pixi_js_1.Assets.add({
+              _pixi.Assets.add({
                 alias: "extra_life",
                 src: 'app/style/graphics/extra_life.png'
               });
@@ -5567,7 +3567,7 @@ var AssetsManager = /*#__PURE__*/function () {
               loadingDotMask.style.width = '0';
               loadedSources = 0; //load images
               _context.n = 1;
-              return pixi_js_1.Assets.load(imageAliases, function (progress) {
+              return _pixi.Assets.load(imageAliases, function (progress) {
                 //console.log("loading assets", progress)
                 gameCoordRef.remainingSources -= 1;
                 loadedSources += 1;
@@ -5652,9 +3652,9 @@ var AssetsManager = /*#__PURE__*/function () {
     key: "createTextures",
     value: function createTextures() {
       //the maze background sprite
-      this.textures.set("mazeBlue", pixi_js_1.Texture.from("maze_blue"));
-      this.textures.set("mazeWhite", pixi_js_1.Texture.from("maze_white"));
-      this.gameCoordinator.mazeSprite = new pixi_js_1.Sprite(pixi_js_1.Texture.from("maze_blue"));
+      this.textures.set("mazeBlue", _pixi.Texture.from("maze_blue"));
+      this.textures.set("mazeWhite", _pixi.Texture.from("maze_white"));
+      this.gameCoordinator.mazeSprite = new _pixi.Sprite(_pixi.Texture.from("maze_blue"));
       this.gameCoordinator.stage.addChild(this.gameCoordinator.mazeSprite);
       this.createPacmanSprite();
       this.createGhostsSprites();
@@ -5663,34 +3663,34 @@ var AssetsManager = /*#__PURE__*/function () {
   }, {
     key: "createPacmanSprite",
     value: function createPacmanSprite() {
-      var container = new pixi_js_1.Container();
-      var sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("arrow_left"));
+      var container = new _pixi.Container();
+      var sprite1 = new _pixi.Sprite(_pixi.Texture.from("arrow_left"));
       sprite1.position.set(0, 0);
       sprite1.anchor.set(0, 0);
-      var sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("arrow_right"));
+      var sprite2 = new _pixi.Sprite(_pixi.Texture.from("arrow_right"));
       sprite2.position.set(32, 0);
       sprite2.anchor.set(0, 0);
-      var sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("arrow_up"));
+      var sprite3 = new _pixi.Sprite(_pixi.Texture.from("arrow_up"));
       sprite3.position.set(64, 0);
       sprite3.anchor.set(0, 0);
-      var sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("arrow_down"));
+      var sprite4 = new _pixi.Sprite(_pixi.Texture.from("arrow_down"));
       sprite4.position.set(96, 0);
       sprite4.anchor.set(0, 0);
       container.addChild(sprite1, sprite2, sprite3, sprite4);
-      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_left"));
+      sprite1 = new _pixi.Sprite(_pixi.Texture.from("pacman_left"));
       sprite1.position.set(0, 32);
       sprite1.anchor.set(0, 0);
-      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_right"));
+      sprite2 = new _pixi.Sprite(_pixi.Texture.from("pacman_right"));
       sprite2.position.set(0, 48);
       sprite2.anchor.set(0, 0);
-      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_up"));
+      sprite3 = new _pixi.Sprite(_pixi.Texture.from("pacman_up"));
       sprite3.position.set(0, 64);
       sprite3.anchor.set(0, 0);
-      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_down"));
+      sprite4 = new _pixi.Sprite(_pixi.Texture.from("pacman_down"));
       sprite4.position.set(0, 80);
       sprite4.anchor.set(0, 0);
       container.addChild(sprite1, sprite2, sprite3, sprite4);
-      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacman_death"));
+      sprite1 = new _pixi.Sprite(_pixi.Texture.from("pacman_death"));
       sprite1.position.set(0, 96);
       sprite1.anchor.set(0, 0);
       container.addChild(sprite1);
@@ -5704,104 +3704,104 @@ var AssetsManager = /*#__PURE__*/function () {
     key: "createGhostsSprites",
     value: function createGhostsSprites() {
       var sprite1, sprite2, sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9, sprite10, sprite11, sprite12;
-      var container = new pixi_js_1.Container();
-      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_left"));
+      var container = new _pixi.Container();
+      sprite1 = new _pixi.Sprite(_pixi.Texture.from("blinky_left"));
       sprite1.position.set(0, 0);
       sprite1.anchor.set(0, 0);
-      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_right"));
+      sprite2 = new _pixi.Sprite(_pixi.Texture.from("blinky_right"));
       sprite2.position.set(0, 16);
       sprite2.anchor.set(0, 0);
-      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_up"));
+      sprite3 = new _pixi.Sprite(_pixi.Texture.from("blinky_up"));
       sprite3.position.set(0, 32);
       sprite3.anchor.set(0, 0);
-      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_down"));
+      sprite4 = new _pixi.Sprite(_pixi.Texture.from("blinky_down"));
       sprite4.position.set(0, 48);
       sprite4.anchor.set(0, 0);
-      sprite5 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_left_angry"));
+      sprite5 = new _pixi.Sprite(_pixi.Texture.from("blinky_left_angry"));
       sprite5.position.set(0, 64);
       sprite5.anchor.set(0, 0);
-      sprite6 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_right_angry"));
+      sprite6 = new _pixi.Sprite(_pixi.Texture.from("blinky_right_angry"));
       sprite6.position.set(0, 80);
       sprite6.anchor.set(0, 0);
-      sprite7 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_up_angry"));
+      sprite7 = new _pixi.Sprite(_pixi.Texture.from("blinky_up_angry"));
       sprite7.position.set(0, 96);
       sprite7.anchor.set(0, 0);
-      sprite8 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_down_angry"));
+      sprite8 = new _pixi.Sprite(_pixi.Texture.from("blinky_down_angry"));
       sprite8.position.set(0, 112);
       sprite8.anchor.set(0, 0);
-      sprite9 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_left_annoyed"));
+      sprite9 = new _pixi.Sprite(_pixi.Texture.from("blinky_left_annoyed"));
       sprite9.position.set(0, 128);
       sprite9.anchor.set(0, 0);
-      sprite10 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_right_annoyed"));
+      sprite10 = new _pixi.Sprite(_pixi.Texture.from("blinky_right_annoyed"));
       sprite10.position.set(0, 144);
       sprite10.anchor.set(0, 0);
-      sprite11 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_up_annoyed"));
+      sprite11 = new _pixi.Sprite(_pixi.Texture.from("blinky_up_annoyed"));
       sprite11.position.set(0, 160);
       sprite11.anchor.set(0, 0);
-      sprite12 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("blinky_down_annoyed"));
+      sprite12 = new _pixi.Sprite(_pixi.Texture.from("blinky_down_annoyed"));
       sprite12.position.set(0, 176);
       sprite12.anchor.set(0, 0);
       container.addChild(sprite1, sprite2, sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9, sprite10, sprite11, sprite12);
-      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pinky_left"));
+      sprite1 = new _pixi.Sprite(_pixi.Texture.from("pinky_left"));
       sprite1.position.set(0, 192);
       sprite1.anchor.set(0, 0);
-      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pinky_right"));
+      sprite2 = new _pixi.Sprite(_pixi.Texture.from("pinky_right"));
       sprite2.position.set(0, 208);
       sprite2.anchor.set(0, 0);
-      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pinky_up"));
+      sprite3 = new _pixi.Sprite(_pixi.Texture.from("pinky_up"));
       sprite3.position.set(0, 224);
       sprite3.anchor.set(0, 0);
-      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pinky_down"));
+      sprite4 = new _pixi.Sprite(_pixi.Texture.from("pinky_down"));
       sprite4.position.set(0, 240);
       sprite4.anchor.set(0, 0);
       container.addChild(sprite1, sprite2, sprite3, sprite4);
-      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("inky_left"));
+      sprite1 = new _pixi.Sprite(_pixi.Texture.from("inky_left"));
       sprite1.position.set(0, 256);
       sprite1.anchor.set(0, 0);
-      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("inky_right"));
+      sprite2 = new _pixi.Sprite(_pixi.Texture.from("inky_right"));
       sprite2.position.set(0, 272);
       sprite2.anchor.set(0, 0);
-      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("inky_up"));
+      sprite3 = new _pixi.Sprite(_pixi.Texture.from("inky_up"));
       sprite3.position.set(0, 288);
       sprite3.anchor.set(0, 0);
-      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("inky_down"));
+      sprite4 = new _pixi.Sprite(_pixi.Texture.from("inky_down"));
       sprite4.position.set(0, 304);
       sprite4.anchor.set(0, 0);
       container.addChild(sprite1, sprite2, sprite3, sprite4);
-      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("clyde_left"));
+      sprite1 = new _pixi.Sprite(_pixi.Texture.from("clyde_left"));
       sprite1.position.set(0, 320);
       sprite1.anchor.set(0, 0);
-      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("clyde_right"));
+      sprite2 = new _pixi.Sprite(_pixi.Texture.from("clyde_right"));
       sprite2.position.set(0, 336);
       sprite2.anchor.set(0, 0);
-      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("clyde_up"));
+      sprite3 = new _pixi.Sprite(_pixi.Texture.from("clyde_up"));
       sprite3.position.set(0, 352);
       sprite3.anchor.set(0, 0);
-      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("clyde_down"));
+      sprite4 = new _pixi.Sprite(_pixi.Texture.from("clyde_down"));
       sprite4.position.set(0, 368);
       sprite4.anchor.set(0, 0);
       container.addChild(sprite1, sprite2, sprite3, sprite4);
-      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("eyes_left"));
+      sprite1 = new _pixi.Sprite(_pixi.Texture.from("eyes_left"));
       sprite1.position.set(0, 384);
       sprite1.anchor.set(0, 0);
-      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("eyes_right"));
+      sprite2 = new _pixi.Sprite(_pixi.Texture.from("eyes_right"));
       sprite2.position.set(0, 400);
       sprite2.anchor.set(0, 0);
-      sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("eyes_up"));
+      sprite3 = new _pixi.Sprite(_pixi.Texture.from("eyes_up"));
       sprite3.position.set(0, 416);
       sprite3.anchor.set(0, 0);
-      sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("eyes_down"));
+      sprite4 = new _pixi.Sprite(_pixi.Texture.from("eyes_down"));
       sprite4.position.set(0, 432);
       sprite4.anchor.set(0, 0);
       container.addChild(sprite1, sprite2, sprite3, sprite4);
-      sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("scared_blue"));
+      sprite1 = new _pixi.Sprite(_pixi.Texture.from("scared_blue"));
       sprite1.position.set(0, 448);
       sprite1.anchor.set(0, 0);
-      sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("scared_white"));
+      sprite2 = new _pixi.Sprite(_pixi.Texture.from("scared_white"));
       sprite2.position.set(0, 464);
       sprite2.anchor.set(0, 0);
       container.addChild(sprite1, sprite2);
-      var renderTexture = pixi_js_1.RenderTexture.create({
+      var renderTexture = _pixi.RenderTexture.create({
         width: 32,
         height: 480
       });
@@ -5813,41 +3813,41 @@ var AssetsManager = /*#__PURE__*/function () {
   }, {
     key: "createPickupsSprite",
     value: function createPickupsSprite() {
-      var container = new pixi_js_1.Container();
-      var sprite1 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("pacdot"));
+      var container = new _pixi.Container();
+      var sprite1 = new _pixi.Sprite(_pixi.Texture.from("pacdot"));
       sprite1.position.set(0, 0);
       sprite1.anchor.set(0, 0);
       container.addChild(sprite1);
-      var sprite2 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("powerPellet"));
+      var sprite2 = new _pixi.Sprite(_pixi.Texture.from("powerPellet"));
       sprite2.position.set(0, 16);
       sprite2.anchor.set(0, 0);
       container.addChild(sprite2);
-      var sprite3 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("cherry"));
+      var sprite3 = new _pixi.Sprite(_pixi.Texture.from("cherry"));
       sprite3.position.set(0, 32);
       sprite3.anchor.set(0, 0);
-      var sprite4 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("strawberry"));
+      var sprite4 = new _pixi.Sprite(_pixi.Texture.from("strawberry"));
       sprite4.position.set(0, 48);
       sprite4.anchor.set(0, 0);
-      var sprite5 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("orange"));
+      var sprite5 = new _pixi.Sprite(_pixi.Texture.from("orange"));
       sprite5.position.set(0, 64);
       sprite5.anchor.set(0, 0);
-      var sprite6 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("apple"));
+      var sprite6 = new _pixi.Sprite(_pixi.Texture.from("apple"));
       sprite6.position.set(0, 80);
       sprite6.anchor.set(0, 0);
-      var sprite7 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("melon"));
+      var sprite7 = new _pixi.Sprite(_pixi.Texture.from("melon"));
       sprite7.position.set(0, 96);
       sprite7.anchor.set(0, 0);
-      var sprite8 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("galaxian"));
+      var sprite8 = new _pixi.Sprite(_pixi.Texture.from("galaxian"));
       sprite8.position.set(0, 112);
       sprite8.anchor.set(0, 0);
-      var sprite9 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("bell"));
+      var sprite9 = new _pixi.Sprite(_pixi.Texture.from("bell"));
       sprite9.position.set(0, 128);
       sprite9.anchor.set(0, 0);
-      var sprite10 = new pixi_js_1.Sprite(pixi_js_1.Texture.from("key"));
+      var sprite10 = new _pixi.Sprite(_pixi.Texture.from("key"));
       sprite10.position.set(0, 144);
       sprite10.anchor.set(0, 0);
       container.addChild(sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9, sprite10);
-      var renderTexture = pixi_js_1.RenderTexture.create({
+      var renderTexture = _pixi.RenderTexture.create({
         width: 16,
         height: 160
       });
@@ -5867,311 +3867,66 @@ var AssetsManager = /*#__PURE__*/function () {
           if (!width || !height) throw new Error("If the frameX or/and frameY is informed, width and hight should be paased as parameters.");
           if (!frameY) frameY = 0;
           txName = textureName + "_" + frameX + "_" + frameY;
-          newTx = pixi_js_1.Cache.get(txName);
+          newTx = _pixi.Cache.get(txName);
           if (!newTx) {
-            var rect = new pixi_js_1.Rectangle(frameX * width, frameY * height, width, height);
+            var rect = new _pixi.Rectangle(frameX * width, frameY * height, width, height);
             if (spWidth) rect.width = spWidth;
             if (spHeight) rect.height = spHeight;
-            newTx = new pixi_js_1.Texture(tx.castToBaseTexture(), rect);
-            pixi_js_1.Cache.set(txName, newTx);
+            newTx = new _pixi.Texture(tx.castToBaseTexture(), rect);
+            _pixi.Cache.set(txName, newTx);
           }
           tx = newTx;
         }
       } else {
         //get from the cache directly
-        return pixi_js_1.Cache.get(textureName.toString());
+        return _pixi.Cache.get(textureName.toString());
       }
       return tx;
     }
   }]);
 }(); //removeIf(production)
-exports["default"] = AssetsManager;
-//endRemoveIf
+var _default = exports["default"] = AssetsManager; //endRemoveIf
 
-},{"pixi.js":449}],26:[function(require,module,exports){
+},{"pixi.js":446}],24:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _regenerator() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
-    t,
-    r = "function" == typeof Symbol ? Symbol : {},
-    n = r.iterator || "@@iterator",
-    o = r.toStringTag || "@@toStringTag";
-  function i(r, n, o, i) {
-    var c = n && n.prototype instanceof Generator ? n : Generator,
-      u = Object.create(c.prototype);
-    return _regeneratorDefine2(u, "_invoke", function (r, n, o) {
-      var i,
-        c,
-        u,
-        f = 0,
-        p = o || [],
-        y = !1,
-        G = {
-          p: 0,
-          n: 0,
-          v: e,
-          a: d,
-          f: d.bind(e, 4),
-          d: function d(t, r) {
-            return i = t, c = 0, u = e, G.n = r, a;
-          }
-        };
-      function d(r, n) {
-        for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
-          var o,
-            i = p[t],
-            d = G.p,
-            l = i[2];
-          r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0));
-        }
-        if (o || r > 1) return a;
-        throw y = !0, n;
-      }
-      return function (o, p, l) {
-        if (f > 1) throw TypeError("Generator is already running");
-        for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) {
-          i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
-          try {
-            if (f = 2, i) {
-              if (c || (o = "next"), t = i[o]) {
-                if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
-                if (!t.done) return t;
-                u = t.value, c < 2 && (c = 0);
-              } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1);
-              i = e;
-            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
-          } catch (t) {
-            i = e, c = 1, u = t;
-          } finally {
-            f = 1;
-          }
-        }
-        return {
-          value: t,
-          done: y
-        };
-      };
-    }(r, o, i), !0), u;
-  }
-  var a = {};
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-  t = Object.getPrototypeOf;
-  var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () {
-      return this;
-    }), t),
-    u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
-  function f(e) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e;
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () {
-    return this;
-  }), _regeneratorDefine2(u, "toString", function () {
-    return "[object Generator]";
-  }), (_regenerator = function _regenerator() {
-    return {
-      w: i,
-      m: f
-    };
-  })();
-}
-function _regeneratorDefine2(e, r, n, t) {
-  var i = Object.defineProperty;
-  try {
-    i({}, "", {});
-  } catch (e) {
-    i = 0;
-  }
-  _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) {
-    function o(r, n) {
-      _regeneratorDefine2(e, r, function (e) {
-        return this._invoke(r, n, e);
-      });
-    }
-    r ? i ? i(e, r, {
-      value: n,
-      enumerable: !t,
-      configurable: !t,
-      writable: !t
-    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
-  }, _regeneratorDefine2(e, r, n, t);
-}
-function asyncGeneratorStep(n, t, e, r, o, a, c) {
-  try {
-    var i = n[a](c),
-      u = i.value;
-  } catch (n) {
-    return void e(n);
-  }
-  i.done ? t(u) : Promise.resolve(u).then(r, o);
-}
-function _asyncToGenerator(n) {
-  return function () {
-    var t = this,
-      e = arguments;
-    return new Promise(function (r, o) {
-      var a = n.apply(t, e);
-      function _next(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-      }
-      function _throw(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-      }
-      _next(void 0);
-    });
-  };
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __createBinding = void 0 && (void 0).__createBinding || (Object.create ? function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  var desc = Object.getOwnPropertyDescriptor(m, k);
-  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-    desc = {
-      enumerable: true,
-      get: function get() {
-        return m[k];
-      }
-    };
-  }
-  Object.defineProperty(o, k2, desc);
-} : function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  o[k2] = m[k];
-});
-var __setModuleDefault = void 0 && (void 0).__setModuleDefault || (Object.create ? function (o, v) {
-  Object.defineProperty(o, "default", {
-    enumerable: true,
-    value: v
-  });
-} : function (o, v) {
-  o["default"] = v;
-});
-var __importStar = void 0 && (void 0).__importStar || function () {
-  var _ownKeys = function ownKeys(o) {
-    _ownKeys = Object.getOwnPropertyNames || function (o) {
-      var ar = [];
-      for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-      return ar;
-    };
-    return _ownKeys(o);
-  };
-  return function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k = _ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-    __setModuleDefault(result, mod);
-    return result;
-  };
-}();
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var pixi_js_1 = require("pixi.js");
-var PIXI = __importStar(require("pixi.js"));
-var eventemitter3_1 = __importDefault(require("eventemitter3"));
-var mazeManagert_js_1 = __importDefault(require("./mazeManagert.js"));
-var soundManager_js_1 = __importDefault(require("../utilities/soundManager.js"));
-var assetsManager_js_1 = __importDefault(require("./assetsManager.js"));
-var ghost_js_1 = __importDefault(require("../characters/ghost.js"));
-var pacman_js_1 = __importDefault(require("../characters/pacman.js"));
-var pickup_js_1 = __importDefault(require("../pickups/pickup.js"));
-var characterUtil_js_1 = __importDefault(require("../utilities/characterUtil.js"));
-var gameEngine_js_1 = __importDefault(require("./gameEngine.js"));
-var timer_js_1 = __importDefault(require("../utilities/timer.js"));
-var empty_mod_js_1 = __importDefault(require("../../mods/empty-mod.js"));
+exports["default"] = void 0;
+var _pixi = _interopRequireWildcard(require("pixi.js"));
+var PIXI = _pixi;
+var _eventemitter = _interopRequireDefault(require("eventemitter3"));
+var _mazeManagert = _interopRequireDefault(require("./mazeManagert.ts"));
+var _soundManager = _interopRequireDefault(require("../utilities/soundManager.ts"));
+var _assetsManager = _interopRequireDefault(require("./assetsManager.ts"));
+var _ghost = _interopRequireDefault(require("../characters/ghost.ts"));
+var _pacman = _interopRequireDefault(require("../characters/pacman.ts"));
+var _pickup = _interopRequireDefault(require("../pickups/pickup.ts"));
+var _characterUtil = _interopRequireDefault(require("../utilities/characterUtil.ts"));
+var _gameEngine = _interopRequireDefault(require("./gameEngine.ts"));
+var _timer = _interopRequireDefault(require("../utilities/timer.ts"));
+var _emptyMod = _interopRequireDefault(require("../../mods/empty-mod.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, "default": e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 //global.window.Assets = Assets
 //import path from 'path'
 var options = {
@@ -6180,7 +3935,7 @@ var options = {
   antialias: false
 };
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-pixi_js_1.BaseTexture.defaultOptions.scaleMode = pixi_js_1.SCALE_MODES.NEAREST;
+_pixi.BaseTexture.defaultOptions.scaleMode = _pixi.SCALE_MODES.NEAREST;
 var GameCoordinator = /*#__PURE__*/function () {
   function GameCoordinator() {
     _classCallCheck(this, GameCoordinator);
@@ -6249,7 +4004,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     _defineProperty(this, "bottomRender", void 0);
     _defineProperty(this, "view", void 0);
     //super(options)
-    this.mod = new empty_mod_js_1["default"](this);
+    this.mod = new _emptyMod["default"](this);
     this.gameUi = document.getElementById('game-ui');
     this.rowTop = document.getElementById('row-top');
     this.mazeDiv = document.getElementById('maze');
@@ -6263,7 +4018,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     this.pausedText = document.getElementById('paused-text');
     this.bottomRow = document.getElementById('bottom-row');
     this.movementButtons = document.getElementById('movement-buttons');
-    var mm = new mazeManagert_js_1["default"]();
+    var mm = new _mazeManagert["default"]();
     this.maze = mm.get("maze1");
     this.mazeArray = this.maze.mazeArray;
     this.maxFps = 120;
@@ -6274,6 +4029,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     this.height = this.scaledTileSize * 31;
     this.width = this.scaledTileSize * 28;
     this.maze.setDimensions(this.width, this.height);
+
     //PIXI
     window['PIXI'] = PIXI;
     this.firstGame = true;
@@ -6310,6 +4066,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     link.onload = this.preloadAssets.bind(this);
     head === null || head === void 0 || head.appendChild(link);
   }
+
   /**
    * Included to accpet a new mod to the game
    * @param {Mod} mod
@@ -6319,6 +4076,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function setMod(mod) {
       this.mod = mod;
     }
+
     /**
      * Recursive method which determines the largest possible scale the game's graphics can use
      * @param {Number} scale
@@ -6329,6 +4087,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       var availableScreenHeight = Math.min(document.documentElement.clientHeight, window.innerHeight || 0);
       var availableScreenWidth = Math.min(document.documentElement.clientWidth, window.innerWidth || 0);
       var scaledTileSize = this.tileSize * scale;
+
       // The original Pac-Man game leaves 5 tiles of height (3 above, 2 below) surrounding the
       // maze for the UI. See app\style\graphics\spriteSheets\references\mazeGridSystemReference.png
       // for reference.
@@ -6339,6 +4098,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       }
       return scale - 1;
     }
+
     /**
      * Reveals the game underneath the loading covers and starts gameplay
      */
@@ -6360,6 +4120,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       }
       this.startGameplay(true);
     }
+
     /**
      * Toggles the master volume for the soundManager, and saves the preference to storage
      */
@@ -6371,6 +4132,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       localStorage.setItem('volumePreference', newVolume.toString());
       this.setSoundButtonIcon(newVolume);
     }
+
     /**
      * Sets the icon for the sound button
      */
@@ -6379,6 +4141,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function setSoundButtonIcon(newVolume) {
       this.soundButton.innerHTML = newVolume === 0 ? 'volume_off' : 'volume_up';
     }
+
     /**
      * Displays an error message in the event assets are unable to download
      */
@@ -6394,17 +4157,18 @@ var GameCoordinator = /*#__PURE__*/function () {
         errorMessage.style.visibility = 'visible';
       }, 1500);
     }
+
     /**
      * Load all assets into a hidden Div to pre-load them into memory.
      */
   }, {
     key: "preloadAssets",
-    value: function () {
+    value: (function () {
       var _preloadAssets = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
         return _regenerator().w(function (_context) {
           while (1) switch (_context.n) {
             case 0:
-              this.am = new assetsManager_js_1["default"](this);
+              this.am = new _assetsManager["default"](this);
               _context.n = 1;
               return this.am.load();
             case 1:
@@ -6420,6 +4184,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     /**
      * Resets gameCoordinator values to their default states
      */
+    )
   }, {
     key: "reset",
     value: function reset() {
@@ -6439,12 +4204,12 @@ var GameCoordinator = /*#__PURE__*/function () {
         setInterval(function () {
           _this2.collisionDetectionLoop();
         }, 500);
-        this.pacman = new pacman_js_1["default"](this, new characterUtil_js_1["default"]());
-        this.blinky = new ghost_js_1["default"](this, 'blinky', this.level, new characterUtil_js_1["default"]());
-        this.pinky = new ghost_js_1["default"](this, 'pinky', this.level, new characterUtil_js_1["default"]());
-        this.inky = new ghost_js_1["default"](this, 'inky', this.level, new characterUtil_js_1["default"](), this.blinky);
-        this.clyde = new ghost_js_1["default"](this, 'clyde', this.level, new characterUtil_js_1["default"]());
-        this.fruit = new pickup_js_1["default"]('fruit', 13.5, 17, 100, this);
+        this.pacman = new _pacman["default"](this, new _characterUtil["default"]());
+        this.blinky = new _ghost["default"](this, 'blinky', this.level, new _characterUtil["default"]());
+        this.pinky = new _ghost["default"](this, 'pinky', this.level, new _characterUtil["default"]());
+        this.inky = new _ghost["default"](this, 'inky', this.level, new _characterUtil["default"](), this.blinky);
+        this.clyde = new _ghost["default"](this, 'clyde', this.level, new _characterUtil["default"]());
+        this.fruit = new _pickup["default"]('fruit', 13.5, 17, 100, this);
       }
       this.entityList = [this.pacman, this.blinky, this.pinky, this.inky, this.clyde, this.fruit];
       this.ghosts = [this.blinky, this.pinky, this.inky, this.clyde];
@@ -6465,7 +4230,7 @@ var GameCoordinator = /*#__PURE__*/function () {
           //@ts-ignore
           _this2.stage.addChild(g.sprite);
         });
-        this.soundManager = new soundManager_js_1["default"]();
+        this.soundManager = new _soundManager["default"]();
         this.setUiDimensions();
       } else {
         this.pacman.reset();
@@ -6488,6 +4253,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.setSoundButtonIcon(volumePreference);
       this.soundManager.setMasterVolume(volumePreference);
     }
+
     /**
      * Calls necessary setup functions to start the game
      */
@@ -6497,9 +4263,10 @@ var GameCoordinator = /*#__PURE__*/function () {
       //initialize the current mod values    
       this.registerEventListeners();
       this.mod.initialize();
-      this.gameEngine = new gameEngine_js_1["default"](this, this.maxFps, this.entityList);
+      this.gameEngine = new _gameEngine["default"](this, this.maxFps, this.entityList);
       this.gameEngine.start();
     }
+
     /**
      * Adds HTML elements to draw on the webpage by iterating through the 2D maze array
      * @param {Array} mazeArray - 2D array representing the game board
@@ -6519,7 +4286,7 @@ var GameCoordinator = /*#__PURE__*/function () {
           if (block === 'o' || block === 'O') {
             var type = block === 'o' ? 'pacdot' : 'powerPellet';
             var points = block === 'o' ? 10 : 50;
-            var dot = new pickup_js_1["default"](type, columnIndex, rowIndex, points, _this3);
+            var dot = new _pickup["default"](type, columnIndex, rowIndex, points, _this3);
             entityList.push(dot);
             _this3.pickups.push(dot);
             _this3.remainingDots += 1;
@@ -6542,13 +4309,14 @@ var GameCoordinator = /*#__PURE__*/function () {
         height: this.height * 0.06 * this.scale
       });
       this.bottomRender.update();
+
       //canvas view     
       this.view = document.createElement("canvas");
       this.view.width = this.tileSize * 28 * this.scale;
       this.view.height = this.tileSize * 31 * this.scale;
       this.mazeDiv.appendChild(this.view);
       this.view.classList.add("view");
-      this.stage = new pixi_js_1.Container();
+      this.stage = new _pixi.Container();
       this.stage.sortableChildren = true;
       this.stage.scale.set(this.scale);
       var opts = {
@@ -6575,6 +4343,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       if (this.topRender) this.topRender.render(this.topRender.container);
       if (this.bottomRender) this.bottomRender.render(this.bottomRender.container);
     }
+
     /**
      * Loop which periodically checks which pickups are nearby Pacman.
      * Pickups which are far away will not be considered for collision detection.
@@ -6588,6 +4357,7 @@ var GameCoordinator = /*#__PURE__*/function () {
           x: this.pacman.position.x + this.scaledTileSize,
           y: this.pacman.position.y + this.scaledTileSize
         };
+
         // Set this flag to TRUE to see how two-phase collision detection works!
         var debugging = false;
         this.pickups.forEach(function (pickup) {
@@ -6595,6 +4365,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         });
       }
     }
+
     /**
      * Displays "Ready!" and allows Pacman to move after a breif delay
      * @param {Boolean} initialStart - Special condition for the game's beginning
@@ -6619,7 +4390,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         y: y
       }, 'ready', duration, width, height);
       this.updateExtraLivesDisplay();
-      new timer_js_1["default"](function () {
+      new _timer["default"](function () {
         //for mods. start the mod 
         _this4.mod.start();
         _this4.allowPause = true;
@@ -6659,6 +4430,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function updateHightScore() {
       this.topRender.update();
     }
+
     /**
      * Displays extra life images equal to the number of remaining lives
      */
@@ -6669,12 +4441,13 @@ var GameCoordinator = /*#__PURE__*/function () {
       var livesDisplay = this.bottomRender.container.getChildByName("livesDisplay");
       var tx = this.am.getTexture("extra_life");
       for (var i = 0; i < this.lives; i += 1) {
-        var extraLifeSprite = new pixi_js_1.Sprite(tx);
+        var extraLifeSprite = new _pixi.Sprite(tx);
         extraLifeSprite.x = extraLifeSprite.width * i;
         //@ts-ignore
         livesDisplay.addChild(extraLifeSprite);
       }
     }
+
     /**
      * Displays a rolling log of the seven most-recently eaten fruit
      * @param {number} points
@@ -6690,7 +4463,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         var first = fruitsDisplay.getChildAt(0);
         if (first) fruitsDisplay.removeChild(first);
       }
-      var fruitSp = new pixi_js_1.Sprite(this.am.getTexture(name));
+      var fruitSp = new _pixi.Sprite(this.am.getTexture(name));
       var x = 0;
       //@ts-ignore
       fruitsDisplay.children.forEach(function (f) {
@@ -6701,6 +4474,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       //@ts-ignore
       fruitsDisplay.addChild(fruitSp);
     }
+
     /**
      * Cycles the ghosts between 'chase' and 'scatter' mode
      * @param {('chase'|'scatter')} mode
@@ -6711,13 +4485,14 @@ var GameCoordinator = /*#__PURE__*/function () {
       var _this5 = this;
       var delay = mode === 'scatter' ? 7000 : 20000;
       var nextMode = mode === 'scatter' ? 'chase' : 'scatter';
-      this.ghostCycleTimer = new timer_js_1["default"](function () {
+      this.ghostCycleTimer = new _timer["default"](function () {
         _this5.ghosts.forEach(function (ghost) {
           ghost.changeMode(nextMode);
         });
         _this5.ghostCycle(nextMode);
       }, delay);
     }
+
     /**
      * Releases a ghost from the Ghost House after a delay
      */
@@ -6727,12 +4502,13 @@ var GameCoordinator = /*#__PURE__*/function () {
       var _this6 = this;
       if (this.idleGhosts.length > 0) {
         var delay = Math.max((8 - (this.level - 1) * 4) * 1000, 0);
-        this.endIdleTimer = new timer_js_1["default"](function () {
+        this.endIdleTimer = new _timer["default"](function () {
           _this6.idleGhosts[0].endIdleMode();
           _this6.idleGhosts.shift();
         }, delay);
       }
     }
+
     /**
      * Register listeners for various game sequences
      */
@@ -6743,7 +4519,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       //events: 
       //  load, start, post-start, pacman-death, post-death, ghost-eaten-<ghostName>, item-taken (item as argument),
       //  advance-level, game-over, speed-up-blinky, create-fruit
-      this.emitter = new eventemitter3_1["default"]();
+      this.emitter = new _eventemitter["default"]();
       this.entityList.forEach(function (e) {
         e.emitter = _this7.emitter;
         e.registerEventListeners();
@@ -6775,6 +4551,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         });
       });
     }
+
     /**
      * Calls Pacman's changeDirection event if certain conditions are met
      * @param {({'up'|'down'|'left'|'right'})} direction
@@ -6786,6 +4563,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.pacman.changeDirection(direction, this.allowPacmanMovement);
       }
     }
+
     /**
      * Calls various class functions depending upon the pressed key
      * @param {Event} e - The keydown event to evaluate
@@ -6803,6 +4581,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.changeDirection(this.movementKeys[e.keyCode]);
       }
     }
+
     /**
      * Handle behavior for the pause key
      */
@@ -6841,6 +4620,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         }
       }
     }
+
     /**
      * Adds points to the player's total
      * @param {({ detail: { points: Number }})} e - Contains a quantity of points to add
@@ -6874,12 +4654,13 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.updateFruitsDisplay(e.detail.points);
       }
     }
+
     /**
      * Animates Pacman's death, subtracts a life, and resets character positions if
      * the player has remaining lives.
      */
     /**
-     * Changed to suport events details values to change the behavior of this method
+     * Changed to suport events details values to change the behavior of this method 
      */
   }, {
     key: "deathSequence",
@@ -6915,7 +4696,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         var ghostRef = ghost;
         ghostRef.moving = false;
       });
-      new timer_js_1["default"](function () {
+      new _timer["default"](function () {
         _this9.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.display = false;
@@ -6927,10 +4708,10 @@ var GameCoordinator = /*#__PURE__*/function () {
           _this9.lives -= 1;
           var callbackAfter = event === null || event === void 0 || (_event$detail = event.detail) === null || _event$detail === void 0 ? void 0 : _event$detail.callbackAfter;
           if (callbackAfter) callbackAfter();
-          new timer_js_1["default"](function () {
+          new _timer["default"](function () {
             _this9.emitter.emit("post-death");
             _this9.mazeCover.style.visibility = 'visible';
-            new timer_js_1["default"](function () {
+            new _timer["default"](function () {
               var _event$detail2;
               _this9.allowKeyPresses = true;
               _this9.mazeCover.style.visibility = 'hidden';
@@ -6948,6 +4729,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         }
       }, 750);
     }
+
     /**
      * Displays GAME OVER text and displays the menu so players can play again
      */
@@ -6956,7 +4738,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function gameOver() {
       var _this0 = this;
       localStorage.setItem('highScore', this.highScore);
-      new timer_js_1["default"](function () {
+      new _timer["default"](function () {
         //for mods
         _this0.mod.stop();
         _this0.displayText({
@@ -6964,7 +4746,7 @@ var GameCoordinator = /*#__PURE__*/function () {
           y: _this0.scaledTileSize * 16.5
         }, 'game_over', 4000, _this0.scaledTileSize * 10, _this0.scaledTileSize * 2);
         _this0.fruit.hideFruit();
-        new timer_js_1["default"](function () {
+        new _timer["default"](function () {
           _this0.leftCover.style.left = '0';
           _this0.rightCover.style.right = '0';
           setTimeout(function () {
@@ -6975,6 +4757,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         }, 2500);
       }, 2250);
     }
+
     /**
      * Handle events related to the number of remaining dots
      */
@@ -6993,6 +4776,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.emitter.emit("advance-level");
       }
     }
+
     /**
      * Creates a bonus fruit for ten seconds
      */
@@ -7006,10 +4790,11 @@ var GameCoordinator = /*#__PURE__*/function () {
         }
       });
       this.fruit.showFruit(this.fruitPoints[this.level] || 5000);
-      this.fruitTimer = new timer_js_1["default"](function () {
+      this.fruitTimer = new _timer["default"](function () {
         _this1.fruit.hideFruit();
       }, 10000);
     }
+
     /**
      * Speeds up Blinky and raises the background noise pitch
      */
@@ -7021,6 +4806,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.soundManager.setAmbience(this.determineSiren(this.remainingDots));
       }
     }
+
     /**
      * Determines the correct siren ambience
      * @param {Number} remainingDots
@@ -7039,6 +4825,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       }
       return "siren_".concat(sirenNum);
     }
+
     /**
      * Resets the gameboard and prepares the next level
      */
@@ -7051,6 +4838,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.soundManager.setCutscene(this.cutscene);
       this.allowKeyPresses = false;
       this.soundManager.stopAmbience();
+
       //stop the current mod    
       this.mod.stop();
       this.entityList.forEach(function (entity) {
@@ -7077,25 +4865,25 @@ var GameCoordinator = /*#__PURE__*/function () {
           timer: this.ghostFlashTimer
         }
       });
-      new timer_js_1["default"](function () {
+      new _timer["default"](function () {
         _this10.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.display = false;
         });
-        _this10.mazeSprite.texture = pixi_js_1.Texture.from("maze_white");
-        new timer_js_1["default"](function () {
-          _this10.mazeSprite.texture = pixi_js_1.Texture.from("maze_blue");
-          new timer_js_1["default"](function () {
-            _this10.mazeSprite.texture = pixi_js_1.Texture.from("maze_white");
-            new timer_js_1["default"](function () {
-              _this10.mazeSprite.texture = pixi_js_1.Texture.from("maze_blue");
-              new timer_js_1["default"](function () {
-                _this10.mazeSprite.texture = pixi_js_1.Texture.from("maze_white");
-                new timer_js_1["default"](function () {
-                  _this10.mazeSprite.texture = pixi_js_1.Texture.from("maze_blue");
-                  new timer_js_1["default"](function () {
+        _this10.mazeSprite.texture = _pixi.Texture.from("maze_white");
+        new _timer["default"](function () {
+          _this10.mazeSprite.texture = _pixi.Texture.from("maze_blue");
+          new _timer["default"](function () {
+            _this10.mazeSprite.texture = _pixi.Texture.from("maze_white");
+            new _timer["default"](function () {
+              _this10.mazeSprite.texture = _pixi.Texture.from("maze_blue");
+              new _timer["default"](function () {
+                _this10.mazeSprite.texture = _pixi.Texture.from("maze_white");
+                new _timer["default"](function () {
+                  _this10.mazeSprite.texture = _pixi.Texture.from("maze_blue");
+                  new _timer["default"](function () {
                     _this10.mazeSprite.visible = false;
-                    new timer_js_1["default"](function () {
+                    new _timer["default"](function () {
                       _this10.mazeSprite.visible = true;
                       _this10.mazeCover.style.visibility = 'hidden';
                       _this10.level += 1;
@@ -7106,10 +4894,10 @@ var GameCoordinator = /*#__PURE__*/function () {
                           entityRef.level = _this10.level;
                         }
                         entityRef.reset();
-                        if (entityRef instanceof ghost_js_1["default"]) {
+                        if (entityRef instanceof _ghost["default"]) {
                           entityRef.resetDefaultSpeed();
                         }
-                        if (entityRef instanceof pickup_js_1["default"] && entityRef.type !== 'fruit') {
+                        if (entityRef instanceof _pickup["default"] && entityRef.type !== 'fruit') {
                           _this10.remainingDots += 1;
                         }
                       });
@@ -7123,6 +4911,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         }, 250);
       }, 2000);
     }
+
     /**
      * Flashes ghosts blue and white to indicate the end of the powerup
      * @param {Number} flashes - Total number of elapsed flashes
@@ -7144,11 +4933,12 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.scaredGhosts.forEach(function (ghost) {
           ghost.toggleScaredColor();
         });
-        this.ghostFlashTimer = new timer_js_1["default"](function () {
+        this.ghostFlashTimer = new _timer["default"](function () {
           _this11.flashGhosts(flashes + 1, maxFlashes);
         }, 250);
       }
     }
+
     /**
      * Upon eating a power pellet, sets the ghosts to 'scared' mode
      */
@@ -7175,10 +4965,11 @@ var GameCoordinator = /*#__PURE__*/function () {
         ghost.becomeScared();
       });
       var powerDuration = Math.max((7 - this.level) * 1000, 0);
-      this.ghostFlashTimer = new timer_js_1["default"](function () {
+      this.ghostFlashTimer = new _timer["default"](function () {
         _this12.flashGhosts(0, 9);
       }, powerDuration);
     }
+
     /**
      * Determines the quantity of points to give based on the current combo
      */
@@ -7187,6 +4978,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function determineComboPoints() {
       return 100 * Math.pow(2, this.ghostCombo);
     }
+
     /**
      * Upon eating a ghost, award points and temporarily pause movement
      * @param {CustomEvent} e - Contains a target ghost object
@@ -7238,7 +5030,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         ghostRef.pause(true);
         ghostRef.allowCollision = false;
       });
-      new timer_js_1["default"](function () {
+      new _timer["default"](function () {
         _this13.soundManager.setAmbience('eyes');
         _this13.resumeTimer({
           detail: {
@@ -7268,6 +5060,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         });
       }, pauseDuration);
     }
+
     /**
      * Decrements the count of "eye" ghosts and updates the ambience
      */
@@ -7280,6 +5073,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.soundManager.setAmbience(sound);
       }
     }
+
     /**
      * Creates a temporary div to display points on screen
      * @param {({ left: number, top: number })} position - CSS coordinates to display the points at
@@ -7294,7 +5088,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       var _this14 = this;
       var textSp;
       var texture = this.am.getTexture(amount);
-      if (texture) textSp = new pixi_js_1.Sprite(texture);else textSp = new pixi_js_1.Text(amount, {
+      if (texture) textSp = new _pixi.Sprite(texture);else textSp = new _pixi.Text(amount, {
         fontFamily: "Press Start 2P",
         fontSize: 6,
         fill: 0xffffff
@@ -7303,10 +5097,11 @@ var GameCoordinator = /*#__PURE__*/function () {
       textSp.height = height || width;
       textSp.position.set(position.x, position.y);
       this.stage.addChild(textSp);
-      new timer_js_1["default"](function () {
+      new _timer["default"](function () {
         _this14.stage.removeChild(textSp);
       }, duration);
     }
+
     /**
      * Pushes a Timer to the activeTimers array
      * @param {({ detail: { timer: Object }})} e
@@ -7316,6 +5111,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function addTimer(e) {
       this.activeTimers.push(e.detail.timer);
     }
+
     /**
      * Checks if a Timer with a matching ID exists
      * @param {({ detail: { timer: Object }})} e
@@ -7326,6 +5122,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function timerExists(e) {
       return !!(e.detail.timer || {}).timerId;
     }
+
     /**
      * Pauses a timer
      * @param {({ detail: { timer: Object }})} e
@@ -7337,6 +5134,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         e.detail.timer.pause(true);
       }
     }
+
     /**
      * Resumes a timer
      * @param {({ detail: { timer: Object }})} e
@@ -7348,6 +5146,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         e.detail.timer.resume(true);
       }
     }
+
     /**
      * Removes a Timer from activeTimers
      * @param {({ detail: { timer: Object }})} e
@@ -7364,14 +5163,13 @@ var GameCoordinator = /*#__PURE__*/function () {
     }
   }]);
 }(); // removeIf(production)
-exports["default"] = GameCoordinator;
-// endRemoveIf(production)
+var _default = exports["default"] = GameCoordinator; // endRemoveIf(production)
 var RendererTop = /*#__PURE__*/function (_PIXI$Renderer) {
   function RendererTop(gameCoordinator, options) {
     var _this15;
     _classCallCheck(this, RendererTop);
     _this15 = _callSuper(this, RendererTop, [options]);
-    _defineProperty(_this15, "container", new pixi_js_1.Container());
+    _defineProperty(_this15, "container", new _pixi.Container());
     _defineProperty(_this15, "player1Label", void 0);
     _defineProperty(_this15, "points", void 0);
     _defineProperty(_this15, "highScoreLabel", void 0);
@@ -7384,10 +5182,10 @@ var RendererTop = /*#__PURE__*/function (_PIXI$Renderer) {
       //fontWeight: "bold",
       fill: "0xffffff"
     };
-    _this15.player1Label = new pixi_js_1.Text("", textStyle);
-    _this15.points = new pixi_js_1.Text("", textStyle);
-    _this15.highScoreLabel = new pixi_js_1.Text("", textStyle);
-    _this15.highScore = new pixi_js_1.Text("", textStyle);
+    _this15.player1Label = new _pixi.Text("", textStyle);
+    _this15.points = new _pixi.Text("", textStyle);
+    _this15.highScoreLabel = new _pixi.Text("", textStyle);
+    _this15.highScore = new _pixi.Text("", textStyle);
     _this15.container.addChild(_this15.player1Label, _this15.points, _this15.highScoreLabel, _this15.highScore);
     _this15.initialize();
     return _this15;
@@ -7441,15 +5239,15 @@ var RendererBottom = /*#__PURE__*/function (_PIXI$Renderer2) {
     _classCallCheck(this, RendererBottom);
     _this16 = _callSuper(this, RendererBottom, [options]);
     _defineProperty(_this16, "gc", void 0);
-    _defineProperty(_this16, "container", new pixi_js_1.Container());
+    _defineProperty(_this16, "container", new _pixi.Container());
     _this16.gc = gameCoordinator;
     //@ts-ignore
     //   this.view.classList.add("row-bottom-view")
     _this16.container.scale.set(_this16.gc.scale);
-    var livesDisplay = new pixi_js_1.Container();
+    var livesDisplay = new _pixi.Container();
     livesDisplay.name = "livesDisplay";
     _this16.container.addChild(livesDisplay);
-    var fruitsDisplay = new pixi_js_1.Container();
+    var fruitsDisplay = new _pixi.Container();
     fruitsDisplay.name = "fruitsDisplay";
     fruitsDisplay.x = _this16.container.width;
     _this16.container.addChild(fruitsDisplay);
@@ -7464,57 +5262,20 @@ var RendererBottom = /*#__PURE__*/function (_PIXI$Renderer2) {
   }]);
 }(PIXI.Renderer);
 
-},{"../../mods/empty-mod.js":1,"../characters/ghost.js":22,"../characters/pacman.js":23,"../pickups/pickup.js":32,"../utilities/characterUtil.js":33,"../utilities/soundManager.js":35,"../utilities/timer.js":36,"./assetsManager.js":25,"./gameEngine.js":27,"./mazeManagert.js":28,"eventemitter3":425,"pixi.js":449}],27:[function(require,module,exports){
+},{"../../mods/empty-mod.ts":1,"../characters/ghost.ts":21,"../characters/pacman.ts":22,"../pickups/pickup.ts":30,"../utilities/characterUtil.ts":31,"../utilities/soundManager.ts":32,"../utilities/timer.ts":33,"./assetsManager.ts":23,"./gameEngine.ts":25,"./mazeManagert.ts":26,"eventemitter3":422,"pixi.js":446}],25:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var GameEngine = /*#__PURE__*/function () {
   function GameEngine(gameCoordinator, maxFps, entityList) {
     _classCallCheck(this, GameEngine);
@@ -7545,6 +5306,7 @@ var GameEngine = /*#__PURE__*/function () {
     this.running = false;
     this.started = false;
   }
+
   /**
    * Toggles the paused/running status of the game
    * @param {Boolean} running - Whether the game is currently in motion
@@ -7558,6 +5320,7 @@ var GameEngine = /*#__PURE__*/function () {
         this.start();
       }
     }
+
     /**
      * Updates the on-screen FPS counter once per second
      * @param {number} timestamp - The amount of MS which has passed since starting the game engine
@@ -7573,6 +5336,7 @@ var GameEngine = /*#__PURE__*/function () {
       this.framesThisSecond += 1;
       this.fpsDisplay.textContent = "".concat(Math.round(this.fps), " FPS");
     }
+
     /**
      * Calls the draw function for every member of the entityList
      * @param {number} interp - The animation accuracy as a percentage
@@ -7589,6 +5353,7 @@ var GameEngine = /*#__PURE__*/function () {
         }
       });
     }
+
     /**
      * Calls the update function for every member of the entityList
      * @param {number} elapsedMs - The amount of MS that have passed since the last update
@@ -7604,6 +5369,7 @@ var GameEngine = /*#__PURE__*/function () {
         }
       });
     }
+
     /**
      * In the event that a ton of unsimulated frames pile up, discard all of these frames
      * to prevent crashing the game
@@ -7613,6 +5379,7 @@ var GameEngine = /*#__PURE__*/function () {
     value: function panic() {
       this.elapsedMs = 0;
     }
+
     /**
      * Draws an initial frame, resets a few tracking variables related to animation, and calls
      * the mainLoop function to start the engine
@@ -7635,6 +5402,7 @@ var GameEngine = /*#__PURE__*/function () {
         });
       }
     }
+
     /**
      * Stops the engine and cancels the current animation frame
      */
@@ -7645,6 +5413,7 @@ var GameEngine = /*#__PURE__*/function () {
       this.started = false;
       cancelAnimationFrame(this.frameId);
     }
+
     /**
      * The loop which will process all necessary frames to update the game's entities
      * prior to animating them
@@ -7663,6 +5432,7 @@ var GameEngine = /*#__PURE__*/function () {
         }
       }
     }
+
     /**
      * A single cycle of the engine which checks to see if enough time has passed, and, if so,
      * will kick off the loops to update and draw the game's entities.
@@ -7684,10 +5454,12 @@ var GameEngine = /*#__PURE__*/function () {
       this.processFrames();
       this.draw(this.elapsedMs / this.timestep, this.entityList);
       //for debuging popurses
+
       this.frameId = requestAnimationFrame(function (nextTimestamp) {
         _this2.mainLoop(nextTimestamp);
       });
     }
+
     /**
      * The endless loop which will kick off engine cycles so long as the game is running
      * @param {number} timestamp - The amount of MS which has passed since starting the game engine
@@ -7703,73 +5475,31 @@ var GameEngine = /*#__PURE__*/function () {
 //   global.window.GameEngine = GameEngine
 // removeIf(production)
 //module.exports = GameEngine;
-exports["default"] = GameEngine;
-// endRemoveIf(production)
+var _default = exports["default"] = GameEngine; // endRemoveIf(production)
 
-},{}],28:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var maze_1_js_1 = __importDefault(require("../mazes/maze-1.js"));
-var maze_js_1 = __importDefault(require("../mazes/maze.js"));
+exports["default"] = void 0;
+var _maze = _interopRequireDefault(require("../mazes/maze-1.ts"));
+var _maze2 = _interopRequireDefault(require("../mazes/maze.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var MazeManager = /*#__PURE__*/function () {
   function MazeManager() {
     _classCallCheck(this, MazeManager);
     _defineProperty(this, "mazes", void 0);
     this.mazes = new Map();
-    this.mazes.set("maze1", new maze_js_1["default"](maze_1_js_1["default"]));
+    this.mazes.set("maze1", new _maze2["default"](_maze["default"]));
   }
   return _createClass(MazeManager, [{
     key: "get",
@@ -7778,38 +5508,34 @@ var MazeManager = /*#__PURE__*/function () {
     }
   }]);
 }();
-exports["default"] = MazeManager;
+var _default = exports["default"] = MazeManager;
 
-},{"../mazes/maze-1.js":30,"../mazes/maze.js":31}],29:[function(require,module,exports){
+},{"../mazes/maze-1.ts":28,"../mazes/maze.ts":29}],27:[function(require,module,exports){
 "use strict";
 
-// import GameCoordinator from "./core/gameCoordinator.js";
-// import Debugger from "./utilities/debugger.js";
-// import FloodModImp from "../mods/implementations/flood-mod-imp.js";
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var flood_mod_imp_js_1 = __importDefault(require("../mods/implementations/flood-mod-imp.js"));
-var gameCoordinator_js_1 = __importDefault(require("./core/gameCoordinator.js"));
-var debugger_js_1 = __importDefault(require("./utilities/debugger.js"));
+var _floodModImp = _interopRequireDefault(require("../mods/implementations/flood-mod-imp.ts"));
+var _gameCoordinator = _interopRequireDefault(require("./core/gameCoordinator.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+// import GameCoordinator from "./core/gameCoordinator.ts";
+// import Debugger from "./utilities/debugger.ts";
+// import FloodModImp from "../mods/implementations/flood-mod-imp.ts";
+
+//import Debugger from "./utilities/debugger.ts"
+
 window.onload = function () {
-  window.gc = new gameCoordinator_js_1["default"]();
-  var mod = new flood_mod_imp_js_1["default"](window.gc);
+  window.gc = new _gameCoordinator["default"]();
+  var mod = new _floodModImp["default"](window.gc);
   window.gc.setMod(mod);
-  window.debug = new debugger_js_1["default"](window.gc);
+  //window.debug = new Debugger(window.gc) 
 };
 
-},{"../mods/implementations/flood-mod-imp.js":2,"./core/gameCoordinator.js":26,"./utilities/debugger.js":34}],30:[function(require,module,exports){
+},{"../mods/implementations/flood-mod-imp.ts":2,"./core/gameCoordinator.ts":24}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 var maze1 = {
   mazeArray: [['XXXXXXXXXXXXXXXXXXXXXXXXXXXX'], ['XooooooooooooXXooooooooooooX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XOXXXXoXXXXXoXXoXXXXXoXXXXOX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XooooooooooooooooooooooooooX'], ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'], ['XoXXXXoXXoXXXXXXXXoXXoXXXXoX'], ['XooooooXXooooXXooooXXooooooX'], ['XXXXXXoXXXXX XX XXXXXoXXXXXX'], ['XXXXXXoXXXXX XX XXXXXoXXXXXX'], ['XXXXXXoXX          XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX X      X XXoXXXXXX'], ['      o   X      X   o      '], ['XXXXXXoXX X      X XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX          XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XXXXXXoXX XXXXXXXX XXoXXXXXX'], ['XooooooooooooXXooooooooooooX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XoXXXXoXXXXXoXXoXXXXXoXXXXoX'], ['XOooXXooooooo  oooooooXXooOX'], ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'], ['XXXoXXoXXoXXXXXXXXoXXoXXoXXX'], ['XooooooXXooooXXooooXXooooooX'], ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'], ['XoXXXXXXXXXXoXXoXXXXXXXXXXoX'], ['XooooooooooooooooooooooooooX'], ['XXXXXXXXXXXXXXXXXXXXXXXXXXXX']],
   //In tile cordinates
@@ -7820,69 +5546,25 @@ var maze1 = {
     y2: 16.5
   }]
 };
-exports["default"] = maze1;
+var _default = exports["default"] = maze1;
 
-},{}],31:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _classPrivateMethodInitSpec(e, a) {
-  _checkPrivateRedeclaration(e, a), a.add(e);
-}
-function _checkPrivateRedeclaration(e, t) {
-  if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _assertClassBrand(e, t, n) {
-  if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-  throw new TypeError("Private element is not present on this object");
-}
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _classPrivateMethodInitSpec(e, a) { _checkPrivateRedeclaration(e, a), a.add(e); }
+function _checkPrivateRedeclaration(e, t) { if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object"); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _assertClassBrand(e, t, n) { if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n; throw new TypeError("Private element is not present on this object"); }
 var _Maze_brand = /*#__PURE__*/new WeakSet();
 var Maze = /*#__PURE__*/function () {
   function Maze(mazePrp) {
@@ -8113,128 +5795,36 @@ function _createLeftRightBounds(bounds, pixelBounds, holes, row, lastCol) {
     });
   }
 }
-exports["default"] = Maze;
+var _default = exports["default"] = Maze;
 
-},{}],32:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _callSuper(t, o, e) {
-  return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
-}
-function _possibleConstructorReturn(t, e) {
-  if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
-  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-  return _assertThisInitialized(t);
-}
-function _assertThisInitialized(e) {
-  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return e;
-}
-function _isNativeReflectConstruct() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-  } catch (t) {}
-  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
-    return !!t;
-  })();
-}
-function _superPropGet(t, o, e, r) {
-  var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
-}
-function _get() {
-  return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-    var p = _superPropBase(e, t);
-    if (p) {
-      var n = Object.getOwnPropertyDescriptor(p, t);
-      return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
-    }
-  }, _get.apply(null, arguments);
-}
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t)););
-  return t;
-}
-function _getPrototypeOf(t) {
-  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-    return t.__proto__ || Object.getPrototypeOf(t);
-  }, _getPrototypeOf(t);
-}
-function _inherits(t, e) {
-  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, {
-    constructor: {
-      value: t,
-      writable: !0,
-      configurable: !0
-    }
-  }), Object.defineProperty(t, "prototype", {
-    writable: !1
-  }), e && _setPrototypeOf(t, e);
-}
-function _setPrototypeOf(t, e) {
-  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-    return t.__proto__ = e, t;
-  }, _setPrototypeOf(t, e);
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var pixi_js_1 = require("pixi.js");
-var entity_js_1 = __importDefault(require("../characters/entity.js"));
-var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
+exports["default"] = void 0;
+var _pixi = require("pixi.js");
+var _entity = _interopRequireDefault(require("../characters/entity.ts"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _superPropGet(t, o, e, r) { var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+function _get() { return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) { var p = _superPropBase(e, t); if (p) { var n = Object.getOwnPropertyDescriptor(p, t); return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value; } }, _get.apply(null, arguments); }
+function _superPropBase(t, o) { for (; !{}.hasOwnProperty.call(t, o) && null !== (t = _getPrototypeOf(t));); return t; }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var Pickup = /*#__PURE__*/function (_Entity) {
   function Pickup(type, column, row, points, gameCoordinator) {
     var _this;
     _classCallCheck(this, Pickup);
@@ -8267,15 +5857,17 @@ var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
     _this.setStyleMeasurements(type, gameCoordinator.scaledTileSize, column, row, points);
     return _this;
   }
+
   /**
    * Resets the pickup's visibility
    */
-  _inherits(Pickup, _entity_js_1$default);
+  _inherits(Pickup, _Entity);
   return _createClass(Pickup, [{
     key: "reset",
     value: function reset() {
       this.sprite.visible = this.type === 'fruit' ? false : true;
     }
+
     /**
      * Sets various style measurements for the pickup depending on its type
      * @param {('pacdot'|'powerPellet'|'fruit')} type - The classification of pickup
@@ -8367,7 +5959,7 @@ var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
     key: "setSprite",
     value: function setSprite(type) {
       var texture = this.getTexture(type);
-      if (!this.sprite) this.sprite = new pixi_js_1.Sprite(texture);else this.sprite.texture = texture;
+      if (!this.sprite) this.sprite = new _pixi.Sprite(texture);else this.sprite.texture = texture;
     }
     /**
      * Shows a bonus fruit, resetting its point value and image
@@ -8381,6 +5973,7 @@ var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
       this.sprite.texture = tx;
       this.sprite.visible = true;
     }
+
     /**
      * Makes the fruit invisible (happens if Pacman was too slow)
      */
@@ -8389,6 +5982,7 @@ var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
     value: function hideFruit() {
       this.sprite.visible = false;
     }
+
     /**
      * Returns true if the Pickup is touching a bounding box at Pacman's center
      * @param {({ x: number, y: number, size: number})} pickup
@@ -8404,6 +5998,7 @@ var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
       pacman.size /= 2;
       return pickup.x < pacman.x + pacman.size && pickup.x + pickup.size > pacman.x && pickup.y < pacman.y + pacman.size && pickup.y + pickup.size > pacman.y;
     }
+
     /**
      * Checks to see if the pickup is close enough to Pacman to be considered for collision detection
      * @param {number} maxDistance - The maximum distance Pacman can travel per cycle
@@ -8421,6 +6016,7 @@ var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
         }
       }
     }
+
     /**
      * Checks if the pickup is visible and close to Pacman
      * @returns {Boolean}
@@ -8430,6 +6026,7 @@ var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
     value: function shouldCheckForCollision() {
       return this.sprite.visible && this.nearPacman;
     }
+
     /**
      * If the Pickup is still visible, it checks to see if it is colliding with Pacman.
      * It will turn itself invisible and cease collision-detection after the first
@@ -8467,62 +6064,24 @@ var Pickup = /*#__PURE__*/function (_entity_js_1$default) {
       }
     }
   }]);
-}(entity_js_1["default"]); // removeIf(production)
-exports["default"] = Pickup;
-// endRemoveIf(production)
+}(_entity["default"]); // removeIf(production)
+var _default = exports["default"] = Pickup; // endRemoveIf(production)
 
-},{"../characters/entity.js":21,"pixi.js":449}],33:[function(require,module,exports){
+},{"../characters/entity.ts":20,"pixi.js":446}],31:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var utils_js_1 = require("./utils.js");
+exports["default"] = void 0;
+var _utils = require("./utils.ts");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var CharacterUtil = /*#__PURE__*/function () {
   function CharacterUtil() {
     _classCallCheck(this, CharacterUtil);
@@ -8534,6 +6093,7 @@ var CharacterUtil = /*#__PURE__*/function () {
       right: "right"
     };
   }
+
   /**
    * Check if a given character has moved more than five in-game tiles during a frame.
    * If so, we want to temporarily hide the object to avoid 'animation stutter'.
@@ -8554,6 +6114,7 @@ var CharacterUtil = /*#__PURE__*/function () {
       console.log("a");
       return stutter ? 'hidden' : 'visible';
     }
+
     /**
      * Check which CSS property needs to be changed given the character's current direction
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -8570,6 +6131,7 @@ var CharacterUtil = /*#__PURE__*/function () {
           return "x";
       }
     }
+
     /**
      * Calculate the velocity for the character's next frame.
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -8587,6 +6149,7 @@ var CharacterUtil = /*#__PURE__*/function () {
           return velocityPerMs;
       }
     }
+
     /**
      * Determine the next value which will be used to draw the character's position on screen
      * @param {number} interp - The percentage of the desired timestamp between frames
@@ -8600,6 +6163,7 @@ var CharacterUtil = /*#__PURE__*/function () {
     value: function calculateNewDrawValue(interp, prop, oldPosition, position) {
       return oldPosition[prop] + (position[prop] - oldPosition[prop]) * interp;
     }
+
     /**
      * Convert the character's css position to a row-column on the maze array
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -8609,8 +6173,9 @@ var CharacterUtil = /*#__PURE__*/function () {
   }, {
     key: "determineGridPosition",
     value: function determineGridPosition(position, scaledTileSize) {
-      return (0, utils_js_1.createObservablePoint)(this, position.x / scaledTileSize + 0.5, position.y / scaledTileSize + 0.5);
+      return (0, _utils.createObservablePoint)(this, position.x / scaledTileSize + 0.5, position.y / scaledTileSize + 0.5);
     }
+
     /**
      * Check to see if a character's disired direction results in turning around
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -8622,6 +6187,7 @@ var CharacterUtil = /*#__PURE__*/function () {
     value: function turningAround(direction, desiredDirection) {
       return desiredDirection === this.getOppositeDirection(direction);
     }
+
     /**
      * Calculate the opposite of a given direction
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -8641,6 +6207,7 @@ var CharacterUtil = /*#__PURE__*/function () {
           return this.directions.left;
       }
     }
+
     /**
      * Calculate the proper rounding function to assist with collision detection
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
@@ -8657,6 +6224,7 @@ var CharacterUtil = /*#__PURE__*/function () {
           return Math.ceil;
       }
     }
+
     /**
      * Check to see if the character's next frame results in moving to a new tile on the maze array
      * @param {({x: number, y: number})} oldPosition - Position during the previous frame
@@ -8668,6 +6236,7 @@ var CharacterUtil = /*#__PURE__*/function () {
     value: function changingGridPosition(oldPosition, position) {
       return Math.floor(oldPosition.x) !== Math.floor(position.x) || Math.floor(oldPosition.y) !== Math.floor(position.y);
     }
+
     /**
      * Check to see if the character is attempting to run into a wall of the maze
      * @param {({x: number, y: number})} desiredNewGridPosition - Character's target tile
@@ -8687,6 +6256,7 @@ var CharacterUtil = /*#__PURE__*/function () {
       }
       return newGridValue === 'X';
     }
+
     /**
      * Returns an object containing the new position and grid position based upon a direction
      * @param {({top: number, left: number})} position - css position during the current frame
@@ -8699,7 +6269,7 @@ var CharacterUtil = /*#__PURE__*/function () {
   }, {
     key: "determineNewPositions",
     value: function determineNewPositions(position, direction, velocityPerMs, elapsedMs, scaledTileSize) {
-      var newPosition = (0, utils_js_1.createObservablePoint)(this, position.x, position.y);
+      var newPosition = (0, _utils.createObservablePoint)(this, position.x, position.y);
       newPosition[this.getPropertyToChange(direction)] += this.getVelocity(direction, velocityPerMs) * elapsedMs;
       var newGridPosition = this.determineGridPosition(newPosition, scaledTileSize);
       return {
@@ -8707,6 +6277,7 @@ var CharacterUtil = /*#__PURE__*/function () {
         newGridPosition: newGridPosition
       };
     }
+
     /**
      * Calculates the css position when snapping the character to the x-y grid
      * @param {({x: number, y: number})} position - The character's position during the current frame
@@ -8717,7 +6288,7 @@ var CharacterUtil = /*#__PURE__*/function () {
   }, {
     key: "snapToGrid",
     value: function snapToGrid(position, direction, scaledTileSize) {
-      var newPosition = (0, utils_js_1.copyPosition)(this, position);
+      var newPosition = (0, _utils.copyPosition)(this, position);
       var roundingFunction = this.determineRoundingFunction(direction);
       switch (direction) {
         case this.directions.up:
@@ -8728,8 +6299,9 @@ var CharacterUtil = /*#__PURE__*/function () {
           newPosition.x = roundingFunction(newPosition.x);
           break;
       }
-      return (0, utils_js_1.createObservablePoint)(this, (newPosition.x - 0.5) * scaledTileSize, (newPosition.y - 0.5) * scaledTileSize);
+      return (0, _utils.createObservablePoint)(this, (newPosition.x - 0.5) * scaledTileSize, (newPosition.y - 0.5) * scaledTileSize);
     }
+
     /**
      * Returns a modified position if the character needs to warp
      * @param {({top: number, left: number})} position - css position during the current frame
@@ -8740,7 +6312,7 @@ var CharacterUtil = /*#__PURE__*/function () {
   }, {
     key: "handleWarp",
     value: function handleWarp(position, scaledTileSize, mazeArray) {
-      var newPosition = (0, utils_js_1.createObservablePoint)(this, position.x, position.y);
+      var newPosition = (0, _utils.createObservablePoint)(this, position.x, position.y);
       var gridPosition = this.determineGridPosition(position, scaledTileSize);
       if (gridPosition.x < -0.75) {
         newPosition.x = scaledTileSize * (mazeArray[0].length - 0.75);
@@ -8749,6 +6321,7 @@ var CharacterUtil = /*#__PURE__*/function () {
       }
       return newPosition;
     }
+
     /**
      * Advances spritesheet by one frame if needed
      * @param {Object} character - The character which needs to be animated
@@ -8775,596 +6348,26 @@ var CharacterUtil = /*#__PURE__*/function () {
     }
   }]);
 }(); // removeIf(production)
-exports["default"] = CharacterUtil;
-// endRemoveIf(production)
+var _default = exports["default"] = CharacterUtil; // endRemoveIf(production)
 
-},{"./utils.js":37}],34:[function(require,module,exports){
+},{"./utils.ts":34}],32:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var Debugger = /*#__PURE__*/function () {
-  function Debugger(gameCoordinator) {
-    _classCallCheck(this, Debugger);
-    _defineProperty(this, "gc", void 0);
-    _defineProperty(this, "overflowMask", void 0);
-    _defineProperty(this, "mazeDiv", void 0);
-    _defineProperty(this, "mazeArray", void 0);
-    _defineProperty(this, "tileSize", void 0);
-    _defineProperty(this, "pacmanImmortal", void 0);
-    _defineProperty(this, "printMazeGrid", void 0);
-    _defineProperty(this, "infoPanel", void 0);
-    _defineProperty(this, "canvas", void 0);
-    _defineProperty(this, "shouldPrintGrid", void 0);
-    _defineProperty(this, "printing", void 0);
-    this.gc = gameCoordinator;
-    this.overflowMask = $("#overflow-mask");
-    this.mazeDiv = $(this.gc.mazeDiv);
-    this.mazeArray = this.gc.mazeArray;
-    this.tileSize = this.gc.scaledTileSize;
-    this.pacmanImmortal = false;
-    this.printMazeGrid = false;
-    this.createCanvas();
-    this.handleInput();
-    this.configInfoPanel();
-    window.debug = this;
-  }
-  return _createClass(Debugger, [{
-    key: "handleInput",
-    value: function handleInput() {
-      var dbg = this;
-      window.addEventListener('keydown', function (event) {
-        if (event.key == '3') dbg.makePacmanImortal(true);else if (event.key == '4') dbg.makePacmanImortal(false);else if (event.key == '1') dbg.mazeGrid(true);else if (event.key == '2') dbg.mazeGrid(false);else if (event.key == '5') dbg.infoPanel.log();else if (event.key == '7') dbg.drawEntities(false);else if (event.key == '8') dbg.drawEntities(true);else if (event.key == ',')
-          //<
-          dbg.moveInUnits('left', 1);else if (event.key == '.')
-          //> 
-          dbg.moveInUnits('right', 1);else if (event.key == ' ')
-          //> 
-          dbg.moveEntities();else if (event.key == 'u') dbg.notifyPacmanMovement();else if (event.key.toLowerCase() == 'f') dbg.startWave();
-        // if (event.key !=  'HanjaMode') {
-        //     alert(event.key)
-        // }
-      });
-    }
-  }, {
-    key: "createCanvas",
-    value: function createCanvas() {
-      this.canvas = document.createElement('canvas');
-      this.canvas.id = 'canvasD';
-      document.body.append(this.canvas);
-      var canvas = $(this.canvas);
-      var mazeDiv = $(this.gc.mazeDiv);
-      canvas.css('position', 'absolute');
-      canvas.css('left', 0);
-      canvas.css('top', 0);
-      canvas.width(this.overflowMask.width());
-      canvas.height(this.overflowMask.height());
-      this.canvas.width = this.overflowMask.width();
-      this.canvas.height = this.overflowMask.height();
-      // let canvasP = document.createElement('canvas')
-      // canvasP.width = 400
-      // canvasP.height = 300
-      // document.body.appendChild(canvasP)
-      // $(canvasP).css("position", "absolute")
-      // .css("top", "0px").css("left", "0px")
-      // this.renderer = new Renderer({
-      //      width: 400,
-      //      height: 500, 
-      //      antialias: false, transparent: false, 
-      //      resolution: 1, view: canvasP
-      // })
-      // this.container1 = new Container()
-      // this.mainContainer = new Container() 
-      // this.mainContainer.addChild(this.container1)
-    }
-    // renderObject(pixiObject) {
-    //     this.container1.addChild(pixiObject)        
-    // }
-    // render() {
-    //     this.renderer.render(this.mainContainer)
-    // }
-  }, {
-    key: "moveInUnits",
-    value: function moveInUnits(direction, units) {
-      var elapsedMs = this.gc.gameEngine.elapsedMs;
-      var position = this.gc.pacman.position;
-      var velocityPerMs = this.gc.pacman.velocityPerMs;
-      var newPositions;
-      for (var i = 0; i < units; i++) {
-        newPositions = this.gc.pacman.characterUtil.determineNewPositions(position, direction, velocityPerMs, elapsedMs, this.gc.pacman.scaledTileSize);
-        position = newPositions.newPosition;
-      }
-      this.gc.pacman.position = position;
-    }
-  }, {
-    key: "mazeGrid",
-    value: function mazeGrid(printGrid) {
-      var fc = this.gc.gameEngine.update;
-      var _this = this;
-      this.shouldPrintGrid = printGrid;
-      if (_this.printing) return;
-      var interval = window.setInterval(function () {
-        _this.printing = true;
-        if (_this.shouldPrintGrid) {
-          _this.printGrid();
-        } else {
-          _this.printing = false;
-          _this.clearGrid();
-          window.clearInterval(interval);
-        }
-      }, 25);
-    }
-  }, {
-    key: "printGrid",
-    value: function printGrid() {
-      var _this2 = this;
-      var mazeX = this.mazeDiv.offset().left;
-      var mazeY = this.mazeDiv.offset().top;
-      var width = this.mazeDiv.width();
-      var height = this.mazeDiv.height();
-      var ctx = this.canvas.getContext("2d");
-      ctx.strokeStyle = 'green';
-      ctx.lineWidth = 1;
-      var x = mazeX,
-        y = mazeY;
-      ctx.clearRect(mazeX, mazeY, width, height);
-      ctx.beginPath();
-      ctx.moveTo(mazeX, mazeY);
-      this.mazeArray.forEach(function (row, rowIndex) {
-        if (rowIndex > 0) {
-          x = mazeX;
-          y += _this2.tileSize;
-        }
-        ctx.moveTo(x, y);
-        ctx.lineTo(width + mazeX, y);
-        row.forEach(function (col, colIndex) {
-          //ctx!.strokeRect(x,y, this.tileSize, this.tileSize) 
-          ctx.moveTo(x, y);
-          ctx.lineTo(x, y + _this2.tileSize);
-          x += _this2.tileSize;
-          if (colIndex == _this2.mazeArray[rowIndex].length - 1) {
-            ctx.moveTo(x, y);
-            ctx.lineTo(x, y + _this2.tileSize);
-          }
-        });
-        if (rowIndex == _this2.mazeArray.length - 1) {
-          y += _this2.tileSize;
-          ctx.moveTo(mazeX, y);
-          ctx.lineTo(width + mazeX, y);
-        }
-      });
-      ctx.stroke();
-      ctx.strokeStyle = 'yellow';
-      var pacX = this.gc.pacman.position.left + mazeX;
-      var pacY = this.gc.pacman.position.top + mazeY;
-      ctx.strokeRect(pacX, pacY, this.tileSize * 2, this.tileSize * 2);
-      ctx.strokeStyle = 'red';
-      ctx.strokeRect(pacX, pacY, this.tileSize, this.tileSize);
-    }
-  }, {
-    key: "clearGrid",
-    value: function clearGrid() {
-      var mazeX = this.mazeDiv.offset().left;
-      var mazeY = this.mazeDiv.offset().top;
-      var width = this.mazeDiv.width();
-      var height = this.mazeDiv.height();
-      var ctx = this.canvas.getContext("2d");
-      ctx.clearRect(mazeX - 1, mazeY - 1, width + 2, height + 2);
-    }
-  }, {
-    key: "configInfoPanel",
-    value: function configInfoPanel() {
-      var db = this;
-      this.infoPanel = {
-        positions: {},
-        getCanvas: function getCanvas() {
-          return db.canvas;
-        },
-        x: 0,
-        y: 0,
-        line: 0,
-        col: 0,
-        messages: [],
-        interval: null,
-        info: {},
-        update: function update() {
-          this.x = db.mazeDiv.offset().left + db.mazeDiv.width() + 20;
-          this.y = db.mazeDiv.offset().top + db.mazeDiv.height() / 2 - 100;
-        },
-        log: function log() {
-          var _this = this;
-          window.clearInterval(this.interval);
-          this.interval = window.setInterval(function () {
-            var formater = new Intl.NumberFormat("en-US", {
-              maximumFractionDigits: 3
-            });
-            var gridPosition = db.gc.pacman.characterUtil.determineGridPosition({
-              left: db.gc.pacman.position.left,
-              top: db.gc.pacman.position.top
-            }, db.tileSize);
-            var pacX = formater.format(gridPosition.x);
-            var pacY = formater.format(gridPosition.y);
-            _this.messages = ['Pacman position:', 'l:' + pacY + ',c:' + pacX];
-            _this.printMessage(0, 0);
-            var direction = db.gc.pacman.direction;
-            var items = _this.positions[direction];
-            var hasItem = false;
-            if (!items) items = [];
-            for (var pos in _this.positions) {
-              if (pos != direction) {
-                delete _this.positions[pos];
-                continue;
-              }
-              // for (let i = _this.positions[pos].length; i >=0; i--) {
-              //     const it = _this.positions[pos][i]
-              //     if (it.x == pacX && it.y == )
-              // }
-              hasItem = _this.positions[pos].filter(function (element) {
-                return element.x == pacX && element.y == pacY;
-              }).length > 0;
-            }
-            if (!hasItem) items.push({
-              x: pacX,
-              y: pacY
-            });
-            _this.positions[direction] = items;
-            localStorage.setItem(direction, JSON.stringify(items));
-          }, 33);
-        },
-        printMessage: function printMessage(line, col) {
-          var _this3 = this;
-          this.line = line;
-          this.col = col;
-          this.update();
-          var ctx = this.getCanvas().getContext('2d');
-          ctx.clearRect(this.x, this.y, 300, 500);
-          ctx.fillStyle = 'white';
-          ctx.font = db.tileSize + "px 'Press Start 2P', sans-serif";
-          this.messages.forEach(function (message, index) {
-            ctx.fillText(message, _this3.x, _this3.y + +(index * db.tileSize));
-          });
-        },
-        clearMessages: function clearMessages() {
-          this.messages = [];
-        }
-      };
-    }
-  }, {
-    key: "makePacmanImortal",
-    value: function makePacmanImortal(isImmortal) {
-      if (this.gc.allowPacmanMovement) {
-        this.gc.pacman.immortal = isImmortal;
-        this.pacmanImmortal = isImmortal;
-        this.gc.pacman.allowCollision = !isImmortal;
-        // this.gc.ghosts.forEach(ghost => {
-        //     ghost.allowCollision = !isImmortal
-        // });
-        if (isImmortal) console.info('Pacman is immortal!');else console.info('Pacman is mortal again.');
-      }
-    }
-  }, {
-    key: "drawEntities",
-    value: function drawEntities(isDraw) {
-      this.gc.ghosts.forEach(function (ghost) {
-        ghost.display = isDraw;
-      });
-    }
-  }, {
-    key: "moveEntities",
-    value: function moveEntities() {
-      this.gc.pacman.moving = !this.gc.pacman.moving;
-      this.gc.ghosts.forEach(function (ghost) {
-        ghost.moving = !ghost.moving;
-      });
-    }
-  }, {
-    key: "notifyPacmanMovement",
-    value: function notifyPacmanMovement() {
-      var fc = this.gc.pacman['update'];
-      if (!this.gc.pacman['update']['changed']) {
-        this.gc.pacman['update2'] = this.gc.pacman['update'];
-        var _this = this;
-        this.gc.pacman['update'] = function (elapsedMs) {
-          this['update2'](elapsedMs);
-          _this._notify2('update');
-        };
-        this.gc.pacman['update']['changed'] = true;
-      }
-    }
-  }, {
-    key: "startWave",
-    value: function startWave() {
-      console.log("Key f pressed");
-      if (this.gc.mod.flood) {
-        this.gc.mod.flood.generateWave(0);
-      }
-    }
-  }, {
-    key: "_notify",
-    value: function _notify(functionName) {
-      var pacman = this.gc.pacman;
-      var gridPosition = pacman.characterUtil.determineGridPosition(pacman.oldPosition, pacman.scaledTileSize);
-      var newGridPosition = pacman.characterUtil.determineGridPosition(pacman.position, pacman.scaledTileSize);
-      if (pacman.characterUtil.changingGridPosition(gridPosition, newGridPosition)) {
-        var round = pacman.characterUtil.determineRoundingFunction(pacman.direction);
-        this.infoPanel.messages = ['Pacman changed to tile (x,y:):', round(newGridPosition.x) + ', ' + round(newGridPosition.y)];
-        this.infoPanel.printMessage(0, 0);
-        pacman.moving = false;
-      }
-    }
-  }, {
-    key: "_notify2",
-    value: function _notify2(functionName) {
-      var pacman = this.gc.pacman;
-      var infoPanel = this.infoPanel;
-      var handleUnsnappedMovement = pacman.handleUnsnappedMovement;
-      var handleSnappedMovement = pacman.handleSnappedMovement;
-      if (!pacman['handleSnappedMovement']['changed']) {
-        pacman['handleSnappedMovement2'] = handleSnappedMovement;
-        pacman['handleSnappedMovement'] = function (elapsedMs) {
-          infoPanel.messages.push('Pacman "handleSnappedMovement" called');
-          return this['handleSnappedMovement2'](elapsedMs);
-        };
-        pacman['handleSnappedMovement']['changed'] = true;
-      }
-      if (!pacman['handleUnsnappedMovement']['changed']) {
-        pacman['handleUnsnappedMovement2'] = handleUnsnappedMovement;
-        pacman['handleUnsnappedMovement'] = function (gridPosition, elapsedMs) {
-          infoPanel.messages.push('Pacman "handleUnsnappedMovement" called');
-          return this['handleUnsnappedMovement2'](gridPosition, elapsedMs);
-        };
-        pacman['handleUnsnappedMovement']['changed'] = true;
-      }
-      if (pacman.moving != infoPanel.info.moving) {
-        if (!pacman.moving) infoPanel.messages.push('Pacman stopped');
-      }
-      if (pacman.direction != infoPanel.info.direction) {
-        infoPanel.messages.push('Pacman change its direction');
-        infoPanel.messages.forEach(function (message) {
-          console.log(message);
-        });
-        infoPanel.clearMessages();
-      }
-      infoPanel.info.moving = pacman.moving;
-      infoPanel.info.desiredDirection = pacman.desiredDirection;
-      infoPanel.info.direction = pacman.direction;
-    }
-  }]);
-}(); // if (!process.env.NYC_PROCESS_ID) 
-//     global.window.Debugger = Debugger
-//removeIf(production)
-exports["default"] = Debugger;
-//endRemoveIf
-
-},{}],35:[function(require,module,exports){
-"use strict";
-
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _regenerator() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var e,
-    t,
-    r = "function" == typeof Symbol ? Symbol : {},
-    n = r.iterator || "@@iterator",
-    o = r.toStringTag || "@@toStringTag";
-  function i(r, n, o, i) {
-    var c = n && n.prototype instanceof Generator ? n : Generator,
-      u = Object.create(c.prototype);
-    return _regeneratorDefine2(u, "_invoke", function (r, n, o) {
-      var i,
-        c,
-        u,
-        f = 0,
-        p = o || [],
-        y = !1,
-        G = {
-          p: 0,
-          n: 0,
-          v: e,
-          a: d,
-          f: d.bind(e, 4),
-          d: function d(t, r) {
-            return i = t, c = 0, u = e, G.n = r, a;
-          }
-        };
-      function d(r, n) {
-        for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
-          var o,
-            i = p[t],
-            d = G.p,
-            l = i[2];
-          r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0));
-        }
-        if (o || r > 1) return a;
-        throw y = !0, n;
-      }
-      return function (o, p, l) {
-        if (f > 1) throw TypeError("Generator is already running");
-        for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) {
-          i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
-          try {
-            if (f = 2, i) {
-              if (c || (o = "next"), t = i[o]) {
-                if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
-                if (!t.done) return t;
-                u = t.value, c < 2 && (c = 0);
-              } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1);
-              i = e;
-            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
-          } catch (t) {
-            i = e, c = 1, u = t;
-          } finally {
-            f = 1;
-          }
-        }
-        return {
-          value: t,
-          done: y
-        };
-      };
-    }(r, o, i), !0), u;
-  }
-  var a = {};
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-  t = Object.getPrototypeOf;
-  var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () {
-      return this;
-    }), t),
-    u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
-  function f(e) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e;
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () {
-    return this;
-  }), _regeneratorDefine2(u, "toString", function () {
-    return "[object Generator]";
-  }), (_regenerator = function _regenerator() {
-    return {
-      w: i,
-      m: f
-    };
-  })();
-}
-function _regeneratorDefine2(e, r, n, t) {
-  var i = Object.defineProperty;
-  try {
-    i({}, "", {});
-  } catch (e) {
-    i = 0;
-  }
-  _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) {
-    function o(r, n) {
-      _regeneratorDefine2(e, r, function (e) {
-        return this._invoke(r, n, e);
-      });
-    }
-    r ? i ? i(e, r, {
-      value: n,
-      enumerable: !t,
-      configurable: !t,
-      writable: !t
-    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
-  }, _regeneratorDefine2(e, r, n, t);
-}
-function asyncGeneratorStep(n, t, e, r, o, a, c) {
-  try {
-    var i = n[a](c),
-      u = i.value;
-  } catch (n) {
-    return void e(n);
-  }
-  i.done ? t(u) : Promise.resolve(u).then(r, o);
-}
-function _asyncToGenerator(n) {
-  return function () {
-    var t = this,
-      e = arguments;
-    return new Promise(function (r, o) {
-      var a = n.apply(t, e);
-      function _next(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-      }
-      function _throw(n) {
-        asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-      }
-      _next(void 0);
-    });
-  };
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+exports["default"] = void 0;
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var SoundManager = /*#__PURE__*/function () {
   function SoundManager() {
     _classCallCheck(this, SoundManager);
@@ -9389,6 +6392,7 @@ var SoundManager = /*#__PURE__*/function () {
     var AudioContext = window.AudioContext || window.webkitAudioContext;
     this.ambience = new AudioContext();
   }
+
   /**
    * Sets the cutscene flag to determine if players should be able to resume ambience
    * @param {Boolean} newValue
@@ -9398,6 +6402,7 @@ var SoundManager = /*#__PURE__*/function () {
     value: function setCutscene(newValue) {
       this.cutscene = newValue;
     }
+
     /**
      * Sets the master volume for all sounds and stops/resumes ambience
      * @param {(0|1)} newVolume
@@ -9418,6 +6423,7 @@ var SoundManager = /*#__PURE__*/function () {
         this.resumeAmbience(this.paused);
       }
     }
+
     /**
      * Plays a single sound effect
      * @param {String} sound
@@ -9429,6 +6435,7 @@ var SoundManager = /*#__PURE__*/function () {
       this.soundEffect.volume = this.masterVolume;
       this.soundEffect.play();
     }
+
     /**
      * Special method for eating dots. The dots should alternate between two
      * sound effects, but not too quickly.
@@ -9446,6 +6453,7 @@ var SoundManager = /*#__PURE__*/function () {
         this.dotPlayer.play();
       }
     }
+
     /**
      * Deletes the dotSound player and plays another dot sound if needed
      */
@@ -9457,13 +6465,14 @@ var SoundManager = /*#__PURE__*/function () {
         this.playDotSound();
       }
     }
+
     /**
      * Loops an ambient sound
      * @param {String} sound
      */
   }, {
     key: "setAmbience",
-    value: function () {
+    value: (function () {
       var _setAmbience = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(sound, keepCurrentAmbience) {
         var response, arrayBuffer, audioBuffer;
         return _regenerator().w(function (_context) {
@@ -9518,6 +6527,7 @@ var SoundManager = /*#__PURE__*/function () {
     /**
      * Resumes the ambience
      */
+    )
   }, {
     key: "resumeAmbience",
     value: function resumeAmbience(paused) {
@@ -9531,6 +6541,7 @@ var SoundManager = /*#__PURE__*/function () {
         }
       }
     }
+
     /**
      * Stops the ambience
      */
@@ -9543,60 +6554,22 @@ var SoundManager = /*#__PURE__*/function () {
     }
   }]);
 }(); // removeIf(production)
-exports["default"] = SoundManager;
-// endRemoveIf(production)
+var _default = exports["default"] = SoundManager; // endRemoveIf(production)
 
-},{}],36:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : i + "";
-}
-function _toPrimitive(t, r) {
-  if ("object" != _typeof(t) || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != _typeof(i)) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var Timer = /*#__PURE__*/function () {
   function Timer(callback, delay) {
     _classCallCheck(this, Timer);
@@ -9610,6 +6583,7 @@ var Timer = /*#__PURE__*/function () {
     this.remaining = delay;
     this.resume(false);
   }
+
   /**
    * Pauses the timer marks whether the pause came from the player
    * or the system
@@ -9625,6 +6599,7 @@ var Timer = /*#__PURE__*/function () {
         this.pausedBySystem = true;
       }
     }
+
     /**
      * Creates a new setTimeout based upon the remaining time, giving the
      * illusion of 'resuming' the old setTimeout
@@ -9656,10 +6631,9 @@ var Timer = /*#__PURE__*/function () {
     }
   }]);
 }(); // removeIf(production)
-exports["default"] = Timer;
-// endRemoveIf(production)
+var _default = exports["default"] = Timer; // endRemoveIf(production)
 
-},{}],37:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9667,15 +6641,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.copyPosition = copyPosition;
 exports.createObservablePoint = createObservablePoint;
-var pixi_js_1 = require("pixi.js");
+var _pixi = require("pixi.js");
 function copyPosition(classThis, position) {
-  return new pixi_js_1.ObservablePoint(function () {}, classThis, position.x, position.y);
+  return new _pixi.ObservablePoint(function () {}, classThis, position.x, position.y);
 }
 function createObservablePoint(classThis, x, y) {
-  return new pixi_js_1.ObservablePoint(function () {}, classThis, x, y);
+  return new _pixi.ObservablePoint(function () {}, classThis, x, y);
 }
 
-},{"pixi.js":449}],38:[function(require,module,exports){
+},{"pixi.js":446}],35:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), events = require("@pixi/events"), accessibleTarget = require("./accessibleTarget.js");
 display.DisplayObject.mixin(accessibleTarget.accessibleTarget);
@@ -9870,7 +6844,7 @@ core.extensions.add(AccessibilityManager);
 exports.AccessibilityManager = AccessibilityManager;
 
 
-},{"./accessibleTarget.js":39,"@pixi/core":151,"@pixi/display":228,"@pixi/events":239}],39:[function(require,module,exports){
+},{"./accessibleTarget.js":36,"@pixi/core":148,"@pixi/display":225,"@pixi/events":236}],36:[function(require,module,exports){
 "use strict";
 const accessibleTarget = {
   /**
@@ -9941,14 +6915,14 @@ const accessibleTarget = {
 exports.accessibleTarget = accessibleTarget;
 
 
-},{}],40:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 var AccessibilityManager = require("./AccessibilityManager.js"), accessibleTarget = require("./accessibleTarget.js");
 exports.AccessibilityManager = AccessibilityManager.AccessibilityManager;
 exports.accessibleTarget = accessibleTarget.accessibleTarget;
 
 
-},{"./AccessibilityManager.js":38,"./accessibleTarget.js":39}],41:[function(require,module,exports){
+},{"./AccessibilityManager.js":35,"./accessibleTarget.js":36}],38:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display");
 const _Application = class _Application2 {
@@ -10007,7 +6981,7 @@ core.extensions.handleByList(core.ExtensionType.Application, Application._plugin
 exports.Application = Application;
 
 
-},{"@pixi/core":151,"@pixi/display":228}],42:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/display":225}],39:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 class ResizePlugin {
@@ -10068,14 +7042,14 @@ core.extensions.add(ResizePlugin);
 exports.ResizePlugin = ResizePlugin;
 
 
-},{"@pixi/core":151}],43:[function(require,module,exports){
+},{"@pixi/core":148}],40:[function(require,module,exports){
 "use strict";
 var Application = require("./Application.js"), ResizePlugin = require("./ResizePlugin.js");
 exports.Application = Application.Application;
 exports.ResizePlugin = ResizePlugin.ResizePlugin;
 
 
-},{"./Application.js":41,"./ResizePlugin.js":42}],44:[function(require,module,exports){
+},{"./Application.js":38,"./ResizePlugin.js":39}],41:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const assetKeyMap = {
@@ -10098,7 +7072,7 @@ core.extensions.handle(core.ExtensionType.Asset, (extension) => {
 });
 
 
-},{"@pixi/core":151}],45:[function(require,module,exports){
+},{"@pixi/core":148}],42:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), BackgroundLoader = require("./BackgroundLoader.js"), Cache = require("./cache/Cache.js"), Loader = require("./loader/Loader.js");
 require("./loader/parsers/index.js");
@@ -10428,7 +7402,7 @@ exports.Assets = Assets;
 exports.AssetsClass = AssetsClass;
 
 
-},{"./BackgroundLoader.js":46,"./cache/Cache.js":49,"./loader/Loader.js":65,"./loader/parsers/index.js":69,"./loader/parsers/textures/loadTextures.js":75,"./resolver/Resolver.js":79,"./utils/convertToList.js":87,"./utils/isSingleItem.js":91,"@pixi/core":151}],46:[function(require,module,exports){
+},{"./BackgroundLoader.js":43,"./cache/Cache.js":46,"./loader/Loader.js":62,"./loader/parsers/index.js":66,"./loader/parsers/textures/loadTextures.js":72,"./resolver/Resolver.js":76,"./utils/convertToList.js":84,"./utils/isSingleItem.js":88,"@pixi/core":148}],43:[function(require,module,exports){
 "use strict";
 class BackgroundLoader {
   /**
@@ -10475,7 +7449,7 @@ class BackgroundLoader {
 exports.BackgroundLoader = BackgroundLoader;
 
 
-},{}],47:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 const WORKER_CODE = `(function() {
@@ -10508,7 +7482,7 @@ WorkerInstance.revokeObjectURL = function() {
 exports.default = WorkerInstance;
 
 
-},{}],48:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 const WORKER_CODE = `(function() {
@@ -10550,7 +7524,7 @@ WorkerInstance.revokeObjectURL = function() {
 exports.default = WorkerInstance;
 
 
-},{}],49:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 require("../utils/index.js");
@@ -10639,11 +7613,11 @@ const Cache = new CacheClass();
 exports.Cache = Cache;
 
 
-},{"../utils/convertToList.js":87,"../utils/index.js":90,"@pixi/core":151}],50:[function(require,module,exports){
+},{"../utils/convertToList.js":84,"../utils/index.js":87,"@pixi/core":148}],47:[function(require,module,exports){
 "use strict";
 
 
-},{}],51:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 var Cache = require("./Cache.js");
 require("./CacheParser.js");
@@ -10651,7 +7625,7 @@ require("./parsers/index.js");
 exports.Cache = Cache.Cache;
 
 
-},{"./Cache.js":49,"./CacheParser.js":50,"./parsers/index.js":53}],52:[function(require,module,exports){
+},{"./Cache.js":46,"./CacheParser.js":47,"./parsers/index.js":50}],49:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const cacheTextureArray = {
@@ -10670,18 +7644,18 @@ core.extensions.add(cacheTextureArray);
 exports.cacheTextureArray = cacheTextureArray;
 
 
-},{"@pixi/core":151}],53:[function(require,module,exports){
+},{"@pixi/core":148}],50:[function(require,module,exports){
 "use strict";
 var cacheTextureArray = require("./cacheTextureArray.js");
 exports.cacheTextureArray = cacheTextureArray.cacheTextureArray;
 
 
-},{"./cacheTextureArray.js":52}],54:[function(require,module,exports){
+},{"./cacheTextureArray.js":49}],51:[function(require,module,exports){
 "use strict";
 require("./parsers/index.js");
 
 
-},{"./parsers/index.js":61}],55:[function(require,module,exports){
+},{"./parsers/index.js":58}],52:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), testImageFormat = require("../utils/testImageFormat.js");
 const detectAvif = {
@@ -10700,7 +7674,7 @@ core.extensions.add(detectAvif);
 exports.detectAvif = detectAvif;
 
 
-},{"../utils/testImageFormat.js":62,"@pixi/core":151}],56:[function(require,module,exports){
+},{"../utils/testImageFormat.js":59,"@pixi/core":148}],53:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const imageFormats = ["png", "jpg", "jpeg"], detectDefaults = {
@@ -10716,7 +7690,7 @@ core.extensions.add(detectDefaults);
 exports.detectDefaults = detectDefaults;
 
 
-},{"@pixi/core":151}],57:[function(require,module,exports){
+},{"@pixi/core":148}],54:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), testVideoFormat = require("../utils/testVideoFormat.js");
 const detectMp4 = {
@@ -10732,7 +7706,7 @@ core.extensions.add(detectMp4);
 exports.detectMp4 = detectMp4;
 
 
-},{"../utils/testVideoFormat.js":63,"@pixi/core":151}],58:[function(require,module,exports){
+},{"../utils/testVideoFormat.js":60,"@pixi/core":148}],55:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), testVideoFormat = require("../utils/testVideoFormat.js");
 const detectOgv = {
@@ -10748,7 +7722,7 @@ core.extensions.add(detectOgv);
 exports.detectOgv = detectOgv;
 
 
-},{"../utils/testVideoFormat.js":63,"@pixi/core":151}],59:[function(require,module,exports){
+},{"../utils/testVideoFormat.js":60,"@pixi/core":148}],56:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), testVideoFormat = require("../utils/testVideoFormat.js");
 const detectWebm = {
@@ -10764,7 +7738,7 @@ core.extensions.add(detectWebm);
 exports.detectWebm = detectWebm;
 
 
-},{"../utils/testVideoFormat.js":63,"@pixi/core":151}],60:[function(require,module,exports){
+},{"../utils/testVideoFormat.js":60,"@pixi/core":148}],57:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), testImageFormat = require("../utils/testImageFormat.js");
 const detectWebp = {
@@ -10782,7 +7756,7 @@ core.extensions.add(detectWebp);
 exports.detectWebp = detectWebp;
 
 
-},{"../utils/testImageFormat.js":62,"@pixi/core":151}],61:[function(require,module,exports){
+},{"../utils/testImageFormat.js":59,"@pixi/core":148}],58:[function(require,module,exports){
 "use strict";
 var detectAvif = require("./detectAvif.js"), detectWebp = require("./detectWebp.js"), detectDefaults = require("./detectDefaults.js"), detectWebm = require("./detectWebm.js"), detectMp4 = require("./detectMp4.js"), detectOgv = require("./detectOgv.js");
 exports.detectAvif = detectAvif.detectAvif;
@@ -10793,7 +7767,7 @@ exports.detectMp4 = detectMp4.detectMp4;
 exports.detectOgv = detectOgv.detectOgv;
 
 
-},{"./detectAvif.js":55,"./detectDefaults.js":56,"./detectMp4.js":57,"./detectOgv.js":58,"./detectWebm.js":59,"./detectWebp.js":60}],62:[function(require,module,exports){
+},{"./detectAvif.js":52,"./detectDefaults.js":53,"./detectMp4.js":54,"./detectOgv.js":55,"./detectWebm.js":56,"./detectWebp.js":57}],59:[function(require,module,exports){
 "use strict";
 async function testImageFormat(imageData) {
   if ("Image" in globalThis)
@@ -10819,7 +7793,7 @@ async function testImageFormat(imageData) {
 exports.testImageFormat = testImageFormat;
 
 
-},{}],63:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 "use strict";
 const inWorker = "WorkerGlobalScope" in globalThis && globalThis instanceof globalThis.WorkerGlobalScope;
 function testVideoFormat(mimeType) {
@@ -10828,7 +7802,7 @@ function testVideoFormat(mimeType) {
 exports.testVideoFormat = testVideoFormat;
 
 
-},{}],64:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 "use strict";
 require("./AssetExtension.js");
 var Assets = require("./Assets.js");
@@ -10868,7 +7842,7 @@ exports.createStringVariations = createStringVariations.createStringVariations;
 exports.isSingleItem = isSingleItem.isSingleItem;
 
 
-},{"./AssetExtension.js":44,"./Assets.js":45,"./cache/Cache.js":49,"./cache/index.js":51,"./cache/parsers/cacheTextureArray.js":52,"./detections/index.js":54,"./detections/parsers/detectAvif.js":55,"./detections/parsers/detectDefaults.js":56,"./detections/parsers/detectMp4.js":57,"./detections/parsers/detectOgv.js":58,"./detections/parsers/detectWebm.js":59,"./detections/parsers/detectWebp.js":60,"./loader/index.js":66,"./loader/parsers/LoaderParser.js":67,"./loader/parsers/loadJson.js":70,"./loader/parsers/loadTxt.js":71,"./loader/parsers/loadWebFont.js":72,"./loader/parsers/textures/loadSVG.js":74,"./loader/parsers/textures/loadTextures.js":75,"./loader/parsers/textures/loadVideo.js":76,"./loader/parsers/textures/utils/createTexture.js":77,"./resolver/index.js":80,"./resolver/parsers/resolveTextureUrl.js":82,"./types.js":84,"./utils/checkDataUrl.js":85,"./utils/checkExtension.js":86,"./utils/convertToList.js":87,"./utils/copySearchParams.js":88,"./utils/createStringVariations.js":89,"./utils/index.js":90,"./utils/isSingleItem.js":91}],65:[function(require,module,exports){
+},{"./AssetExtension.js":41,"./Assets.js":42,"./cache/Cache.js":46,"./cache/index.js":48,"./cache/parsers/cacheTextureArray.js":49,"./detections/index.js":51,"./detections/parsers/detectAvif.js":52,"./detections/parsers/detectDefaults.js":53,"./detections/parsers/detectMp4.js":54,"./detections/parsers/detectOgv.js":55,"./detections/parsers/detectWebm.js":56,"./detections/parsers/detectWebp.js":57,"./loader/index.js":63,"./loader/parsers/LoaderParser.js":64,"./loader/parsers/loadJson.js":67,"./loader/parsers/loadTxt.js":68,"./loader/parsers/loadWebFont.js":69,"./loader/parsers/textures/loadSVG.js":71,"./loader/parsers/textures/loadTextures.js":72,"./loader/parsers/textures/loadVideo.js":73,"./loader/parsers/textures/utils/createTexture.js":74,"./resolver/index.js":77,"./resolver/parsers/resolveTextureUrl.js":79,"./types.js":81,"./utils/checkDataUrl.js":82,"./utils/checkExtension.js":83,"./utils/convertToList.js":84,"./utils/copySearchParams.js":85,"./utils/createStringVariations.js":86,"./utils/index.js":87,"./utils/isSingleItem.js":88}],62:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 require("../utils/index.js");
@@ -10966,15 +7940,15 @@ ${e}`);
 exports.Loader = Loader;
 
 
-},{"../utils/convertToList.js":87,"../utils/index.js":90,"../utils/isSingleItem.js":91,"@pixi/core":151}],66:[function(require,module,exports){
-arguments[4][54][0].apply(exports,arguments)
-},{"./parsers/index.js":69,"dup":54}],67:[function(require,module,exports){
+},{"../utils/convertToList.js":84,"../utils/index.js":87,"../utils/isSingleItem.js":88,"@pixi/core":148}],63:[function(require,module,exports){
+arguments[4][51][0].apply(exports,arguments)
+},{"./parsers/index.js":66,"dup":51}],64:[function(require,module,exports){
 "use strict";
 var LoaderParserPriority = /* @__PURE__ */ ((LoaderParserPriority2) => (LoaderParserPriority2[LoaderParserPriority2.Low = 0] = "Low", LoaderParserPriority2[LoaderParserPriority2.Normal = 1] = "Normal", LoaderParserPriority2[LoaderParserPriority2.High = 2] = "High", LoaderParserPriority2))(LoaderParserPriority || {});
 exports.LoaderParserPriority = LoaderParserPriority;
 
 
-},{}],68:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 "use strict";
 var checkImageBitmap_worker = require("../../_virtual/checkImageBitmap.worker.js"), loadImageBitmap_worker = require("../../_virtual/loadImageBitmap.worker.js");
 let UUID = 0, MAX_WORKERS;
@@ -11034,7 +8008,7 @@ const WorkerManager = new WorkerManagerClass();
 exports.WorkerManager = WorkerManager;
 
 
-},{"../../_virtual/checkImageBitmap.worker.js":47,"../../_virtual/loadImageBitmap.worker.js":48}],69:[function(require,module,exports){
+},{"../../_virtual/checkImageBitmap.worker.js":44,"../../_virtual/loadImageBitmap.worker.js":45}],66:[function(require,module,exports){
 "use strict";
 var LoaderParser = require("./LoaderParser.js"), loadJson = require("./loadJson.js"), loadTxt = require("./loadTxt.js"), loadWebFont = require("./loadWebFont.js");
 require("./textures/index.js");
@@ -11045,7 +8019,7 @@ exports.getFontFamilyName = loadWebFont.getFontFamilyName;
 exports.loadWebFont = loadWebFont.loadWebFont;
 
 
-},{"./LoaderParser.js":67,"./loadJson.js":70,"./loadTxt.js":71,"./loadWebFont.js":72,"./textures/index.js":73}],70:[function(require,module,exports){
+},{"./LoaderParser.js":64,"./loadJson.js":67,"./loadTxt.js":68,"./loadWebFont.js":69,"./textures/index.js":70}],67:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), checkDataUrl = require("../../utils/checkDataUrl.js"), checkExtension = require("../../utils/checkExtension.js"), LoaderParser = require("./LoaderParser.js");
 const validJSONExtension = ".json", validJSONMIME = "application/json", loadJson = {
@@ -11065,7 +8039,7 @@ core.extensions.add(loadJson);
 exports.loadJson = loadJson;
 
 
-},{"../../utils/checkDataUrl.js":85,"../../utils/checkExtension.js":86,"./LoaderParser.js":67,"@pixi/core":151}],71:[function(require,module,exports){
+},{"../../utils/checkDataUrl.js":82,"../../utils/checkExtension.js":83,"./LoaderParser.js":64,"@pixi/core":148}],68:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), checkDataUrl = require("../../utils/checkDataUrl.js"), checkExtension = require("../../utils/checkExtension.js"), LoaderParser = require("./LoaderParser.js");
 const validTXTExtension = ".txt", validTXTMIME = "text/plain", loadTxt = {
@@ -11085,7 +8059,7 @@ core.extensions.add(loadTxt);
 exports.loadTxt = loadTxt;
 
 
-},{"../../utils/checkDataUrl.js":85,"../../utils/checkExtension.js":86,"./LoaderParser.js":67,"@pixi/core":151}],72:[function(require,module,exports){
+},{"../../utils/checkDataUrl.js":82,"../../utils/checkExtension.js":83,"./LoaderParser.js":64,"@pixi/core":148}],69:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), checkDataUrl = require("../../utils/checkDataUrl.js"), checkExtension = require("../../utils/checkExtension.js"), LoaderParser = require("./LoaderParser.js");
 const validWeights = [
@@ -11154,7 +8128,7 @@ exports.getFontFamilyName = getFontFamilyName;
 exports.loadWebFont = loadWebFont;
 
 
-},{"../../utils/checkDataUrl.js":85,"../../utils/checkExtension.js":86,"./LoaderParser.js":67,"@pixi/core":151}],73:[function(require,module,exports){
+},{"../../utils/checkDataUrl.js":82,"../../utils/checkExtension.js":83,"./LoaderParser.js":64,"@pixi/core":148}],70:[function(require,module,exports){
 "use strict";
 var loadSVG = require("./loadSVG.js"), loadTextures = require("./loadTextures.js"), loadVideo = require("./loadVideo.js");
 require("./utils/index.js");
@@ -11164,7 +8138,7 @@ exports.loadTextures = loadTextures.loadTextures;
 exports.loadVideo = loadVideo.loadVideo;
 
 
-},{"./loadSVG.js":74,"./loadTextures.js":75,"./loadVideo.js":76,"./utils/index.js":78}],74:[function(require,module,exports){
+},{"./loadSVG.js":71,"./loadTextures.js":72,"./loadVideo.js":73,"./utils/index.js":75}],71:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), checkDataUrl = require("../../../utils/checkDataUrl.js"), checkExtension = require("../../../utils/checkExtension.js"), LoaderParser = require("../LoaderParser.js"), loadTextures = require("./loadTextures.js"), createTexture = require("./utils/createTexture.js");
 const validSVGExtension = ".svg", validSVGMIME = "image/svg+xml", loadSVG = {
@@ -11197,7 +8171,7 @@ core.extensions.add(loadSVG);
 exports.loadSVG = loadSVG;
 
 
-},{"../../../utils/checkDataUrl.js":85,"../../../utils/checkExtension.js":86,"../LoaderParser.js":67,"./loadTextures.js":75,"./utils/createTexture.js":77,"@pixi/core":151}],75:[function(require,module,exports){
+},{"../../../utils/checkDataUrl.js":82,"../../../utils/checkExtension.js":83,"../LoaderParser.js":64,"./loadTextures.js":72,"./utils/createTexture.js":74,"@pixi/core":148}],72:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), checkDataUrl = require("../../../utils/checkDataUrl.js"), checkExtension = require("../../../utils/checkExtension.js"), LoaderParser = require("../LoaderParser.js"), WorkerManager = require("../WorkerManager.js"), createTexture = require("./utils/createTexture.js");
 const validImageExtensions = [".jpeg", ".jpg", ".png", ".webp", ".avif"], validImageMIMEs = [
@@ -11248,7 +8222,7 @@ exports.loadImageBitmap = loadImageBitmap;
 exports.loadTextures = loadTextures;
 
 
-},{"../../../utils/checkDataUrl.js":85,"../../../utils/checkExtension.js":86,"../LoaderParser.js":67,"../WorkerManager.js":68,"./utils/createTexture.js":77,"@pixi/core":151}],76:[function(require,module,exports){
+},{"../../../utils/checkDataUrl.js":82,"../../../utils/checkExtension.js":83,"../LoaderParser.js":64,"../WorkerManager.js":65,"./utils/createTexture.js":74,"@pixi/core":148}],73:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), checkDataUrl = require("../../../utils/checkDataUrl.js"), checkExtension = require("../../../utils/checkExtension.js"), LoaderParser = require("../LoaderParser.js"), createTexture = require("./utils/createTexture.js");
 const validVideoExtensions = [".mp4", ".m4v", ".webm", ".ogv"], validVideoMIMEs = [
@@ -11306,7 +8280,7 @@ core.extensions.add(loadVideo);
 exports.loadVideo = loadVideo;
 
 
-},{"../../../utils/checkDataUrl.js":85,"../../../utils/checkExtension.js":86,"../LoaderParser.js":67,"./utils/createTexture.js":77,"@pixi/core":151}],77:[function(require,module,exports){
+},{"../../../utils/checkDataUrl.js":82,"../../../utils/checkExtension.js":83,"../LoaderParser.js":64,"./utils/createTexture.js":74,"@pixi/core":148}],74:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), Cache = require("../../../../cache/Cache.js");
 function createTexture(base, loader, url) {
@@ -11323,13 +8297,13 @@ function createTexture(base, loader, url) {
 exports.createTexture = createTexture;
 
 
-},{"../../../../cache/Cache.js":49,"@pixi/core":151}],78:[function(require,module,exports){
+},{"../../../../cache/Cache.js":46,"@pixi/core":148}],75:[function(require,module,exports){
 "use strict";
 var createTexture = require("./createTexture.js");
 exports.createTexture = createTexture.createTexture;
 
 
-},{"./createTexture.js":77}],79:[function(require,module,exports){
+},{"./createTexture.js":74}],76:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), convertToList = require("../utils/convertToList.js"), createStringVariations = require("../utils/createStringVariations.js"), isSingleItem = require("../utils/isSingleItem.js");
 class Resolver {
@@ -11718,19 +8692,19 @@ Please use Assets.add({ alias, src, data, format, loadParser }) instead.`), asse
 exports.Resolver = Resolver;
 
 
-},{"../utils/convertToList.js":87,"../utils/createStringVariations.js":89,"../utils/isSingleItem.js":91,"@pixi/core":151}],80:[function(require,module,exports){
+},{"../utils/convertToList.js":84,"../utils/createStringVariations.js":86,"../utils/isSingleItem.js":88,"@pixi/core":148}],77:[function(require,module,exports){
 "use strict";
 require("./parsers/index.js");
 require("./types.js");
 
 
-},{"./parsers/index.js":81,"./types.js":83}],81:[function(require,module,exports){
+},{"./parsers/index.js":78,"./types.js":80}],78:[function(require,module,exports){
 "use strict";
 var resolveTextureUrl = require("./resolveTextureUrl.js");
 exports.resolveTextureUrl = resolveTextureUrl.resolveTextureUrl;
 
 
-},{"./resolveTextureUrl.js":82}],82:[function(require,module,exports){
+},{"./resolveTextureUrl.js":79}],79:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 require("../../loader/index.js");
@@ -11748,13 +8722,13 @@ core.extensions.add(resolveTextureUrl);
 exports.resolveTextureUrl = resolveTextureUrl;
 
 
-},{"../../loader/index.js":66,"../../loader/parsers/textures/loadTextures.js":75,"@pixi/core":151}],83:[function(require,module,exports){
+},{"../../loader/index.js":63,"../../loader/parsers/textures/loadTextures.js":72,"@pixi/core":148}],80:[function(require,module,exports){
 "use strict";
 
 
-},{}],84:[function(require,module,exports){
-arguments[4][83][0].apply(exports,arguments)
-},{"dup":83}],85:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
+arguments[4][80][0].apply(exports,arguments)
+},{"dup":80}],82:[function(require,module,exports){
 "use strict";
 function checkDataUrl(url, mimes) {
   if (Array.isArray(mimes)) {
@@ -11768,7 +8742,7 @@ function checkDataUrl(url, mimes) {
 exports.checkDataUrl = checkDataUrl;
 
 
-},{}],86:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 function checkExtension(url, extension) {
@@ -11778,13 +8752,13 @@ function checkExtension(url, extension) {
 exports.checkExtension = checkExtension;
 
 
-},{"@pixi/core":151}],87:[function(require,module,exports){
+},{"@pixi/core":148}],84:[function(require,module,exports){
 "use strict";
 const convertToList = (input, transform, forceTransform = !1) => (Array.isArray(input) || (input = [input]), transform ? input.map((item) => typeof item == "string" || forceTransform ? transform(item) : item) : input);
 exports.convertToList = convertToList;
 
 
-},{}],88:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 "use strict";
 const copySearchParams = (targetUrl, sourceUrl) => {
   const searchParams = sourceUrl.split("?")[1];
@@ -11793,7 +8767,7 @@ const copySearchParams = (targetUrl, sourceUrl) => {
 exports.copySearchParams = copySearchParams;
 
 
-},{}],89:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 "use strict";
 function processX(base, ids, depth, result, tags) {
   const id = ids[depth];
@@ -11817,7 +8791,7 @@ function createStringVariations(string) {
 exports.createStringVariations = createStringVariations;
 
 
-},{}],90:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 "use strict";
 var checkDataUrl = require("./checkDataUrl.js"), checkExtension = require("./checkExtension.js"), convertToList = require("./convertToList.js"), copySearchParams = require("./copySearchParams.js"), createStringVariations = require("./createStringVariations.js"), isSingleItem = require("./isSingleItem.js");
 exports.checkDataUrl = checkDataUrl.checkDataUrl;
@@ -11828,13 +8802,13 @@ exports.createStringVariations = createStringVariations.createStringVariations;
 exports.isSingleItem = isSingleItem.isSingleItem;
 
 
-},{"./checkDataUrl.js":85,"./checkExtension.js":86,"./convertToList.js":87,"./copySearchParams.js":88,"./createStringVariations.js":89,"./isSingleItem.js":91}],91:[function(require,module,exports){
+},{"./checkDataUrl.js":82,"./checkExtension.js":83,"./convertToList.js":84,"./copySearchParams.js":85,"./createStringVariations.js":86,"./isSingleItem.js":88}],88:[function(require,module,exports){
 "use strict";
 const isSingleItem = (item) => !Array.isArray(item);
 exports.isSingleItem = isSingleItem;
 
 
-},{}],92:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 "use strict";
 var colord = require("@pixi/colord"), namesPlugin = require("@pixi/colord/plugins/names");
 colord.extend([namesPlugin]);
@@ -12109,19 +9083,19 @@ let Color = _Color;
 exports.Color = Color;
 
 
-},{"@pixi/colord":94,"@pixi/colord/plugins/names":95}],93:[function(require,module,exports){
+},{"@pixi/colord":91,"@pixi/colord/plugins/names":92}],90:[function(require,module,exports){
 "use strict";
 var Color = require("./Color.js");
 exports.Color = Color.Color;
 
 
-},{"./Color.js":92}],94:[function(require,module,exports){
+},{"./Color.js":89}],91:[function(require,module,exports){
 Object.defineProperty(exports,"__esModule",{value:!0});var r={grad:.9,turn:360,rad:360/(2*Math.PI)},t=function(r){return"string"==typeof r?r.length>0:"number"==typeof r},n=function(r,t,n){return void 0===t&&(t=0),void 0===n&&(n=Math.pow(10,t)),Math.round(n*r)/n+0},e=function(r,t,n){return void 0===t&&(t=0),void 0===n&&(n=1),r>n?n:r>t?r:t},u=function(r){return(r=isFinite(r)?r%360:0)>0?r:r+360},o=function(r){return{r:e(r.r,0,255),g:e(r.g,0,255),b:e(r.b,0,255),a:e(r.a)}},a=function(r){return{r:n(r.r),g:n(r.g),b:n(r.b),a:n(r.a,3)}},s=/^#([0-9a-f]{3,8})$/i,i=function(r){var t=r.toString(16);return t.length<2?"0"+t:t},h=function(r){var t=r.r,n=r.g,e=r.b,u=r.a,o=Math.max(t,n,e),a=o-Math.min(t,n,e),s=a?o===t?(n-e)/a:o===n?2+(e-t)/a:4+(t-n)/a:0;return{h:60*(s<0?s+6:s),s:o?a/o*100:0,v:o/255*100,a:u}},b=function(r){var t=r.h,n=r.s,e=r.v,u=r.a;t=t/360*6,n/=100,e/=100;var o=Math.floor(t),a=e*(1-n),s=e*(1-(t-o)*n),i=e*(1-(1-t+o)*n),h=o%6;return{r:255*[e,s,a,a,i,e][h],g:255*[i,e,e,s,a,a][h],b:255*[a,a,i,e,e,s][h],a:u}},d=function(r){return{h:u(r.h),s:e(r.s,0,100),l:e(r.l,0,100),a:e(r.a)}},g=function(r){return{h:n(r.h),s:n(r.s),l:n(r.l),a:n(r.a,3)}},f=function(r){return b((n=(t=r).s,{h:t.h,s:(n*=((e=t.l)<50?e:100-e)/100)>0?2*n/(e+n)*100:0,v:e+n,a:t.a}));var t,n,e},p=function(r){return{h:(t=h(r)).h,s:(u=(200-(n=t.s))*(e=t.v)/100)>0&&u<200?n*e/100/(u<=100?u:200-u)*100:0,l:u/2,a:t.a};var t,n,e,u},l=/^hsla?\(\s*([+-]?\d*\.?\d+)(deg|rad|grad|turn)?\s*,\s*([+-]?\d*\.?\d+)%\s*,\s*([+-]?\d*\.?\d+)%\s*(?:,\s*([+-]?\d*\.?\d+)(%)?\s*)?\)$/i,c=/^hsla?\(\s*([+-]?\d*\.?\d+)(deg|rad|grad|turn)?\s+([+-]?\d*\.?\d+)%\s+([+-]?\d*\.?\d+)%\s*(?:\/\s*([+-]?\d*\.?\d+)(%)?\s*)?\)$/i,v=/^rgba?\(\s*([+-]?\d*\.?\d+)(%)?\s*,\s*([+-]?\d*\.?\d+)(%)?\s*,\s*([+-]?\d*\.?\d+)(%)?\s*(?:,\s*([+-]?\d*\.?\d+)(%)?\s*)?\)$/i,m=/^rgba?\(\s*([+-]?\d*\.?\d+)(%)?\s+([+-]?\d*\.?\d+)(%)?\s+([+-]?\d*\.?\d+)(%)?\s*(?:\/\s*([+-]?\d*\.?\d+)(%)?\s*)?\)$/i,y={string:[[function(r){var t=s.exec(r);return t?(r=t[1]).length<=4?{r:parseInt(r[0]+r[0],16),g:parseInt(r[1]+r[1],16),b:parseInt(r[2]+r[2],16),a:4===r.length?n(parseInt(r[3]+r[3],16)/255,2):1}:6===r.length||8===r.length?{r:parseInt(r.substr(0,2),16),g:parseInt(r.substr(2,2),16),b:parseInt(r.substr(4,2),16),a:8===r.length?n(parseInt(r.substr(6,2),16)/255,2):1}:null:null},"hex"],[function(r){var t=v.exec(r)||m.exec(r);return t?t[2]!==t[4]||t[4]!==t[6]?null:o({r:Number(t[1])/(t[2]?100/255:1),g:Number(t[3])/(t[4]?100/255:1),b:Number(t[5])/(t[6]?100/255:1),a:void 0===t[7]?1:Number(t[7])/(t[8]?100:1)}):null},"rgb"],[function(t){var n=l.exec(t)||c.exec(t);if(!n)return null;var e,u,o=d({h:(e=n[1],u=n[2],void 0===u&&(u="deg"),Number(e)*(r[u]||1)),s:Number(n[3]),l:Number(n[4]),a:void 0===n[5]?1:Number(n[5])/(n[6]?100:1)});return f(o)},"hsl"]],object:[[function(r){var n=r.r,e=r.g,u=r.b,a=r.a,s=void 0===a?1:a;return t(n)&&t(e)&&t(u)?o({r:Number(n),g:Number(e),b:Number(u),a:Number(s)}):null},"rgb"],[function(r){var n=r.h,e=r.s,u=r.l,o=r.a,a=void 0===o?1:o;if(!t(n)||!t(e)||!t(u))return null;var s=d({h:Number(n),s:Number(e),l:Number(u),a:Number(a)});return f(s)},"hsl"],[function(r){var n=r.h,o=r.s,a=r.v,s=r.a,i=void 0===s?1:s;if(!t(n)||!t(o)||!t(a))return null;var h=function(r){return{h:u(r.h),s:e(r.s,0,100),v:e(r.v,0,100),a:e(r.a)}}({h:Number(n),s:Number(o),v:Number(a),a:Number(i)});return b(h)},"hsv"]]},N=function(r,t){for(var n=0;n<t.length;n++){var e=t[n][0](r);if(e)return[e,t[n][1]]}return[null,void 0]},x=function(r){return"string"==typeof r?N(r.trim(),y.string):"object"==typeof r&&null!==r?N(r,y.object):[null,void 0]},M=function(r,t){var n=p(r);return{h:n.h,s:e(n.s+100*t,0,100),l:n.l,a:n.a}},I=function(r){return(299*r.r+587*r.g+114*r.b)/1e3/255},H=function(r,t){var n=p(r);return{h:n.h,s:n.s,l:e(n.l+100*t,0,100),a:n.a}},$=function(){function r(r){this.parsed=x(r)[0],this.rgba=this.parsed||{r:0,g:0,b:0,a:1}}return r.prototype.isValid=function(){return null!==this.parsed},r.prototype.brightness=function(){return n(I(this.rgba),2)},r.prototype.isDark=function(){return I(this.rgba)<.5},r.prototype.isLight=function(){return I(this.rgba)>=.5},r.prototype.toHex=function(){return r=a(this.rgba),t=r.r,e=r.g,u=r.b,s=(o=r.a)<1?i(n(255*o)):"","#"+i(t)+i(e)+i(u)+s;var r,t,e,u,o,s},r.prototype.toRgb=function(){return a(this.rgba)},r.prototype.toRgbString=function(){return r=a(this.rgba),t=r.r,n=r.g,e=r.b,(u=r.a)<1?"rgba("+t+", "+n+", "+e+", "+u+")":"rgb("+t+", "+n+", "+e+")";var r,t,n,e,u},r.prototype.toHsl=function(){return g(p(this.rgba))},r.prototype.toHslString=function(){return r=g(p(this.rgba)),t=r.h,n=r.s,e=r.l,(u=r.a)<1?"hsla("+t+", "+n+"%, "+e+"%, "+u+")":"hsl("+t+", "+n+"%, "+e+"%)";var r,t,n,e,u},r.prototype.toHsv=function(){return r=h(this.rgba),{h:n(r.h),s:n(r.s),v:n(r.v),a:n(r.a,3)};var r},r.prototype.invert=function(){return j({r:255-(r=this.rgba).r,g:255-r.g,b:255-r.b,a:r.a});var r},r.prototype.saturate=function(r){return void 0===r&&(r=.1),j(M(this.rgba,r))},r.prototype.desaturate=function(r){return void 0===r&&(r=.1),j(M(this.rgba,-r))},r.prototype.grayscale=function(){return j(M(this.rgba,-1))},r.prototype.lighten=function(r){return void 0===r&&(r=.1),j(H(this.rgba,r))},r.prototype.darken=function(r){return void 0===r&&(r=.1),j(H(this.rgba,-r))},r.prototype.rotate=function(r){return void 0===r&&(r=15),this.hue(this.hue()+r)},r.prototype.alpha=function(r){return"number"==typeof r?j({r:(t=this.rgba).r,g:t.g,b:t.b,a:r}):n(this.rgba.a,3);var t},r.prototype.hue=function(r){var t=p(this.rgba);return"number"==typeof r?j({h:r,s:t.s,l:t.l,a:t.a}):n(t.h)},r.prototype.isEqual=function(r){return this.toHex()===j(r).toHex()},r}(),j=function(r){return r instanceof $?r:new $(r)},w=[];exports.Colord=$,exports.colord=j,exports.extend=function(r){r.forEach(function(r){w.indexOf(r)<0&&(r($,y),w.push(r))})},exports.getFormat=function(r){return x(r)[1]},exports.random=function(){return new $({r:255*Math.random(),g:255*Math.random(),b:255*Math.random()})};
 
-},{}],95:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 module.exports=function(e,f){var a={white:"#ffffff",bisque:"#ffe4c4",blue:"#0000ff",cadetblue:"#5f9ea0",chartreuse:"#7fff00",chocolate:"#d2691e",coral:"#ff7f50",antiquewhite:"#faebd7",aqua:"#00ffff",azure:"#f0ffff",whitesmoke:"#f5f5f5",papayawhip:"#ffefd5",plum:"#dda0dd",blanchedalmond:"#ffebcd",black:"#000000",gold:"#ffd700",goldenrod:"#daa520",gainsboro:"#dcdcdc",cornsilk:"#fff8dc",cornflowerblue:"#6495ed",burlywood:"#deb887",aquamarine:"#7fffd4",beige:"#f5f5dc",crimson:"#dc143c",cyan:"#00ffff",darkblue:"#00008b",darkcyan:"#008b8b",darkgoldenrod:"#b8860b",darkkhaki:"#bdb76b",darkgray:"#a9a9a9",darkgreen:"#006400",darkgrey:"#a9a9a9",peachpuff:"#ffdab9",darkmagenta:"#8b008b",darkred:"#8b0000",darkorchid:"#9932cc",darkorange:"#ff8c00",darkslateblue:"#483d8b",gray:"#808080",darkslategray:"#2f4f4f",darkslategrey:"#2f4f4f",deeppink:"#ff1493",deepskyblue:"#00bfff",wheat:"#f5deb3",firebrick:"#b22222",floralwhite:"#fffaf0",ghostwhite:"#f8f8ff",darkviolet:"#9400d3",magenta:"#ff00ff",green:"#008000",dodgerblue:"#1e90ff",grey:"#808080",honeydew:"#f0fff0",hotpink:"#ff69b4",blueviolet:"#8a2be2",forestgreen:"#228b22",lawngreen:"#7cfc00",indianred:"#cd5c5c",indigo:"#4b0082",fuchsia:"#ff00ff",brown:"#a52a2a",maroon:"#800000",mediumblue:"#0000cd",lightcoral:"#f08080",darkturquoise:"#00ced1",lightcyan:"#e0ffff",ivory:"#fffff0",lightyellow:"#ffffe0",lightsalmon:"#ffa07a",lightseagreen:"#20b2aa",linen:"#faf0e6",mediumaquamarine:"#66cdaa",lemonchiffon:"#fffacd",lime:"#00ff00",khaki:"#f0e68c",mediumseagreen:"#3cb371",limegreen:"#32cd32",mediumspringgreen:"#00fa9a",lightskyblue:"#87cefa",lightblue:"#add8e6",midnightblue:"#191970",lightpink:"#ffb6c1",mistyrose:"#ffe4e1",moccasin:"#ffe4b5",mintcream:"#f5fffa",lightslategray:"#778899",lightslategrey:"#778899",navajowhite:"#ffdead",navy:"#000080",mediumvioletred:"#c71585",powderblue:"#b0e0e6",palegoldenrod:"#eee8aa",oldlace:"#fdf5e6",paleturquoise:"#afeeee",mediumturquoise:"#48d1cc",mediumorchid:"#ba55d3",rebeccapurple:"#663399",lightsteelblue:"#b0c4de",mediumslateblue:"#7b68ee",thistle:"#d8bfd8",tan:"#d2b48c",orchid:"#da70d6",mediumpurple:"#9370db",purple:"#800080",pink:"#ffc0cb",skyblue:"#87ceeb",springgreen:"#00ff7f",palegreen:"#98fb98",red:"#ff0000",yellow:"#ffff00",slateblue:"#6a5acd",lavenderblush:"#fff0f5",peru:"#cd853f",palevioletred:"#db7093",violet:"#ee82ee",teal:"#008080",slategray:"#708090",slategrey:"#708090",aliceblue:"#f0f8ff",darkseagreen:"#8fbc8f",darkolivegreen:"#556b2f",greenyellow:"#adff2f",seagreen:"#2e8b57",seashell:"#fff5ee",tomato:"#ff6347",silver:"#c0c0c0",sienna:"#a0522d",lavender:"#e6e6fa",lightgreen:"#90ee90",orange:"#ffa500",orangered:"#ff4500",steelblue:"#4682b4",royalblue:"#4169e1",turquoise:"#40e0d0",yellowgreen:"#9acd32",salmon:"#fa8072",saddlebrown:"#8b4513",sandybrown:"#f4a460",rosybrown:"#bc8f8f",darksalmon:"#e9967a",lightgoldenrodyellow:"#fafad2",snow:"#fffafa",lightgrey:"#d3d3d3",lightgray:"#d3d3d3",dimgray:"#696969",dimgrey:"#696969",olivedrab:"#6b8e23",olive:"#808000"},r={};for(var d in a)r[a[d]]=d;var l={};e.prototype.toName=function(f){if(!(this.rgba.a||this.rgba.r||this.rgba.g||this.rgba.b))return"transparent";var d,i,o=r[this.toHex()];if(o)return o;if(null==f?void 0:f.closest){var n=this.toRgb(),t=1/0,b="black";if(!l.length)for(var c in a)l[c]=new e(a[c]).toRgb();for(var g in a){var u=(d=n,i=l[g],Math.pow(d.r-i.r,2)+Math.pow(d.g-i.g,2)+Math.pow(d.b-i.b,2));u<t&&(t=u,b=g)}return b}};f.string.push([function(f){var r=f.toLowerCase(),d="transparent"===r?"#0000":a[r];return d?new e(d).toRgb():null},"name"])};
 
-},{}],96:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 "use strict";
 var INTERNAL_FORMATS = /* @__PURE__ */ ((INTERNAL_FORMATS2) => (INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGB_S3TC_DXT1_EXT = 33776] = "COMPRESSED_RGB_S3TC_DXT1_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA_S3TC_DXT1_EXT = 33777] = "COMPRESSED_RGBA_S3TC_DXT1_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA_S3TC_DXT3_EXT = 33778] = "COMPRESSED_RGBA_S3TC_DXT3_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA_S3TC_DXT5_EXT = 33779] = "COMPRESSED_RGBA_S3TC_DXT5_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT = 35917] = "COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT = 35918] = "COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT = 35919] = "COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SRGB_S3TC_DXT1_EXT = 35916] = "COMPRESSED_SRGB_S3TC_DXT1_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_R11_EAC = 37488] = "COMPRESSED_R11_EAC", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SIGNED_R11_EAC = 37489] = "COMPRESSED_SIGNED_R11_EAC", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RG11_EAC = 37490] = "COMPRESSED_RG11_EAC", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SIGNED_RG11_EAC = 37491] = "COMPRESSED_SIGNED_RG11_EAC", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGB8_ETC2 = 37492] = "COMPRESSED_RGB8_ETC2", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA8_ETC2_EAC = 37496] = "COMPRESSED_RGBA8_ETC2_EAC", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SRGB8_ETC2 = 37493] = "COMPRESSED_SRGB8_ETC2", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SRGB8_ALPHA8_ETC2_EAC = 37497] = "COMPRESSED_SRGB8_ALPHA8_ETC2_EAC", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2 = 37494] = "COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2 = 37495] = "COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGB_PVRTC_4BPPV1_IMG = 35840] = "COMPRESSED_RGB_PVRTC_4BPPV1_IMG", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA_PVRTC_4BPPV1_IMG = 35842] = "COMPRESSED_RGBA_PVRTC_4BPPV1_IMG", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGB_PVRTC_2BPPV1_IMG = 35841] = "COMPRESSED_RGB_PVRTC_2BPPV1_IMG", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA_PVRTC_2BPPV1_IMG = 35843] = "COMPRESSED_RGBA_PVRTC_2BPPV1_IMG", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGB_ETC1_WEBGL = 36196] = "COMPRESSED_RGB_ETC1_WEBGL", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGB_ATC_WEBGL = 35986] = "COMPRESSED_RGB_ATC_WEBGL", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA_ATC_EXPLICIT_ALPHA_WEBGL = 35987] = "COMPRESSED_RGBA_ATC_EXPLICIT_ALPHA_WEBGL", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA_ATC_INTERPOLATED_ALPHA_WEBGL = 34798] = "COMPRESSED_RGBA_ATC_INTERPOLATED_ALPHA_WEBGL", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA_ASTC_4x4_KHR = 37808] = "COMPRESSED_RGBA_ASTC_4x4_KHR", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGBA_BPTC_UNORM_EXT = 36492] = "COMPRESSED_RGBA_BPTC_UNORM_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT = 36493] = "COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT = 36494] = "COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT", INTERNAL_FORMATS2[INTERNAL_FORMATS2.COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT = 36495] = "COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT", INTERNAL_FORMATS2))(INTERNAL_FORMATS || {});
 const INTERNAL_FORMAT_TO_BYTES_PER_PIXEL = {
@@ -12175,7 +9149,7 @@ exports.INTERNAL_FORMATS = INTERNAL_FORMATS;
 exports.INTERNAL_FORMAT_TO_BYTES_PER_PIXEL = INTERNAL_FORMAT_TO_BYTES_PER_PIXEL;
 
 
-},{}],97:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 "use strict";
 var _const = require("./const.js");
 require("./loaders/index.js");
@@ -12197,11 +9171,11 @@ exports.BlobResource = BlobResource.BlobResource;
 exports.CompressedTextureResource = CompressedTextureResource.CompressedTextureResource;
 
 
-},{"./const.js":96,"./loaders/detectCompressedTextures.js":99,"./loaders/index.js":100,"./loaders/loadDDS.js":101,"./loaders/loadKTX.js":102,"./loaders/resolveCompressedTextureUrl.js":103,"./parsers/index.js":104,"./parsers/parseDDS.js":105,"./parsers/parseKTX.js":106,"./resources/BlobResource.js":107,"./resources/CompressedTextureResource.js":108,"./resources/index.js":109}],98:[function(require,module,exports){
+},{"./const.js":93,"./loaders/detectCompressedTextures.js":96,"./loaders/index.js":97,"./loaders/loadDDS.js":98,"./loaders/loadKTX.js":99,"./loaders/resolveCompressedTextureUrl.js":100,"./parsers/index.js":101,"./parsers/parseDDS.js":102,"./parsers/parseKTX.js":103,"./resources/BlobResource.js":104,"./resources/CompressedTextureResource.js":105,"./resources/index.js":106}],95:[function(require,module,exports){
 "use strict";
 
 
-},{}],99:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 let storedGl, extensions;
@@ -12240,7 +9214,7 @@ core.extensions.add(detectCompressedTextures);
 exports.detectCompressedTextures = detectCompressedTextures;
 
 
-},{"@pixi/core":151}],100:[function(require,module,exports){
+},{"@pixi/core":148}],97:[function(require,module,exports){
 "use strict";
 require("./compressedTextureExtensions.js");
 var detectCompressedTextures = require("./detectCompressedTextures.js"), loadDDS = require("./loadDDS.js"), loadKTX = require("./loadKTX.js"), resolveCompressedTextureUrl = require("./resolveCompressedTextureUrl.js");
@@ -12250,7 +9224,7 @@ exports.loadKTX = loadKTX.loadKTX;
 exports.resolveCompressedTextureUrl = resolveCompressedTextureUrl.resolveCompressedTextureUrl;
 
 
-},{"./compressedTextureExtensions.js":98,"./detectCompressedTextures.js":99,"./loadDDS.js":101,"./loadKTX.js":102,"./resolveCompressedTextureUrl.js":103}],101:[function(require,module,exports){
+},{"./compressedTextureExtensions.js":95,"./detectCompressedTextures.js":96,"./loadDDS.js":98,"./loadKTX.js":99,"./resolveCompressedTextureUrl.js":100}],98:[function(require,module,exports){
 "use strict";
 var assets = require("@pixi/assets"), core = require("@pixi/core");
 require("../parsers/index.js");
@@ -12284,7 +9258,7 @@ core.extensions.add(loadDDS);
 exports.loadDDS = loadDDS;
 
 
-},{"../parsers/index.js":104,"../parsers/parseDDS.js":105,"@pixi/assets":64,"@pixi/core":151}],102:[function(require,module,exports){
+},{"../parsers/index.js":101,"../parsers/parseDDS.js":102,"@pixi/assets":61,"@pixi/core":148}],99:[function(require,module,exports){
 "use strict";
 var assets = require("@pixi/assets"), core = require("@pixi/core");
 require("../parsers/index.js");
@@ -12322,7 +9296,7 @@ core.extensions.add(loadKTX);
 exports.loadKTX = loadKTX;
 
 
-},{"../parsers/index.js":104,"../parsers/parseKTX.js":106,"@pixi/assets":64,"@pixi/core":151}],103:[function(require,module,exports){
+},{"../parsers/index.js":101,"../parsers/parseKTX.js":103,"@pixi/assets":61,"@pixi/core":148}],100:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const knownFormats = ["s3tc", "s3tc_sRGB", "etc", "etc1", "pvrtc", "atc", "astc", "bptc"], resolveCompressedTextureUrl = {
@@ -12353,7 +9327,7 @@ core.extensions.add(resolveCompressedTextureUrl);
 exports.resolveCompressedTextureUrl = resolveCompressedTextureUrl;
 
 
-},{"@pixi/core":151}],104:[function(require,module,exports){
+},{"@pixi/core":148}],101:[function(require,module,exports){
 "use strict";
 var parseDDS = require("./parseDDS.js"), parseKTX = require("./parseKTX.js");
 exports.parseDDS = parseDDS.parseDDS;
@@ -12363,7 +9337,7 @@ exports.TYPES_TO_BYTES_PER_PIXEL = parseKTX.TYPES_TO_BYTES_PER_PIXEL;
 exports.parseKTX = parseKTX.parseKTX;
 
 
-},{"./parseDDS.js":105,"./parseKTX.js":106}],105:[function(require,module,exports){
+},{"./parseDDS.js":102,"./parseKTX.js":103}],102:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js");
 require("../resources/index.js");
@@ -12472,7 +9446,7 @@ function parseDDS(arrayBuffer) {
 exports.parseDDS = parseDDS;
 
 
-},{"../const.js":96,"../resources/CompressedTextureResource.js":108,"../resources/index.js":109}],106:[function(require,module,exports){
+},{"../const.js":93,"../resources/CompressedTextureResource.js":105,"../resources/index.js":106}],103:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), _const = require("../const.js");
 require("../resources/index.js");
@@ -12638,7 +9612,7 @@ exports.TYPES_TO_BYTES_PER_PIXEL = TYPES_TO_BYTES_PER_PIXEL;
 exports.parseKTX = parseKTX;
 
 
-},{"../const.js":96,"../resources/CompressedTextureResource.js":108,"../resources/index.js":109,"@pixi/core":151}],107:[function(require,module,exports){
+},{"../const.js":93,"../resources/CompressedTextureResource.js":105,"../resources/index.js":106,"@pixi/core":148}],104:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 class BlobResource extends core.BufferResource {
@@ -12665,7 +9639,7 @@ class BlobResource extends core.BufferResource {
 exports.BlobResource = BlobResource;
 
 
-},{"@pixi/core":151}],108:[function(require,module,exports){
+},{"@pixi/core":148}],105:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js"), BlobResource = require("./BlobResource.js");
 class CompressedTextureResource extends BlobResource.BlobResource {
@@ -12774,14 +9748,14 @@ class CompressedTextureResource extends BlobResource.BlobResource {
 exports.CompressedTextureResource = CompressedTextureResource;
 
 
-},{"../const.js":96,"./BlobResource.js":107}],109:[function(require,module,exports){
+},{"../const.js":93,"./BlobResource.js":104}],106:[function(require,module,exports){
 "use strict";
 var BlobResource = require("./BlobResource.js"), CompressedTextureResource = require("./CompressedTextureResource.js");
 exports.BlobResource = BlobResource.BlobResource;
 exports.CompressedTextureResource = CompressedTextureResource.CompressedTextureResource;
 
 
-},{"./BlobResource.js":107,"./CompressedTextureResource.js":108}],110:[function(require,module,exports){
+},{"./BlobResource.js":104,"./CompressedTextureResource.js":105}],107:[function(require,module,exports){
 "use strict";
 var ENV = /* @__PURE__ */ ((ENV2) => (ENV2[ENV2.WEBGL_LEGACY = 0] = "WEBGL_LEGACY", ENV2[ENV2.WEBGL = 1] = "WEBGL", ENV2[ENV2.WEBGL2 = 2] = "WEBGL2", ENV2))(ENV || {}), RENDERER_TYPE = /* @__PURE__ */ ((RENDERER_TYPE2) => (RENDERER_TYPE2[RENDERER_TYPE2.UNKNOWN = 0] = "UNKNOWN", RENDERER_TYPE2[RENDERER_TYPE2.WEBGL = 1] = "WEBGL", RENDERER_TYPE2[RENDERER_TYPE2.CANVAS = 2] = "CANVAS", RENDERER_TYPE2))(RENDERER_TYPE || {}), BUFFER_BITS = /* @__PURE__ */ ((BUFFER_BITS2) => (BUFFER_BITS2[BUFFER_BITS2.COLOR = 16384] = "COLOR", BUFFER_BITS2[BUFFER_BITS2.DEPTH = 256] = "DEPTH", BUFFER_BITS2[BUFFER_BITS2.STENCIL = 1024] = "STENCIL", BUFFER_BITS2))(BUFFER_BITS || {}), BLEND_MODES = /* @__PURE__ */ ((BLEND_MODES2) => (BLEND_MODES2[BLEND_MODES2.NORMAL = 0] = "NORMAL", BLEND_MODES2[BLEND_MODES2.ADD = 1] = "ADD", BLEND_MODES2[BLEND_MODES2.MULTIPLY = 2] = "MULTIPLY", BLEND_MODES2[BLEND_MODES2.SCREEN = 3] = "SCREEN", BLEND_MODES2[BLEND_MODES2.OVERLAY = 4] = "OVERLAY", BLEND_MODES2[BLEND_MODES2.DARKEN = 5] = "DARKEN", BLEND_MODES2[BLEND_MODES2.LIGHTEN = 6] = "LIGHTEN", BLEND_MODES2[BLEND_MODES2.COLOR_DODGE = 7] = "COLOR_DODGE", BLEND_MODES2[BLEND_MODES2.COLOR_BURN = 8] = "COLOR_BURN", BLEND_MODES2[BLEND_MODES2.HARD_LIGHT = 9] = "HARD_LIGHT", BLEND_MODES2[BLEND_MODES2.SOFT_LIGHT = 10] = "SOFT_LIGHT", BLEND_MODES2[BLEND_MODES2.DIFFERENCE = 11] = "DIFFERENCE", BLEND_MODES2[BLEND_MODES2.EXCLUSION = 12] = "EXCLUSION", BLEND_MODES2[BLEND_MODES2.HUE = 13] = "HUE", BLEND_MODES2[BLEND_MODES2.SATURATION = 14] = "SATURATION", BLEND_MODES2[BLEND_MODES2.COLOR = 15] = "COLOR", BLEND_MODES2[BLEND_MODES2.LUMINOSITY = 16] = "LUMINOSITY", BLEND_MODES2[BLEND_MODES2.NORMAL_NPM = 17] = "NORMAL_NPM", BLEND_MODES2[BLEND_MODES2.ADD_NPM = 18] = "ADD_NPM", BLEND_MODES2[BLEND_MODES2.SCREEN_NPM = 19] = "SCREEN_NPM", BLEND_MODES2[BLEND_MODES2.NONE = 20] = "NONE", BLEND_MODES2[BLEND_MODES2.SRC_OVER = 0] = "SRC_OVER", BLEND_MODES2[BLEND_MODES2.SRC_IN = 21] = "SRC_IN", BLEND_MODES2[BLEND_MODES2.SRC_OUT = 22] = "SRC_OUT", BLEND_MODES2[BLEND_MODES2.SRC_ATOP = 23] = "SRC_ATOP", BLEND_MODES2[BLEND_MODES2.DST_OVER = 24] = "DST_OVER", BLEND_MODES2[BLEND_MODES2.DST_IN = 25] = "DST_IN", BLEND_MODES2[BLEND_MODES2.DST_OUT = 26] = "DST_OUT", BLEND_MODES2[BLEND_MODES2.DST_ATOP = 27] = "DST_ATOP", BLEND_MODES2[BLEND_MODES2.ERASE = 26] = "ERASE", BLEND_MODES2[BLEND_MODES2.SUBTRACT = 28] = "SUBTRACT", BLEND_MODES2[BLEND_MODES2.XOR = 29] = "XOR", BLEND_MODES2))(BLEND_MODES || {}), DRAW_MODES = /* @__PURE__ */ ((DRAW_MODES2) => (DRAW_MODES2[DRAW_MODES2.POINTS = 0] = "POINTS", DRAW_MODES2[DRAW_MODES2.LINES = 1] = "LINES", DRAW_MODES2[DRAW_MODES2.LINE_LOOP = 2] = "LINE_LOOP", DRAW_MODES2[DRAW_MODES2.LINE_STRIP = 3] = "LINE_STRIP", DRAW_MODES2[DRAW_MODES2.TRIANGLES = 4] = "TRIANGLES", DRAW_MODES2[DRAW_MODES2.TRIANGLE_STRIP = 5] = "TRIANGLE_STRIP", DRAW_MODES2[DRAW_MODES2.TRIANGLE_FAN = 6] = "TRIANGLE_FAN", DRAW_MODES2))(DRAW_MODES || {}), FORMATS = /* @__PURE__ */ ((FORMATS2) => (FORMATS2[FORMATS2.RGBA = 6408] = "RGBA", FORMATS2[FORMATS2.RGB = 6407] = "RGB", FORMATS2[FORMATS2.RG = 33319] = "RG", FORMATS2[FORMATS2.RED = 6403] = "RED", FORMATS2[FORMATS2.RGBA_INTEGER = 36249] = "RGBA_INTEGER", FORMATS2[FORMATS2.RGB_INTEGER = 36248] = "RGB_INTEGER", FORMATS2[FORMATS2.RG_INTEGER = 33320] = "RG_INTEGER", FORMATS2[FORMATS2.RED_INTEGER = 36244] = "RED_INTEGER", FORMATS2[FORMATS2.ALPHA = 6406] = "ALPHA", FORMATS2[FORMATS2.LUMINANCE = 6409] = "LUMINANCE", FORMATS2[FORMATS2.LUMINANCE_ALPHA = 6410] = "LUMINANCE_ALPHA", FORMATS2[FORMATS2.DEPTH_COMPONENT = 6402] = "DEPTH_COMPONENT", FORMATS2[FORMATS2.DEPTH_STENCIL = 34041] = "DEPTH_STENCIL", FORMATS2))(FORMATS || {}), TARGETS = /* @__PURE__ */ ((TARGETS2) => (TARGETS2[TARGETS2.TEXTURE_2D = 3553] = "TEXTURE_2D", TARGETS2[TARGETS2.TEXTURE_CUBE_MAP = 34067] = "TEXTURE_CUBE_MAP", TARGETS2[TARGETS2.TEXTURE_2D_ARRAY = 35866] = "TEXTURE_2D_ARRAY", TARGETS2[TARGETS2.TEXTURE_CUBE_MAP_POSITIVE_X = 34069] = "TEXTURE_CUBE_MAP_POSITIVE_X", TARGETS2[TARGETS2.TEXTURE_CUBE_MAP_NEGATIVE_X = 34070] = "TEXTURE_CUBE_MAP_NEGATIVE_X", TARGETS2[TARGETS2.TEXTURE_CUBE_MAP_POSITIVE_Y = 34071] = "TEXTURE_CUBE_MAP_POSITIVE_Y", TARGETS2[TARGETS2.TEXTURE_CUBE_MAP_NEGATIVE_Y = 34072] = "TEXTURE_CUBE_MAP_NEGATIVE_Y", TARGETS2[TARGETS2.TEXTURE_CUBE_MAP_POSITIVE_Z = 34073] = "TEXTURE_CUBE_MAP_POSITIVE_Z", TARGETS2[TARGETS2.TEXTURE_CUBE_MAP_NEGATIVE_Z = 34074] = "TEXTURE_CUBE_MAP_NEGATIVE_Z", TARGETS2))(TARGETS || {}), TYPES = /* @__PURE__ */ ((TYPES2) => (TYPES2[TYPES2.UNSIGNED_BYTE = 5121] = "UNSIGNED_BYTE", TYPES2[TYPES2.UNSIGNED_SHORT = 5123] = "UNSIGNED_SHORT", TYPES2[TYPES2.UNSIGNED_SHORT_5_6_5 = 33635] = "UNSIGNED_SHORT_5_6_5", TYPES2[TYPES2.UNSIGNED_SHORT_4_4_4_4 = 32819] = "UNSIGNED_SHORT_4_4_4_4", TYPES2[TYPES2.UNSIGNED_SHORT_5_5_5_1 = 32820] = "UNSIGNED_SHORT_5_5_5_1", TYPES2[TYPES2.UNSIGNED_INT = 5125] = "UNSIGNED_INT", TYPES2[TYPES2.UNSIGNED_INT_10F_11F_11F_REV = 35899] = "UNSIGNED_INT_10F_11F_11F_REV", TYPES2[TYPES2.UNSIGNED_INT_2_10_10_10_REV = 33640] = "UNSIGNED_INT_2_10_10_10_REV", TYPES2[TYPES2.UNSIGNED_INT_24_8 = 34042] = "UNSIGNED_INT_24_8", TYPES2[TYPES2.UNSIGNED_INT_5_9_9_9_REV = 35902] = "UNSIGNED_INT_5_9_9_9_REV", TYPES2[TYPES2.BYTE = 5120] = "BYTE", TYPES2[TYPES2.SHORT = 5122] = "SHORT", TYPES2[TYPES2.INT = 5124] = "INT", TYPES2[TYPES2.FLOAT = 5126] = "FLOAT", TYPES2[TYPES2.FLOAT_32_UNSIGNED_INT_24_8_REV = 36269] = "FLOAT_32_UNSIGNED_INT_24_8_REV", TYPES2[TYPES2.HALF_FLOAT = 36193] = "HALF_FLOAT", TYPES2))(TYPES || {}), SAMPLER_TYPES = /* @__PURE__ */ ((SAMPLER_TYPES2) => (SAMPLER_TYPES2[SAMPLER_TYPES2.FLOAT = 0] = "FLOAT", SAMPLER_TYPES2[SAMPLER_TYPES2.INT = 1] = "INT", SAMPLER_TYPES2[SAMPLER_TYPES2.UINT = 2] = "UINT", SAMPLER_TYPES2))(SAMPLER_TYPES || {}), SCALE_MODES = /* @__PURE__ */ ((SCALE_MODES2) => (SCALE_MODES2[SCALE_MODES2.NEAREST = 0] = "NEAREST", SCALE_MODES2[SCALE_MODES2.LINEAR = 1] = "LINEAR", SCALE_MODES2))(SCALE_MODES || {}), WRAP_MODES = /* @__PURE__ */ ((WRAP_MODES2) => (WRAP_MODES2[WRAP_MODES2.CLAMP = 33071] = "CLAMP", WRAP_MODES2[WRAP_MODES2.REPEAT = 10497] = "REPEAT", WRAP_MODES2[WRAP_MODES2.MIRRORED_REPEAT = 33648] = "MIRRORED_REPEAT", WRAP_MODES2))(WRAP_MODES || {}), MIPMAP_MODES = /* @__PURE__ */ ((MIPMAP_MODES2) => (MIPMAP_MODES2[MIPMAP_MODES2.OFF = 0] = "OFF", MIPMAP_MODES2[MIPMAP_MODES2.POW2 = 1] = "POW2", MIPMAP_MODES2[MIPMAP_MODES2.ON = 2] = "ON", MIPMAP_MODES2[MIPMAP_MODES2.ON_MANUAL = 3] = "ON_MANUAL", MIPMAP_MODES2))(MIPMAP_MODES || {}), ALPHA_MODES = /* @__PURE__ */ ((ALPHA_MODES2) => (ALPHA_MODES2[ALPHA_MODES2.NPM = 0] = "NPM", ALPHA_MODES2[ALPHA_MODES2.UNPACK = 1] = "UNPACK", ALPHA_MODES2[ALPHA_MODES2.PMA = 2] = "PMA", ALPHA_MODES2[ALPHA_MODES2.NO_PREMULTIPLIED_ALPHA = 0] = "NO_PREMULTIPLIED_ALPHA", ALPHA_MODES2[ALPHA_MODES2.PREMULTIPLY_ON_UPLOAD = 1] = "PREMULTIPLY_ON_UPLOAD", ALPHA_MODES2[ALPHA_MODES2.PREMULTIPLIED_ALPHA = 2] = "PREMULTIPLIED_ALPHA", ALPHA_MODES2))(ALPHA_MODES || {}), CLEAR_MODES = /* @__PURE__ */ ((CLEAR_MODES2) => (CLEAR_MODES2[CLEAR_MODES2.NO = 0] = "NO", CLEAR_MODES2[CLEAR_MODES2.YES = 1] = "YES", CLEAR_MODES2[CLEAR_MODES2.AUTO = 2] = "AUTO", CLEAR_MODES2[CLEAR_MODES2.BLEND = 0] = "BLEND", CLEAR_MODES2[CLEAR_MODES2.CLEAR = 1] = "CLEAR", CLEAR_MODES2[CLEAR_MODES2.BLIT = 2] = "BLIT", CLEAR_MODES2))(CLEAR_MODES || {}), GC_MODES = /* @__PURE__ */ ((GC_MODES2) => (GC_MODES2[GC_MODES2.AUTO = 0] = "AUTO", GC_MODES2[GC_MODES2.MANUAL = 1] = "MANUAL", GC_MODES2))(GC_MODES || {}), PRECISION = /* @__PURE__ */ ((PRECISION2) => (PRECISION2.LOW = "lowp", PRECISION2.MEDIUM = "mediump", PRECISION2.HIGH = "highp", PRECISION2))(PRECISION || {}), MASK_TYPES = /* @__PURE__ */ ((MASK_TYPES2) => (MASK_TYPES2[MASK_TYPES2.NONE = 0] = "NONE", MASK_TYPES2[MASK_TYPES2.SCISSOR = 1] = "SCISSOR", MASK_TYPES2[MASK_TYPES2.STENCIL = 2] = "STENCIL", MASK_TYPES2[MASK_TYPES2.SPRITE = 3] = "SPRITE", MASK_TYPES2[MASK_TYPES2.COLOR = 4] = "COLOR", MASK_TYPES2))(MASK_TYPES || {}), COLOR_MASK_BITS = /* @__PURE__ */ ((COLOR_MASK_BITS2) => (COLOR_MASK_BITS2[COLOR_MASK_BITS2.RED = 1] = "RED", COLOR_MASK_BITS2[COLOR_MASK_BITS2.GREEN = 2] = "GREEN", COLOR_MASK_BITS2[COLOR_MASK_BITS2.BLUE = 4] = "BLUE", COLOR_MASK_BITS2[COLOR_MASK_BITS2.ALPHA = 8] = "ALPHA", COLOR_MASK_BITS2))(COLOR_MASK_BITS || {}), MSAA_QUALITY = /* @__PURE__ */ ((MSAA_QUALITY2) => (MSAA_QUALITY2[MSAA_QUALITY2.NONE = 0] = "NONE", MSAA_QUALITY2[MSAA_QUALITY2.LOW = 2] = "LOW", MSAA_QUALITY2[MSAA_QUALITY2.MEDIUM = 4] = "MEDIUM", MSAA_QUALITY2[MSAA_QUALITY2.HIGH = 8] = "HIGH", MSAA_QUALITY2))(MSAA_QUALITY || {}), BUFFER_TYPE = /* @__PURE__ */ ((BUFFER_TYPE2) => (BUFFER_TYPE2[BUFFER_TYPE2.ELEMENT_ARRAY_BUFFER = 34963] = "ELEMENT_ARRAY_BUFFER", BUFFER_TYPE2[BUFFER_TYPE2.ARRAY_BUFFER = 34962] = "ARRAY_BUFFER", BUFFER_TYPE2[BUFFER_TYPE2.UNIFORM_BUFFER = 35345] = "UNIFORM_BUFFER", BUFFER_TYPE2))(BUFFER_TYPE || {});
 exports.ALPHA_MODES = ALPHA_MODES;
@@ -12806,11 +9780,11 @@ exports.TYPES = TYPES;
 exports.WRAP_MODES = WRAP_MODES;
 
 
-},{}],111:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 "use strict";
 
 
-},{}],112:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), math = require("@pixi/math"), settings = require("@pixi/settings"), utils = require("@pixi/utils"), UniformGroup = require("./shader/UniformGroup.js"), SystemManager = require("./system/SystemManager.js");
 const _Renderer = class _Renderer2 extends SystemManager.SystemManager {
@@ -13065,7 +10039,7 @@ extensions.extensions.add(Renderer);
 exports.Renderer = Renderer;
 
 
-},{"./shader/UniformGroup.js":170,"./system/SystemManager.js":195,"@pixi/constants":110,"@pixi/extensions":240,"@pixi/math":290,"@pixi/settings":330,"@pixi/utils":393}],113:[function(require,module,exports){
+},{"./shader/UniformGroup.js":167,"./system/SystemManager.js":192,"@pixi/constants":107,"@pixi/extensions":237,"@pixi/math":287,"@pixi/settings":327,"@pixi/utils":390}],110:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions");
 const renderers = [];
@@ -13079,7 +10053,7 @@ function autoDetectRenderer(options) {
 exports.autoDetectRenderer = autoDetectRenderer;
 
 
-},{"@pixi/extensions":240}],114:[function(require,module,exports){
+},{"@pixi/extensions":237}],111:[function(require,module,exports){
 "use strict";
 var color = require("@pixi/color"), extensions = require("@pixi/extensions");
 class BackgroundSystem {
@@ -13153,7 +10127,7 @@ extensions.extensions.add(BackgroundSystem);
 exports.BackgroundSystem = BackgroundSystem;
 
 
-},{"@pixi/color":93,"@pixi/extensions":240}],115:[function(require,module,exports){
+},{"@pixi/color":90,"@pixi/extensions":237}],112:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 class BatchDrawCall {
@@ -13164,7 +10138,7 @@ class BatchDrawCall {
 exports.BatchDrawCall = BatchDrawCall;
 
 
-},{"@pixi/constants":110}],116:[function(require,module,exports){
+},{"@pixi/constants":107}],113:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), Buffer = require("../geometry/Buffer.js"), Geometry = require("../geometry/Geometry.js");
 class BatchGeometry extends Geometry.Geometry {
@@ -13179,7 +10153,7 @@ class BatchGeometry extends Geometry.Geometry {
 exports.BatchGeometry = BatchGeometry;
 
 
-},{"../geometry/Buffer.js":144,"../geometry/Geometry.js":147,"@pixi/constants":110}],117:[function(require,module,exports){
+},{"../geometry/Buffer.js":141,"../geometry/Geometry.js":144,"@pixi/constants":107}],114:[function(require,module,exports){
 "use strict";
 var color = require("@pixi/color"), constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), settings = require("@pixi/settings"), utils = require("@pixi/utils"), ViewableBuffer = require("../geometry/ViewableBuffer.js"), checkMaxIfStatementsInShader = require("../shader/utils/checkMaxIfStatementsInShader.js"), State = require("../state/State.js"), BaseTexture = require("../textures/BaseTexture.js"), BatchDrawCall = require("./BatchDrawCall.js"), BatchGeometry = require("./BatchGeometry.js"), BatchShaderGenerator = require("./BatchShaderGenerator.js"), BatchTextureArray = require("./BatchTextureArray.js"), canUploadSameBuffer = require("./canUploadSameBuffer.js"), maxRecommendedTextures = require("./maxRecommendedTextures.js"), ObjectRenderer = require("./ObjectRenderer.js"), texture$1 = require("./texture.frag.js"), texture = require("./texture.vert.js");
 const _BatchRenderer = class _BatchRenderer2 extends ObjectRenderer.ObjectRenderer {
@@ -13443,7 +10417,7 @@ extensions.extensions.add(BatchRenderer);
 exports.BatchRenderer = BatchRenderer;
 
 
-},{"../geometry/ViewableBuffer.js":149,"../shader/utils/checkMaxIfStatementsInShader.js":173,"../state/State.js":191,"../textures/BaseTexture.js":197,"./BatchDrawCall.js":115,"./BatchGeometry.js":116,"./BatchShaderGenerator.js":118,"./BatchTextureArray.js":120,"./ObjectRenderer.js":121,"./canUploadSameBuffer.js":122,"./maxRecommendedTextures.js":123,"./texture.frag.js":124,"./texture.vert.js":125,"@pixi/color":93,"@pixi/constants":110,"@pixi/extensions":240,"@pixi/settings":330,"@pixi/utils":393}],118:[function(require,module,exports){
+},{"../geometry/ViewableBuffer.js":146,"../shader/utils/checkMaxIfStatementsInShader.js":170,"../state/State.js":188,"../textures/BaseTexture.js":194,"./BatchDrawCall.js":112,"./BatchGeometry.js":113,"./BatchShaderGenerator.js":115,"./BatchTextureArray.js":117,"./ObjectRenderer.js":118,"./canUploadSameBuffer.js":119,"./maxRecommendedTextures.js":120,"./texture.frag.js":121,"./texture.vert.js":122,"@pixi/color":90,"@pixi/constants":107,"@pixi/extensions":237,"@pixi/settings":327,"@pixi/utils":390}],115:[function(require,module,exports){
 "use strict";
 var math = require("@pixi/math"), Program = require("../shader/Program.js"), Shader = require("../shader/Shader.js"), UniformGroup = require("../shader/UniformGroup.js");
 class BatchShaderGenerator {
@@ -13492,7 +10466,7 @@ else `), i < maxTextures - 1 && (src += `if(vTextureId < ${i}.5)`), src += `
 exports.BatchShaderGenerator = BatchShaderGenerator;
 
 
-},{"../shader/Program.js":167,"../shader/Shader.js":168,"../shader/UniformGroup.js":170,"@pixi/math":290}],119:[function(require,module,exports){
+},{"../shader/Program.js":164,"../shader/Shader.js":165,"../shader/UniformGroup.js":167,"@pixi/math":287}],116:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), ObjectRenderer = require("./ObjectRenderer.js");
 class BatchSystem {
@@ -13575,7 +10549,7 @@ extensions.extensions.add(BatchSystem);
 exports.BatchSystem = BatchSystem;
 
 
-},{"./ObjectRenderer.js":121,"@pixi/extensions":240}],120:[function(require,module,exports){
+},{"./ObjectRenderer.js":118,"@pixi/extensions":237}],117:[function(require,module,exports){
 "use strict";
 class BatchTextureArray {
   constructor() {
@@ -13590,7 +10564,7 @@ class BatchTextureArray {
 exports.BatchTextureArray = BatchTextureArray;
 
 
-},{}],121:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 "use strict";
 class ObjectRenderer {
   /**
@@ -13629,7 +10603,7 @@ class ObjectRenderer {
 exports.ObjectRenderer = ObjectRenderer;
 
 
-},{}],122:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings");
 function canUploadSameBuffer() {
@@ -13638,7 +10612,7 @@ function canUploadSameBuffer() {
 exports.canUploadSameBuffer = canUploadSameBuffer;
 
 
-},{"@pixi/settings":330}],123:[function(require,module,exports){
+},{"@pixi/settings":327}],120:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings");
 function maxRecommendedTextures(max) {
@@ -13659,7 +10633,7 @@ function maxRecommendedTextures(max) {
 exports.maxRecommendedTextures = maxRecommendedTextures;
 
 
-},{"@pixi/settings":330}],124:[function(require,module,exports){
+},{"@pixi/settings":327}],121:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var defaultFragment = `varying vec2 vTextureCoord;
@@ -13676,7 +10650,7 @@ void main(void){
 exports.default = defaultFragment;
 
 
-},{}],125:[function(require,module,exports){
+},{}],122:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var defaultVertex = `precision highp float;
@@ -13704,7 +10678,7 @@ void main(void){
 exports.default = defaultVertex;
 
 
-},{}],126:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), settings = require("@pixi/settings");
 let CONTEXT_UID_COUNTER = 0;
@@ -13883,7 +10857,7 @@ extensions.extensions.add(ContextSystem);
 exports.ContextSystem = ContextSystem;
 
 
-},{"@pixi/constants":110,"@pixi/extensions":240,"@pixi/settings":330}],127:[function(require,module,exports){
+},{"@pixi/constants":107,"@pixi/extensions":237,"@pixi/settings":327}],124:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), Program = require("../shader/Program.js"), Shader = require("../shader/Shader.js"), State = require("../state/State.js"), defaultFilter$1 = require("./defaultFilter.frag.js"), defaultFilter = require("./defaultFilter.vert.js");
 const _Filter = class _Filter2 extends Shader.Shader {
@@ -13960,7 +10934,7 @@ let Filter = _Filter;
 exports.Filter = Filter;
 
 
-},{"../shader/Program.js":167,"../shader/Shader.js":168,"../state/State.js":191,"./defaultFilter.frag.js":131,"./defaultFilter.vert.js":132,"@pixi/constants":110}],128:[function(require,module,exports){
+},{"../shader/Program.js":164,"../shader/Shader.js":165,"../state/State.js":188,"./defaultFilter.frag.js":128,"./defaultFilter.vert.js":129,"@pixi/constants":107}],125:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), math = require("@pixi/math");
 class FilterState {
@@ -13975,7 +10949,7 @@ class FilterState {
 exports.FilterState = FilterState;
 
 
-},{"@pixi/constants":110,"@pixi/math":290}],129:[function(require,module,exports){
+},{"@pixi/constants":107,"@pixi/math":287}],126:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), math = require("@pixi/math"), RenderTexturePool = require("../renderTexture/RenderTexturePool.js"), UniformGroup = require("../shader/UniformGroup.js"), Quad = require("../utils/Quad.js"), QuadUv = require("../utils/QuadUv.js"), FilterState = require("./FilterState.js");
 const tempPoints = [new math.Point(), new math.Point(), new math.Point(), new math.Point()], tempMatrix = new math.Matrix();
@@ -14210,11 +11184,11 @@ extensions.extensions.add(FilterSystem);
 exports.FilterSystem = FilterSystem;
 
 
-},{"../renderTexture/RenderTexturePool.js":163,"../shader/UniformGroup.js":170,"../utils/Quad.js":222,"../utils/QuadUv.js":223,"./FilterState.js":128,"@pixi/constants":110,"@pixi/extensions":240,"@pixi/math":290}],130:[function(require,module,exports){
+},{"../renderTexture/RenderTexturePool.js":160,"../shader/UniformGroup.js":167,"../utils/Quad.js":219,"../utils/QuadUv.js":220,"./FilterState.js":125,"@pixi/constants":107,"@pixi/extensions":237,"@pixi/math":287}],127:[function(require,module,exports){
 "use strict";
 
 
-},{}],131:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var defaultFragment = `varying vec2 vTextureCoord;
@@ -14228,7 +11202,7 @@ void main(void){
 exports.default = defaultFragment;
 
 
-},{}],132:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var defaultVertex = `attribute vec2 aVertexPosition;
@@ -14261,7 +11235,7 @@ void main(void)
 exports.default = defaultVertex;
 
 
-},{}],133:[function(require,module,exports){
+},{}],130:[function(require,module,exports){
 "use strict";
 var math = require("@pixi/math"), TextureMatrix = require("../../textures/TextureMatrix.js"), Filter = require("../Filter.js"), spriteMaskFilter$1 = require("./spriteMaskFilter.frag.js"), spriteMaskFilter = require("./spriteMaskFilter.vert.js");
 class SpriteMaskFilter extends Filter.Filter {
@@ -14295,7 +11269,7 @@ class SpriteMaskFilter extends Filter.Filter {
 exports.SpriteMaskFilter = SpriteMaskFilter;
 
 
-},{"../../textures/TextureMatrix.js":201,"../Filter.js":127,"./spriteMaskFilter.frag.js":134,"./spriteMaskFilter.vert.js":135,"@pixi/math":290}],134:[function(require,module,exports){
+},{"../../textures/TextureMatrix.js":198,"../Filter.js":124,"./spriteMaskFilter.frag.js":131,"./spriteMaskFilter.vert.js":132,"@pixi/math":287}],131:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragment = `varying vec2 vMaskCoord;
@@ -14327,7 +11301,7 @@ void main(void)
 exports.default = fragment;
 
 
-},{}],135:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var vertex = `attribute vec2 aVertexPosition;
@@ -14350,7 +11324,7 @@ void main(void)
 exports.default = vertex;
 
 
-},{}],136:[function(require,module,exports){
+},{}],133:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var $defaultVertex = `attribute vec2 aVertexPosition;
@@ -14368,7 +11342,7 @@ void main(void)
 exports.default = $defaultVertex;
 
 
-},{}],137:[function(require,module,exports){
+},{}],134:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var $defaultFilterVertex = `attribute vec2 aVertexPosition;
@@ -14401,7 +11375,7 @@ void main(void)
 exports.default = $defaultFilterVertex;
 
 
-},{}],138:[function(require,module,exports){
+},{}],135:[function(require,module,exports){
 "use strict";
 var _default = require("./default.vert.js"), defaultFilter = require("./defaultFilter.vert.js");
 const defaultVertex = _default.default, defaultFilterVertex = defaultFilter.default;
@@ -14409,7 +11383,7 @@ exports.defaultFilterVertex = defaultFilterVertex;
 exports.defaultVertex = defaultVertex;
 
 
-},{"./default.vert.js":136,"./defaultFilter.vert.js":137}],139:[function(require,module,exports){
+},{"./default.vert.js":133,"./defaultFilter.vert.js":134}],136:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), runner = require("@pixi/runner"), BaseTexture = require("../textures/BaseTexture.js");
 class Framebuffer {
@@ -14498,7 +11472,7 @@ class Framebuffer {
 exports.Framebuffer = Framebuffer;
 
 
-},{"../textures/BaseTexture.js":197,"@pixi/constants":110,"@pixi/runner":326}],140:[function(require,module,exports){
+},{"../textures/BaseTexture.js":194,"@pixi/constants":107,"@pixi/runner":323}],137:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), math = require("@pixi/math"), settings = require("@pixi/settings"), Framebuffer = require("./Framebuffer.js"), GLFramebuffer = require("./GLFramebuffer.js");
 const tempRectangle = new math.Rectangle();
@@ -14798,7 +11772,7 @@ extensions.extensions.add(FramebufferSystem);
 exports.FramebufferSystem = FramebufferSystem;
 
 
-},{"./Framebuffer.js":139,"./GLFramebuffer.js":141,"@pixi/constants":110,"@pixi/extensions":240,"@pixi/math":290,"@pixi/settings":330}],141:[function(require,module,exports){
+},{"./Framebuffer.js":136,"./GLFramebuffer.js":138,"@pixi/constants":107,"@pixi/extensions":237,"@pixi/math":287,"@pixi/settings":327}],138:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 class GLFramebuffer {
@@ -14809,7 +11783,7 @@ class GLFramebuffer {
 exports.GLFramebuffer = GLFramebuffer;
 
 
-},{"@pixi/constants":110}],142:[function(require,module,exports){
+},{"@pixi/constants":107}],139:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions");
 class MultisampleSystem {
@@ -14838,7 +11812,7 @@ extensions.extensions.add(MultisampleSystem);
 exports.MultisampleSystem = MultisampleSystem;
 
 
-},{"@pixi/constants":110,"@pixi/extensions":240}],143:[function(require,module,exports){
+},{"@pixi/constants":107,"@pixi/extensions":237}],140:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 class Attribute {
@@ -14875,7 +11849,7 @@ class Attribute {
 exports.Attribute = Attribute;
 
 
-},{"@pixi/constants":110}],144:[function(require,module,exports){
+},{"@pixi/constants":107}],141:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), runner = require("@pixi/runner");
 let UID = 0;
@@ -14930,7 +11904,7 @@ class Buffer {
 exports.Buffer = Buffer;
 
 
-},{"@pixi/constants":110,"@pixi/runner":326}],145:[function(require,module,exports){
+},{"@pixi/constants":107,"@pixi/runner":323}],142:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), GLBuffer = require("./GLBuffer.js");
 class BufferSystem {
@@ -15042,7 +12016,7 @@ extensions.extensions.add(BufferSystem);
 exports.BufferSystem = BufferSystem;
 
 
-},{"./GLBuffer.js":146,"@pixi/extensions":240}],146:[function(require,module,exports){
+},{"./GLBuffer.js":143,"@pixi/extensions":237}],143:[function(require,module,exports){
 "use strict";
 class GLBuffer {
   constructor(buffer) {
@@ -15052,7 +12026,7 @@ class GLBuffer {
 exports.GLBuffer = GLBuffer;
 
 
-},{}],147:[function(require,module,exports){
+},{}],144:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), runner = require("@pixi/runner"), utils = require("@pixi/utils"), Attribute = require("./Attribute.js"), Buffer = require("./Buffer.js"), interleaveTypedArrays = require("./utils/interleaveTypedArrays.js");
 const byteSizeMap = { 5126: 4, 5123: 2, 5121: 1 };
@@ -15235,7 +12209,7 @@ class Geometry {
 exports.Geometry = Geometry;
 
 
-},{"./Attribute.js":143,"./Buffer.js":144,"./utils/interleaveTypedArrays.js":150,"@pixi/constants":110,"@pixi/runner":326,"@pixi/utils":393}],148:[function(require,module,exports){
+},{"./Attribute.js":140,"./Buffer.js":141,"./utils/interleaveTypedArrays.js":147,"@pixi/constants":107,"@pixi/runner":323,"@pixi/utils":390}],145:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), settings = require("@pixi/settings");
 const byteSizeMap = { 5126: 4, 5123: 2, 5121: 1 };
@@ -15436,7 +12410,7 @@ extensions.extensions.add(GeometrySystem);
 exports.GeometrySystem = GeometrySystem;
 
 
-},{"@pixi/constants":110,"@pixi/extensions":240,"@pixi/settings":330}],149:[function(require,module,exports){
+},{"@pixi/constants":107,"@pixi/extensions":237,"@pixi/settings":327}],146:[function(require,module,exports){
 "use strict";
 class ViewableBuffer {
   constructor(sizeOrBuffer) {
@@ -15495,7 +12469,7 @@ class ViewableBuffer {
 exports.ViewableBuffer = ViewableBuffer;
 
 
-},{}],150:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 "use strict";
 var utils = require("@pixi/utils");
 const map = {
@@ -15525,7 +12499,7 @@ function interleaveTypedArrays(arrays, sizes) {
 exports.interleaveTypedArrays = interleaveTypedArrays;
 
 
-},{"@pixi/utils":393}],151:[function(require,module,exports){
+},{"@pixi/utils":390}],148:[function(require,module,exports){
 "use strict";
 require("./settings.js");
 var color = require("@pixi/color"), constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), math = require("@pixi/math"), runner = require("@pixi/runner"), settings = require("@pixi/settings"), ticker = require("@pixi/ticker"), utils$1 = require("@pixi/utils"), autoDetectRenderer = require("./autoDetectRenderer.js"), BackgroundSystem = require("./background/BackgroundSystem.js"), BatchDrawCall = require("./batch/BatchDrawCall.js"), BatchGeometry = require("./batch/BatchGeometry.js"), BatchRenderer = require("./batch/BatchRenderer.js"), BatchShaderGenerator = require("./batch/BatchShaderGenerator.js"), BatchSystem = require("./batch/BatchSystem.js"), BatchTextureArray = require("./batch/BatchTextureArray.js"), ObjectRenderer = require("./batch/ObjectRenderer.js"), ContextSystem = require("./context/ContextSystem.js"), Filter = require("./filters/Filter.js"), FilterState = require("./filters/FilterState.js"), FilterSystem = require("./filters/FilterSystem.js");
@@ -15696,7 +12670,7 @@ Object.keys(ticker).forEach(function(k) {
 });
 
 
-},{"./IRenderer.js":111,"./Renderer.js":112,"./autoDetectRenderer.js":113,"./background/BackgroundSystem.js":114,"./batch/BatchDrawCall.js":115,"./batch/BatchGeometry.js":116,"./batch/BatchRenderer.js":117,"./batch/BatchShaderGenerator.js":118,"./batch/BatchSystem.js":119,"./batch/BatchTextureArray.js":120,"./batch/ObjectRenderer.js":121,"./context/ContextSystem.js":126,"./filters/Filter.js":127,"./filters/FilterState.js":128,"./filters/FilterSystem.js":129,"./filters/IFilterTarget.js":130,"./filters/spriteMask/SpriteMaskFilter.js":133,"./fragments/index.js":138,"./framebuffer/Framebuffer.js":139,"./framebuffer/FramebufferSystem.js":140,"./framebuffer/GLFramebuffer.js":141,"./framebuffer/MultisampleSystem.js":142,"./geometry/Attribute.js":143,"./geometry/Buffer.js":144,"./geometry/BufferSystem.js":145,"./geometry/Geometry.js":147,"./geometry/GeometrySystem.js":148,"./geometry/ViewableBuffer.js":149,"./mask/MaskData.js":153,"./mask/MaskSystem.js":154,"./mask/ScissorSystem.js":155,"./mask/StencilSystem.js":156,"./plugin/PluginSystem.js":157,"./projection/ProjectionSystem.js":158,"./render/ObjectRendererSystem.js":159,"./renderTexture/BaseRenderTexture.js":160,"./renderTexture/GenerateTextureSystem.js":161,"./renderTexture/RenderTexture.js":162,"./renderTexture/RenderTexturePool.js":163,"./renderTexture/RenderTextureSystem.js":164,"./settings.js":165,"./shader/GLProgram.js":166,"./shader/Program.js":167,"./shader/Shader.js":168,"./shader/ShaderSystem.js":169,"./shader/UniformGroup.js":170,"./shader/utils/checkMaxIfStatementsInShader.js":173,"./shader/utils/generateProgram.js":176,"./shader/utils/generateUniformBufferSync.js":177,"./shader/utils/getTestContext.js":181,"./shader/utils/uniformParsers.js":188,"./shader/utils/unsafeEvalSupported.js":189,"./startup/StartupSystem.js":190,"./state/State.js":191,"./state/StateSystem.js":192,"./system/ISystem.js":194,"./system/SystemManager.js":195,"./systems.js":196,"./textures/BaseTexture.js":197,"./textures/GLTexture.js":198,"./textures/Texture.js":199,"./textures/TextureGCSystem.js":200,"./textures/TextureMatrix.js":201,"./textures/TextureSystem.js":202,"./textures/TextureUvs.js":203,"./textures/resources/AbstractMultiResource.js":204,"./textures/resources/ArrayResource.js":205,"./textures/resources/BaseImageResource.js":206,"./textures/resources/BufferResource.js":207,"./textures/resources/CanvasResource.js":208,"./textures/resources/CubeResource.js":209,"./textures/resources/ImageBitmapResource.js":210,"./textures/resources/ImageResource.js":211,"./textures/resources/Resource.js":212,"./textures/resources/SVGResource.js":213,"./textures/resources/VideoResource.js":215,"./textures/resources/autoDetectResource.js":216,"./textures/resources/index.js":217,"./transformFeedback/TransformFeedback.js":220,"./transformFeedback/TransformFeedbackSystem.js":221,"./utils/Quad.js":222,"./utils/QuadUv.js":223,"./view/ViewSystem.js":224,"@pixi/color":93,"@pixi/constants":110,"@pixi/extensions":240,"@pixi/math":290,"@pixi/runner":326,"@pixi/settings":330,"@pixi/ticker":378,"@pixi/utils":393}],152:[function(require,module,exports){
+},{"./IRenderer.js":108,"./Renderer.js":109,"./autoDetectRenderer.js":110,"./background/BackgroundSystem.js":111,"./batch/BatchDrawCall.js":112,"./batch/BatchGeometry.js":113,"./batch/BatchRenderer.js":114,"./batch/BatchShaderGenerator.js":115,"./batch/BatchSystem.js":116,"./batch/BatchTextureArray.js":117,"./batch/ObjectRenderer.js":118,"./context/ContextSystem.js":123,"./filters/Filter.js":124,"./filters/FilterState.js":125,"./filters/FilterSystem.js":126,"./filters/IFilterTarget.js":127,"./filters/spriteMask/SpriteMaskFilter.js":130,"./fragments/index.js":135,"./framebuffer/Framebuffer.js":136,"./framebuffer/FramebufferSystem.js":137,"./framebuffer/GLFramebuffer.js":138,"./framebuffer/MultisampleSystem.js":139,"./geometry/Attribute.js":140,"./geometry/Buffer.js":141,"./geometry/BufferSystem.js":142,"./geometry/Geometry.js":144,"./geometry/GeometrySystem.js":145,"./geometry/ViewableBuffer.js":146,"./mask/MaskData.js":150,"./mask/MaskSystem.js":151,"./mask/ScissorSystem.js":152,"./mask/StencilSystem.js":153,"./plugin/PluginSystem.js":154,"./projection/ProjectionSystem.js":155,"./render/ObjectRendererSystem.js":156,"./renderTexture/BaseRenderTexture.js":157,"./renderTexture/GenerateTextureSystem.js":158,"./renderTexture/RenderTexture.js":159,"./renderTexture/RenderTexturePool.js":160,"./renderTexture/RenderTextureSystem.js":161,"./settings.js":162,"./shader/GLProgram.js":163,"./shader/Program.js":164,"./shader/Shader.js":165,"./shader/ShaderSystem.js":166,"./shader/UniformGroup.js":167,"./shader/utils/checkMaxIfStatementsInShader.js":170,"./shader/utils/generateProgram.js":173,"./shader/utils/generateUniformBufferSync.js":174,"./shader/utils/getTestContext.js":178,"./shader/utils/uniformParsers.js":185,"./shader/utils/unsafeEvalSupported.js":186,"./startup/StartupSystem.js":187,"./state/State.js":188,"./state/StateSystem.js":189,"./system/ISystem.js":191,"./system/SystemManager.js":192,"./systems.js":193,"./textures/BaseTexture.js":194,"./textures/GLTexture.js":195,"./textures/Texture.js":196,"./textures/TextureGCSystem.js":197,"./textures/TextureMatrix.js":198,"./textures/TextureSystem.js":199,"./textures/TextureUvs.js":200,"./textures/resources/AbstractMultiResource.js":201,"./textures/resources/ArrayResource.js":202,"./textures/resources/BaseImageResource.js":203,"./textures/resources/BufferResource.js":204,"./textures/resources/CanvasResource.js":205,"./textures/resources/CubeResource.js":206,"./textures/resources/ImageBitmapResource.js":207,"./textures/resources/ImageResource.js":208,"./textures/resources/Resource.js":209,"./textures/resources/SVGResource.js":210,"./textures/resources/VideoResource.js":212,"./textures/resources/autoDetectResource.js":213,"./textures/resources/index.js":214,"./transformFeedback/TransformFeedback.js":217,"./transformFeedback/TransformFeedbackSystem.js":218,"./utils/Quad.js":219,"./utils/QuadUv.js":220,"./view/ViewSystem.js":221,"@pixi/color":90,"@pixi/constants":107,"@pixi/extensions":237,"@pixi/math":287,"@pixi/runner":323,"@pixi/settings":327,"@pixi/ticker":375,"@pixi/utils":390}],149:[function(require,module,exports){
 "use strict";
 class AbstractMaskSystem {
   /**
@@ -15733,7 +12707,7 @@ class AbstractMaskSystem {
 exports.AbstractMaskSystem = AbstractMaskSystem;
 
 
-},{}],153:[function(require,module,exports){
+},{}],150:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), Filter = require("../filters/Filter.js");
 class MaskData {
@@ -15770,7 +12744,7 @@ class MaskData {
 exports.MaskData = MaskData;
 
 
-},{"../filters/Filter.js":127,"@pixi/constants":110}],154:[function(require,module,exports){
+},{"../filters/Filter.js":124,"@pixi/constants":107}],151:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), SpriteMaskFilter = require("../filters/spriteMask/SpriteMaskFilter.js"), MaskData = require("./MaskData.js");
 class MaskSystem {
@@ -15916,7 +12890,7 @@ extensions.extensions.add(MaskSystem);
 exports.MaskSystem = MaskSystem;
 
 
-},{"../filters/spriteMask/SpriteMaskFilter.js":133,"./MaskData.js":153,"@pixi/constants":110,"@pixi/extensions":240}],155:[function(require,module,exports){
+},{"../filters/spriteMask/SpriteMaskFilter.js":130,"./MaskData.js":150,"@pixi/constants":107,"@pixi/extensions":237}],152:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), math = require("@pixi/math"), settings = require("@pixi/settings"), AbstractMaskSystem = require("./AbstractMaskSystem.js");
 const tempMatrix = new math.Matrix(), rectPool = [], _ScissorSystem = class _ScissorSystem2 extends AbstractMaskSystem.AbstractMaskSystem {
@@ -16012,7 +12986,7 @@ extensions.extensions.add(ScissorSystem);
 exports.ScissorSystem = ScissorSystem;
 
 
-},{"./AbstractMaskSystem.js":152,"@pixi/extensions":240,"@pixi/math":290,"@pixi/settings":330}],156:[function(require,module,exports){
+},{"./AbstractMaskSystem.js":149,"@pixi/extensions":237,"@pixi/math":287,"@pixi/settings":327}],153:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), settings = require("@pixi/settings"), AbstractMaskSystem = require("./AbstractMaskSystem.js");
 class StencilSystem extends AbstractMaskSystem.AbstractMaskSystem {
@@ -16076,7 +13050,7 @@ extensions.extensions.add(StencilSystem);
 exports.StencilSystem = StencilSystem;
 
 
-},{"./AbstractMaskSystem.js":152,"@pixi/extensions":240,"@pixi/settings":330}],157:[function(require,module,exports){
+},{"./AbstractMaskSystem.js":149,"@pixi/extensions":237,"@pixi/settings":327}],154:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), utils = require("@pixi/utils");
 class PluginSystem {
@@ -16127,7 +13101,7 @@ extensions.extensions.add(PluginSystem);
 exports.PluginSystem = PluginSystem;
 
 
-},{"@pixi/extensions":240,"@pixi/utils":393}],158:[function(require,module,exports){
+},{"@pixi/extensions":237,"@pixi/utils":390}],155:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), math = require("@pixi/math");
 class ProjectionSystem {
@@ -16187,7 +13161,7 @@ extensions.extensions.add(ProjectionSystem);
 exports.ProjectionSystem = ProjectionSystem;
 
 
-},{"@pixi/extensions":240,"@pixi/math":290}],159:[function(require,module,exports){
+},{"@pixi/extensions":237,"@pixi/math":287}],156:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions");
 class ObjectRendererSystem {
@@ -16223,7 +13197,7 @@ extensions.extensions.add(ObjectRendererSystem);
 exports.ObjectRendererSystem = ObjectRendererSystem;
 
 
-},{"@pixi/extensions":240}],160:[function(require,module,exports){
+},{"@pixi/extensions":237}],157:[function(require,module,exports){
 "use strict";
 var color = require("@pixi/color"), constants = require("@pixi/constants"), Framebuffer = require("../framebuffer/Framebuffer.js"), BaseTexture = require("../textures/BaseTexture.js");
 class BaseRenderTexture extends BaseTexture.BaseTexture {
@@ -16294,7 +13268,7 @@ class BaseRenderTexture extends BaseTexture.BaseTexture {
 exports.BaseRenderTexture = BaseRenderTexture;
 
 
-},{"../framebuffer/Framebuffer.js":139,"../textures/BaseTexture.js":197,"@pixi/color":93,"@pixi/constants":110}],161:[function(require,module,exports){
+},{"../framebuffer/Framebuffer.js":136,"../textures/BaseTexture.js":194,"@pixi/color":90,"@pixi/constants":107}],158:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), math = require("@pixi/math"), RenderTexture = require("./RenderTexture.js");
 const tempTransform = new math.Transform(), tempRect = new math.Rectangle();
@@ -16340,7 +13314,7 @@ extensions.extensions.add(GenerateTextureSystem);
 exports.GenerateTextureSystem = GenerateTextureSystem;
 
 
-},{"./RenderTexture.js":162,"@pixi/extensions":240,"@pixi/math":290}],162:[function(require,module,exports){
+},{"./RenderTexture.js":159,"@pixi/extensions":237,"@pixi/math":287}],159:[function(require,module,exports){
 "use strict";
 var Texture = require("../textures/Texture.js"), BaseRenderTexture = require("./BaseRenderTexture.js");
 class RenderTexture extends Texture.Texture {
@@ -16405,7 +13379,7 @@ class RenderTexture extends Texture.Texture {
 exports.RenderTexture = RenderTexture;
 
 
-},{"../textures/Texture.js":199,"./BaseRenderTexture.js":160}],163:[function(require,module,exports){
+},{"../textures/Texture.js":196,"./BaseRenderTexture.js":157}],160:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), utils = require("@pixi/utils"), BaseRenderTexture = require("./BaseRenderTexture.js"), RenderTexture = require("./RenderTexture.js");
 class RenderTexturePool {
@@ -16519,7 +13493,7 @@ RenderTexturePool.SCREEN_KEY = -1;
 exports.RenderTexturePool = RenderTexturePool;
 
 
-},{"./BaseRenderTexture.js":160,"./RenderTexture.js":162,"@pixi/constants":110,"@pixi/utils":393}],164:[function(require,module,exports){
+},{"./BaseRenderTexture.js":157,"./RenderTexture.js":159,"@pixi/constants":107,"@pixi/utils":390}],161:[function(require,module,exports){
 "use strict";
 var color = require("@pixi/color"), extensions = require("@pixi/extensions"), math = require("@pixi/math");
 const tempRect = new math.Rectangle(), tempRect2 = new math.Rectangle();
@@ -16583,7 +13557,7 @@ extensions.extensions.add(RenderTextureSystem);
 exports.RenderTextureSystem = RenderTextureSystem;
 
 
-},{"@pixi/color":93,"@pixi/extensions":240,"@pixi/math":290}],165:[function(require,module,exports){
+},{"@pixi/color":90,"@pixi/extensions":237,"@pixi/math":287}],162:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), settings = require("@pixi/settings"), utils = require("@pixi/utils"), BatchRenderer = require("./batch/BatchRenderer.js"), Filter = require("./filters/Filter.js"), Program = require("./shader/Program.js");
 require("./systems.js");
@@ -16840,7 +13814,7 @@ Object.defineProperties(settings.settings, {
 });
 
 
-},{"./background/BackgroundSystem.js":114,"./batch/BatchRenderer.js":117,"./context/ContextSystem.js":126,"./filters/Filter.js":127,"./shader/Program.js":167,"./startup/StartupSystem.js":190,"./systems.js":196,"./textures/BaseTexture.js":197,"./textures/TextureGCSystem.js":200,"./view/ViewSystem.js":224,"@pixi/constants":110,"@pixi/settings":330,"@pixi/utils":393}],166:[function(require,module,exports){
+},{"./background/BackgroundSystem.js":111,"./batch/BatchRenderer.js":114,"./context/ContextSystem.js":123,"./filters/Filter.js":124,"./shader/Program.js":164,"./startup/StartupSystem.js":187,"./systems.js":193,"./textures/BaseTexture.js":194,"./textures/TextureGCSystem.js":197,"./view/ViewSystem.js":221,"@pixi/constants":107,"@pixi/settings":327,"@pixi/utils":390}],163:[function(require,module,exports){
 "use strict";
 class IGLUniformData {
 }
@@ -16862,7 +13836,7 @@ exports.GLProgram = GLProgram;
 exports.IGLUniformData = IGLUniformData;
 
 
-},{}],167:[function(require,module,exports){
+},{}],164:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), utils = require("@pixi/utils"), defaultProgram$1 = require("./defaultProgram.frag.js"), defaultProgram = require("./defaultProgram.vert.js");
 require("./utils/index.js");
@@ -16929,7 +13903,7 @@ let Program = _Program;
 exports.Program = Program;
 
 
-},{"./defaultProgram.frag.js":171,"./defaultProgram.vert.js":172,"./utils/getMaxFragmentPrecision.js":180,"./utils/index.js":183,"./utils/setPrecision.js":187,"@pixi/constants":110,"@pixi/utils":393}],168:[function(require,module,exports){
+},{"./defaultProgram.frag.js":168,"./defaultProgram.vert.js":169,"./utils/getMaxFragmentPrecision.js":177,"./utils/index.js":180,"./utils/setPrecision.js":184,"@pixi/constants":107,"@pixi/utils":390}],165:[function(require,module,exports){
 "use strict";
 var runner = require("@pixi/runner"), Program = require("./Program.js"), UniformGroup = require("./UniformGroup.js");
 class Shader {
@@ -16976,7 +13950,7 @@ class Shader {
 exports.Shader = Shader;
 
 
-},{"./Program.js":167,"./UniformGroup.js":170,"@pixi/runner":326}],169:[function(require,module,exports){
+},{"./Program.js":164,"./UniformGroup.js":167,"@pixi/runner":323}],166:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions");
 require("./utils/index.js");
@@ -17140,7 +14114,7 @@ extensions.extensions.add(ShaderSystem);
 exports.ShaderSystem = ShaderSystem;
 
 
-},{"./utils/generateProgram.js":176,"./utils/generateUniformBufferSync.js":177,"./utils/generateUniformsSync.js":178,"./utils/index.js":183,"./utils/unsafeEvalSupported.js":189,"@pixi/extensions":240}],170:[function(require,module,exports){
+},{"./utils/generateProgram.js":173,"./utils/generateUniformBufferSync.js":174,"./utils/generateUniformsSync.js":175,"./utils/index.js":180,"./utils/unsafeEvalSupported.js":186,"@pixi/extensions":237}],167:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), Buffer = require("../geometry/Buffer.js");
 let UID = 0;
@@ -17177,7 +14151,7 @@ class UniformGroup {
 exports.UniformGroup = UniformGroup;
 
 
-},{"../geometry/Buffer.js":144,"@pixi/constants":110}],171:[function(require,module,exports){
+},{"../geometry/Buffer.js":141,"@pixi/constants":107}],168:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var defaultFragment = `varying vec2 vTextureCoord;
@@ -17190,7 +14164,7 @@ void main(void){
 exports.default = defaultFragment;
 
 
-},{}],172:[function(require,module,exports){
+},{}],169:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var defaultVertex = `attribute vec2 aVertexPosition;
@@ -17208,7 +14182,7 @@ void main(void){
 exports.default = defaultVertex;
 
 
-},{}],173:[function(require,module,exports){
+},{}],170:[function(require,module,exports){
 "use strict";
 const fragTemplate = [
   "precision mediump float;",
@@ -17242,7 +14216,7 @@ function checkMaxIfStatementsInShader(maxIfs, gl) {
 exports.checkMaxIfStatementsInShader = checkMaxIfStatementsInShader;
 
 
-},{}],174:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 "use strict";
 function compileShader(gl, type, src) {
   const shader = gl.createShader(type);
@@ -17251,7 +14225,7 @@ function compileShader(gl, type, src) {
 exports.compileShader = compileShader;
 
 
-},{}],175:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 "use strict";
 function booleanArray(size) {
   const array = new Array(size);
@@ -17338,7 +14312,7 @@ function defaultValue(type, size) {
 exports.defaultValue = defaultValue;
 
 
-},{}],176:[function(require,module,exports){
+},{}],173:[function(require,module,exports){
 "use strict";
 var GLProgram = require("../GLProgram.js"), compileShader = require("./compileShader.js"), defaultValue = require("./defaultValue.js"), getAttributeData = require("./getAttributeData.js"), getUniformData = require("./getUniformData.js"), logProgramError = require("./logProgramError.js");
 function generateProgram(gl, program) {
@@ -17370,7 +14344,7 @@ function generateProgram(gl, program) {
 exports.generateProgram = generateProgram;
 
 
-},{"../GLProgram.js":166,"./compileShader.js":174,"./defaultValue.js":175,"./getAttributeData.js":179,"./getUniformData.js":182,"./logProgramError.js":184}],177:[function(require,module,exports){
+},{"../GLProgram.js":163,"./compileShader.js":171,"./defaultValue.js":172,"./getAttributeData.js":176,"./getUniformData.js":179,"./logProgramError.js":181}],174:[function(require,module,exports){
 "use strict";
 require("./index.js");
 var uniformParsers = require("./uniformParsers.js"), mapSize = require("./mapSize.js");
@@ -17544,7 +14518,7 @@ exports.generateUniformBufferSync = generateUniformBufferSync;
 exports.getUBOData = getUBOData;
 
 
-},{"./index.js":183,"./mapSize.js":185,"./uniformParsers.js":188}],178:[function(require,module,exports){
+},{"./index.js":180,"./mapSize.js":182,"./uniformParsers.js":185}],175:[function(require,module,exports){
 "use strict";
 var uniformParsers = require("./uniformParsers.js");
 const GLSL_TO_SINGLE_SETTERS_CACHED = {
@@ -17770,7 +14744,7 @@ function generateUniformsSync(group, uniformData) {
 exports.generateUniformsSync = generateUniformsSync;
 
 
-},{"./uniformParsers.js":188}],179:[function(require,module,exports){
+},{"./uniformParsers.js":185}],176:[function(require,module,exports){
 "use strict";
 var mapSize = require("./mapSize.js"), mapType = require("./mapType.js");
 function getAttributeData(program, gl) {
@@ -17792,7 +14766,7 @@ function getAttributeData(program, gl) {
 exports.getAttributeData = getAttributeData;
 
 
-},{"./mapSize.js":185,"./mapType.js":186}],180:[function(require,module,exports){
+},{"./mapSize.js":182,"./mapType.js":183}],177:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), getTestContext = require("./getTestContext.js");
 let maxFragmentPrecision;
@@ -17810,7 +14784,7 @@ function getMaxFragmentPrecision() {
 exports.getMaxFragmentPrecision = getMaxFragmentPrecision;
 
 
-},{"./getTestContext.js":181,"@pixi/constants":110}],181:[function(require,module,exports){
+},{"./getTestContext.js":178,"@pixi/constants":107}],178:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), settings = require("@pixi/settings");
 const unknownContext = {};
@@ -17826,7 +14800,7 @@ function getTestContext() {
 exports.getTestContext = getTestContext;
 
 
-},{"@pixi/constants":110,"@pixi/settings":330}],182:[function(require,module,exports){
+},{"@pixi/constants":107,"@pixi/settings":327}],179:[function(require,module,exports){
 "use strict";
 var defaultValue = require("./defaultValue.js"), mapType = require("./mapType.js");
 function getUniformData(program, gl) {
@@ -17847,7 +14821,7 @@ function getUniformData(program, gl) {
 exports.getUniformData = getUniformData;
 
 
-},{"./defaultValue.js":175,"./mapType.js":186}],183:[function(require,module,exports){
+},{"./defaultValue.js":172,"./mapType.js":183}],180:[function(require,module,exports){
 "use strict";
 var checkMaxIfStatementsInShader = require("./checkMaxIfStatementsInShader.js"), compileShader = require("./compileShader.js"), defaultValue = require("./defaultValue.js"), generateUniformsSync = require("./generateUniformsSync.js"), getMaxFragmentPrecision = require("./getMaxFragmentPrecision.js"), getTestContext = require("./getTestContext.js"), logProgramError = require("./logProgramError.js"), mapSize = require("./mapSize.js"), mapType = require("./mapType.js"), setPrecision = require("./setPrecision.js"), uniformParsers = require("./uniformParsers.js"), unsafeEvalSupported = require("./unsafeEvalSupported.js");
 exports.checkMaxIfStatementsInShader = checkMaxIfStatementsInShader.checkMaxIfStatementsInShader;
@@ -17864,7 +14838,7 @@ exports.uniformParsers = uniformParsers.uniformParsers;
 exports.unsafeEvalSupported = unsafeEvalSupported.unsafeEvalSupported;
 
 
-},{"./checkMaxIfStatementsInShader.js":173,"./compileShader.js":174,"./defaultValue.js":175,"./generateUniformsSync.js":178,"./getMaxFragmentPrecision.js":180,"./getTestContext.js":181,"./logProgramError.js":184,"./mapSize.js":185,"./mapType.js":186,"./setPrecision.js":187,"./uniformParsers.js":188,"./unsafeEvalSupported.js":189}],184:[function(require,module,exports){
+},{"./checkMaxIfStatementsInShader.js":170,"./compileShader.js":171,"./defaultValue.js":172,"./generateUniformsSync.js":175,"./getMaxFragmentPrecision.js":177,"./getTestContext.js":178,"./logProgramError.js":181,"./mapSize.js":182,"./mapType.js":183,"./setPrecision.js":184,"./uniformParsers.js":185,"./unsafeEvalSupported.js":186}],181:[function(require,module,exports){
 "use strict";
 function logPrettyShaderError(gl, shader) {
   const shaderSrc = gl.getShaderSource(shader).split(`
@@ -17883,7 +14857,7 @@ function logProgramError(gl, program, vertexShader, fragmentShader) {
 exports.logProgramError = logProgramError;
 
 
-},{}],185:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 "use strict";
 const GLSL_TO_SIZE = {
   float: 1,
@@ -17913,7 +14887,7 @@ function mapSize(type) {
 exports.mapSize = mapSize;
 
 
-},{}],186:[function(require,module,exports){
+},{}],183:[function(require,module,exports){
 "use strict";
 let GL_TABLE = null;
 const GL_TO_GLSL_TYPES = {
@@ -17960,7 +14934,7 @@ function mapType(gl, type) {
 exports.mapType = mapType;
 
 
-},{}],187:[function(require,module,exports){
+},{}],184:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 function setPrecision(src, requestedPrecision, maxSupportedPrecision) {
@@ -17975,7 +14949,7 @@ ${src}`;
 exports.setPrecision = setPrecision;
 
 
-},{"@pixi/constants":110}],188:[function(require,module,exports){
+},{"@pixi/constants":107}],185:[function(require,module,exports){
 "use strict";
 const uniformParsers = [
   // a float cache layer
@@ -18158,7 +15132,7 @@ const uniformParsers = [
 exports.uniformParsers = uniformParsers;
 
 
-},{}],189:[function(require,module,exports){
+},{}],186:[function(require,module,exports){
 "use strict";
 let unsafeEval;
 function unsafeEvalSupported() {
@@ -18174,7 +15148,7 @@ function unsafeEvalSupported() {
 exports.unsafeEvalSupported = unsafeEvalSupported;
 
 
-},{}],190:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions");
 class StartupSystem {
@@ -18211,7 +15185,7 @@ extensions.extensions.add(StartupSystem);
 exports.StartupSystem = StartupSystem;
 
 
-},{"@pixi/extensions":240}],191:[function(require,module,exports){
+},{"@pixi/extensions":237}],188:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 const BLEND = 0, OFFSET = 1, CULLING = 2, DEPTH_TEST = 3, WINDING = 4, DEPTH_MASK = 5;
@@ -18311,7 +15285,7 @@ State.prototype.toString = function() {
 exports.State = State;
 
 
-},{"@pixi/constants":110}],192:[function(require,module,exports){
+},{"@pixi/constants":107}],189:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), State = require("./State.js"), mapWebGLBlendModesToPixi = require("./utils/mapWebGLBlendModesToPixi.js");
 const BLEND = 0, OFFSET = 1, CULLING = 2, DEPTH_TEST = 3, WINDING = 4, DEPTH_MASK = 5, _StateSystem = class _StateSystem2 {
@@ -18458,7 +15432,7 @@ extensions.extensions.add(StateSystem);
 exports.StateSystem = StateSystem;
 
 
-},{"./State.js":191,"./utils/mapWebGLBlendModesToPixi.js":193,"@pixi/constants":110,"@pixi/extensions":240}],193:[function(require,module,exports){
+},{"./State.js":188,"./utils/mapWebGLBlendModesToPixi.js":190,"@pixi/constants":107,"@pixi/extensions":237}],190:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 function mapWebGLBlendModesToPixi(gl, array = []) {
@@ -18467,11 +15441,11 @@ function mapWebGLBlendModesToPixi(gl, array = []) {
 exports.mapWebGLBlendModesToPixi = mapWebGLBlendModesToPixi;
 
 
-},{"@pixi/constants":110}],194:[function(require,module,exports){
+},{"@pixi/constants":107}],191:[function(require,module,exports){
 "use strict";
 
 
-},{}],195:[function(require,module,exports){
+},{}],192:[function(require,module,exports){
 "use strict";
 var runner = require("@pixi/runner"), utils = require("@pixi/utils");
 class SystemManager extends utils.EventEmitter {
@@ -18557,7 +15531,7 @@ class SystemManager extends utils.EventEmitter {
 exports.SystemManager = SystemManager;
 
 
-},{"@pixi/runner":326,"@pixi/utils":393}],196:[function(require,module,exports){
+},{"@pixi/runner":323,"@pixi/utils":390}],193:[function(require,module,exports){
 "use strict";
 var BackgroundSystem = require("./background/BackgroundSystem.js"), BatchSystem = require("./batch/BatchSystem.js"), ContextSystem = require("./context/ContextSystem.js"), FilterSystem = require("./filters/FilterSystem.js"), FramebufferSystem = require("./framebuffer/FramebufferSystem.js"), GeometrySystem = require("./geometry/GeometrySystem.js"), MaskSystem = require("./mask/MaskSystem.js"), ScissorSystem = require("./mask/ScissorSystem.js"), StencilSystem = require("./mask/StencilSystem.js"), PluginSystem = require("./plugin/PluginSystem.js"), ProjectionSystem = require("./projection/ProjectionSystem.js"), GenerateTextureSystem = require("./renderTexture/GenerateTextureSystem.js"), RenderTextureSystem = require("./renderTexture/RenderTextureSystem.js"), ShaderSystem = require("./shader/ShaderSystem.js"), StartupSystem = require("./startup/StartupSystem.js"), StateSystem = require("./state/StateSystem.js"), SystemManager = require("./system/SystemManager.js"), TextureGCSystem = require("./textures/TextureGCSystem.js"), TextureSystem = require("./textures/TextureSystem.js"), TransformFeedbackSystem = require("./transformFeedback/TransformFeedbackSystem.js"), ViewSystem = require("./view/ViewSystem.js");
 exports.BackgroundSystem = BackgroundSystem.BackgroundSystem;
@@ -18583,7 +15557,7 @@ exports.TransformFeedbackSystem = TransformFeedbackSystem.TransformFeedbackSyste
 exports.ViewSystem = ViewSystem.ViewSystem;
 
 
-},{"./background/BackgroundSystem.js":114,"./batch/BatchSystem.js":119,"./context/ContextSystem.js":126,"./filters/FilterSystem.js":129,"./framebuffer/FramebufferSystem.js":140,"./geometry/GeometrySystem.js":148,"./mask/MaskSystem.js":154,"./mask/ScissorSystem.js":155,"./mask/StencilSystem.js":156,"./plugin/PluginSystem.js":157,"./projection/ProjectionSystem.js":158,"./renderTexture/GenerateTextureSystem.js":161,"./renderTexture/RenderTextureSystem.js":164,"./shader/ShaderSystem.js":169,"./startup/StartupSystem.js":190,"./state/StateSystem.js":192,"./system/SystemManager.js":195,"./textures/TextureGCSystem.js":200,"./textures/TextureSystem.js":202,"./transformFeedback/TransformFeedbackSystem.js":221,"./view/ViewSystem.js":224}],197:[function(require,module,exports){
+},{"./background/BackgroundSystem.js":111,"./batch/BatchSystem.js":116,"./context/ContextSystem.js":123,"./filters/FilterSystem.js":126,"./framebuffer/FramebufferSystem.js":137,"./geometry/GeometrySystem.js":145,"./mask/MaskSystem.js":151,"./mask/ScissorSystem.js":152,"./mask/StencilSystem.js":153,"./plugin/PluginSystem.js":154,"./projection/ProjectionSystem.js":155,"./renderTexture/GenerateTextureSystem.js":158,"./renderTexture/RenderTextureSystem.js":161,"./shader/ShaderSystem.js":166,"./startup/StartupSystem.js":187,"./state/StateSystem.js":189,"./system/SystemManager.js":192,"./textures/TextureGCSystem.js":197,"./textures/TextureSystem.js":199,"./transformFeedback/TransformFeedbackSystem.js":218,"./view/ViewSystem.js":221}],194:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), settings = require("@pixi/settings"), utils = require("@pixi/utils"), autoDetectResource = require("./resources/autoDetectResource.js"), BufferResource = require("./resources/BufferResource.js"), Resource = require("./resources/Resource.js");
 const defaultBufferOptions = {
@@ -18896,7 +15870,7 @@ let BaseTexture = _BaseTexture;
 exports.BaseTexture = BaseTexture;
 
 
-},{"./resources/BufferResource.js":207,"./resources/Resource.js":212,"./resources/autoDetectResource.js":216,"@pixi/constants":110,"@pixi/settings":330,"@pixi/utils":393}],198:[function(require,module,exports){
+},{"./resources/BufferResource.js":204,"./resources/Resource.js":209,"./resources/autoDetectResource.js":213,"@pixi/constants":107,"@pixi/settings":327,"@pixi/utils":390}],195:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 class GLTexture {
@@ -18907,7 +15881,7 @@ class GLTexture {
 exports.GLTexture = GLTexture;
 
 
-},{"@pixi/constants":110}],199:[function(require,module,exports){
+},{"@pixi/constants":107}],196:[function(require,module,exports){
 "use strict";
 var math = require("@pixi/math"), settings = require("@pixi/settings"), utils = require("@pixi/utils"), BaseTexture = require("./BaseTexture.js"), ImageResource = require("./resources/ImageResource.js"), TextureUvs = require("./TextureUvs.js");
 const DEFAULT_UVS = new TextureUvs.TextureUvs();
@@ -19174,7 +16148,7 @@ class Texture extends utils.EventEmitter {
 exports.Texture = Texture;
 
 
-},{"./BaseTexture.js":197,"./TextureUvs.js":203,"./resources/ImageResource.js":211,"@pixi/math":290,"@pixi/settings":330,"@pixi/utils":393}],200:[function(require,module,exports){
+},{"./BaseTexture.js":194,"./TextureUvs.js":200,"./resources/ImageResource.js":208,"@pixi/math":287,"@pixi/settings":327,"@pixi/utils":390}],197:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions");
 const _TextureGCSystem = class _TextureGCSystem2 {
@@ -19243,7 +16217,7 @@ extensions.extensions.add(TextureGCSystem);
 exports.TextureGCSystem = TextureGCSystem;
 
 
-},{"@pixi/constants":110,"@pixi/extensions":240}],201:[function(require,module,exports){
+},{"@pixi/constants":107,"@pixi/extensions":237}],198:[function(require,module,exports){
 "use strict";
 var math = require("@pixi/math");
 const tempMat = new math.Matrix();
@@ -19305,7 +16279,7 @@ class TextureMatrix {
 exports.TextureMatrix = TextureMatrix;
 
 
-},{"@pixi/math":290}],202:[function(require,module,exports){
+},{"@pixi/math":287}],199:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), utils = require("@pixi/utils"), BaseTexture = require("./BaseTexture.js"), GLTexture = require("./GLTexture.js"), mapInternalFormatToSamplerType = require("./utils/mapInternalFormatToSamplerType.js"), mapTypeAndFormatToInternalFormat = require("./utils/mapTypeAndFormatToInternalFormat.js");
 class TextureSystem {
@@ -19474,7 +16448,7 @@ extensions.extensions.add(TextureSystem);
 exports.TextureSystem = TextureSystem;
 
 
-},{"./BaseTexture.js":197,"./GLTexture.js":198,"./utils/mapInternalFormatToSamplerType.js":218,"./utils/mapTypeAndFormatToInternalFormat.js":219,"@pixi/constants":110,"@pixi/extensions":240,"@pixi/utils":393}],203:[function(require,module,exports){
+},{"./BaseTexture.js":194,"./GLTexture.js":195,"./utils/mapInternalFormatToSamplerType.js":215,"./utils/mapTypeAndFormatToInternalFormat.js":216,"@pixi/constants":107,"@pixi/extensions":237,"@pixi/utils":390}],200:[function(require,module,exports){
 "use strict";
 var math = require("@pixi/math");
 class TextureUvs {
@@ -19504,7 +16478,7 @@ TextureUvs.prototype.toString = function() {
 exports.TextureUvs = TextureUvs;
 
 
-},{"@pixi/math":290}],204:[function(require,module,exports){
+},{"@pixi/math":287}],201:[function(require,module,exports){
 "use strict";
 var BaseTexture = require("../BaseTexture.js"), autoDetectResource = require("./autoDetectResource.js"), Resource = require("./Resource.js");
 class AbstractMultiResource extends Resource.Resource {
@@ -19589,7 +16563,7 @@ class AbstractMultiResource extends Resource.Resource {
 exports.AbstractMultiResource = AbstractMultiResource;
 
 
-},{"../BaseTexture.js":197,"./Resource.js":212,"./autoDetectResource.js":216}],205:[function(require,module,exports){
+},{"../BaseTexture.js":194,"./Resource.js":209,"./autoDetectResource.js":213}],202:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), AbstractMultiResource = require("./AbstractMultiResource.js");
 class ArrayResource extends AbstractMultiResource.AbstractMultiResource {
@@ -19672,7 +16646,7 @@ class ArrayResource extends AbstractMultiResource.AbstractMultiResource {
 exports.ArrayResource = ArrayResource;
 
 
-},{"./AbstractMultiResource.js":204,"@pixi/constants":110}],206:[function(require,module,exports){
+},{"./AbstractMultiResource.js":201,"@pixi/constants":107}],203:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), utils = require("@pixi/utils"), Resource = require("./Resource.js");
 class BaseImageResource extends Resource.Resource {
@@ -19727,7 +16701,7 @@ class BaseImageResource extends Resource.Resource {
 exports.BaseImageResource = BaseImageResource;
 
 
-},{"./Resource.js":212,"@pixi/constants":110,"@pixi/utils":393}],207:[function(require,module,exports){
+},{"./Resource.js":209,"@pixi/constants":107,"@pixi/utils":390}],204:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), Resource = require("./Resource.js");
 class BufferResource extends Resource.Resource {
@@ -19793,7 +16767,7 @@ class BufferResource extends Resource.Resource {
 exports.BufferResource = BufferResource;
 
 
-},{"./Resource.js":212,"@pixi/constants":110}],208:[function(require,module,exports){
+},{"./Resource.js":209,"@pixi/constants":107}],205:[function(require,module,exports){
 "use strict";
 var BaseImageResource = require("./BaseImageResource.js");
 class CanvasResource extends BaseImageResource.BaseImageResource {
@@ -19817,7 +16791,7 @@ class CanvasResource extends BaseImageResource.BaseImageResource {
 exports.CanvasResource = CanvasResource;
 
 
-},{"./BaseImageResource.js":206}],209:[function(require,module,exports){
+},{"./BaseImageResource.js":203}],206:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), AbstractMultiResource = require("./AbstractMultiResource.js");
 const _CubeResource = class _CubeResource2 extends AbstractMultiResource.AbstractMultiResource {
@@ -19898,7 +16872,7 @@ let CubeResource = _CubeResource;
 exports.CubeResource = CubeResource;
 
 
-},{"./AbstractMultiResource.js":204,"@pixi/constants":110}],210:[function(require,module,exports){
+},{"./AbstractMultiResource.js":201,"@pixi/constants":107}],207:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), settings = require("@pixi/settings"), BaseImageResource = require("./BaseImageResource.js");
 class ImageBitmapResource extends BaseImageResource.BaseImageResource {
@@ -19975,7 +16949,7 @@ class ImageBitmapResource extends BaseImageResource.BaseImageResource {
 exports.ImageBitmapResource = ImageBitmapResource;
 
 
-},{"./BaseImageResource.js":206,"@pixi/constants":110,"@pixi/settings":330}],211:[function(require,module,exports){
+},{"./BaseImageResource.js":203,"@pixi/constants":107,"@pixi/settings":327}],208:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), settings = require("@pixi/settings"), BaseImageResource = require("./BaseImageResource.js");
 class ImageResource extends BaseImageResource.BaseImageResource {
@@ -20081,7 +17055,7 @@ class ImageResource extends BaseImageResource.BaseImageResource {
 exports.ImageResource = ImageResource;
 
 
-},{"./BaseImageResource.js":206,"@pixi/constants":110,"@pixi/settings":330}],212:[function(require,module,exports){
+},{"./BaseImageResource.js":203,"@pixi/constants":107,"@pixi/settings":327}],209:[function(require,module,exports){
 "use strict";
 var runner = require("@pixi/runner");
 class Resource {
@@ -20181,7 +17155,7 @@ class Resource {
 exports.Resource = Resource;
 
 
-},{"@pixi/runner":326}],213:[function(require,module,exports){
+},{"@pixi/runner":323}],210:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings"), utils = require("@pixi/utils"), BaseImageResource = require("./BaseImageResource.js");
 const _SVGResource = class _SVGResource2 extends BaseImageResource.BaseImageResource {
@@ -20259,7 +17233,7 @@ let SVGResource = _SVGResource;
 exports.SVGResource = SVGResource;
 
 
-},{"./BaseImageResource.js":206,"@pixi/settings":330,"@pixi/utils":393}],214:[function(require,module,exports){
+},{"./BaseImageResource.js":203,"@pixi/settings":327,"@pixi/utils":390}],211:[function(require,module,exports){
 "use strict";
 var BaseImageResource = require("./BaseImageResource.js");
 class VideoFrameResource extends BaseImageResource.BaseImageResource {
@@ -20282,7 +17256,7 @@ class VideoFrameResource extends BaseImageResource.BaseImageResource {
 exports.VideoFrameResource = VideoFrameResource;
 
 
-},{"./BaseImageResource.js":206}],215:[function(require,module,exports){
+},{"./BaseImageResource.js":203}],212:[function(require,module,exports){
 "use strict";
 var ticker = require("@pixi/ticker"), BaseImageResource = require("./BaseImageResource.js");
 const _VideoResource = class _VideoResource2 extends BaseImageResource.BaseImageResource {
@@ -20445,7 +17419,7 @@ let VideoResource = _VideoResource;
 exports.VideoResource = VideoResource;
 
 
-},{"./BaseImageResource.js":206,"@pixi/ticker":378}],216:[function(require,module,exports){
+},{"./BaseImageResource.js":203,"@pixi/ticker":375}],213:[function(require,module,exports){
 "use strict";
 const INSTALLED = [];
 function autoDetectResource(source, options) {
@@ -20467,7 +17441,7 @@ exports.INSTALLED = INSTALLED;
 exports.autoDetectResource = autoDetectResource;
 
 
-},{}],217:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 "use strict";
 var ArrayResource = require("./ArrayResource.js"), autoDetectResource = require("./autoDetectResource.js"), BufferResource = require("./BufferResource.js"), CanvasResource = require("./CanvasResource.js"), CubeResource = require("./CubeResource.js"), ImageBitmapResource = require("./ImageBitmapResource.js"), ImageResource = require("./ImageResource.js"), SVGResource = require("./SVGResource.js"), VideoFrameResource = require("./VideoFrameResource.js"), VideoResource = require("./VideoResource.js"), BaseImageResource = require("./BaseImageResource.js"), Resource = require("./Resource.js"), AbstractMultiResource = require("./AbstractMultiResource.js");
 autoDetectResource.INSTALLED.push(
@@ -20496,7 +17470,7 @@ exports.Resource = Resource.Resource;
 exports.AbstractMultiResource = AbstractMultiResource.AbstractMultiResource;
 
 
-},{"./AbstractMultiResource.js":204,"./ArrayResource.js":205,"./BaseImageResource.js":206,"./BufferResource.js":207,"./CanvasResource.js":208,"./CubeResource.js":209,"./ImageBitmapResource.js":210,"./ImageResource.js":211,"./Resource.js":212,"./SVGResource.js":213,"./VideoFrameResource.js":214,"./VideoResource.js":215,"./autoDetectResource.js":216}],218:[function(require,module,exports){
+},{"./AbstractMultiResource.js":201,"./ArrayResource.js":202,"./BaseImageResource.js":203,"./BufferResource.js":204,"./CanvasResource.js":205,"./CubeResource.js":206,"./ImageBitmapResource.js":207,"./ImageResource.js":208,"./Resource.js":209,"./SVGResource.js":210,"./VideoFrameResource.js":211,"./VideoResource.js":212,"./autoDetectResource.js":213}],215:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 function mapInternalFormatToSamplerType(gl) {
@@ -20574,7 +17548,7 @@ function mapInternalFormatToSamplerType(gl) {
 exports.mapInternalFormatToSamplerType = mapInternalFormatToSamplerType;
 
 
-},{"@pixi/constants":110}],219:[function(require,module,exports){
+},{"@pixi/constants":107}],216:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 function mapTypeAndFormatToInternalFormat(gl) {
@@ -20689,7 +17663,7 @@ function mapTypeAndFormatToInternalFormat(gl) {
 exports.mapTypeAndFormatToInternalFormat = mapTypeAndFormatToInternalFormat;
 
 
-},{"@pixi/constants":110}],220:[function(require,module,exports){
+},{"@pixi/constants":107}],217:[function(require,module,exports){
 "use strict";
 var runner = require("@pixi/runner");
 class TransformFeedback {
@@ -20712,7 +17686,7 @@ class TransformFeedback {
 exports.TransformFeedback = TransformFeedback;
 
 
-},{"@pixi/runner":326}],221:[function(require,module,exports){
+},{"@pixi/runner":323}],218:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions");
 class TransformFeedbackSystem {
@@ -20798,7 +17772,7 @@ extensions.extensions.add(TransformFeedbackSystem);
 exports.TransformFeedbackSystem = TransformFeedbackSystem;
 
 
-},{"@pixi/extensions":240}],222:[function(require,module,exports){
+},{"@pixi/extensions":237}],219:[function(require,module,exports){
 "use strict";
 var Geometry = require("../geometry/Geometry.js");
 class Quad extends Geometry.Geometry {
@@ -20818,7 +17792,7 @@ class Quad extends Geometry.Geometry {
 exports.Quad = Quad;
 
 
-},{"../geometry/Geometry.js":147}],223:[function(require,module,exports){
+},{"../geometry/Geometry.js":144}],220:[function(require,module,exports){
 "use strict";
 var Buffer = require("../geometry/Buffer.js"), Geometry = require("../geometry/Geometry.js");
 class QuadUv extends Geometry.Geometry {
@@ -20864,7 +17838,7 @@ class QuadUv extends Geometry.Geometry {
 exports.QuadUv = QuadUv;
 
 
-},{"../geometry/Buffer.js":144,"../geometry/Geometry.js":147}],224:[function(require,module,exports){
+},{"../geometry/Buffer.js":141,"../geometry/Geometry.js":144}],221:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), math = require("@pixi/math"), settings = require("@pixi/settings");
 class ViewSystem {
@@ -20934,7 +17908,7 @@ extensions.extensions.add(ViewSystem);
 exports.ViewSystem = ViewSystem;
 
 
-},{"@pixi/extensions":240,"@pixi/math":290,"@pixi/settings":330}],225:[function(require,module,exports){
+},{"@pixi/extensions":237,"@pixi/math":287,"@pixi/settings":327}],222:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 class Bounds {
@@ -21116,7 +18090,7 @@ class Bounds {
 exports.Bounds = Bounds;
 
 
-},{"@pixi/core":151}],226:[function(require,module,exports){
+},{"@pixi/core":148}],223:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), DisplayObject = require("./DisplayObject.js");
 const tempMatrix = new core.Matrix();
@@ -21440,7 +18414,7 @@ Container.prototype.containerUpdateTransform = Container.prototype.updateTransfo
 exports.Container = Container;
 
 
-},{"./DisplayObject.js":227,"@pixi/core":151}],227:[function(require,module,exports){
+},{"./DisplayObject.js":224,"@pixi/core":148}],224:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), Bounds = require("./Bounds.js");
 class DisplayObject extends core.utils.EventEmitter {
@@ -21807,7 +18781,7 @@ exports.DisplayObject = DisplayObject;
 exports.TemporaryDisplayObject = TemporaryDisplayObject;
 
 
-},{"./Bounds.js":225,"@pixi/core":151}],228:[function(require,module,exports){
+},{"./Bounds.js":222,"@pixi/core":148}],225:[function(require,module,exports){
 "use strict";
 require("./settings.js");
 var Bounds = require("./Bounds.js"), Container = require("./Container.js"), DisplayObject = require("./DisplayObject.js");
@@ -21817,7 +18791,7 @@ exports.DisplayObject = DisplayObject.DisplayObject;
 exports.TemporaryDisplayObject = DisplayObject.TemporaryDisplayObject;
 
 
-},{"./Bounds.js":225,"./Container.js":226,"./DisplayObject.js":227,"./settings.js":229}],229:[function(require,module,exports){
+},{"./Bounds.js":222,"./Container.js":223,"./DisplayObject.js":224,"./settings.js":226}],226:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), Container = require("./Container.js");
 Object.defineProperties(core.settings, {
@@ -21847,7 +18821,7 @@ Object.defineProperty(exports, "settings", {
 });
 
 
-},{"./Container.js":226,"@pixi/core":151}],230:[function(require,module,exports){
+},{"./Container.js":223,"@pixi/core":148}],227:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), EventTicker = require("./EventTicker.js"), FederatedMouseEvent = require("./FederatedMouseEvent.js"), FederatedPointerEvent = require("./FederatedPointerEvent.js"), FederatedWheelEvent = require("./FederatedWheelEvent.js");
 const PROPAGATION_LIMIT = 2048, tempHitLocation = new core.Point(), tempLocalMapping = new core.Point();
@@ -22459,7 +19433,7 @@ class EventBoundary {
 exports.EventBoundary = EventBoundary;
 
 
-},{"./EventTicker.js":232,"./FederatedMouseEvent.js":236,"./FederatedPointerEvent.js":237,"./FederatedWheelEvent.js":238,"@pixi/core":151}],231:[function(require,module,exports){
+},{"./EventTicker.js":229,"./FederatedMouseEvent.js":233,"./FederatedPointerEvent.js":234,"./FederatedWheelEvent.js":235,"@pixi/core":148}],228:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), EventBoundary = require("./EventBoundary.js"), EventTicker = require("./EventTicker.js"), FederatedPointerEvent = require("./FederatedPointerEvent.js"), FederatedWheelEvent = require("./FederatedWheelEvent.js");
 const MOUSE_POINTER_ID = 1, TOUCH_TO_POINTER = {
@@ -22735,7 +19709,7 @@ core.extensions.add(EventSystem);
 exports.EventSystem = EventSystem;
 
 
-},{"./EventBoundary.js":230,"./EventTicker.js":232,"./FederatedPointerEvent.js":237,"./FederatedWheelEvent.js":238,"@pixi/core":151}],232:[function(require,module,exports){
+},{"./EventBoundary.js":227,"./EventTicker.js":229,"./FederatedPointerEvent.js":234,"./FederatedWheelEvent.js":235,"@pixi/core":148}],229:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 class EventsTickerClass {
@@ -22797,7 +19771,7 @@ const EventsTicker = new EventsTickerClass();
 exports.EventsTicker = EventsTicker;
 
 
-},{"@pixi/core":151}],233:[function(require,module,exports){
+},{"@pixi/core":148}],230:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 class FederatedEvent {
@@ -22880,11 +19854,11 @@ class FederatedEvent {
 exports.FederatedEvent = FederatedEvent;
 
 
-},{"@pixi/core":151}],234:[function(require,module,exports){
+},{"@pixi/core":148}],231:[function(require,module,exports){
 "use strict";
 
 
-},{}],235:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), EventSystem = require("./EventSystem.js"), FederatedEvent = require("./FederatedEvent.js");
 function convertEventModeToInteractiveMode(mode) {
@@ -23393,7 +20367,7 @@ display.DisplayObject.mixin(FederatedDisplayObject);
 exports.FederatedDisplayObject = FederatedDisplayObject;
 
 
-},{"./EventSystem.js":231,"./FederatedEvent.js":233,"@pixi/core":151,"@pixi/display":228}],236:[function(require,module,exports){
+},{"./EventSystem.js":228,"./FederatedEvent.js":230,"@pixi/core":148,"@pixi/display":225}],233:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), FederatedEvent = require("./FederatedEvent.js");
 class FederatedMouseEvent extends FederatedEvent.FederatedEvent {
@@ -23508,7 +20482,7 @@ class FederatedMouseEvent extends FederatedEvent.FederatedEvent {
 exports.FederatedMouseEvent = FederatedMouseEvent;
 
 
-},{"./FederatedEvent.js":233,"@pixi/core":151}],237:[function(require,module,exports){
+},{"./FederatedEvent.js":230,"@pixi/core":148}],234:[function(require,module,exports){
 "use strict";
 var FederatedMouseEvent = require("./FederatedMouseEvent.js");
 class FederatedPointerEvent extends FederatedMouseEvent.FederatedMouseEvent {
@@ -23527,7 +20501,7 @@ class FederatedPointerEvent extends FederatedMouseEvent.FederatedMouseEvent {
 exports.FederatedPointerEvent = FederatedPointerEvent;
 
 
-},{"./FederatedMouseEvent.js":236}],238:[function(require,module,exports){
+},{"./FederatedMouseEvent.js":233}],235:[function(require,module,exports){
 "use strict";
 var FederatedMouseEvent = require("./FederatedMouseEvent.js");
 class FederatedWheelEvent extends FederatedMouseEvent.FederatedMouseEvent {
@@ -23541,7 +20515,7 @@ FederatedWheelEvent.DOM_DELTA_PAGE = 2;
 exports.FederatedWheelEvent = FederatedWheelEvent;
 
 
-},{"./FederatedMouseEvent.js":236}],239:[function(require,module,exports){
+},{"./FederatedMouseEvent.js":233}],236:[function(require,module,exports){
 "use strict";
 var EventBoundary = require("./EventBoundary.js"), EventSystem = require("./EventSystem.js"), FederatedEvent = require("./FederatedEvent.js");
 require("./FederatedEventMap.js");
@@ -23555,7 +20529,7 @@ exports.FederatedPointerEvent = FederatedPointerEvent.FederatedPointerEvent;
 exports.FederatedWheelEvent = FederatedWheelEvent.FederatedWheelEvent;
 
 
-},{"./EventBoundary.js":230,"./EventSystem.js":231,"./FederatedEvent.js":233,"./FederatedEventMap.js":234,"./FederatedEventTarget.js":235,"./FederatedMouseEvent.js":236,"./FederatedPointerEvent.js":237,"./FederatedWheelEvent.js":238}],240:[function(require,module,exports){
+},{"./EventBoundary.js":227,"./EventSystem.js":228,"./FederatedEvent.js":230,"./FederatedEventMap.js":231,"./FederatedEventTarget.js":232,"./FederatedMouseEvent.js":233,"./FederatedPointerEvent.js":234,"./FederatedWheelEvent.js":235}],237:[function(require,module,exports){
 "use strict";
 var ExtensionType = /* @__PURE__ */ ((ExtensionType2) => (ExtensionType2.Renderer = "renderer", ExtensionType2.Application = "application", ExtensionType2.RendererSystem = "renderer-webgl-system", ExtensionType2.RendererPlugin = "renderer-webgl-plugin", ExtensionType2.CanvasRendererSystem = "renderer-canvas-system", ExtensionType2.CanvasRendererPlugin = "renderer-canvas-plugin", ExtensionType2.Asset = "asset", ExtensionType2.LoadParser = "load-parser", ExtensionType2.ResolveParser = "resolve-parser", ExtensionType2.CacheParser = "cache-parser", ExtensionType2.DetectionParser = "detection-parser", ExtensionType2))(ExtensionType || {});
 const normalizeExtension = (ext) => {
@@ -23655,7 +20629,7 @@ exports.ExtensionType = ExtensionType;
 exports.extensions = extensions;
 
 
-},{}],241:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const TEMP_RECT = new core.Rectangle(), BYTES_PER_PIXEL = 4, _Extract = class _Extract2 {
@@ -23803,13 +20777,13 @@ core.extensions.add(Extract);
 exports.Extract = Extract;
 
 
-},{"@pixi/core":151}],242:[function(require,module,exports){
+},{"@pixi/core":148}],239:[function(require,module,exports){
 "use strict";
 var Extract = require("./Extract.js");
 exports.Extract = Extract.Extract;
 
 
-},{"./Extract.js":241}],243:[function(require,module,exports){
+},{"./Extract.js":238}],240:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), alpha = require("./alpha.frag.js");
 class AlphaFilter extends core.Filter {
@@ -23833,7 +20807,7 @@ class AlphaFilter extends core.Filter {
 exports.AlphaFilter = AlphaFilter;
 
 
-},{"./alpha.frag.js":244,"@pixi/core":151}],244:[function(require,module,exports){
+},{"./alpha.frag.js":241,"@pixi/core":148}],241:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragment = `varying vec2 vTextureCoord;
@@ -23849,13 +20823,13 @@ void main(void)
 exports.default = fragment;
 
 
-},{}],245:[function(require,module,exports){
+},{}],242:[function(require,module,exports){
 "use strict";
 var AlphaFilter = require("./AlphaFilter.js");
 exports.AlphaFilter = AlphaFilter.AlphaFilter;
 
 
-},{"./AlphaFilter.js":243}],246:[function(require,module,exports){
+},{"./AlphaFilter.js":240}],243:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), BlurFilterPass = require("./BlurFilterPass.js");
 class BlurFilter extends core.Filter {
@@ -23950,7 +20924,7 @@ class BlurFilter extends core.Filter {
 exports.BlurFilter = BlurFilter;
 
 
-},{"./BlurFilterPass.js":247,"@pixi/core":151}],247:[function(require,module,exports){
+},{"./BlurFilterPass.js":244,"@pixi/core":148}],244:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), generateBlurFragSource = require("./generateBlurFragSource.js"), generateBlurVertSource = require("./generateBlurVertSource.js");
 class BlurFilterPass extends core.Filter {
@@ -24017,7 +20991,7 @@ class BlurFilterPass extends core.Filter {
 exports.BlurFilterPass = BlurFilterPass;
 
 
-},{"./generateBlurFragSource.js":248,"./generateBlurVertSource.js":249,"@pixi/core":151}],248:[function(require,module,exports){
+},{"./generateBlurFragSource.js":245,"./generateBlurVertSource.js":246,"@pixi/core":148}],245:[function(require,module,exports){
 "use strict";
 const GAUSSIAN_VALUES = {
   5: [0.153388, 0.221461, 0.250301],
@@ -24051,7 +21025,7 @@ function generateBlurFragSource(kernelSize) {
 exports.generateBlurFragSource = generateBlurFragSource;
 
 
-},{}],249:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 "use strict";
 const vertTemplate = `
     attribute vec2 aVertexPosition;
@@ -24098,14 +21072,14 @@ function generateBlurVertSource(kernelSize, x) {
 exports.generateBlurVertSource = generateBlurVertSource;
 
 
-},{}],250:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 "use strict";
 var BlurFilter = require("./BlurFilter.js"), BlurFilterPass = require("./BlurFilterPass.js");
 exports.BlurFilter = BlurFilter.BlurFilter;
 exports.BlurFilterPass = BlurFilterPass.BlurFilterPass;
 
 
-},{"./BlurFilter.js":246,"./BlurFilterPass.js":247}],251:[function(require,module,exports){
+},{"./BlurFilter.js":243,"./BlurFilterPass.js":244}],248:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), colorMatrix = require("./colorMatrix.frag.js");
 class ColorMatrixFilter extends core.Filter {
@@ -24825,7 +21799,7 @@ ColorMatrixFilter.prototype.grayscale = ColorMatrixFilter.prototype.greyscale;
 exports.ColorMatrixFilter = ColorMatrixFilter;
 
 
-},{"./colorMatrix.frag.js":252,"@pixi/core":151}],252:[function(require,module,exports){
+},{"./colorMatrix.frag.js":249,"@pixi/core":148}],249:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragment = `varying vec2 vTextureCoord;
@@ -24884,13 +21858,13 @@ void main(void)
 exports.default = fragment;
 
 
-},{}],253:[function(require,module,exports){
+},{}],250:[function(require,module,exports){
 "use strict";
 var ColorMatrixFilter = require("./ColorMatrixFilter.js");
 exports.ColorMatrixFilter = ColorMatrixFilter.ColorMatrixFilter;
 
 
-},{"./ColorMatrixFilter.js":251}],254:[function(require,module,exports){
+},{"./ColorMatrixFilter.js":248}],251:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), displacement$1 = require("./displacement.frag.js"), displacement = require("./displacement.vert.js");
 class DisplacementFilter extends core.Filter {
@@ -24930,7 +21904,7 @@ class DisplacementFilter extends core.Filter {
 exports.DisplacementFilter = DisplacementFilter;
 
 
-},{"./displacement.frag.js":255,"./displacement.vert.js":256,"@pixi/core":151}],255:[function(require,module,exports){
+},{"./displacement.frag.js":252,"./displacement.vert.js":253,"@pixi/core":148}],252:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragment = `varying vec2 vFilterCoord;
@@ -24957,7 +21931,7 @@ void main(void)
 exports.default = fragment;
 
 
-},{}],256:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var vertex = `attribute vec2 aVertexPosition;
@@ -24993,13 +21967,13 @@ void main(void)
 exports.default = vertex;
 
 
-},{}],257:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 "use strict";
 var DisplacementFilter = require("./DisplacementFilter.js");
 exports.DisplacementFilter = DisplacementFilter.DisplacementFilter;
 
 
-},{"./DisplacementFilter.js":254}],258:[function(require,module,exports){
+},{"./DisplacementFilter.js":251}],255:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), fxaa$1 = require("./fxaa.frag.js"), fxaa = require("./fxaa.vert.js");
 class FXAAFilter extends core.Filter {
@@ -25010,7 +21984,7 @@ class FXAAFilter extends core.Filter {
 exports.FXAAFilter = FXAAFilter;
 
 
-},{"./fxaa.frag.js":259,"./fxaa.vert.js":260,"@pixi/core":151}],259:[function(require,module,exports){
+},{"./fxaa.frag.js":256,"./fxaa.vert.js":257,"@pixi/core":148}],256:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragment = `varying vec2 v_rgbNW;
@@ -25138,7 +22112,7 @@ void main() {
 exports.default = fragment;
 
 
-},{}],260:[function(require,module,exports){
+},{}],257:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var vertex = `
@@ -25187,13 +22161,13 @@ void main(void) {
 exports.default = vertex;
 
 
-},{}],261:[function(require,module,exports){
+},{}],258:[function(require,module,exports){
 "use strict";
 var FXAAFilter = require("./FXAAFilter.js");
 exports.FXAAFilter = FXAAFilter.FXAAFilter;
 
 
-},{"./FXAAFilter.js":258}],262:[function(require,module,exports){
+},{"./FXAAFilter.js":255}],259:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), noise = require("./noise.frag.js");
 class NoiseFilter extends core.Filter {
@@ -25228,13 +22202,13 @@ class NoiseFilter extends core.Filter {
 exports.NoiseFilter = NoiseFilter;
 
 
-},{"./noise.frag.js":264,"@pixi/core":151}],263:[function(require,module,exports){
+},{"./noise.frag.js":261,"@pixi/core":148}],260:[function(require,module,exports){
 "use strict";
 var NoiseFilter = require("./NoiseFilter.js");
 exports.NoiseFilter = NoiseFilter.NoiseFilter;
 
 
-},{"./NoiseFilter.js":262}],264:[function(require,module,exports){
+},{"./NoiseFilter.js":259}],261:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragment = `precision highp float;
@@ -25275,7 +22249,7 @@ void main()
 exports.default = fragment;
 
 
-},{}],265:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), _const = require("./const.js"), GraphicsGeometry = require("./GraphicsGeometry.js"), FillStyle = require("./styles/FillStyle.js"), LineStyle = require("./styles/LineStyle.js");
 require("./utils/index.js");
@@ -25831,7 +22805,7 @@ let Graphics = _Graphics;
 exports.Graphics = Graphics;
 
 
-},{"./GraphicsGeometry.js":267,"./const.js":268,"./styles/FillStyle.js":270,"./styles/LineStyle.js":271,"./utils/ArcUtils.js":272,"./utils/BezierUtils.js":274,"./utils/QuadraticUtils.js":275,"./utils/index.js":281,"@pixi/core":151,"@pixi/display":228}],266:[function(require,module,exports){
+},{"./GraphicsGeometry.js":264,"./const.js":265,"./styles/FillStyle.js":267,"./styles/LineStyle.js":268,"./utils/ArcUtils.js":269,"./utils/BezierUtils.js":271,"./utils/QuadraticUtils.js":272,"./utils/index.js":278,"@pixi/core":148,"@pixi/display":225}],263:[function(require,module,exports){
 "use strict";
 class GraphicsData {
   /**
@@ -25863,7 +22837,7 @@ class GraphicsData {
 exports.GraphicsData = GraphicsData;
 
 
-},{}],267:[function(require,module,exports){
+},{}],264:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), GraphicsData = require("./GraphicsData.js"), index = require("./utils/index.js"), BatchPart = require("./utils/BatchPart.js"), buildPoly = require("./utils/buildPoly.js"), buildLine = require("./utils/buildLine.js");
 const tmpPoint = new core.Point(), _GraphicsGeometry = class _GraphicsGeometry2 extends core.BatchGeometry {
@@ -26177,7 +23151,7 @@ let GraphicsGeometry = _GraphicsGeometry;
 exports.GraphicsGeometry = GraphicsGeometry;
 
 
-},{"./GraphicsData.js":266,"./utils/BatchPart.js":273,"./utils/buildLine.js":277,"./utils/buildPoly.js":278,"./utils/index.js":281,"@pixi/core":151,"@pixi/display":228}],268:[function(require,module,exports){
+},{"./GraphicsData.js":263,"./utils/BatchPart.js":270,"./utils/buildLine.js":274,"./utils/buildPoly.js":275,"./utils/index.js":278,"@pixi/core":148,"@pixi/display":225}],265:[function(require,module,exports){
 "use strict";
 var LINE_JOIN = /* @__PURE__ */ ((LINE_JOIN2) => (LINE_JOIN2.MITER = "miter", LINE_JOIN2.BEVEL = "bevel", LINE_JOIN2.ROUND = "round", LINE_JOIN2))(LINE_JOIN || {}), LINE_CAP = /* @__PURE__ */ ((LINE_CAP2) => (LINE_CAP2.BUTT = "butt", LINE_CAP2.ROUND = "round", LINE_CAP2.SQUARE = "square", LINE_CAP2))(LINE_CAP || {});
 const curves = {
@@ -26199,7 +23173,7 @@ exports.LINE_JOIN = LINE_JOIN;
 exports.curves = curves;
 
 
-},{}],269:[function(require,module,exports){
+},{}],266:[function(require,module,exports){
 "use strict";
 var index = require("./utils/index.js"), _const = require("./const.js"), Graphics = require("./Graphics.js"), GraphicsData = require("./GraphicsData.js"), GraphicsGeometry = require("./GraphicsGeometry.js"), FillStyle = require("./styles/FillStyle.js"), LineStyle = require("./styles/LineStyle.js"), buildPoly = require("./utils/buildPoly.js"), buildCircle = require("./utils/buildCircle.js"), buildRectangle = require("./utils/buildRectangle.js"), buildRoundedRectangle = require("./utils/buildRoundedRectangle.js"), buildLine = require("./utils/buildLine.js"), ArcUtils = require("./utils/ArcUtils.js"), BezierUtils = require("./utils/BezierUtils.js"), QuadraticUtils = require("./utils/QuadraticUtils.js"), BatchPart = require("./utils/BatchPart.js");
 const graphicsUtils = {
@@ -26228,7 +23202,7 @@ exports.LineStyle = LineStyle.LineStyle;
 exports.graphicsUtils = graphicsUtils;
 
 
-},{"./Graphics.js":265,"./GraphicsData.js":266,"./GraphicsGeometry.js":267,"./const.js":268,"./styles/FillStyle.js":270,"./styles/LineStyle.js":271,"./utils/ArcUtils.js":272,"./utils/BatchPart.js":273,"./utils/BezierUtils.js":274,"./utils/QuadraticUtils.js":275,"./utils/buildCircle.js":276,"./utils/buildLine.js":277,"./utils/buildPoly.js":278,"./utils/buildRectangle.js":279,"./utils/buildRoundedRectangle.js":280,"./utils/index.js":281}],270:[function(require,module,exports){
+},{"./Graphics.js":262,"./GraphicsData.js":263,"./GraphicsGeometry.js":264,"./const.js":265,"./styles/FillStyle.js":267,"./styles/LineStyle.js":268,"./utils/ArcUtils.js":269,"./utils/BatchPart.js":270,"./utils/BezierUtils.js":271,"./utils/QuadraticUtils.js":272,"./utils/buildCircle.js":273,"./utils/buildLine.js":274,"./utils/buildPoly.js":275,"./utils/buildRectangle.js":276,"./utils/buildRoundedRectangle.js":277,"./utils/index.js":278}],267:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 class FillStyle {
@@ -26252,7 +23226,7 @@ class FillStyle {
 exports.FillStyle = FillStyle;
 
 
-},{"@pixi/core":151}],271:[function(require,module,exports){
+},{"@pixi/core":148}],268:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js"), FillStyle = require("./FillStyle.js");
 class LineStyle extends FillStyle.FillStyle {
@@ -26272,7 +23246,7 @@ class LineStyle extends FillStyle.FillStyle {
 exports.LineStyle = LineStyle;
 
 
-},{"../const.js":268,"./FillStyle.js":270}],272:[function(require,module,exports){
+},{"../const.js":265,"./FillStyle.js":267}],269:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), _const = require("../const.js");
 class ArcUtils {
@@ -26334,7 +23308,7 @@ class ArcUtils {
 exports.ArcUtils = ArcUtils;
 
 
-},{"../const.js":268,"@pixi/core":151}],273:[function(require,module,exports){
+},{"../const.js":265,"@pixi/core":148}],270:[function(require,module,exports){
 "use strict";
 class BatchPart {
   constructor() {
@@ -26364,7 +23338,7 @@ class BatchPart {
 exports.BatchPart = BatchPart;
 
 
-},{}],274:[function(require,module,exports){
+},{}],271:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js");
 class BezierUtils {
@@ -26420,7 +23394,7 @@ class BezierUtils {
 exports.BezierUtils = BezierUtils;
 
 
-},{"../const.js":268}],275:[function(require,module,exports){
+},{"../const.js":265}],272:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js");
 class QuadraticUtils {
@@ -26468,7 +23442,7 @@ class QuadraticUtils {
 exports.QuadraticUtils = QuadraticUtils;
 
 
-},{"../const.js":268}],276:[function(require,module,exports){
+},{"../const.js":265}],273:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const buildCircle = {
@@ -26540,7 +23514,7 @@ const buildCircle = {
 exports.buildCircle = buildCircle;
 
 
-},{"@pixi/core":151}],277:[function(require,module,exports){
+},{"@pixi/core":148}],274:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), _const = require("../const.js");
 function square(x, y, nx, ny, innerWeight, outerWeight, clockwise, verts) {
@@ -26839,7 +23813,7 @@ function buildLine(graphicsData, graphicsGeometry) {
 exports.buildLine = buildLine;
 
 
-},{"../const.js":268,"@pixi/core":151}],278:[function(require,module,exports){
+},{"../const.js":265,"@pixi/core":148}],275:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 function fixOrientation(points, hole = !1) {
@@ -26887,7 +23861,7 @@ const buildPoly = {
 exports.buildPoly = buildPoly;
 
 
-},{"@pixi/core":151}],279:[function(require,module,exports){
+},{"@pixi/core":148}],276:[function(require,module,exports){
 "use strict";
 const buildRectangle = {
   build(graphicsData) {
@@ -26930,7 +23904,7 @@ const buildRectangle = {
 exports.buildRectangle = buildRectangle;
 
 
-},{}],280:[function(require,module,exports){
+},{}],277:[function(require,module,exports){
 "use strict";
 var buildCircle = require("./buildCircle.js");
 const buildRoundedRectangle = {
@@ -26944,7 +23918,7 @@ const buildRoundedRectangle = {
 exports.buildRoundedRectangle = buildRoundedRectangle;
 
 
-},{"./buildCircle.js":276}],281:[function(require,module,exports){
+},{"./buildCircle.js":273}],278:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), buildCircle = require("./buildCircle.js"), buildPoly = require("./buildPoly.js"), buildRectangle = require("./buildRectangle.js"), buildRoundedRectangle = require("./buildRoundedRectangle.js"), ArcUtils = require("./ArcUtils.js"), BatchPart = require("./BatchPart.js"), BezierUtils = require("./BezierUtils.js"), buildLine = require("./buildLine.js"), QuadraticUtils = require("./QuadraticUtils.js");
 const FILL_COMMANDS = {
@@ -26968,15 +23942,15 @@ exports.DRAW_CALL_POOL = DRAW_CALL_POOL;
 exports.FILL_COMMANDS = FILL_COMMANDS;
 
 
-},{"./ArcUtils.js":272,"./BatchPart.js":273,"./BezierUtils.js":274,"./QuadraticUtils.js":275,"./buildCircle.js":276,"./buildLine.js":277,"./buildPoly.js":278,"./buildRectangle.js":279,"./buildRoundedRectangle.js":280,"@pixi/core":151}],282:[function(require,module,exports){
+},{"./ArcUtils.js":269,"./BatchPart.js":270,"./BezierUtils.js":271,"./QuadraticUtils.js":272,"./buildCircle.js":273,"./buildLine.js":274,"./buildPoly.js":275,"./buildRectangle.js":276,"./buildRoundedRectangle.js":277,"@pixi/core":148}],279:[function(require,module,exports){
 "use strict";
 
 
-},{}],283:[function(require,module,exports){
+},{}],280:[function(require,module,exports){
 "use strict";
 
 
-},{}],284:[function(require,module,exports){
+},{}],281:[function(require,module,exports){
 "use strict";
 var _const = require("./const.js"), Point = require("./Point.js");
 class Matrix {
@@ -27187,7 +24161,7 @@ Matrix.prototype.toString = function() {
 exports.Matrix = Matrix;
 
 
-},{"./Point.js":286,"./const.js":288}],285:[function(require,module,exports){
+},{"./Point.js":283,"./const.js":285}],282:[function(require,module,exports){
 "use strict";
 class ObservablePoint {
   /**
@@ -27267,7 +24241,7 @@ ObservablePoint.prototype.toString = function() {
 exports.ObservablePoint = ObservablePoint;
 
 
-},{}],286:[function(require,module,exports){
+},{}],283:[function(require,module,exports){
 "use strict";
 class Point {
   /**
@@ -27326,7 +24300,7 @@ Point.prototype.toString = function() {
 exports.Point = Point;
 
 
-},{}],287:[function(require,module,exports){
+},{}],284:[function(require,module,exports){
 "use strict";
 var Matrix = require("./Matrix.js"), ObservablePoint = require("./ObservablePoint.js");
 const _Transform = class {
@@ -27380,7 +24354,7 @@ Transform.prototype.toString = function() {
 exports.Transform = Transform;
 
 
-},{"./Matrix.js":284,"./ObservablePoint.js":285}],288:[function(require,module,exports){
+},{"./Matrix.js":281,"./ObservablePoint.js":282}],285:[function(require,module,exports){
 "use strict";
 const PI_2 = Math.PI * 2, RAD_TO_DEG = 180 / Math.PI, DEG_TO_RAD = Math.PI / 180;
 var SHAPES = /* @__PURE__ */ ((SHAPES2) => (SHAPES2[SHAPES2.POLY = 0] = "POLY", SHAPES2[SHAPES2.RECT = 1] = "RECT", SHAPES2[SHAPES2.CIRC = 2] = "CIRC", SHAPES2[SHAPES2.ELIP = 3] = "ELIP", SHAPES2[SHAPES2.RREC = 4] = "RREC", SHAPES2))(SHAPES || {});
@@ -27390,7 +24364,7 @@ exports.RAD_TO_DEG = RAD_TO_DEG;
 exports.SHAPES = SHAPES;
 
 
-},{}],289:[function(require,module,exports){
+},{}],286:[function(require,module,exports){
 "use strict";
 var Matrix = require("./Matrix.js");
 const ux = [1, 1, 0, -1, -1, -1, 0, 1, 1, 1, 0, -1, -1, -1, 0, 1], uy = [0, 1, 1, 1, 0, -1, -1, -1, 0, 1, 1, 1, 0, -1, -1, -1], vx = [0, -1, -1, -1, 0, 1, 1, 1, 0, 1, 1, 1, 0, -1, -1, -1], vy = [1, 1, 0, -1, -1, -1, 0, 1, -1, -1, 0, 1, 1, 1, 0, -1], rotationCayley = [], rotationMatrices = [], signum = Math.sign;
@@ -27591,7 +24565,7 @@ const groupD8 = {
 exports.groupD8 = groupD8;
 
 
-},{"./Matrix.js":284}],290:[function(require,module,exports){
+},{"./Matrix.js":281}],287:[function(require,module,exports){
 "use strict";
 var Circle = require("./shapes/Circle.js"), Ellipse = require("./shapes/Ellipse.js"), Polygon = require("./shapes/Polygon.js"), Rectangle = require("./shapes/Rectangle.js"), RoundedRectangle = require("./shapes/RoundedRectangle.js"), groupD8 = require("./groupD8.js");
 require("./IPoint.js");
@@ -27613,7 +24587,7 @@ exports.RAD_TO_DEG = _const.RAD_TO_DEG;
 exports.SHAPES = _const.SHAPES;
 
 
-},{"./IPoint.js":282,"./IPointData.js":283,"./Matrix.js":284,"./ObservablePoint.js":285,"./Point.js":286,"./Transform.js":287,"./const.js":288,"./groupD8.js":289,"./shapes/Circle.js":291,"./shapes/Ellipse.js":292,"./shapes/Polygon.js":293,"./shapes/Rectangle.js":294,"./shapes/RoundedRectangle.js":295}],291:[function(require,module,exports){
+},{"./IPoint.js":279,"./IPointData.js":280,"./Matrix.js":281,"./ObservablePoint.js":282,"./Point.js":283,"./Transform.js":284,"./const.js":285,"./groupD8.js":286,"./shapes/Circle.js":288,"./shapes/Ellipse.js":289,"./shapes/Polygon.js":290,"./shapes/Rectangle.js":291,"./shapes/RoundedRectangle.js":292}],288:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js"), Rectangle = require("./Rectangle.js");
 class Circle {
@@ -27659,7 +24633,7 @@ Circle.prototype.toString = function() {
 exports.Circle = Circle;
 
 
-},{"../const.js":288,"./Rectangle.js":294}],292:[function(require,module,exports){
+},{"../const.js":285,"./Rectangle.js":291}],289:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js"), Rectangle = require("./Rectangle.js");
 class Ellipse {
@@ -27705,7 +24679,7 @@ Ellipse.prototype.toString = function() {
 exports.Ellipse = Ellipse;
 
 
-},{"../const.js":288,"./Rectangle.js":294}],293:[function(require,module,exports){
+},{"../const.js":285,"./Rectangle.js":291}],290:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js");
 class Polygon {
@@ -27756,7 +24730,7 @@ Polygon.prototype.toString = function() {
 exports.Polygon = Polygon;
 
 
-},{"../const.js":288}],294:[function(require,module,exports){
+},{"../const.js":285}],291:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js"), Point = require("../Point.js");
 const tempPoints = [new Point.Point(), new Point.Point(), new Point.Point(), new Point.Point()];
@@ -27899,7 +24873,7 @@ Rectangle.prototype.toString = function() {
 exports.Rectangle = Rectangle;
 
 
-},{"../Point.js":286,"../const.js":288}],295:[function(require,module,exports){
+},{"../Point.js":283,"../const.js":285}],292:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js");
 class RoundedRectangle {
@@ -27947,7 +24921,7 @@ RoundedRectangle.prototype.toString = function() {
 exports.RoundedRectangle = RoundedRectangle;
 
 
-},{"../const.js":288}],296:[function(require,module,exports){
+},{"../const.js":285}],293:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), SimplePlane = require("./SimplePlane.js");
 const DEFAULT_BORDER_SIZE = 10;
@@ -28042,7 +25016,7 @@ class NineSlicePlane extends SimplePlane.SimplePlane {
 exports.NineSlicePlane = NineSlicePlane;
 
 
-},{"./SimplePlane.js":298,"@pixi/core":151}],297:[function(require,module,exports){
+},{"./SimplePlane.js":295,"@pixi/core":148}],294:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), mesh = require("@pixi/mesh");
 class SimpleMesh extends mesh.Mesh {
@@ -28076,7 +25050,7 @@ class SimpleMesh extends mesh.Mesh {
 exports.SimpleMesh = SimpleMesh;
 
 
-},{"@pixi/core":151,"@pixi/mesh":307}],298:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/mesh":304}],295:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), mesh = require("@pixi/mesh"), PlaneGeometry = require("./geometry/PlaneGeometry.js");
 class SimplePlane extends mesh.Mesh {
@@ -28114,7 +25088,7 @@ class SimplePlane extends mesh.Mesh {
 exports.SimplePlane = SimplePlane;
 
 
-},{"./geometry/PlaneGeometry.js":300,"@pixi/core":151,"@pixi/mesh":307}],299:[function(require,module,exports){
+},{"./geometry/PlaneGeometry.js":297,"@pixi/core":148,"@pixi/mesh":304}],296:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), mesh = require("@pixi/mesh"), RopeGeometry = require("./geometry/RopeGeometry.js");
 class SimpleRope extends mesh.Mesh {
@@ -28138,7 +25112,7 @@ class SimpleRope extends mesh.Mesh {
 exports.SimpleRope = SimpleRope;
 
 
-},{"./geometry/RopeGeometry.js":301,"@pixi/core":151,"@pixi/mesh":307}],300:[function(require,module,exports){
+},{"./geometry/RopeGeometry.js":298,"@pixi/core":148,"@pixi/mesh":304}],297:[function(require,module,exports){
 "use strict";
 var mesh = require("@pixi/mesh");
 class PlaneGeometry extends mesh.MeshGeometry {
@@ -28179,7 +25153,7 @@ class PlaneGeometry extends mesh.MeshGeometry {
 exports.PlaneGeometry = PlaneGeometry;
 
 
-},{"@pixi/mesh":307}],301:[function(require,module,exports){
+},{"@pixi/mesh":304}],298:[function(require,module,exports){
 "use strict";
 var mesh = require("@pixi/mesh");
 class RopeGeometry extends mesh.MeshGeometry {
@@ -28261,7 +25235,7 @@ class RopeGeometry extends mesh.MeshGeometry {
 exports.RopeGeometry = RopeGeometry;
 
 
-},{"@pixi/mesh":307}],302:[function(require,module,exports){
+},{"@pixi/mesh":304}],299:[function(require,module,exports){
 "use strict";
 var PlaneGeometry = require("./geometry/PlaneGeometry.js"), RopeGeometry = require("./geometry/RopeGeometry.js"), NineSlicePlane = require("./NineSlicePlane.js"), SimpleMesh = require("./SimpleMesh.js"), SimplePlane = require("./SimplePlane.js"), SimpleRope = require("./SimpleRope.js");
 exports.PlaneGeometry = PlaneGeometry.PlaneGeometry;
@@ -28272,7 +25246,7 @@ exports.SimplePlane = SimplePlane.SimplePlane;
 exports.SimpleRope = SimpleRope.SimpleRope;
 
 
-},{"./NineSlicePlane.js":296,"./SimpleMesh.js":297,"./SimplePlane.js":298,"./SimpleRope.js":299,"./geometry/PlaneGeometry.js":300,"./geometry/RopeGeometry.js":301}],303:[function(require,module,exports){
+},{"./NineSlicePlane.js":293,"./SimpleMesh.js":294,"./SimplePlane.js":295,"./SimpleRope.js":296,"./geometry/PlaneGeometry.js":297,"./geometry/RopeGeometry.js":298}],300:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), MeshBatchUvs = require("./MeshBatchUvs.js");
 const tempPoint = new core.Point(), tempPolygon = new core.Polygon(), _Mesh = class _Mesh2 extends display.Container {
@@ -28452,7 +25426,7 @@ let Mesh = _Mesh;
 exports.Mesh = Mesh;
 
 
-},{"./MeshBatchUvs.js":304,"@pixi/core":151,"@pixi/display":228}],304:[function(require,module,exports){
+},{"./MeshBatchUvs.js":301,"@pixi/core":148,"@pixi/display":225}],301:[function(require,module,exports){
 "use strict";
 class MeshBatchUvs {
   /**
@@ -28477,7 +25451,7 @@ class MeshBatchUvs {
 exports.MeshBatchUvs = MeshBatchUvs;
 
 
-},{}],305:[function(require,module,exports){
+},{}],302:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 class MeshGeometry extends core.Geometry {
@@ -28503,7 +25477,7 @@ class MeshGeometry extends core.Geometry {
 exports.MeshGeometry = MeshGeometry;
 
 
-},{"@pixi/core":151}],306:[function(require,module,exports){
+},{"@pixi/core":148}],303:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), mesh$1 = require("./shader/mesh.frag.js"), mesh = require("./shader/mesh.vert.js");
 class MeshMaterial extends core.Shader {
@@ -28576,7 +25550,7 @@ class MeshMaterial extends core.Shader {
 exports.MeshMaterial = MeshMaterial;
 
 
-},{"./shader/mesh.frag.js":308,"./shader/mesh.vert.js":309,"@pixi/core":151}],307:[function(require,module,exports){
+},{"./shader/mesh.frag.js":305,"./shader/mesh.vert.js":306,"@pixi/core":148}],304:[function(require,module,exports){
 "use strict";
 var Mesh = require("./Mesh.js"), MeshBatchUvs = require("./MeshBatchUvs.js"), MeshGeometry = require("./MeshGeometry.js"), MeshMaterial = require("./MeshMaterial.js");
 exports.Mesh = Mesh.Mesh;
@@ -28585,7 +25559,7 @@ exports.MeshGeometry = MeshGeometry.MeshGeometry;
 exports.MeshMaterial = MeshMaterial.MeshMaterial;
 
 
-},{"./Mesh.js":303,"./MeshBatchUvs.js":304,"./MeshGeometry.js":305,"./MeshMaterial.js":306}],308:[function(require,module,exports){
+},{"./Mesh.js":300,"./MeshBatchUvs.js":301,"./MeshGeometry.js":302,"./MeshMaterial.js":303}],305:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragment = `varying vec2 vTextureCoord;
@@ -28601,7 +25575,7 @@ void main(void)
 exports.default = fragment;
 
 
-},{}],309:[function(require,module,exports){
+},{}],306:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var vertex = `attribute vec2 aVertexPosition;
@@ -28623,7 +25597,7 @@ void main(void)
 exports.default = vertex;
 
 
-},{}],310:[function(require,module,exports){
+},{}],307:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), sprite = require("@pixi/sprite");
 const _tempMatrix = new core.Matrix();
@@ -28757,7 +25731,7 @@ display.DisplayObject.prototype._cacheAsBitmapDestroy = function(options) {
 exports.CacheData = CacheData;
 
 
-},{"@pixi/core":151,"@pixi/display":228,"@pixi/sprite":344}],311:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/display":225,"@pixi/sprite":341}],308:[function(require,module,exports){
 "use strict";
 var display = require("@pixi/display");
 display.DisplayObject.prototype.name = null;
@@ -28778,7 +25752,7 @@ display.Container.prototype.getChildByName = function(name, deep) {
 };
 
 
-},{"@pixi/display":228}],312:[function(require,module,exports){
+},{"@pixi/display":225}],309:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display");
 display.DisplayObject.prototype.getGlobalPosition = function(point = new core.Point(), skipUpdate = !1) {
@@ -28786,7 +25760,7 @@ display.DisplayObject.prototype.getGlobalPosition = function(point = new core.Po
 };
 
 
-},{"@pixi/core":151,"@pixi/display":228}],313:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/display":225}],310:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 class ParticleBuffer {
@@ -28901,7 +25875,7 @@ class ParticleBuffer {
 exports.ParticleBuffer = ParticleBuffer;
 
 
-},{"@pixi/core":151}],314:[function(require,module,exports){
+},{"@pixi/core":148}],311:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display");
 class ParticleContainer extends display.Container {
@@ -28988,7 +25962,7 @@ class ParticleContainer extends display.Container {
 exports.ParticleContainer = ParticleContainer;
 
 
-},{"@pixi/core":151,"@pixi/display":228}],315:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/display":225}],312:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), ParticleBuffer = require("./ParticleBuffer.js"), particles$1 = require("./particles.frag.js"), particles = require("./particles.vert.js");
 class ParticleRenderer extends core.ObjectRenderer {
@@ -29170,14 +26144,14 @@ core.extensions.add(ParticleRenderer);
 exports.ParticleRenderer = ParticleRenderer;
 
 
-},{"./ParticleBuffer.js":313,"./particles.frag.js":317,"./particles.vert.js":318,"@pixi/core":151}],316:[function(require,module,exports){
+},{"./ParticleBuffer.js":310,"./particles.frag.js":314,"./particles.vert.js":315,"@pixi/core":148}],313:[function(require,module,exports){
 "use strict";
 var ParticleContainer = require("./ParticleContainer.js"), ParticleRenderer = require("./ParticleRenderer.js");
 exports.ParticleContainer = ParticleContainer.ParticleContainer;
 exports.ParticleRenderer = ParticleRenderer.ParticleRenderer;
 
 
-},{"./ParticleContainer.js":314,"./ParticleRenderer.js":315}],317:[function(require,module,exports){
+},{"./ParticleContainer.js":311,"./ParticleRenderer.js":312}],314:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragment = `varying vec2 vTextureCoord;
@@ -29192,7 +26166,7 @@ void main(void){
 exports.default = fragment;
 
 
-},{}],318:[function(require,module,exports){
+},{}],315:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var vertex = `attribute vec2 aVertexPosition;
@@ -29224,7 +26198,7 @@ void main(void){
 exports.default = vertex;
 
 
-},{}],319:[function(require,module,exports){
+},{}],316:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), text = require("@pixi/text"), CountLimiter = require("./CountLimiter.js");
 function findMultipleBaseTextures(item, queue) {
@@ -29371,7 +26345,7 @@ let BasePrepare = _BasePrepare;
 exports.BasePrepare = BasePrepare;
 
 
-},{"./CountLimiter.js":320,"@pixi/core":151,"@pixi/display":228,"@pixi/text":373}],320:[function(require,module,exports){
+},{"./CountLimiter.js":317,"@pixi/core":148,"@pixi/display":225,"@pixi/text":370}],317:[function(require,module,exports){
 "use strict";
 class CountLimiter {
   /**
@@ -29395,7 +26369,7 @@ class CountLimiter {
 exports.CountLimiter = CountLimiter;
 
 
-},{}],321:[function(require,module,exports){
+},{}],318:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), graphics = require("@pixi/graphics"), BasePrepare = require("./BasePrepare.js");
 function uploadBaseTextures(renderer, item) {
@@ -29432,7 +26406,7 @@ core.extensions.add(Prepare);
 exports.Prepare = Prepare;
 
 
-},{"./BasePrepare.js":319,"@pixi/core":151,"@pixi/graphics":269}],322:[function(require,module,exports){
+},{"./BasePrepare.js":316,"@pixi/core":148,"@pixi/graphics":266}],319:[function(require,module,exports){
 "use strict";
 class TimeLimiter {
   /** @param maxMilliseconds - The maximum milliseconds that can be spent preparing items each frame. */
@@ -29454,7 +26428,7 @@ class TimeLimiter {
 exports.TimeLimiter = TimeLimiter;
 
 
-},{}],323:[function(require,module,exports){
+},{}],320:[function(require,module,exports){
 "use strict";
 require("./settings.js");
 var BasePrepare = require("./BasePrepare.js"), CountLimiter = require("./CountLimiter.js"), Prepare = require("./Prepare.js"), TimeLimiter = require("./TimeLimiter.js");
@@ -29464,7 +26438,7 @@ exports.Prepare = Prepare.Prepare;
 exports.TimeLimiter = TimeLimiter.TimeLimiter;
 
 
-},{"./BasePrepare.js":319,"./CountLimiter.js":320,"./Prepare.js":321,"./TimeLimiter.js":322,"./settings.js":324}],324:[function(require,module,exports){
+},{"./BasePrepare.js":316,"./CountLimiter.js":317,"./Prepare.js":318,"./TimeLimiter.js":319,"./settings.js":321}],321:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), BasePrepare = require("./BasePrepare.js");
 Object.defineProperties(core.settings, {
@@ -29494,7 +26468,7 @@ Object.defineProperty(exports, "settings", {
 });
 
 
-},{"./BasePrepare.js":319,"@pixi/core":151}],325:[function(require,module,exports){
+},{"./BasePrepare.js":316,"@pixi/core":148}],322:[function(require,module,exports){
 "use strict";
 class Runner {
   /**
@@ -29599,21 +26573,21 @@ Object.defineProperties(Runner.prototype, {
 exports.Runner = Runner;
 
 
-},{}],326:[function(require,module,exports){
+},{}],323:[function(require,module,exports){
 "use strict";
 var Runner = require("./Runner.js");
 exports.Runner = Runner.Runner;
 
 
-},{"./Runner.js":325}],327:[function(require,module,exports){
+},{"./Runner.js":322}],324:[function(require,module,exports){
 "use strict";
 
 
-},{}],328:[function(require,module,exports){
+},{}],325:[function(require,module,exports){
 "use strict";
 
 
-},{}],329:[function(require,module,exports){
+},{}],326:[function(require,module,exports){
 "use strict";
 const BrowserAdapter = {
   /**
@@ -29637,7 +26611,7 @@ const BrowserAdapter = {
 exports.BrowserAdapter = BrowserAdapter;
 
 
-},{}],330:[function(require,module,exports){
+},{}],327:[function(require,module,exports){
 "use strict";
 var adapter = require("./adapter.js");
 require("./ICanvas.js");
@@ -29648,7 +26622,7 @@ exports.settings = settings.settings;
 exports.isMobile = isMobile.isMobile;
 
 
-},{"./ICanvas.js":327,"./ICanvasRenderingContext2D.js":328,"./adapter.js":329,"./settings.js":331,"./utils/isMobile.js":332}],331:[function(require,module,exports){
+},{"./ICanvas.js":324,"./ICanvasRenderingContext2D.js":325,"./adapter.js":326,"./settings.js":328,"./utils/isMobile.js":329}],328:[function(require,module,exports){
 "use strict";
 var adapter = require("./adapter.js");
 const settings = {
@@ -29697,14 +26671,14 @@ const settings = {
 exports.settings = settings;
 
 
-},{"./adapter.js":329}],332:[function(require,module,exports){
+},{"./adapter.js":326}],329:[function(require,module,exports){
 "use strict";
 var isMobileJs = require("ismobilejs");
 const isMobileCall = isMobileJs.default ?? isMobileJs, isMobile = isMobileCall(globalThis.navigator);
 exports.isMobile = isMobile;
 
 
-},{"ismobilejs":437}],333:[function(require,module,exports){
+},{"ismobilejs":434}],330:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite");
 class AnimatedSprite extends sprite.Sprite {
@@ -29849,13 +26823,13 @@ class AnimatedSprite extends sprite.Sprite {
 exports.AnimatedSprite = AnimatedSprite;
 
 
-},{"@pixi/core":151,"@pixi/sprite":344}],334:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/sprite":341}],331:[function(require,module,exports){
 "use strict";
 var AnimatedSprite = require("./AnimatedSprite.js");
 exports.AnimatedSprite = AnimatedSprite.AnimatedSprite;
 
 
-},{"./AnimatedSprite.js":333}],335:[function(require,module,exports){
+},{"./AnimatedSprite.js":330}],332:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite");
 const tempPoint = new core.Point();
@@ -29986,7 +26960,7 @@ class TilingSprite extends sprite.Sprite {
 exports.TilingSprite = TilingSprite;
 
 
-},{"@pixi/core":151,"@pixi/sprite":344}],336:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/sprite":341}],333:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), spriteTiling$1 = require("./sprite-tiling.frag.js"), spriteTiling = require("./sprite-tiling.vert.js"), spriteTilingFallback$1 = require("./sprite-tiling-fallback.frag.js"), spriteTilingFallback = require("./sprite-tiling-fallback.vert.js"), spriteTilingSimple = require("./sprite-tiling-simple.frag.js");
 const tempMat = new core.Matrix();
@@ -30034,14 +27008,14 @@ core.extensions.add(TilingSpriteRenderer);
 exports.TilingSpriteRenderer = TilingSpriteRenderer;
 
 
-},{"./sprite-tiling-fallback.frag.js":338,"./sprite-tiling-fallback.vert.js":339,"./sprite-tiling-simple.frag.js":340,"./sprite-tiling.frag.js":341,"./sprite-tiling.vert.js":342,"@pixi/core":151}],337:[function(require,module,exports){
+},{"./sprite-tiling-fallback.frag.js":335,"./sprite-tiling-fallback.vert.js":336,"./sprite-tiling-simple.frag.js":337,"./sprite-tiling.frag.js":338,"./sprite-tiling.vert.js":339,"@pixi/core":148}],334:[function(require,module,exports){
 "use strict";
 var TilingSprite = require("./TilingSprite.js"), TilingSpriteRenderer = require("./TilingSpriteRenderer.js");
 exports.TilingSprite = TilingSprite.TilingSprite;
 exports.TilingSpriteRenderer = TilingSpriteRenderer.TilingSpriteRenderer;
 
 
-},{"./TilingSprite.js":335,"./TilingSpriteRenderer.js":336}],338:[function(require,module,exports){
+},{"./TilingSprite.js":332,"./TilingSpriteRenderer.js":333}],335:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var gl1FragmentSrc = `#version 100
@@ -30081,7 +27055,7 @@ void main(void)
 exports.default = gl1FragmentSrc;
 
 
-},{}],339:[function(require,module,exports){
+},{}],336:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var gl1VertexSrc = `#version 100
@@ -30108,7 +27082,7 @@ void main(void)
 exports.default = gl1VertexSrc;
 
 
-},{}],340:[function(require,module,exports){
+},{}],337:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragmentSimpleSrc = `#version 100
@@ -30130,7 +27104,7 @@ void main(void)
 exports.default = fragmentSimpleSrc;
 
 
-},{}],341:[function(require,module,exports){
+},{}],338:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var gl2FragmentSrc = `#version 300 es
@@ -30163,7 +27137,7 @@ void main(void)
 exports.default = gl2FragmentSrc;
 
 
-},{}],342:[function(require,module,exports){
+},{}],339:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var gl2VertexSrc = `#version 300 es
@@ -30190,7 +27164,7 @@ void main(void)
 exports.default = gl2VertexSrc;
 
 
-},{}],343:[function(require,module,exports){
+},{}],340:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display");
 const tempPoint = new core.Point(), indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
@@ -30389,13 +27363,13 @@ class Sprite extends display.Container {
 exports.Sprite = Sprite;
 
 
-},{"@pixi/core":151,"@pixi/display":228}],344:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/display":225}],341:[function(require,module,exports){
 "use strict";
 var Sprite = require("./Sprite.js");
 exports.Sprite = Sprite.Sprite;
 
 
-},{"./Sprite.js":343}],345:[function(require,module,exports){
+},{"./Sprite.js":340}],342:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const _Spritesheet = class _Spritesheet2 {
@@ -30511,14 +27485,14 @@ let Spritesheet = _Spritesheet;
 exports.Spritesheet = Spritesheet;
 
 
-},{"@pixi/core":151}],346:[function(require,module,exports){
+},{"@pixi/core":148}],343:[function(require,module,exports){
 "use strict";
 var Spritesheet = require("./Spritesheet.js"), spritesheetAsset = require("./spritesheetAsset.js");
 exports.Spritesheet = Spritesheet.Spritesheet;
 exports.spritesheetAsset = spritesheetAsset.spritesheetAsset;
 
 
-},{"./Spritesheet.js":345,"./spritesheetAsset.js":347}],347:[function(require,module,exports){
+},{"./Spritesheet.js":342,"./spritesheetAsset.js":344}],344:[function(require,module,exports){
 "use strict";
 var assets = require("@pixi/assets"), core = require("@pixi/core"), Spritesheet = require("./Spritesheet.js");
 const validImages = [
@@ -30647,7 +27621,7 @@ core.extensions.add(spritesheetAsset);
 exports.spritesheetAsset = spritesheetAsset;
 
 
-},{"./Spritesheet.js":345,"@pixi/assets":64,"@pixi/core":151}],348:[function(require,module,exports){
+},{"./Spritesheet.js":342,"@pixi/assets":61,"@pixi/core":148}],345:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), text = require("@pixi/text"), BitmapFontData = require("./BitmapFontData.js"), index = require("./formats/index.js");
 require("./utils/index.js");
@@ -30876,7 +27850,7 @@ let BitmapFont = _BitmapFont;
 exports.BitmapFont = BitmapFont;
 
 
-},{"./BitmapFontData.js":349,"./formats/index.js":355,"./utils/drawGlyph.js":360,"./utils/extractCharCode.js":361,"./utils/index.js":363,"./utils/resolveCharacters.js":364,"@pixi/core":151,"@pixi/text":373}],349:[function(require,module,exports){
+},{"./BitmapFontData.js":346,"./formats/index.js":352,"./utils/drawGlyph.js":357,"./utils/extractCharCode.js":358,"./utils/index.js":360,"./utils/resolveCharacters.js":361,"@pixi/core":148,"@pixi/text":370}],346:[function(require,module,exports){
 "use strict";
 class BitmapFontData {
   constructor() {
@@ -30886,7 +27860,7 @@ class BitmapFontData {
 exports.BitmapFontData = BitmapFontData;
 
 
-},{}],350:[function(require,module,exports){
+},{}],347:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), mesh = require("@pixi/mesh"), BitmapFont = require("./BitmapFont.js"), msdf$1 = require("./shader/msdf.frag.js"), msdf = require("./shader/msdf.vert.js");
 require("./utils/index.js");
@@ -31205,11 +28179,11 @@ let BitmapText = _BitmapText;
 exports.BitmapText = BitmapText;
 
 
-},{"./BitmapFont.js":348,"./shader/msdf.frag.js":358,"./shader/msdf.vert.js":359,"./utils/extractCharCode.js":361,"./utils/index.js":363,"./utils/splitTextToCharacters.js":365,"@pixi/core":151,"@pixi/display":228,"@pixi/mesh":307}],351:[function(require,module,exports){
+},{"./BitmapFont.js":345,"./shader/msdf.frag.js":355,"./shader/msdf.vert.js":356,"./utils/extractCharCode.js":358,"./utils/index.js":360,"./utils/splitTextToCharacters.js":362,"@pixi/core":148,"@pixi/display":225,"@pixi/mesh":304}],348:[function(require,module,exports){
 "use strict";
 
 
-},{}],352:[function(require,module,exports){
+},{}],349:[function(require,module,exports){
 "use strict";
 var BitmapFontData = require("../BitmapFontData.js");
 class TextFormat {
@@ -31277,7 +28251,7 @@ class TextFormat {
 exports.TextFormat = TextFormat;
 
 
-},{"../BitmapFontData.js":349}],353:[function(require,module,exports){
+},{"../BitmapFontData.js":346}],350:[function(require,module,exports){
 "use strict";
 var BitmapFontData = require("../BitmapFontData.js");
 class XMLFormat {
@@ -31342,7 +28316,7 @@ class XMLFormat {
 exports.XMLFormat = XMLFormat;
 
 
-},{"../BitmapFontData.js":349}],354:[function(require,module,exports){
+},{"../BitmapFontData.js":346}],351:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), XMLFormat = require("./XMLFormat.js");
 class XMLStringFormat {
@@ -31366,7 +28340,7 @@ class XMLStringFormat {
 exports.XMLStringFormat = XMLStringFormat;
 
 
-},{"./XMLFormat.js":353,"@pixi/core":151}],355:[function(require,module,exports){
+},{"./XMLFormat.js":350,"@pixi/core":148}],352:[function(require,module,exports){
 "use strict";
 var TextFormat = require("./TextFormat.js"), XMLFormat = require("./XMLFormat.js"), XMLStringFormat = require("./XMLStringFormat.js");
 const formats = [
@@ -31386,7 +28360,7 @@ exports.XMLStringFormat = XMLStringFormat.XMLStringFormat;
 exports.autoDetectFormat = autoDetectFormat;
 
 
-},{"./TextFormat.js":352,"./XMLFormat.js":353,"./XMLStringFormat.js":354}],356:[function(require,module,exports){
+},{"./TextFormat.js":349,"./XMLFormat.js":350,"./XMLStringFormat.js":351}],353:[function(require,module,exports){
 "use strict";
 var BitmapFont = require("./BitmapFont.js"), BitmapFontData = require("./BitmapFontData.js"), BitmapText = require("./BitmapText.js");
 require("./BitmapTextStyle.js");
@@ -31401,7 +28375,7 @@ exports.XMLFormat = XMLFormat.XMLFormat;
 exports.XMLStringFormat = XMLStringFormat.XMLStringFormat;
 
 
-},{"./BitmapFont.js":348,"./BitmapFontData.js":349,"./BitmapText.js":350,"./BitmapTextStyle.js":351,"./formats/TextFormat.js":352,"./formats/XMLFormat.js":353,"./formats/XMLStringFormat.js":354,"./formats/index.js":355,"./loadBitmapFont.js":357}],357:[function(require,module,exports){
+},{"./BitmapFont.js":345,"./BitmapFontData.js":346,"./BitmapText.js":347,"./BitmapTextStyle.js":348,"./formats/TextFormat.js":349,"./formats/XMLFormat.js":350,"./formats/XMLStringFormat.js":351,"./formats/index.js":352,"./loadBitmapFont.js":354}],354:[function(require,module,exports){
 "use strict";
 var assets = require("@pixi/assets"), core = require("@pixi/core"), BitmapFont = require("./BitmapFont.js");
 require("./formats/index.js");
@@ -31439,7 +28413,7 @@ core.extensions.add(loadBitmapFont);
 exports.loadBitmapFont = loadBitmapFont;
 
 
-},{"./BitmapFont.js":348,"./formats/TextFormat.js":352,"./formats/XMLStringFormat.js":354,"./formats/index.js":355,"@pixi/assets":64,"@pixi/core":151}],358:[function(require,module,exports){
+},{"./BitmapFont.js":345,"./formats/TextFormat.js":349,"./formats/XMLStringFormat.js":351,"./formats/index.js":352,"@pixi/assets":61,"@pixi/core":148}],355:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var msdfFrag = `// Pixi texture info\r
@@ -31484,7 +28458,7 @@ void main(void) {\r
 exports.default = msdfFrag;
 
 
-},{}],359:[function(require,module,exports){
+},{}],356:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var msdfVert = `// Mesh material default fragment\r
@@ -31507,7 +28481,7 @@ void main(void)\r
 exports.default = msdfVert;
 
 
-},{}],360:[function(require,module,exports){
+},{}],357:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), generateFillStyle = require("./generateFillStyle.js");
 function drawGlyph(canvas, context, metrics, x, y, resolution, style) {
@@ -31524,7 +28498,7 @@ function drawGlyph(canvas, context, metrics, x, y, resolution, style) {
 exports.drawGlyph = drawGlyph;
 
 
-},{"./generateFillStyle.js":362,"@pixi/core":151}],361:[function(require,module,exports){
+},{"./generateFillStyle.js":359,"@pixi/core":148}],358:[function(require,module,exports){
 "use strict";
 function extractCharCode(str) {
   return str.codePointAt ? str.codePointAt(0) : str.charCodeAt(0);
@@ -31532,7 +28506,7 @@ function extractCharCode(str) {
 exports.extractCharCode = extractCharCode;
 
 
-},{}],362:[function(require,module,exports){
+},{}],359:[function(require,module,exports){
 "use strict";
 var text = require("@pixi/text");
 function generateFillStyle(canvas, context, style, resolution, lines, metrics) {
@@ -31577,7 +28551,7 @@ function generateFillStyle(canvas, context, style, resolution, lines, metrics) {
 exports.generateFillStyle = generateFillStyle;
 
 
-},{"@pixi/text":373}],363:[function(require,module,exports){
+},{"@pixi/text":370}],360:[function(require,module,exports){
 "use strict";
 var drawGlyph = require("./drawGlyph.js"), extractCharCode = require("./extractCharCode.js"), generateFillStyle = require("./generateFillStyle.js"), resolveCharacters = require("./resolveCharacters.js"), splitTextToCharacters = require("./splitTextToCharacters.js");
 exports.drawGlyph = drawGlyph.drawGlyph;
@@ -31587,7 +28561,7 @@ exports.resolveCharacters = resolveCharacters.resolveCharacters;
 exports.splitTextToCharacters = splitTextToCharacters.splitTextToCharacters;
 
 
-},{"./drawGlyph.js":360,"./extractCharCode.js":361,"./generateFillStyle.js":362,"./resolveCharacters.js":364,"./splitTextToCharacters.js":365}],364:[function(require,module,exports){
+},{"./drawGlyph.js":357,"./extractCharCode.js":358,"./generateFillStyle.js":359,"./resolveCharacters.js":361,"./splitTextToCharacters.js":362}],361:[function(require,module,exports){
 "use strict";
 var splitTextToCharacters = require("./splitTextToCharacters.js");
 function resolveCharacters(chars) {
@@ -31613,7 +28587,7 @@ function resolveCharacters(chars) {
 exports.resolveCharacters = resolveCharacters;
 
 
-},{"./splitTextToCharacters.js":365}],365:[function(require,module,exports){
+},{"./splitTextToCharacters.js":362}],362:[function(require,module,exports){
 "use strict";
 function splitTextToCharacters(text) {
   return Array.from ? Array.from(text) : text.split("");
@@ -31621,7 +28595,7 @@ function splitTextToCharacters(text) {
 exports.splitTextToCharacters = splitTextToCharacters;
 
 
-},{}],366:[function(require,module,exports){
+},{}],363:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite"), text = require("@pixi/text"), HTMLTextStyle = require("./HTMLTextStyle.js");
 const _HTMLText = class _HTMLText2 extends sprite.Sprite {
@@ -31829,7 +28803,7 @@ let HTMLText = _HTMLText;
 exports.HTMLText = HTMLText;
 
 
-},{"./HTMLTextStyle.js":367,"@pixi/core":151,"@pixi/sprite":344,"@pixi/text":373}],367:[function(require,module,exports){
+},{"./HTMLTextStyle.js":364,"@pixi/core":148,"@pixi/sprite":341,"@pixi/text":370}],364:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), text = require("@pixi/text");
 const _HTMLTextStyle = class _HTMLTextStyle2 extends text.TextStyle {
@@ -32105,14 +29079,14 @@ let HTMLTextStyle = _HTMLTextStyle;
 exports.HTMLTextStyle = HTMLTextStyle;
 
 
-},{"@pixi/core":151,"@pixi/text":373}],368:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/text":370}],365:[function(require,module,exports){
 "use strict";
 var HTMLText = require("./HTMLText.js"), HTMLTextStyle = require("./HTMLTextStyle.js");
 exports.HTMLText = HTMLText.HTMLText;
 exports.HTMLTextStyle = HTMLTextStyle.HTMLTextStyle;
 
 
-},{"./HTMLText.js":366,"./HTMLTextStyle.js":367}],369:[function(require,module,exports){
+},{"./HTMLText.js":363,"./HTMLTextStyle.js":364}],366:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite"), _const = require("./const.js"), TextMetrics = require("./TextMetrics.js"), TextStyle = require("./TextStyle.js");
 const defaultDestroyOptions = {
@@ -32375,7 +29349,7 @@ let Text = _Text;
 exports.Text = Text;
 
 
-},{"./TextMetrics.js":370,"./TextStyle.js":371,"./const.js":372,"@pixi/core":151,"@pixi/sprite":344}],370:[function(require,module,exports){
+},{"./TextMetrics.js":367,"./TextStyle.js":368,"./const.js":369,"@pixi/core":148,"@pixi/sprite":341}],367:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const contextSettings = {
@@ -32797,7 +29771,7 @@ let TextMetrics = _TextMetrics;
 exports.TextMetrics = TextMetrics;
 
 
-},{"@pixi/core":151}],371:[function(require,module,exports){
+},{"@pixi/core":148}],368:[function(require,module,exports){
 "use strict";
 var _const = require("./const.js"), core = require("@pixi/core");
 const genericFontFamilies = [
@@ -33251,13 +30225,13 @@ function deepCopyProperties(target, source, propertyObj) {
 exports.TextStyle = TextStyle;
 
 
-},{"./const.js":372,"@pixi/core":151}],372:[function(require,module,exports){
+},{"./const.js":369,"@pixi/core":148}],369:[function(require,module,exports){
 "use strict";
 var TEXT_GRADIENT = /* @__PURE__ */ ((TEXT_GRADIENT2) => (TEXT_GRADIENT2[TEXT_GRADIENT2.LINEAR_VERTICAL = 0] = "LINEAR_VERTICAL", TEXT_GRADIENT2[TEXT_GRADIENT2.LINEAR_HORIZONTAL = 1] = "LINEAR_HORIZONTAL", TEXT_GRADIENT2))(TEXT_GRADIENT || {});
 exports.TEXT_GRADIENT = TEXT_GRADIENT;
 
 
-},{}],373:[function(require,module,exports){
+},{}],370:[function(require,module,exports){
 "use strict";
 var _const = require("./const.js"), Text = require("./Text.js"), TextMetrics = require("./TextMetrics.js"), TextStyle = require("./TextStyle.js");
 exports.TEXT_GRADIENT = _const.TEXT_GRADIENT;
@@ -33266,7 +30240,7 @@ exports.TextMetrics = TextMetrics.TextMetrics;
 exports.TextStyle = TextStyle.TextStyle;
 
 
-},{"./Text.js":369,"./TextMetrics.js":370,"./TextStyle.js":371,"./const.js":372}],374:[function(require,module,exports){
+},{"./Text.js":366,"./TextMetrics.js":367,"./TextStyle.js":368,"./const.js":369}],371:[function(require,module,exports){
 "use strict";
 var _const = require("./const.js"), TickerListener = require("./TickerListener.js");
 const _Ticker = class _Ticker2 {
@@ -33544,7 +30518,7 @@ let Ticker = _Ticker;
 exports.Ticker = Ticker;
 
 
-},{"./TickerListener.js":375,"./const.js":377}],375:[function(require,module,exports){
+},{"./TickerListener.js":372,"./const.js":374}],372:[function(require,module,exports){
 "use strict";
 class TickerListener {
   /**
@@ -33603,7 +30577,7 @@ class TickerListener {
 exports.TickerListener = TickerListener;
 
 
-},{}],376:[function(require,module,exports){
+},{}],373:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), _const = require("./const.js"), Ticker = require("./Ticker.js");
 class TickerPlugin {
@@ -33651,13 +30625,13 @@ extensions.extensions.add(TickerPlugin);
 exports.TickerPlugin = TickerPlugin;
 
 
-},{"./Ticker.js":374,"./const.js":377,"@pixi/extensions":240}],377:[function(require,module,exports){
+},{"./Ticker.js":371,"./const.js":374,"@pixi/extensions":237}],374:[function(require,module,exports){
 "use strict";
 var UPDATE_PRIORITY = /* @__PURE__ */ ((UPDATE_PRIORITY2) => (UPDATE_PRIORITY2[UPDATE_PRIORITY2.INTERACTION = 50] = "INTERACTION", UPDATE_PRIORITY2[UPDATE_PRIORITY2.HIGH = 25] = "HIGH", UPDATE_PRIORITY2[UPDATE_PRIORITY2.NORMAL = 0] = "NORMAL", UPDATE_PRIORITY2[UPDATE_PRIORITY2.LOW = -25] = "LOW", UPDATE_PRIORITY2[UPDATE_PRIORITY2.UTILITY = -50] = "UTILITY", UPDATE_PRIORITY2))(UPDATE_PRIORITY || {});
 exports.UPDATE_PRIORITY = UPDATE_PRIORITY;
 
 
-},{}],378:[function(require,module,exports){
+},{}],375:[function(require,module,exports){
 "use strict";
 require("./settings.js");
 var _const = require("./const.js"), Ticker = require("./Ticker.js"), TickerPlugin = require("./TickerPlugin.js");
@@ -33666,7 +30640,7 @@ exports.Ticker = Ticker.Ticker;
 exports.TickerPlugin = TickerPlugin.TickerPlugin;
 
 
-},{"./Ticker.js":374,"./TickerPlugin.js":376,"./const.js":377,"./settings.js":379}],379:[function(require,module,exports){
+},{"./Ticker.js":371,"./TickerPlugin.js":373,"./const.js":374,"./settings.js":376}],376:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings"), utils = require("@pixi/utils"), Ticker = require("./Ticker.js");
 Object.defineProperties(settings.settings, {
@@ -33696,7 +30670,7 @@ Object.defineProperty(exports, "settings", {
 });
 
 
-},{"./Ticker.js":374,"@pixi/settings":330,"@pixi/utils":393}],380:[function(require,module,exports){
+},{"./Ticker.js":371,"@pixi/settings":327,"@pixi/utils":390}],377:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 let promise;
@@ -33728,7 +30702,7 @@ async function detectVideoAlphaMode() {
 exports.detectVideoAlphaMode = detectVideoAlphaMode;
 
 
-},{"@pixi/constants":110}],381:[function(require,module,exports){
+},{"@pixi/constants":107}],378:[function(require,module,exports){
 "use strict";
 var deprecation = require("../logging/deprecation.js");
 function skipHello() {
@@ -33741,7 +30715,7 @@ exports.sayHello = sayHello;
 exports.skipHello = skipHello;
 
 
-},{"../logging/deprecation.js":394}],382:[function(require,module,exports){
+},{"../logging/deprecation.js":391}],379:[function(require,module,exports){
 "use strict";
 require("../settings.js");
 var settings = require("@pixi/settings");
@@ -33771,7 +30745,7 @@ function isWebGLSupported() {
 exports.isWebGLSupported = isWebGLSupported;
 
 
-},{"../settings.js":404,"@pixi/settings":330}],383:[function(require,module,exports){
+},{"../settings.js":401,"@pixi/settings":327}],380:[function(require,module,exports){
 "use strict";
 var color = require("@pixi/color"), deprecation = require("../logging/deprecation.js");
 function hex2rgb(hex, out = []) {
@@ -33792,7 +30766,7 @@ exports.rgb2hex = rgb2hex;
 exports.string2hex = string2hex;
 
 
-},{"../logging/deprecation.js":394,"@pixi/color":93}],384:[function(require,module,exports){
+},{"../logging/deprecation.js":391,"@pixi/color":90}],381:[function(require,module,exports){
 "use strict";
 var color = require("@pixi/color"), constants = require("@pixi/constants"), deprecation = require("../logging/deprecation.js");
 function mapPremultipliedBlendModes() {
@@ -33823,13 +30797,13 @@ exports.premultiplyTint = premultiplyTint;
 exports.premultiplyTintToRgba = premultiplyTintToRgba;
 
 
-},{"../logging/deprecation.js":394,"@pixi/color":93,"@pixi/constants":110}],385:[function(require,module,exports){
+},{"../logging/deprecation.js":391,"@pixi/color":90,"@pixi/constants":107}],382:[function(require,module,exports){
 "use strict";
 const DATA_URI = /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(base64))?,(.*)/i;
 exports.DATA_URI = DATA_URI;
 
 
-},{}],386:[function(require,module,exports){
+},{}],383:[function(require,module,exports){
 "use strict";
 function createIndicesForQuads(size, outBuffer = null) {
   const totalIndices = size * 6;
@@ -33842,7 +30816,7 @@ function createIndicesForQuads(size, outBuffer = null) {
 exports.createIndicesForQuads = createIndicesForQuads;
 
 
-},{}],387:[function(require,module,exports){
+},{}],384:[function(require,module,exports){
 "use strict";
 function getBufferType(array) {
   if (array.BYTES_PER_ELEMENT === 4)
@@ -33857,7 +30831,7 @@ function getBufferType(array) {
 exports.getBufferType = getBufferType;
 
 
-},{}],388:[function(require,module,exports){
+},{}],385:[function(require,module,exports){
 "use strict";
 var getBufferType = require("./getBufferType.js");
 const map = { Float32Array, Uint32Array, Int32Array, Uint8Array };
@@ -33882,7 +30856,7 @@ function interleaveTypedArrays(arrays, sizes) {
 exports.interleaveTypedArrays = interleaveTypedArrays;
 
 
-},{"./getBufferType.js":387}],389:[function(require,module,exports){
+},{"./getBufferType.js":384}],386:[function(require,module,exports){
 "use strict";
 function nextPow2(v) {
   return v += v === 0 ? 1 : 0, --v, v |= v >>> 1, v |= v >>> 2, v |= v >>> 4, v |= v >>> 8, v |= v >>> 16, v + 1;
@@ -33901,7 +30875,7 @@ exports.log2 = log2;
 exports.nextPow2 = nextPow2;
 
 
-},{}],390:[function(require,module,exports){
+},{}],387:[function(require,module,exports){
 "use strict";
 function removeItems(arr, startIdx, removeCount) {
   const length = arr.length;
@@ -33917,7 +30891,7 @@ function removeItems(arr, startIdx, removeCount) {
 exports.removeItems = removeItems;
 
 
-},{}],391:[function(require,module,exports){
+},{}],388:[function(require,module,exports){
 "use strict";
 function sign(n) {
   return n === 0 ? 0 : n < 0 ? -1 : 1;
@@ -33925,7 +30899,7 @@ function sign(n) {
 exports.sign = sign;
 
 
-},{}],392:[function(require,module,exports){
+},{}],389:[function(require,module,exports){
 "use strict";
 let nextUid = 0;
 function uid() {
@@ -33934,7 +30908,7 @@ function uid() {
 exports.uid = uid;
 
 
-},{}],393:[function(require,module,exports){
+},{}],390:[function(require,module,exports){
 "use strict";
 require("./settings.js");
 var settings = require("@pixi/settings"), eventemitter3 = require("eventemitter3"), earcut = require("earcut"), url = require("./url.js"), path = require("./path.js"), detectVideoAlphaMode = require("./browser/detectVideoAlphaMode.js"), hello = require("./browser/hello.js"), isWebGLSupported = require("./browser/isWebGLSupported.js"), hex = require("./color/hex.js"), premultiply = require("./color/premultiply.js"), _const = require("./const.js"), createIndicesForQuads = require("./data/createIndicesForQuads.js"), getBufferType = require("./data/getBufferType.js"), interleaveTypedArrays = require("./data/interleaveTypedArrays.js"), pow2 = require("./data/pow2.js"), removeItems = require("./data/removeItems.js"), sign = require("./data/sign.js"), uid = require("./data/uid.js"), deprecation = require("./logging/deprecation.js"), BoundingBox = require("./media/BoundingBox.js"), caches = require("./media/caches.js"), CanvasRenderTarget = require("./media/CanvasRenderTarget.js"), getCanvasBoundingBox = require("./media/getCanvasBoundingBox.js"), trimCanvas = require("./media/trimCanvas.js"), decomposeDataUri = require("./network/decomposeDataUri.js"), determineCrossOrigin = require("./network/determineCrossOrigin.js"), getResolutionOfUrl = require("./network/getResolutionOfUrl.js");
@@ -33987,7 +30961,7 @@ exports.determineCrossOrigin = determineCrossOrigin.determineCrossOrigin;
 exports.getResolutionOfUrl = getResolutionOfUrl.getResolutionOfUrl;
 
 
-},{"./browser/detectVideoAlphaMode.js":380,"./browser/hello.js":381,"./browser/isWebGLSupported.js":382,"./color/hex.js":383,"./color/premultiply.js":384,"./const.js":385,"./data/createIndicesForQuads.js":386,"./data/getBufferType.js":387,"./data/interleaveTypedArrays.js":388,"./data/pow2.js":389,"./data/removeItems.js":390,"./data/sign.js":391,"./data/uid.js":392,"./logging/deprecation.js":394,"./media/BoundingBox.js":395,"./media/CanvasRenderTarget.js":396,"./media/caches.js":397,"./media/getCanvasBoundingBox.js":398,"./media/trimCanvas.js":399,"./network/decomposeDataUri.js":400,"./network/determineCrossOrigin.js":401,"./network/getResolutionOfUrl.js":402,"./path.js":403,"./settings.js":404,"./types/index.js":405,"./url.js":406,"@pixi/settings":330,"earcut":415,"eventemitter3":425}],394:[function(require,module,exports){
+},{"./browser/detectVideoAlphaMode.js":377,"./browser/hello.js":378,"./browser/isWebGLSupported.js":379,"./color/hex.js":380,"./color/premultiply.js":381,"./const.js":382,"./data/createIndicesForQuads.js":383,"./data/getBufferType.js":384,"./data/interleaveTypedArrays.js":385,"./data/pow2.js":386,"./data/removeItems.js":387,"./data/sign.js":388,"./data/uid.js":389,"./logging/deprecation.js":391,"./media/BoundingBox.js":392,"./media/CanvasRenderTarget.js":393,"./media/caches.js":394,"./media/getCanvasBoundingBox.js":395,"./media/trimCanvas.js":396,"./network/decomposeDataUri.js":397,"./network/determineCrossOrigin.js":398,"./network/getResolutionOfUrl.js":399,"./path.js":400,"./settings.js":401,"./types/index.js":402,"./url.js":403,"@pixi/settings":327,"earcut":412,"eventemitter3":422}],391:[function(require,module,exports){
 "use strict";
 const warnings = {};
 function deprecation(version, message, ignoreDepth = 3) {
@@ -34009,7 +30983,7 @@ Deprecated since v${version}`), console.warn(stack))), warnings[message] = !0;
 exports.deprecation = deprecation;
 
 
-},{}],395:[function(require,module,exports){
+},{}],392:[function(require,module,exports){
 "use strict";
 const _BoundingBox = class {
   /**
@@ -34039,7 +31013,7 @@ let BoundingBox = _BoundingBox;
 exports.BoundingBox = BoundingBox;
 
 
-},{}],396:[function(require,module,exports){
+},{}],393:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings");
 class CanvasRenderTarget {
@@ -34106,7 +31080,7 @@ class CanvasRenderTarget {
 exports.CanvasRenderTarget = CanvasRenderTarget;
 
 
-},{"@pixi/settings":330}],397:[function(require,module,exports){
+},{"@pixi/settings":327}],394:[function(require,module,exports){
 "use strict";
 const ProgramCache = {}, TextureCache = /* @__PURE__ */ Object.create(null), BaseTextureCache = /* @__PURE__ */ Object.create(null);
 function destroyTextureCache() {
@@ -34130,7 +31104,7 @@ exports.clearTextureCache = clearTextureCache;
 exports.destroyTextureCache = destroyTextureCache;
 
 
-},{}],398:[function(require,module,exports){
+},{}],395:[function(require,module,exports){
 "use strict";
 var BoundingBox = require("./BoundingBox.js");
 function checkRow(data, width, y) {
@@ -34169,7 +31143,7 @@ function getCanvasBoundingBox(canvas) {
 exports.getCanvasBoundingBox = getCanvasBoundingBox;
 
 
-},{"./BoundingBox.js":395}],399:[function(require,module,exports){
+},{"./BoundingBox.js":392}],396:[function(require,module,exports){
 "use strict";
 var getCanvasBoundingBox = require("./getCanvasBoundingBox.js");
 function trimCanvas(canvas) {
@@ -34191,7 +31165,7 @@ function trimCanvas(canvas) {
 exports.trimCanvas = trimCanvas;
 
 
-},{"./getCanvasBoundingBox.js":398}],400:[function(require,module,exports){
+},{"./getCanvasBoundingBox.js":395}],397:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js");
 function decomposeDataUri(dataUri) {
@@ -34208,7 +31182,7 @@ function decomposeDataUri(dataUri) {
 exports.decomposeDataUri = decomposeDataUri;
 
 
-},{"../const.js":385}],401:[function(require,module,exports){
+},{"../const.js":382}],398:[function(require,module,exports){
 "use strict";
 function determineCrossOrigin(url, loc = globalThis.location) {
   if (url.startsWith("data:"))
@@ -34220,7 +31194,7 @@ function determineCrossOrigin(url, loc = globalThis.location) {
 exports.determineCrossOrigin = determineCrossOrigin;
 
 
-},{}],402:[function(require,module,exports){
+},{}],399:[function(require,module,exports){
 "use strict";
 require("../settings.js");
 var settings = require("@pixi/settings");
@@ -34231,7 +31205,7 @@ function getResolutionOfUrl(url, defaultValue = 1) {
 exports.getResolutionOfUrl = getResolutionOfUrl;
 
 
-},{"../settings.js":404,"@pixi/settings":330}],403:[function(require,module,exports){
+},{"../settings.js":401,"@pixi/settings":327}],400:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings");
 function assertPath(path2) {
@@ -34517,7 +31491,7 @@ const path = {
 exports.path = path;
 
 
-},{"@pixi/settings":330}],404:[function(require,module,exports){
+},{"@pixi/settings":327}],401:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings");
 settings.settings.RETINA_PREFIX = /@([0-9\.]+)x/;
@@ -34530,11 +31504,11 @@ Object.defineProperty(exports, "settings", {
 });
 
 
-},{"@pixi/settings":330}],405:[function(require,module,exports){
+},{"@pixi/settings":327}],402:[function(require,module,exports){
 "use strict";
 
 
-},{}],406:[function(require,module,exports){
+},{}],403:[function(require,module,exports){
 "use strict";
 var url$1 = require("url"), deprecation = require("./logging/deprecation.js");
 const url = {
@@ -34560,9 +31534,9 @@ const url = {
 exports.url = url;
 
 
-},{"./logging/deprecation.js":394,"url":460}],407:[function(require,module,exports){
+},{"./logging/deprecation.js":391,"url":457}],404:[function(require,module,exports){
 
-},{}],408:[function(require,module,exports){
+},{}],405:[function(require,module,exports){
 'use strict';
 
 var bind = require('function-bind');
@@ -34574,19 +31548,19 @@ var $reflectApply = require('./reflectApply');
 /** @type {import('./actualApply')} */
 module.exports = $reflectApply || bind.call($call, $apply);
 
-},{"./functionApply":409,"./functionCall":410,"./reflectApply":412,"function-bind":427}],409:[function(require,module,exports){
+},{"./functionApply":406,"./functionCall":407,"./reflectApply":409,"function-bind":424}],406:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./functionApply')} */
 module.exports = Function.prototype.apply;
 
-},{}],410:[function(require,module,exports){
+},{}],407:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./functionCall')} */
 module.exports = Function.prototype.call;
 
-},{}],411:[function(require,module,exports){
+},{}],408:[function(require,module,exports){
 'use strict';
 
 var bind = require('function-bind');
@@ -34603,13 +31577,13 @@ module.exports = function callBindBasic(args) {
 	return $actualApply(bind, $call, args);
 };
 
-},{"./actualApply":408,"./functionCall":410,"es-errors/type":422,"function-bind":427}],412:[function(require,module,exports){
+},{"./actualApply":405,"./functionCall":407,"es-errors/type":419,"function-bind":424}],409:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./reflectApply')} */
 module.exports = typeof Reflect !== 'undefined' && Reflect && Reflect.apply;
 
-},{}],413:[function(require,module,exports){
+},{}],410:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -34630,7 +31604,7 @@ module.exports = function callBoundIntrinsic(name, allowMissing) {
 	return intrinsic;
 };
 
-},{"call-bind-apply-helpers":411,"get-intrinsic":428}],414:[function(require,module,exports){
+},{"call-bind-apply-helpers":408,"get-intrinsic":425}],411:[function(require,module,exports){
 'use strict';
 
 var callBind = require('call-bind-apply-helpers');
@@ -34662,7 +31636,7 @@ module.exports = desc && typeof desc.get === 'function'
 		}
 		: false;
 
-},{"call-bind-apply-helpers":411,"gopd":433}],415:[function(require,module,exports){
+},{"call-bind-apply-helpers":408,"gopd":430}],412:[function(require,module,exports){
 'use strict';
 
 module.exports = earcut;
@@ -35345,7 +32319,7 @@ earcut.flatten = function (data) {
     return result;
 };
 
-},{}],416:[function(require,module,exports){
+},{}],413:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
@@ -35361,55 +32335,55 @@ if ($defineProperty) {
 
 module.exports = $defineProperty;
 
-},{}],417:[function(require,module,exports){
+},{}],414:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./eval')} */
 module.exports = EvalError;
 
-},{}],418:[function(require,module,exports){
+},{}],415:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
 module.exports = Error;
 
-},{}],419:[function(require,module,exports){
+},{}],416:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./range')} */
 module.exports = RangeError;
 
-},{}],420:[function(require,module,exports){
+},{}],417:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./ref')} */
 module.exports = ReferenceError;
 
-},{}],421:[function(require,module,exports){
+},{}],418:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./syntax')} */
 module.exports = SyntaxError;
 
-},{}],422:[function(require,module,exports){
+},{}],419:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./type')} */
 module.exports = TypeError;
 
-},{}],423:[function(require,module,exports){
+},{}],420:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./uri')} */
 module.exports = URIError;
 
-},{}],424:[function(require,module,exports){
+},{}],421:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
 module.exports = Object;
 
-},{}],425:[function(require,module,exports){
+},{}],422:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty
@@ -35747,7 +32721,7 @@ if ('undefined' !== typeof module) {
   module.exports = EventEmitter;
 }
 
-},{}],426:[function(require,module,exports){
+},{}],423:[function(require,module,exports){
 'use strict';
 
 /* eslint no-invalid-this: 1 */
@@ -35833,14 +32807,14 @@ module.exports = function bind(that) {
     return bound;
 };
 
-},{}],427:[function(require,module,exports){
+},{}],424:[function(require,module,exports){
 'use strict';
 
 var implementation = require('./implementation');
 
 module.exports = Function.prototype.bind || implementation;
 
-},{"./implementation":426}],428:[function(require,module,exports){
+},{"./implementation":423}],425:[function(require,module,exports){
 'use strict';
 
 var undefined;
@@ -36220,7 +33194,7 @@ module.exports = function GetIntrinsic(name, allowMissing) {
 	return value;
 };
 
-},{"call-bind-apply-helpers/functionApply":409,"call-bind-apply-helpers/functionCall":410,"es-define-property":416,"es-errors":418,"es-errors/eval":417,"es-errors/range":419,"es-errors/ref":420,"es-errors/syntax":421,"es-errors/type":422,"es-errors/uri":423,"es-object-atoms":424,"function-bind":427,"get-proto":431,"get-proto/Object.getPrototypeOf":429,"get-proto/Reflect.getPrototypeOf":430,"gopd":433,"has-symbols":434,"hasown":436,"math-intrinsics/abs":439,"math-intrinsics/floor":440,"math-intrinsics/max":442,"math-intrinsics/min":443,"math-intrinsics/pow":444,"math-intrinsics/round":445,"math-intrinsics/sign":446}],429:[function(require,module,exports){
+},{"call-bind-apply-helpers/functionApply":406,"call-bind-apply-helpers/functionCall":407,"es-define-property":413,"es-errors":415,"es-errors/eval":414,"es-errors/range":416,"es-errors/ref":417,"es-errors/syntax":418,"es-errors/type":419,"es-errors/uri":420,"es-object-atoms":421,"function-bind":424,"get-proto":428,"get-proto/Object.getPrototypeOf":426,"get-proto/Reflect.getPrototypeOf":427,"gopd":430,"has-symbols":431,"hasown":433,"math-intrinsics/abs":436,"math-intrinsics/floor":437,"math-intrinsics/max":439,"math-intrinsics/min":440,"math-intrinsics/pow":441,"math-intrinsics/round":442,"math-intrinsics/sign":443}],426:[function(require,module,exports){
 'use strict';
 
 var $Object = require('es-object-atoms');
@@ -36228,13 +33202,13 @@ var $Object = require('es-object-atoms');
 /** @type {import('./Object.getPrototypeOf')} */
 module.exports = $Object.getPrototypeOf || null;
 
-},{"es-object-atoms":424}],430:[function(require,module,exports){
+},{"es-object-atoms":421}],427:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./Reflect.getPrototypeOf')} */
 module.exports = (typeof Reflect !== 'undefined' && Reflect.getPrototypeOf) || null;
 
-},{}],431:[function(require,module,exports){
+},{}],428:[function(require,module,exports){
 'use strict';
 
 var reflectGetProto = require('./Reflect.getPrototypeOf');
@@ -36263,13 +33237,13 @@ module.exports = reflectGetProto
 			}
 			: null;
 
-},{"./Object.getPrototypeOf":429,"./Reflect.getPrototypeOf":430,"dunder-proto/get":414}],432:[function(require,module,exports){
+},{"./Object.getPrototypeOf":426,"./Reflect.getPrototypeOf":427,"dunder-proto/get":411}],429:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./gOPD')} */
 module.exports = Object.getOwnPropertyDescriptor;
 
-},{}],433:[function(require,module,exports){
+},{}],430:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
@@ -36286,7 +33260,7 @@ if ($gOPD) {
 
 module.exports = $gOPD;
 
-},{"./gOPD":432}],434:[function(require,module,exports){
+},{"./gOPD":429}],431:[function(require,module,exports){
 'use strict';
 
 var origSymbol = typeof Symbol !== 'undefined' && Symbol;
@@ -36302,7 +33276,7 @@ module.exports = function hasNativeSymbols() {
 	return hasSymbolSham();
 };
 
-},{"./shams":435}],435:[function(require,module,exports){
+},{"./shams":432}],432:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./shams')} */
@@ -36349,7 +33323,7 @@ module.exports = function hasSymbols() {
 	return true;
 };
 
-},{}],436:[function(require,module,exports){
+},{}],433:[function(require,module,exports){
 'use strict';
 
 var call = Function.prototype.call;
@@ -36359,7 +33333,7 @@ var bind = require('function-bind');
 /** @type {import('.')} */
 module.exports = bind.call(call, $hasOwn);
 
-},{"function-bind":427}],437:[function(require,module,exports){
+},{"function-bind":424}],434:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -36369,7 +33343,7 @@ __export(require("./isMobile"));
 var isMobile_1 = require("./isMobile");
 exports["default"] = isMobile_1["default"];
 
-},{"./isMobile":438}],438:[function(require,module,exports){
+},{"./isMobile":435}],435:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 var appleIphone = /iPhone/i;
@@ -36498,19 +33472,19 @@ function isMobile(param) {
 }
 exports["default"] = isMobile;
 
-},{}],439:[function(require,module,exports){
+},{}],436:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./abs')} */
 module.exports = Math.abs;
 
-},{}],440:[function(require,module,exports){
+},{}],437:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./floor')} */
 module.exports = Math.floor;
 
-},{}],441:[function(require,module,exports){
+},{}],438:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./isNaN')} */
@@ -36518,31 +33492,31 @@ module.exports = Number.isNaN || function isNaN(a) {
 	return a !== a;
 };
 
-},{}],442:[function(require,module,exports){
+},{}],439:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./max')} */
 module.exports = Math.max;
 
-},{}],443:[function(require,module,exports){
+},{}],440:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./min')} */
 module.exports = Math.min;
 
-},{}],444:[function(require,module,exports){
+},{}],441:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./pow')} */
 module.exports = Math.pow;
 
-},{}],445:[function(require,module,exports){
+},{}],442:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./round')} */
 module.exports = Math.round;
 
-},{}],446:[function(require,module,exports){
+},{}],443:[function(require,module,exports){
 'use strict';
 
 var $isNaN = require('./isNaN');
@@ -36555,7 +33529,7 @@ module.exports = function sign(number) {
 	return number < 0 ? -1 : +1;
 };
 
-},{"./isNaN":441}],447:[function(require,module,exports){
+},{"./isNaN":438}],444:[function(require,module,exports){
 (function (global){(function (){
 var hasMap = typeof Map === 'function' && Map.prototype;
 var mapSizeDescriptor = Object.getOwnPropertyDescriptor && hasMap ? Object.getOwnPropertyDescriptor(Map.prototype, 'size') : null;
@@ -37103,7 +34077,7 @@ function arrObjKeys(obj, inspect) {
 }
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./util.inspect":407}],448:[function(require,module,exports){
+},{"./util.inspect":404}],445:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), filterAlpha = require("@pixi/filter-alpha"), filterBlur = require("@pixi/filter-blur"), filterColorMatrix = require("@pixi/filter-color-matrix"), filterDisplacement = require("@pixi/filter-displacement"), filterFxaa = require("@pixi/filter-fxaa"), filterNoise = require("@pixi/filter-noise");
 const filters = {
@@ -37167,7 +34141,7 @@ Object.entries(filters).forEach(([key, FilterClass]) => {
 exports.filters = filters;
 
 
-},{"@pixi/core":151,"@pixi/filter-alpha":245,"@pixi/filter-blur":250,"@pixi/filter-color-matrix":253,"@pixi/filter-displacement":257,"@pixi/filter-fxaa":261,"@pixi/filter-noise":263}],449:[function(require,module,exports){
+},{"@pixi/core":148,"@pixi/filter-alpha":242,"@pixi/filter-blur":247,"@pixi/filter-color-matrix":250,"@pixi/filter-displacement":254,"@pixi/filter-fxaa":258,"@pixi/filter-noise":260}],446:[function(require,module,exports){
 "use strict";
 require("@pixi/mixin-cache-as-bitmap");
 require("@pixi/mixin-get-child-by-name");
@@ -37384,7 +34358,7 @@ Object.keys(textHtml).forEach(function(k) {
 });
 
 
-},{"./filters.js":448,"@pixi/accessibility":40,"@pixi/app":43,"@pixi/assets":64,"@pixi/compressed-textures":97,"@pixi/core":151,"@pixi/display":228,"@pixi/events":239,"@pixi/extract":242,"@pixi/filter-alpha":245,"@pixi/filter-blur":250,"@pixi/filter-color-matrix":253,"@pixi/filter-displacement":257,"@pixi/filter-fxaa":261,"@pixi/filter-noise":263,"@pixi/graphics":269,"@pixi/mesh":307,"@pixi/mesh-extras":302,"@pixi/mixin-cache-as-bitmap":310,"@pixi/mixin-get-child-by-name":311,"@pixi/mixin-get-global-position":312,"@pixi/particle-container":316,"@pixi/prepare":323,"@pixi/sprite":344,"@pixi/sprite-animated":334,"@pixi/sprite-tiling":337,"@pixi/spritesheet":346,"@pixi/text":373,"@pixi/text-bitmap":356,"@pixi/text-html":368}],450:[function(require,module,exports){
+},{"./filters.js":445,"@pixi/accessibility":37,"@pixi/app":40,"@pixi/assets":61,"@pixi/compressed-textures":94,"@pixi/core":148,"@pixi/display":225,"@pixi/events":236,"@pixi/extract":239,"@pixi/filter-alpha":242,"@pixi/filter-blur":247,"@pixi/filter-color-matrix":250,"@pixi/filter-displacement":254,"@pixi/filter-fxaa":258,"@pixi/filter-noise":260,"@pixi/graphics":266,"@pixi/mesh":304,"@pixi/mesh-extras":299,"@pixi/mixin-cache-as-bitmap":307,"@pixi/mixin-get-child-by-name":308,"@pixi/mixin-get-global-position":309,"@pixi/particle-container":313,"@pixi/prepare":320,"@pixi/sprite":341,"@pixi/sprite-animated":331,"@pixi/sprite-tiling":334,"@pixi/spritesheet":343,"@pixi/text":370,"@pixi/text-bitmap":353,"@pixi/text-html":365}],447:[function(require,module,exports){
 'use strict';
 
 var inspect = require('object-inspect');
@@ -37499,7 +34473,7 @@ module.exports = function getSideChannelList() {
 	return channel;
 };
 
-},{"es-errors/type":422,"object-inspect":447}],451:[function(require,module,exports){
+},{"es-errors/type":419,"object-inspect":444}],448:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -37569,7 +34543,7 @@ module.exports = !!$Map && /** @type {Exclude<import('.'), false>} */ function g
 	return channel;
 };
 
-},{"call-bound":413,"es-errors/type":422,"get-intrinsic":428,"object-inspect":447}],452:[function(require,module,exports){
+},{"call-bound":410,"es-errors/type":419,"get-intrinsic":425,"object-inspect":444}],449:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -37655,7 +34629,7 @@ module.exports = $WeakMap
 	}
 	: getSideChannelMap;
 
-},{"call-bound":413,"es-errors/type":422,"get-intrinsic":428,"object-inspect":447,"side-channel-map":451}],453:[function(require,module,exports){
+},{"call-bound":410,"es-errors/type":419,"get-intrinsic":425,"object-inspect":444,"side-channel-map":448}],450:[function(require,module,exports){
 'use strict';
 
 var $TypeError = require('es-errors/type');
@@ -37700,7 +34674,7 @@ module.exports = function getSideChannel() {
 	return channel;
 };
 
-},{"es-errors/type":422,"object-inspect":447,"side-channel-list":450,"side-channel-map":451,"side-channel-weakmap":452}],454:[function(require,module,exports){
+},{"es-errors/type":419,"object-inspect":444,"side-channel-list":447,"side-channel-map":448,"side-channel-weakmap":449}],451:[function(require,module,exports){
 (function (global){(function (){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -38237,7 +35211,7 @@ module.exports = function getSideChannel() {
 }(this));
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],455:[function(require,module,exports){
+},{}],452:[function(require,module,exports){
 'use strict';
 
 var replace = String.prototype.replace;
@@ -38262,7 +35236,7 @@ module.exports = {
     RFC3986: Format.RFC3986
 };
 
-},{}],456:[function(require,module,exports){
+},{}],453:[function(require,module,exports){
 'use strict';
 
 var stringify = require('./stringify');
@@ -38275,7 +35249,7 @@ module.exports = {
     stringify: stringify
 };
 
-},{"./formats":455,"./parse":457,"./stringify":458}],457:[function(require,module,exports){
+},{"./formats":452,"./parse":454,"./stringify":455}],454:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -38605,7 +35579,7 @@ module.exports = function (str, opts) {
     return utils.compact(obj);
 };
 
-},{"./utils":459}],458:[function(require,module,exports){
+},{"./utils":456}],455:[function(require,module,exports){
 'use strict';
 
 var getSideChannel = require('side-channel');
@@ -38963,7 +35937,7 @@ module.exports = function (object, opts) {
     return joined.length > 0 ? prefix + joined : '';
 };
 
-},{"./formats":455,"./utils":459,"side-channel":453}],459:[function(require,module,exports){
+},{"./formats":452,"./utils":456,"side-channel":450}],456:[function(require,module,exports){
 'use strict';
 
 var formats = require('./formats');
@@ -39233,7 +36207,7 @@ module.exports = {
     merge: merge
 };
 
-},{"./formats":455}],460:[function(require,module,exports){
+},{"./formats":452}],457:[function(require,module,exports){
 /*
  * Copyright Joyent, Inc. and other Node contributors.
  *
@@ -40011,4 +36985,4 @@ exports.format = urlFormat;
 
 exports.Url = Url;
 
-},{"punycode/":454,"qs":456}]},{},[1,20,29,2,21,22,23,24,25,26,27,28,30,31,32,33,34,35,36,37,13,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19]);
+},{"punycode/":451,"qs":453}]},{},[27]);

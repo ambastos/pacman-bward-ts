@@ -1,5 +1,5 @@
-import DrownManager from "../core/drownManager.js"
-import Flood from "../core/flood.js"
+import DrownManager from "../core/drownManager.ts"
+import Flood from "../core/flood.ts"
 
 const States = {
     IDLE_STATE:0, 

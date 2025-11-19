@@ -1,5 +1,5 @@
 import { Assets, Cache, ProgressCallback, Texture } from "pixi.js";
-import Flood from "./flood.js";
+import Flood from "./flood.ts";
 class AssetsManager {
     flood: Flood;
     constructor(flood: Flood) {

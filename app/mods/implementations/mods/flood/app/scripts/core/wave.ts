@@ -1,8 +1,8 @@
 import { Container, DisplayObject, Graphics, Polygon, Sprite, Texture } from "pixi.js"
-import DrownManager from "./drownManager.js"
-import Maze from "../../../../../../../scripts/mazes/maze.js"
-import EntitiesManager from "./entitiesManager.js"
-import { getMazeWays } from "../utils/util.js"
+import DrownManager from "./drownManager.ts"
+import Maze from "../../../../../../../scripts/mazes/maze.ts"
+import EntitiesManager from "./entitiesManager.ts"
+import { getMazeWays } from "../utils/util.ts"
 
 class Wave extends Sprite {
     speedY = 15    
@@ -16,7 +16,7 @@ class Wave extends Sprite {
     gp: Graphics
     container: Container
     startTopY: number
-    bubblesLocation!: any[]
+    bubblesLocation!: any[] 
     duration!:number
     elements:unknown[] = []
     queuedList:any[] = []
@@ -47,7 +47,7 @@ class Wave extends Sprite {
         const id = Date.now()
         element.name = type
         Object.defineProperty(element,"id",{value:id})
-        this.queuedList.push(element)
+        this.queuedList.push(element) 
     }
     private queuedElementsBy(type:string) {   
         return this.queuedList.filter(f=>{return f.name == type})
@@ -88,12 +88,12 @@ class Wave extends Sprite {
             let cols = wayCells.find((f: { row: number} ) => f.row == row)!.cols
             let indexCol = Math.floor(Math.random() * (cols.length - 1))
             let col = cols[indexCol]
-            const pixelBounds = this.maze.getPixelCoordinates(row!, col!)
+            const pixelBounds = this.maze.getPixelCoordinates(col!, row!) 
 
             const bubble = new Sprite(this.drownManager.flood.am.getTexture("bubbles"))
             //bubleSprite.tint = 0x002400
             //bubleSprite.alpha = 0.6 
-            bubble.height = tileSize
+            bubble.height = tileSize  
             bubble.width = tileSize
             bubble.position.set(pixelBounds.x, pixelBounds.y)
             this.queueElement("bubble", bubble)

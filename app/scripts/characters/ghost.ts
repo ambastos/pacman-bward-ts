@@ -1,16 +1,16 @@
 import { Container, ObservablePoint, Rectangle, RenderTexture, Sprite, Texture } from "pixi.js";
-import Entity from "./entity.js";
-import GameCoordinator from "../core/gameCoordinator.js";
-import CharacterUtil from "../utilities/characterUtil.js";
-import Pacman from "./pacman.js";
-import { copyPosition, createObservablePoint } from "../utilities/utils.js";
+import Entity from "./entity.ts";
+import GameCoordinator from "../core/gameCoordinator.ts";
+import CharacterUtil from "../utilities/characterUtil.ts";
+import Pacman from "./pacman.ts";
+import { copyPosition, createObservablePoint } from "../utilities/utils.ts";
 
 class Ghost extends Entity{
     pacman:Pacman
     blinky:Ghost | undefined;    
     defaultSpeed!:any    
     cruiseElroy!:any
-    mode!:string
+    mode!:string 
     defaultMode!:string
     idleMode!:string | undefined
     slowSpeed!:number

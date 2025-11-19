@@ -1,9 +1,9 @@
 import { Sprite } from "pixi.js";
-import Wave from "./wave.js";
-import Sonic from "../entities/sonic.js";
-import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.js";
-import { getMazeWays } from "../utils/util.js";
-import Entity from "../entities/entity.js";
+import Wave from "./wave.ts";
+import Sonic from "../entities/sonic.ts";
+import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts";
+import { getMazeWays } from "../utils/util.ts";
+import Entity from "../entities/entity.ts";
 
 class EntitiesManager {
     wave: Wave;

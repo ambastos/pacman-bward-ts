@@ -1,5 +1,5 @@
-import Entity from "../characters/entity.js";
-import GameCoordinator from "./gameCoordinator.js";
+import Entity from "../characters/entity.ts";
+import GameCoordinator from "./gameCoordinator.ts";
 
 class GameEngine {
   gameCoordinator: any;

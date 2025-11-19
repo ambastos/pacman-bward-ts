@@ -1,8 +1,8 @@
 import { ObservablePoint } from "pixi.js";
-import Entity from "../characters/entity.js";
-import { copyPosition, createObservablePoint } from "./utils.js";
+import Entity from "../characters/entity.ts";
+import { copyPosition, createObservablePoint } from "./utils.ts";
 
-class CharacterUtil {
+class CharacterUtil { 
   directions  
   constructor() {
     this.directions = {

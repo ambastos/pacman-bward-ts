@@ -1,9 +1,9 @@
 //import Flood from '../../../../flood-pacman-bward/app/scripts/flood.js'
 //import Flood from 'flood-pacman-bward''
 import { ProgressCallback } from 'pixi.js'
-import Mod from '../mod.js'
-import Flood from './mods/flood/app/scripts/core/flood.js'
-import GameCoordinator from '../../scripts/core/gameCoordinator.js'
+import Mod from '../mod.ts'
+import Flood from './mods/flood/app/scripts/core/flood.ts'
+import GameCoordinator from '../../scripts/core/gameCoordinator.ts'
 
 class FloodModImp extends Mod{
     flood

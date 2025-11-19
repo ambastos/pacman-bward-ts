@@ -1,5 +1,5 @@
-import DrownManager from "../core/drownManager.js"
-import { State } from "./state.js"
+import DrownManager from "../core/drownManager.ts"
+import { State } from "./state.ts"
 class CancelState extends State {
      constructor(drownManager: DrownManager) {
         super(drownManager)

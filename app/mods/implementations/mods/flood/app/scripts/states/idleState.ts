@@ -1,6 +1,6 @@
-import DrownManager from '../core/drownManager.js'
-import Wave from '../core/wave.js'
-import {State, States} from './state.js'
+import DrownManager from '../core/drownManager.ts'
+import Wave from '../core/wave.ts'
+import {State, States} from './state.ts'
 class IdleState extends State {    
     constructor(drownManager: DrownManager) {
         super(drownManager)        

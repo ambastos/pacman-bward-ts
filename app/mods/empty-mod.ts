@@ -1,5 +1,5 @@
-import GameCoordinator from "../scripts/core/gameCoordinator.js";
-import Mod from "./mod.js";
+import GameCoordinator from "../scripts/core/gameCoordinator.ts";
+import Mod from "./mod.ts";
 
 class EmptyMod extends Mod{
     constructor(gameCoordinator:GameCoordinator) {

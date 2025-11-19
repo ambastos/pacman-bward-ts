@@ -1,8 +1,8 @@
 import { Container, DisplayObject, IHitArea, ObservablePoint, Rectangle, Sprite } from "pixi.js"
-import GameCoordinator from "../core/gameCoordinator.js"
-import CharacterUtil from "../utilities/characterUtil.js"
+import GameCoordinator from "../core/gameCoordinator.ts"
+import CharacterUtil from "../utilities/characterUtil.ts"
 import EventEmitter from "eventemitter3"
-import { createObservablePoint } from "../utilities/utils.js"
+import { createObservablePoint } from "../utilities/utils.ts"
 
 class Entity extends Sprite {
     allowCollision = true

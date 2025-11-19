@@ -1,8 +1,8 @@
 import { Sprite, Texture } from "pixi.js";
-import Flood from "../core/flood.js";
-import Wave from "../core/wave.js";
-import Animator from "../animations/animator.js";
-import Entity from "./entity.js";
+import Flood from "../core/flood.ts";
+import Wave from "../core/wave.ts";
+import Animator from "../animations/animator.ts";
+import Entity from "./entity.ts";
 
 class Sonic extends Sprite implements Entity{
     flood: Flood;

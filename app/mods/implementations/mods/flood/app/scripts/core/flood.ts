@@ -1,16 +1,16 @@
 import { Assets, Container, Graphics} from "pixi.js"
-import Breath from "./breath.js"
-import IdleState from "../states/idleState.js"
-import StartState from "../states/startState.js"
-import EndState from "../states/endState.js"
-import CancelState from "../states/cancelState.js"
-import DrownManager from "./drownManager.js"
-import Mod from "../mod.js"
-import { State, States } from "../states/state.js"
-import AssetsManager from "./assetsManager.js"
-import Pacman from "../../../../../../../scripts/characters/pacman.js"
-import Ghost from "../../../../../../../scripts/characters/ghost.js"
-import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.js"
+import Breath from "./breath.ts"
+import IdleState from "../states/idleState.ts"
+import StartState from "../states/startState.ts"
+import EndState from "../states/endState.ts"
+import CancelState from "../states/cancelState.ts"
+import DrownManager from "./drownManager.ts"
+import Mod from "../mod.ts"
+import { State, States } from "../states/state.ts"
+import AssetsManager from "./assetsManager.ts"
+import Pacman from "../../../../../../../scripts/characters/pacman.ts"
+import Ghost from "../../../../../../../scripts/characters/ghost.ts"
+import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -37,6 +37,7 @@ class Flood extends Mod{
         this.am = new AssetsManager(this)
         this.gp = new Graphics()      
         this.drownManager = new DrownManager(this)  
+        console.log("Flood mod is active!")
     }
     async initialize() {
         this.pacman = this.gc.pacman

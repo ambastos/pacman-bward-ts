@@ -1,4 +1,3 @@
-import GameCoordinator from "./app/scripts/core/gameCoordinator.js"
 
 // module.exports = {
 //   "extends": "airbnb-base",
@@ -11,4 +10,3 @@ import GameCoordinator from "./app/scripts/core/gameCoordinator.js"
 //   }
 // };
 
-export default GameCoordinator

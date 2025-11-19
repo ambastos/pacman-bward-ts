@@ -1,6 +1,6 @@
 import { Assets, BaseTexture, Cache, Container, Matrix, 
   Rectangle, RenderTexture, SCALE_MODES, Sprite, Texture } from "pixi.js"
-import GameCoordinator from "./gameCoordinator.js";
+import GameCoordinator from "./gameCoordinator.ts";
 class AssetsManager {       
     gameCoordinator:GameCoordinator
     textures:Map<String,Texture> 

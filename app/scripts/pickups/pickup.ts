@@ -1,7 +1,7 @@
 import { Container, RenderTexture, Sprite, Texture } from "pixi.js";
-import Entity from "../characters/entity.js";
-import GameCoordinator from "../core/gameCoordinator.js";
-import Pacman from "../characters/pacman.js";
+import Entity from "../characters/entity.ts";
+import GameCoordinator from "../core/gameCoordinator.ts";
+import Pacman from "../characters/pacman.ts";
 
 class Pickup extends Entity {
   type:string

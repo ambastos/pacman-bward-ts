@@ -1,5 +1,5 @@
 import EventEmitter from "eventemitter3"
-import GameCoordinator from "../scripts/core/gameCoordinator.js"
+import GameCoordinator from "../scripts/core/gameCoordinator.ts"
 
 /**
  * Module class to pacmam-bward game
@@ -21,7 +21,8 @@ class Mod {
     getResources():string[] {
         return []
     }
-    async loadAssets(callback:unknown):Promise<unknown> {
+    //@ts-ignore
+    async loadAssets(callback:unknown):Promise<Record<string, any>> | null {
       return null
     }
     reset() {

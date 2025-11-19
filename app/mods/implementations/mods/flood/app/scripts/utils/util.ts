@@ -1,5 +1,5 @@
 import { Rectangle } from "pixi.js"
-import Maze from "../../../../../../../scripts/mazes/maze.js"
+import Maze from "../../../../../../../scripts/mazes/maze.ts"
 /**
  * 
  * @param {Rectangle} rectangle 

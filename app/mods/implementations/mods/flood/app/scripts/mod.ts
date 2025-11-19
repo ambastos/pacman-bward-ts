@@ -1,5 +1,5 @@
 import EventEmitter from "eventemitter3"
-import GameCoordinator from "../../../../../../scripts/core/gameCoordinator.js"
+import GameCoordinator from "../../../../../../scripts/core/gameCoordinator.ts"
 
 /**
  * Module class to pacmam-bward game

@@ -1,5 +1,5 @@
-import maze1 from "../mazes/maze-1.js"
-import Maze from "../mazes/maze.js"
+import maze1 from "../mazes/maze-1.ts"
+import Maze from "../mazes/maze.ts"
 
 class MazeManager {
     mazes: Map<String, Maze>    

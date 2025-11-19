@@ -1,8 +1,8 @@
 import {  ObservablePoint, Sprite, Texture } from "pixi.js";
-import Entity from "./entity.js";
-import GameCoordinator from "../core/gameCoordinator.js";
-import CharacterUtil from "../utilities/characterUtil.js";
-import { copyPosition } from "../utilities/utils.js";
+import Entity from "./entity.ts";
+import GameCoordinator from "../core/gameCoordinator.ts";
+import CharacterUtil from "../utilities/characterUtil.ts";
+import { copyPosition } from "../utilities/utils.ts";
 import _ from 'lodash'
 
 class Pacman extends Entity{

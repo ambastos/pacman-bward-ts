@@ -1,4 +1,4 @@
-import { Coordinate } from "../characters/types.js"
+import { Coordinate } from "../characters/types.ts"
 
 class Maze {
     width!: number

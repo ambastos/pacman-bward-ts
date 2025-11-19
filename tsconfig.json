@@ -8,7 +8,7 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
-    "target": "esnext",
+    "target": "es2015",
    // "moduleResolution": "nodenext",
     "esModuleInterop": true,
     "types": [
@@ -30,6 +30,7 @@
     "exactOptionalPropertyTypes": true,
 
     // Style Options
+    //"noImplicitAny": true,
     // "noImplicitReturns": true,
     // "noImplicitOverride": true,
     // "noUnusedLocals": true,
@@ -44,7 +45,9 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "emitDeclarationOnly": true,
+    "allowImportingTsExtensions": true
   },
   "include": [
     "app/**/*.ts",

@@ -4,19 +4,19 @@ import {
 } from "pixi.js";
 import * as PIXI from 'pixi.js'
 import EventEmitter from "eventemitter3"
-import Maze from "../mazes/maze.js";
-import MazeManager from "./mazeManagert.js";
-import SoundManager from "../utilities/soundManager.js";
-import AssetsManager from "./assetsManager.js";
-import Ghost from "../characters/ghost.js";
-import Pacman from "../characters/pacman.js";
-import Pickup from "../pickups/pickup.js";
-import CharacterUtil from "../utilities/characterUtil.js";
-import Entity from "../characters/entity.js";
-import GameEngine from "./gameEngine.js";
-import Timer from "../utilities/timer.js";
-import Mod from "../../mods/mod.js";
-import EmptyMod from "../../mods/empty-mod.js";
+import Maze from "../mazes/maze.ts";
+import MazeManager from "./mazeManagert.ts";
+import SoundManager from "../utilities/soundManager.ts";
+import AssetsManager from "./assetsManager.ts";
+import Ghost from "../characters/ghost.ts";
+import Pacman from "../characters/pacman.ts";
+import Pickup from "../pickups/pickup.ts";
+import CharacterUtil from "../utilities/characterUtil.ts";
+import Entity from "../characters/entity.ts";
+import GameEngine from "./gameEngine.ts";
+import Timer from "../utilities/timer.ts";
+import Mod from "../../mods/mod.ts";
+import EmptyMod from "../../mods/empty-mod.ts";
 //global.window.Assets = Assets
 //import path from 'path'
 const options = {

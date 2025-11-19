@@ -1,5 +1,5 @@
-import Animator from "../animations/animator.js"
-import Flood from "../core/flood.js"
+import Animator from "../animations/animator.ts"
+import Flood from "../core/flood.ts"
 
 interface Entity  {
     flood:Flood
