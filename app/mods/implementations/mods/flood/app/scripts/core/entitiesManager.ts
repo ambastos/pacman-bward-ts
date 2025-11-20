@@ -4,6 +4,7 @@ import Sonic from "../entities/sonic.ts";
 import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts";
 import { getMazeWays } from "../utils/util.ts";
 import Entity from "../entities/entity.ts";
+import { ObjectsGroup } from "../types/types.ts";
 
 class EntitiesManager {
     wave: Wave;
@@ -25,6 +26,9 @@ class EntitiesManager {
                 return arr 
             }).flat()
             const index =  Math.floor(Math.random() * (cells.length -1)) 
+            //TODO only for debuggin, Just adding one sonic
+            if (this.wave.elements.get(ObjectsGroup.ENTITY)!.length > 0)
+                return 
             const sonic = new Sonic(this.wave.waveManager.flood)
             this.wave.waveManager.createBreath(sonic)
             const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)

@@ -475,6 +475,7 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _sonic = _interopRequireDefault(require("../entities/sonic.ts"));
 var _util = require("../utils/util.ts");
+var _types = require("../types/types.ts");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
@@ -509,6 +510,8 @@ var EntitiesManager = /*#__PURE__*/function () {
           return arr;
         }).flat();
         var index = Math.floor(Math.random() * (cells.length - 1));
+        //TODO only for debuggin, Just adding one sonic
+        if (this.wave.elements.get(_types.ObjectsGroup.ENTITY).length > 0) return;
         var sonic = new _sonic["default"](this.wave.waveManager.flood);
         this.wave.waveManager.createBreath(sonic);
         var coords = this.wave.maze.getPixelCoordinates(cells[index].row, cells[index].col);
@@ -520,7 +523,7 @@ var EntitiesManager = /*#__PURE__*/function () {
 }();
 var _default = exports["default"] = EntitiesManager;
 
-},{"../entities/sonic.ts":11,"../utils/util.ts":19}],8:[function(require,module,exports){
+},{"../entities/sonic.ts":11,"../types/types.ts":18,"../utils/util.ts":19}],8:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -773,8 +776,8 @@ var Wave = /*#__PURE__*/function (_Sprite) {
     _this.waveManager = drownManager;
     _this.gp = _this.waveManager.gp;
     _this.entitiesManager = new _entitiesManager["default"](_this);
-    _this.elements.set(_types.ObjectsType.OBJECT, []);
-    _this.elements.set(_types.ObjectsType.ENTITY, []);
+    _this.elements.set(_types.ObjectsGroup.OBJECT, []);
+    _this.elements.set(_types.ObjectsGroup.ENTITY, []);
     _this.gp.zIndex = _this.zIndex;
     _this.container = _this.waveManager.gc.stage;
     //if (this.container.children.length > 0) 
@@ -829,7 +832,7 @@ var Wave = /*#__PURE__*/function (_Sprite) {
     value: function clearElements() {
       var _this2 = this;
       //Exclude the entities after test
-      var objects = this.elements.get(_types.ObjectsType.OBJECT);
+      var objects = this.elements.get(_types.ObjectsGroup.OBJECT);
       objects.forEach(function (el) {
         _this2.container.removeChild(el);
       });
@@ -880,7 +883,7 @@ var Wave = /*#__PURE__*/function (_Sprite) {
       for (var i = 0; i < bubbles.length; i++) {
         var bubble = bubbles[i];
         if (bubble.position.y == this.y) {
-          this.addElement(_types.ObjectsType.OBJECT, bubble);
+          this.addElement(_types.ObjectsGroup.OBJECT, bubble);
           this.dequeueElement(bubble);
         }
       }
@@ -896,13 +899,11 @@ var Wave = /*#__PURE__*/function (_Sprite) {
         this.getGeneratedBubbles();
         var entities = this.queuedElementsBy("entity");
         //TODO only for debug erase that
-        if (entities.length > 1) return;
+        if (this.elements.get(_types.ObjectsGroup.ENTITY).length > 1) return;
         entities.forEach(function (e) {
           e.name = "sonic";
-          _this4.addElement(_types.ObjectsType.ENTITY, e);
+          _this4.addElement(_types.ObjectsGroup.ENTITY, e);
           _this4.dequeueElement(e);
-          //Put it in the maze 
-          _this4.waveManager.gc.entityList.push(e);
         });
       }
     }
@@ -914,11 +915,11 @@ var Wave = /*#__PURE__*/function (_Sprite) {
         this.decreasing = true;
         this.updatePosition();
         //console.log("decrease wave: ", this.height, this.position)
-        var bubbles = this.getElementsBy(_types.ObjectsType.OBJECT, "bubble");
+        var bubbles = this.getElementsBy(_types.ObjectsGroup.OBJECT, "bubble");
         for (var i = 0; i < bubbles.length; i++) {
           var bubble = bubbles[i];
           if (bubble.y <= this.y) {
-            this.removeElement(_types.ObjectsType.OBJECT, bubble);
+            this.removeElement(_types.ObjectsGroup.OBJECT, bubble);
           }
         }
       }
@@ -1248,7 +1249,7 @@ var WaveManager = /*#__PURE__*/function () {
       if (this.wave) {
         this.animator.update();
         var container = this.wave.container;
-        var bubbles = this.wave.getElementsBy(_types.ObjectsType.OBJECT, "bubble");
+        var bubbles = this.wave.getElementsBy(_types.ObjectsGroup.OBJECT, "bubble");
         var pacman = this.gc.pacman;
         //@ts-ignore
         var hitArea = (0, _util.enlarge)(pacman.hitArea.clone(), 2);
@@ -1867,11 +1868,11 @@ var State = exports.State = /*#__PURE__*/function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ObjectsType = void 0;
-var ObjectsType = exports.ObjectsType = /*#__PURE__*/function (ObjectsType) {
-  ObjectsType["OBJECT"] = "objects";
-  ObjectsType["ENTITY"] = "entities";
-  return ObjectsType;
+exports.ObjectsGroup = void 0;
+var ObjectsGroup = exports.ObjectsGroup = /*#__PURE__*/function (ObjectsGroup) {
+  ObjectsGroup["OBJECT"] = "objects";
+  ObjectsGroup["ENTITY"] = "entities";
+  return ObjectsGroup;
 }({});
 
 },{}],19:[function(require,module,exports){
@@ -4042,6 +4043,7 @@ var _ghost = _interopRequireDefault(require("../characters/ghost.ts"));
 var _pacman = _interopRequireDefault(require("../characters/pacman.ts"));
 var _pickup = _interopRequireDefault(require("../pickups/pickup.ts"));
 var _characterUtil = _interopRequireDefault(require("../utilities/characterUtil.ts"));
+var _staticEntity = _interopRequireDefault(require("../characters/staticEntity.ts"));
 var _gameEngine = _interopRequireDefault(require("./gameEngine.ts"));
 var _timer = _interopRequireDefault(require("../utilities/timer.ts"));
 var _emptyMod = _interopRequireDefault(require("../../mods/empty-mod.ts"));
@@ -4077,6 +4079,7 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 _pixi.BaseTexture.defaultOptions.scaleMode = _pixi.SCALE_MODES.NEAREST;
 var GameCoordinator = /*#__PURE__*/function () {
   function GameCoordinator() {
+    var _this = this;
     _classCallCheck(this, GameCoordinator);
     _defineProperty(this, "mod", void 0);
     _defineProperty(this, "gameUi", void 0);
@@ -4128,7 +4131,7 @@ var GameCoordinator = /*#__PURE__*/function () {
     _defineProperty(this, "inky", void 0);
     _defineProperty(this, "clyde", void 0);
     _defineProperty(this, "fruit", void 0);
-    _defineProperty(this, "entityList", void 0);
+    _defineProperty(this, "entityList", []);
     _defineProperty(this, "ghosts", void 0);
     _defineProperty(this, "scaredGhosts", void 0);
     _defineProperty(this, "idleGhosts", void 0);
@@ -4168,6 +4171,16 @@ var GameCoordinator = /*#__PURE__*/function () {
     this.height = this.scaledTileSize * 31;
     this.width = this.scaledTileSize * 28;
     this.maze.setDimensions(this.width, this.height);
+
+    //This contains all the objects of the game
+    this.stage = new _pixi.Container();
+    this.stage.sortableChildren = true;
+    this.stage.on("childAdded", function (child) {
+      if (child instanceof _staticEntity["default"]) _this.entityList.push(child);
+    });
+    this.stage.on("childRemoved", function (child) {
+      if (child instanceof _staticEntity["default"]) _this.entityList.splice(_this.entityList.indexOf(child), 1);
+    });
 
     //PIXI
     window['PIXI'] = PIXI;
@@ -4244,13 +4257,13 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "startButtonClick",
     value: function startButtonClick() {
-      var _this = this;
+      var _this2 = this;
       this.leftCover.style.left = '-50%';
       this.rightCover.style.right = '-50%';
       this.mainMenu.style.opacity = "0";
       this.gameStartButton.disabled = true;
       setTimeout(function () {
-        _this.mainMenu.style.visibility = 'hidden';
+        _this2.mainMenu.style.visibility = 'hidden';
       }, 1000);
       this.reset();
       if (this.firstGame) {
@@ -4327,7 +4340,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "reset",
     value: function reset() {
-      var _this2 = this;
+      var _this3 = this;
       this.activeTimers = [];
       this.points = 0;
       this.level = 1;
@@ -4341,7 +4354,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.highScore = localStorage.getItem('highScore');
       if (this.firstGame) {
         setInterval(function () {
-          _this2.collisionDetectionLoop();
+          _this3.collisionDetectionLoop();
         }, 500);
         this.pacman = new _pacman["default"](this, new _characterUtil["default"]());
         this.blinky = new _ghost["default"](this, 'blinky', this.level, new _characterUtil["default"]());
@@ -4350,21 +4363,14 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.clyde = new _ghost["default"](this, 'clyde', this.level, new _characterUtil["default"]());
         this.fruit = new _pickup["default"]('fruit', 13.5, 17, 100, this);
       }
-      this.entityList = [this.pacman, this.blinky, this.pinky, this.inky, this.clyde, this.fruit];
+      this.stage.addChild(this.pacman, this.blinky, this.pinky, this.inky, this.clyde, this.fruit);
       this.ghosts = [this.blinky, this.pinky, this.inky, this.clyde];
       this.scaredGhosts = [];
       this.eyeGhosts = 0;
       if (this.firstGame) {
         //add dots,  pacman, ghosts sprites to the stage
-        this.drawMaze(this.mazeArray, this.entityList);
-        this.pickups.forEach(function (p) {
-          _this2.stage.addChild(p);
-        });
-        this.stage.addChild(this.pacman);
+        this.drawMaze(this.mazeArray);
         this.stage.addChild(this.pacman.spriteArrow);
-        this.ghosts.forEach(function (g) {
-          _this2.stage.addChild(g);
-        });
         this.soundManager = new _soundManager["default"]();
         this.setUiDimensions();
       } else {
@@ -4374,9 +4380,8 @@ var GameCoordinator = /*#__PURE__*/function () {
         });
         this.pickups.forEach(function (pickup) {
           if (pickup.type !== 'fruit') {
-            _this2.remainingDots += 1;
+            _this3.remainingDots += 1;
             pickup.reset();
-            _this2.entityList.push(pickup);
           }
         });
       }
@@ -4405,12 +4410,11 @@ var GameCoordinator = /*#__PURE__*/function () {
     /**
      * Adds HTML elements to draw on the webpage by iterating through the 2D maze array
      * @param {Array} mazeArray - 2D array representing the game board
-     * @param {Array} entityList - List of entities to be used throughout the game
      */
   }, {
     key: "drawMaze",
-    value: function drawMaze(mazeArray, entityList) {
-      var _this3 = this;
+    value: function drawMaze(mazeArray) {
+      var _this4 = this;
       this.pickups = [this.fruit];
       this.mazeDiv.style.height = "".concat(this.height * this.scale, "px");
       this.mazeDiv.style.width = "".concat(this.width * this.scale, "px");
@@ -4421,10 +4425,10 @@ var GameCoordinator = /*#__PURE__*/function () {
           if (block === 'o' || block === 'O') {
             var type = block === 'o' ? 'pacdot' : 'powerPellet';
             var points = block === 'o' ? 10 : 50;
-            var dot = new _pickup["default"](type, columnIndex, rowIndex, points, _this3);
-            entityList.push(dot);
-            _this3.pickups.push(dot);
-            _this3.remainingDots += 1;
+            var dot = new _pickup["default"](type, columnIndex, rowIndex, points, _this4);
+            _this4.stage.addChild(dot);
+            _this4.pickups.push(dot);
+            _this4.remainingDots += 1;
           }
         });
       });
@@ -4432,6 +4436,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "createUi",
     value: function createUi() {
+      this.stage.scale.set(this.scale);
       this.topRender = new RendererTop(this, {
         backgroundColor: 0x0000ff,
         width: this.width * this.scale,
@@ -4451,9 +4456,6 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.view.height = this.tileSize * 31 * this.scale;
       this.mazeDiv.appendChild(this.view);
       this.view.classList.add("view");
-      this.stage = new _pixi.Container();
-      this.stage.sortableChildren = true;
-      this.stage.scale.set(this.scale);
       var opts = {
         view: this.view,
         width: this.view.width,
@@ -4508,7 +4510,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "startGameplay",
     value: function startGameplay(initialStart) {
-      var _this4 = this;
+      var _this5 = this;
       if (initialStart) {
         this.soundManager.play('game_start');
       }
@@ -4527,21 +4529,21 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.updateExtraLivesDisplay();
       new _timer["default"](function () {
         //for mods. start the mod 
-        _this4.mod.start();
-        _this4.allowPause = true;
-        _this4.cutscene = false;
-        _this4.soundManager.setCutscene(_this4.cutscene);
-        _this4.soundManager.setAmbience(_this4.determineSiren(_this4.remainingDots), false);
-        _this4.allowPacmanMovement = true;
-        _this4.pacman.moving = true;
-        _this4.ghosts.forEach(function (ghost) {
+        _this5.mod.start();
+        _this5.allowPause = true;
+        _this5.cutscene = false;
+        _this5.soundManager.setCutscene(_this5.cutscene);
+        _this5.soundManager.setAmbience(_this5.determineSiren(_this5.remainingDots), false);
+        _this5.allowPacmanMovement = true;
+        _this5.pacman.moving = true;
+        _this5.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.moving = true;
         });
-        _this4.ghostCycle('scatter');
-        _this4.idleGhosts = [_this4.pinky, _this4.inky, _this4.clyde];
-        _this4.releaseGhost();
-        _this4.emitter.emit("post-start");
+        _this5.ghostCycle('scatter');
+        _this5.idleGhosts = [_this5.pinky, _this5.inky, _this5.clyde];
+        _this5.releaseGhost();
+        _this5.emitter.emit("post-start");
       }, duration);
     }
     /**
@@ -4617,14 +4619,14 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "ghostCycle",
     value: function ghostCycle(mode) {
-      var _this5 = this;
+      var _this6 = this;
       var delay = mode === 'scatter' ? 7000 : 20000;
       var nextMode = mode === 'scatter' ? 'chase' : 'scatter';
       this.ghostCycleTimer = new _timer["default"](function () {
-        _this5.ghosts.forEach(function (ghost) {
+        _this6.ghosts.forEach(function (ghost) {
           ghost.changeMode(nextMode);
         });
-        _this5.ghostCycle(nextMode);
+        _this6.ghostCycle(nextMode);
       }, delay);
     }
 
@@ -4634,12 +4636,12 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "releaseGhost",
     value: function releaseGhost() {
-      var _this6 = this;
+      var _this7 = this;
       if (this.idleGhosts.length > 0) {
         var delay = Math.max((8 - (this.level - 1) * 4) * 1000, 0);
         this.endIdleTimer = new _timer["default"](function () {
-          _this6.idleGhosts[0].endIdleMode();
-          _this6.idleGhosts.shift();
+          _this7.idleGhosts[0].endIdleMode();
+          _this7.idleGhosts.shift();
         }, delay);
       }
     }
@@ -4650,13 +4652,13 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "registerEventListeners",
     value: function registerEventListeners() {
-      var _this7 = this;
+      var _this8 = this;
       //events: 
       //  load, start, post-start, pacman-death, post-death, ghost-eaten-<ghostName>, item-taken (item as argument),
       //  advance-level, game-over, speed-up-blinky, create-fruit
       this.emitter = new _eventemitter["default"]();
       this.entityList.forEach(function (e) {
-        e.emitter = _this7.emitter;
+        e.emitter = _this8.emitter;
         e.registerEventListeners();
       });
       this.emitter.on("start", this.startGameplay.bind(this));
@@ -4682,7 +4684,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       var directions = ['up', 'down', 'left', 'right'];
       directions.forEach(function (direction) {
         document.getElementById("button-".concat(direction)).addEventListener('touchstart', function () {
-          _this7.changeDirection(direction);
+          _this8.changeDirection(direction);
         });
       });
     }
@@ -4723,12 +4725,12 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "handlePauseKey",
     value: function handlePauseKey() {
-      var _this8 = this;
+      var _this9 = this;
       if (this.allowPause) {
         this.allowPause = false;
         setTimeout(function () {
-          if (!_this8.cutscene) {
-            _this8.allowPause = true;
+          if (!_this9.cutscene) {
+            _this9.allowPause = true;
           }
         }, 500);
         this.gameEngine.changePausedState(this.gameEngine.running);
@@ -4800,7 +4802,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "deathSequence",
     value: function deathSequence(event) {
-      var _this9 = this;
+      var _this0 = this;
       this.allowPause = false;
       this.cutscene = true;
       this.soundManager.setCutscene(this.cutscene);
@@ -4832,35 +4834,35 @@ var GameCoordinator = /*#__PURE__*/function () {
         ghostRef.moving = false;
       });
       new _timer["default"](function () {
-        _this9.ghosts.forEach(function (ghost) {
+        _this0.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.display = false;
         });
-        _this9.pacman.prepDeathAnimation();
-        _this9.soundManager.play('death');
-        if (_this9.lives > 0) {
+        _this0.pacman.prepDeathAnimation();
+        _this0.soundManager.play('death');
+        if (_this0.lives > 0) {
           var _event$detail;
-          _this9.lives -= 1;
+          _this0.lives -= 1;
           var callbackAfter = event === null || event === void 0 || (_event$detail = event.detail) === null || _event$detail === void 0 ? void 0 : _event$detail.callbackAfter;
           if (callbackAfter) callbackAfter();
           new _timer["default"](function () {
-            _this9.emitter.emit("post-death");
-            _this9.mazeCover.style.visibility = 'visible';
+            _this0.emitter.emit("post-death");
+            _this0.mazeCover.style.visibility = 'visible';
             new _timer["default"](function () {
               var _event$detail2;
-              _this9.allowKeyPresses = true;
-              _this9.mazeCover.style.visibility = 'hidden';
-              _this9.pacman.reset();
-              _this9.ghosts.forEach(function (ghost) {
+              _this0.allowKeyPresses = true;
+              _this0.mazeCover.style.visibility = 'hidden';
+              _this0.pacman.reset();
+              _this0.ghosts.forEach(function (ghost) {
                 ghost.reset();
               });
-              _this9.fruit.hideFruit();
+              _this0.fruit.hideFruit();
               var shouldRestart = (event === null || event === void 0 || (_event$detail2 = event.detail) === null || _event$detail2 === void 0 ? void 0 : _event$detail2.restart) === undefined ? true : event.detail.restart;
-              if (shouldRestart) _this9.emitter.emit("start");
+              if (shouldRestart) _this0.emitter.emit("start");
             }, 500);
           }, 2250);
         } else {
-          _this9.emitter.emit("game-over");
+          _this0.emitter.emit("game-over");
         }
       }, 750);
     }
@@ -4871,23 +4873,23 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "gameOver",
     value: function gameOver() {
-      var _this0 = this;
+      var _this1 = this;
       localStorage.setItem('highScore', this.highScore);
       new _timer["default"](function () {
         //for mods
-        _this0.mod.stop();
-        _this0.displayText({
-          x: _this0.scaledTileSize * 9,
-          y: _this0.scaledTileSize * 16.5
-        }, 'game_over', 4000, _this0.scaledTileSize * 10, _this0.scaledTileSize * 2);
-        _this0.fruit.hideFruit();
+        _this1.mod.stop();
+        _this1.displayText({
+          x: _this1.scaledTileSize * 9,
+          y: _this1.scaledTileSize * 16.5
+        }, 'game_over', 4000, _this1.scaledTileSize * 10, _this1.scaledTileSize * 2);
+        _this1.fruit.hideFruit();
         new _timer["default"](function () {
-          _this0.leftCover.style.left = '0';
-          _this0.rightCover.style.right = '0';
+          _this1.leftCover.style.left = '0';
+          _this1.rightCover.style.right = '0';
           setTimeout(function () {
-            _this0.mainMenu.style.opacity = "1";
-            _this0.gameStartButton.disabled = false;
-            _this0.mainMenu.style.visibility = 'visible';
+            _this1.mainMenu.style.opacity = "1";
+            _this1.gameStartButton.disabled = false;
+            _this1.mainMenu.style.visibility = 'visible';
           }, 1000);
         }, 2500);
       }, 2250);
@@ -4918,7 +4920,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "createFruit",
     value: function createFruit() {
-      var _this1 = this;
+      var _this10 = this;
       this.removeTimer({
         detail: {
           timer: this.fruitTimer
@@ -4926,7 +4928,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       });
       this.fruit.showFruit(this.fruitPoints[this.level] || 5000);
       this.fruitTimer = new _timer["default"](function () {
-        _this1.fruit.hideFruit();
+        _this10.fruit.hideFruit();
       }, 10000);
     }
 
@@ -4967,7 +4969,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "advanceLevel",
     value: function advanceLevel() {
-      var _this10 = this;
+      var _this11 = this;
       this.allowPause = false;
       this.cutscene = true;
       this.soundManager.setCutscene(this.cutscene);
@@ -5004,43 +5006,43 @@ var GameCoordinator = /*#__PURE__*/function () {
         }
       });
       new _timer["default"](function () {
-        _this10.ghosts.forEach(function (ghost) {
+        _this11.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.display = false;
         });
-        _this10.mazeSprite.texture = _pixi.Texture.from("maze_white");
+        _this11.mazeSprite.texture = _pixi.Texture.from("maze_white");
         new _timer["default"](function () {
-          _this10.mazeSprite.texture = _pixi.Texture.from("maze_blue");
+          _this11.mazeSprite.texture = _pixi.Texture.from("maze_blue");
           new _timer["default"](function () {
-            _this10.mazeSprite.texture = _pixi.Texture.from("maze_white");
+            _this11.mazeSprite.texture = _pixi.Texture.from("maze_white");
             new _timer["default"](function () {
-              _this10.mazeSprite.texture = _pixi.Texture.from("maze_blue");
+              _this11.mazeSprite.texture = _pixi.Texture.from("maze_blue");
               new _timer["default"](function () {
-                _this10.mazeSprite.texture = _pixi.Texture.from("maze_white");
+                _this11.mazeSprite.texture = _pixi.Texture.from("maze_white");
                 new _timer["default"](function () {
-                  _this10.mazeSprite.texture = _pixi.Texture.from("maze_blue");
+                  _this11.mazeSprite.texture = _pixi.Texture.from("maze_blue");
                   new _timer["default"](function () {
-                    _this10.mazeSprite.visible = false;
+                    _this11.mazeSprite.visible = false;
                     new _timer["default"](function () {
-                      _this10.mazeSprite.visible = true;
-                      _this10.mazeCover.style.visibility = 'hidden';
-                      _this10.level += 1;
-                      _this10.allowKeyPresses = true;
-                      _this10.entityList.forEach(function (entity) {
+                      _this11.mazeSprite.visible = true;
+                      _this11.mazeCover.style.visibility = 'hidden';
+                      _this11.level += 1;
+                      _this11.allowKeyPresses = true;
+                      _this11.entityList.forEach(function (entity) {
                         var entityRef = entity;
                         if (entityRef instanceof _movableEntity["default"]) {
                           entityRef;
-                          entityRef.level = _this10.level;
+                          entityRef.level = _this11.level;
                         }
                         entityRef.reset();
                         if (entityRef instanceof _ghost["default"]) {
                           entityRef.resetDefaultSpeed();
                         }
                         if (entityRef instanceof _pickup["default"] && entityRef.type !== 'fruit') {
-                          _this10.remainingDots += 1;
+                          _this11.remainingDots += 1;
                         }
                       });
-                      _this10.startGameplay();
+                      _this11.startGameplay();
                     }, 500);
                   }, 250);
                 }, 250);
@@ -5059,7 +5061,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "flashGhosts",
     value: function flashGhosts(flashes, maxFlashes) {
-      var _this11 = this;
+      var _this12 = this;
       if (flashes === maxFlashes) {
         this.scaredGhosts.forEach(function (ghost) {
           ghost.endScared();
@@ -5073,7 +5075,7 @@ var GameCoordinator = /*#__PURE__*/function () {
           ghost.toggleScaredColor();
         });
         this.ghostFlashTimer = new _timer["default"](function () {
-          _this11.flashGhosts(flashes + 1, maxFlashes);
+          _this12.flashGhosts(flashes + 1, maxFlashes);
         }, 250);
       }
     }
@@ -5084,7 +5086,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "powerUp",
     value: function powerUp() {
-      var _this12 = this;
+      var _this13 = this;
       if (this.remainingDots !== 0) {
         this.soundManager.setAmbience('power_up');
       }
@@ -5097,7 +5099,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.scaredGhosts = [];
       this.ghosts.forEach(function (ghost) {
         if (ghost.mode !== 'eyes') {
-          _this12.scaredGhosts.push(ghost);
+          _this13.scaredGhosts.push(ghost);
         }
       });
       this.scaredGhosts.forEach(function (ghost) {
@@ -5105,7 +5107,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       });
       var powerDuration = Math.max((7 - this.level) * 1000, 0);
       this.ghostFlashTimer = new _timer["default"](function () {
-        _this12.flashGhosts(0, 9);
+        _this13.flashGhosts(0, 9);
       }, powerDuration);
     }
 
@@ -5125,7 +5127,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "eatGhost",
     value: function eatGhost(e) {
-      var _this13 = this;
+      var _this14 = this;
       var pauseDuration = 1000;
       var _e$detail$ghost = e.detail.ghost,
         position = _e$detail$ghost.position,
@@ -5170,28 +5172,28 @@ var GameCoordinator = /*#__PURE__*/function () {
         ghostRef.allowCollision = false;
       });
       new _timer["default"](function () {
-        _this13.soundManager.setAmbience('eyes');
-        _this13.resumeTimer({
+        _this14.soundManager.setAmbience('eyes');
+        _this14.resumeTimer({
           detail: {
-            timer: _this13.ghostFlashTimer
+            timer: _this14.ghostFlashTimer
           }
         });
-        _this13.resumeTimer({
+        _this14.resumeTimer({
           detail: {
-            timer: _this13.ghostCycleTimer
+            timer: _this14.ghostCycleTimer
           }
         });
-        _this13.resumeTimer({
+        _this14.resumeTimer({
           detail: {
-            timer: _this13.fruitTimer
+            timer: _this14.fruitTimer
           }
         });
-        _this13.allowPacmanMovement = true;
-        _this13.pacman.display = true;
-        _this13.pacman.moving = true;
+        _this14.allowPacmanMovement = true;
+        _this14.pacman.display = true;
+        _this14.pacman.moving = true;
         e.detail.ghost.display = true;
         e.detail.ghost.moving = true;
-        _this13.ghosts.forEach(function (ghost) {
+        _this14.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.animate = true;
           ghostRef.pause(false);
@@ -5224,7 +5226,7 @@ var GameCoordinator = /*#__PURE__*/function () {
   }, {
     key: "displayText",
     value: function displayText(position, amount, duration, width, height) {
-      var _this14 = this;
+      var _this15 = this;
       var textSp;
       var texture = this.am.getTexture(amount);
       if (texture) textSp = new _pixi.Sprite(texture);else textSp = new _pixi.Text(amount, {
@@ -5237,7 +5239,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       textSp.position.set(position.x, position.y);
       this.stage.addChild(textSp);
       new _timer["default"](function () {
-        _this14.stage.removeChild(textSp);
+        _this15.stage.removeChild(textSp);
       }, duration);
     }
 
@@ -5305,29 +5307,29 @@ var GameCoordinator = /*#__PURE__*/function () {
 var _default = exports["default"] = GameCoordinator; // endRemoveIf(production)
 var RendererTop = /*#__PURE__*/function (_PIXI$Renderer) {
   function RendererTop(gameCoordinator, options) {
-    var _this15;
+    var _this16;
     _classCallCheck(this, RendererTop);
-    _this15 = _callSuper(this, RendererTop, [options]);
-    _defineProperty(_this15, "container", new _pixi.Container());
-    _defineProperty(_this15, "player1Label", void 0);
-    _defineProperty(_this15, "points", void 0);
-    _defineProperty(_this15, "highScoreLabel", void 0);
-    _defineProperty(_this15, "highScore", void 0);
-    _defineProperty(_this15, "gc", void 0);
-    _this15.gc = gameCoordinator;
+    _this16 = _callSuper(this, RendererTop, [options]);
+    _defineProperty(_this16, "container", new _pixi.Container());
+    _defineProperty(_this16, "player1Label", void 0);
+    _defineProperty(_this16, "points", void 0);
+    _defineProperty(_this16, "highScoreLabel", void 0);
+    _defineProperty(_this16, "highScore", void 0);
+    _defineProperty(_this16, "gc", void 0);
+    _this16.gc = gameCoordinator;
     var textStyle = {
       fontFamily: "Press Start 2P, sans-serif",
       fontSize: 8,
       //fontWeight: "bold",
       fill: "0xffffff"
     };
-    _this15.player1Label = new _pixi.Text("", textStyle);
-    _this15.points = new _pixi.Text("", textStyle);
-    _this15.highScoreLabel = new _pixi.Text("", textStyle);
-    _this15.highScore = new _pixi.Text("", textStyle);
-    _this15.container.addChild(_this15.player1Label, _this15.points, _this15.highScoreLabel, _this15.highScore);
-    _this15.initialize();
-    return _this15;
+    _this16.player1Label = new _pixi.Text("", textStyle);
+    _this16.points = new _pixi.Text("", textStyle);
+    _this16.highScoreLabel = new _pixi.Text("", textStyle);
+    _this16.highScore = new _pixi.Text("", textStyle);
+    _this16.container.addChild(_this16.player1Label, _this16.points, _this16.highScoreLabel, _this16.highScore);
+    _this16.initialize();
+    return _this16;
   }
   _inherits(RendererTop, _PIXI$Renderer);
   return _createClass(RendererTop, [{
@@ -5374,25 +5376,25 @@ var RendererTop = /*#__PURE__*/function (_PIXI$Renderer) {
 }(PIXI.Renderer);
 var RendererBottom = /*#__PURE__*/function (_PIXI$Renderer2) {
   function RendererBottom(gameCoordinator, options) {
-    var _this16;
+    var _this17;
     _classCallCheck(this, RendererBottom);
-    _this16 = _callSuper(this, RendererBottom, [options]);
-    _defineProperty(_this16, "gc", void 0);
-    _defineProperty(_this16, "container", new _pixi.Container());
-    _this16.gc = gameCoordinator;
+    _this17 = _callSuper(this, RendererBottom, [options]);
+    _defineProperty(_this17, "gc", void 0);
+    _defineProperty(_this17, "container", new _pixi.Container());
+    _this17.gc = gameCoordinator;
     //@ts-ignore
     //   this.view.classList.add("row-bottom-view")
-    _this16.container.scale.set(_this16.gc.scale);
+    _this17.container.scale.set(_this17.gc.scale);
     var livesDisplay = new _pixi.Container();
     livesDisplay.name = "livesDisplay";
-    _this16.container.addChild(livesDisplay);
+    _this17.container.addChild(livesDisplay);
     var fruitsDisplay = new _pixi.Container();
     fruitsDisplay.name = "fruitsDisplay";
-    fruitsDisplay.x = _this16.container.width;
-    _this16.container.addChild(fruitsDisplay);
+    fruitsDisplay.x = _this17.container.width;
+    _this17.container.addChild(fruitsDisplay);
     //@ts-ignore
-    _this16.gc.bottomRow.appendChild(_this16.view);
-    return _this16;
+    _this17.gc.bottomRow.appendChild(_this17.view);
+    return _this17;
   }
   _inherits(RendererBottom, _PIXI$Renderer2);
   return _createClass(RendererBottom, [{
@@ -5401,7 +5403,7 @@ var RendererBottom = /*#__PURE__*/function (_PIXI$Renderer2) {
   }]);
 }(PIXI.Renderer);
 
-},{"../../mods/empty-mod.ts":1,"../characters/ghost.ts":21,"../characters/movableEntity.ts":22,"../characters/pacman.ts":23,"../pickups/pickup.ts":32,"../utilities/characterUtil.ts":33,"../utilities/soundManager.ts":35,"../utilities/timer.ts":36,"./assetsManager.ts":25,"./gameEngine.ts":27,"./mazeManagert.ts":28,"eventemitter3":425,"pixi.js":449}],27:[function(require,module,exports){
+},{"../../mods/empty-mod.ts":1,"../characters/ghost.ts":21,"../characters/movableEntity.ts":22,"../characters/pacman.ts":23,"../characters/staticEntity.ts":24,"../pickups/pickup.ts":32,"../utilities/characterUtil.ts":33,"../utilities/soundManager.ts":35,"../utilities/timer.ts":36,"./assetsManager.ts":25,"./gameEngine.ts":27,"./mazeManagert.ts":28,"eventemitter3":425,"pixi.js":449}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

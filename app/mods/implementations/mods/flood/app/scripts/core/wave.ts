@@ -4,7 +4,7 @@ import Maze from "../../../../../../../scripts/mazes/maze.ts"
 import EntitiesManager from "./entitiesManager.ts"
 import { getMazeWays } from "../utils/util.ts"
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
-import { ObjectsType } from "../types/types.ts"
+import { ObjectsGroup } from "../types/types.ts"
 
 class Wave extends Sprite {
     speedY = 15    
@@ -20,7 +20,7 @@ class Wave extends Sprite {
     startTopY: number
     bubblesLocation!: any[] 
     duration!:number
-    elements:Map<ObjectsType, Sprite[]> = new Map()
+    elements:Map<ObjectsGroup, Sprite[]> = new Map()
     queuedList:any[] = []
     constructor(drownManager: WaveManager, maze: Maze, width: number, height: number) {        
         super(Texture.WHITE)           
@@ -34,8 +34,8 @@ class Wave extends Sprite {
         this.waveManager = drownManager                 
         this.gp = this.waveManager.gp 
         this.entitiesManager = new EntitiesManager(this)
-        this.elements.set(ObjectsType.OBJECT, [])
-        this.elements.set(ObjectsType.ENTITY, [])
+        this.elements.set(ObjectsGroup.OBJECT, [])
+        this.elements.set(ObjectsGroup.ENTITY, [])
          
         this.gp.zIndex = this.zIndex
         this.container = this.waveManager.gc.stage 
@@ -61,24 +61,24 @@ class Wave extends Sprite {
         this.queuedList = this.queuedList.filter(f=>f.id != element.id)
         return contains
     }
-    addElement(type:ObjectsType,  element:Sprite) { 
+    addElement(type:ObjectsGroup,  element:Sprite) { 
         this.elements.get(type)!.push(element)
         this.container.addChild(element)  
     }    
-    removeElement(type:ObjectsType, element:Sprite) {
+    removeElement(type:ObjectsGroup, element:Sprite) {
         const list = this.elements.get(type)
         list!.splice(list!.indexOf(element), 1)
         this.container.removeChild(element)
     }
     clearElements() {
         //Exclude the entities after test
-        const objects =  this.elements.get(ObjectsType.OBJECT)
+        const objects =  this.elements.get(ObjectsGroup.OBJECT)
         objects!.forEach((el:any)=>{            
             this.container.removeChild(el)
         })
         objects!.length = 0
     }
-    getElementsBy(type:ObjectsType,name?:string):Sprite[]  {        
+    getElementsBy(type:ObjectsGroup,name?:string):Sprite[]  {        
         return this.elements.get(type)!.filter(f=>f.name == name)
     }
     private generateBubbles() { 
@@ -108,7 +108,7 @@ class Wave extends Sprite {
         for (let i = 0; i < bubbles.length; i++) {
             const bubble = bubbles[i]
             if (bubble.position.y == this.y) {  
-                this.addElement(ObjectsType.OBJECT, bubble)    
+                this.addElement(ObjectsGroup.OBJECT, bubble)    
                 this.dequeueElement(bubble)
             }
         }
@@ -119,16 +119,15 @@ class Wave extends Sprite {
             this.decreasing = false
             this.updatePosition()
             this.getGeneratedBubbles()      
-            const entities = this.queuedElementsBy("entity") as MovableEntity[]
+            const entities = this.queuedElementsBy("entity")
             //TODO only for debug erase that
-            if (entities.length > 1)
+            if (this.elements.get(ObjectsGroup.ENTITY)!.length > 1 )
                 return
+            
             entities.forEach((e)=>{
               e.name = "sonic"
-              this.addElement(ObjectsType.ENTITY, e)  
+              this.addElement(ObjectsGroup.ENTITY, e)  
               this.dequeueElement(e)  
-              //Put it in the maze 
-              this.waveManager.gc.entityList.push(e)
             })
         }
     }
@@ -138,11 +137,11 @@ class Wave extends Sprite {
             this.decreasing = true
             this.updatePosition()            
             //console.log("decrease wave: ", this.height, this.position)
-            const bubbles =  this.getElementsBy(ObjectsType.OBJECT, "bubble")
+            const bubbles =  this.getElementsBy(ObjectsGroup.OBJECT, "bubble")
             for (let i=0;i< bubbles.length; i++) {                
                 const bubble = bubbles[i] as Sprite
                 if (bubble.y <= this.y) {                                          
-                    this.removeElement(ObjectsType.OBJECT,bubble)
+                    this.removeElement(ObjectsGroup.OBJECT,bubble)
                 }
             } 
         }

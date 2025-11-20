@@ -10,7 +10,7 @@ import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.t
 import Pacman from "../../../../../../../scripts/characters/pacman.ts"
 import Ghost from "../../../../../../../scripts/characters/ghost.ts"
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
-import { ObjectsType } from "../types/types.ts"
+import { ObjectsGroup } from "../types/types.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -162,7 +162,7 @@ class WaveManager {
         if (this.wave) {
             this.animator.update()
             const container = this.wave.container
-            const bubbles = this.wave.getElementsBy(ObjectsType.OBJECT,"bubble")            
+            const bubbles = this.wave.getElementsBy(ObjectsGroup.OBJECT,"bubble")            
             const pacman = this.gc.pacman 
             //@ts-ignore
             const hitArea = enlarge(pacman.hitArea.clone(),2)

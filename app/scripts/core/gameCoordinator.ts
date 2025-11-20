@@ -78,7 +78,7 @@ class GameCoordinator {
   inky!: Ghost
   clyde!: Ghost
   fruit!: Pickup
-  entityList!: StaticEntity[];
+  entityList: StaticEntity[] = [];
   ghosts!: Ghost[]
   scaredGhosts!: Ghost[];
   idleGhosts!: Ghost[];
@@ -122,6 +122,18 @@ class GameCoordinator {
     this.height = this.scaledTileSize * 31
     this.width = this.scaledTileSize * 28
     this.maze!.setDimensions(this.width, this.height)
+
+    //This contains all the objects of the game
+    this.stage = new Container()
+    this.stage.sortableChildren = true
+    this.stage.on("childAdded",(child)=>{
+      if (child instanceof StaticEntity) 
+        this.entityList.push(child)      
+    })
+    this.stage.on("childRemoved", (child)=>{
+      if (child instanceof StaticEntity) 
+        this.entityList.splice(this.entityList.indexOf(child), 1)      
+    }) 
 
     //PIXI
     window['PIXI'] = PIXI
@@ -272,7 +284,6 @@ class GameCoordinator {
     this.am = new AssetsManager(this)
     await this.am.load()
   }
-
   /**
    * Resets gameCoordinator values to their default states
    */
@@ -290,6 +301,7 @@ class GameCoordinator {
     this.highScore = localStorage.getItem('highScore');
 
     if (this.firstGame) {
+      
       setInterval(() => {
         this.collisionDetectionLoop();
       }, 500);
@@ -332,32 +344,23 @@ class GameCoordinator {
       );
     }
 
-    this.entityList = [
+    this.stage.addChild(
       this.pacman,
       this.blinky,
       this.pinky,
-      this.inky,
+      this.inky, 
       this.clyde,
       this.fruit,
-    ];
-
+    )
+  
     this.ghosts = [this.blinky, this.pinky, this.inky, this.clyde];
 
     this.scaredGhosts = [];
     this.eyeGhosts = 0;
-
     if (this.firstGame) {
-
       //add dots,  pacman, ghosts sprites to the stage
-      this.drawMaze(this.mazeArray, this.entityList);
-      this.pickups.forEach(p => {
-        this.stage.addChild(p)
-      })
-      this.stage.addChild(this.pacman)
+      this.drawMaze(this.mazeArray);
       this.stage.addChild(this.pacman.spriteArrow!)
-      this.ghosts.forEach(g => {
-        this.stage.addChild(g)
-      })
       this.soundManager = new SoundManager();
       this.setUiDimensions();
     } else {
@@ -369,7 +372,6 @@ class GameCoordinator {
         if (pickup.type !== 'fruit') {
           this.remainingDots += 1;
           pickup.reset();
-          this.entityList.push(pickup);
         }
       });
     }
@@ -400,9 +402,8 @@ class GameCoordinator {
   /**
    * Adds HTML elements to draw on the webpage by iterating through the 2D maze array
    * @param {Array} mazeArray - 2D array representing the game board
-   * @param {Array} entityList - List of entities to be used throughout the game
    */
-  drawMaze(mazeArray: any, entityList: StaticEntity[]) {
+  drawMaze(mazeArray: any) {
     this.pickups = [this.fruit];
 
     this.mazeDiv.style.height = `${this.height * this.scale}px`;
@@ -422,7 +423,7 @@ class GameCoordinator {
             points,
             this
           );
-          entityList.push(dot);
+          this.stage.addChild(dot)
           this.pickups.push(dot);
           this.remainingDots += 1;
         }
@@ -431,6 +432,8 @@ class GameCoordinator {
   }
 
   createUi() {
+    this.stage.scale.set(this.scale)
+
     this.topRender = new RendererTop(this, {
       backgroundColor: 0x0000ff,
       width: this.width * this.scale,
@@ -451,10 +454,7 @@ class GameCoordinator {
     this.view.height = (this.tileSize * 31) * this.scale
     this.mazeDiv.appendChild(this.view)
     this.view.classList.add("view")
-
-    this.stage = new Container()
-    this.stage.sortableChildren = true
-    this.stage.scale.set(this.scale)
+    
     const opts = {
       view: this.view,
       width: this.view.width,
@@ -1012,7 +1012,7 @@ class GameCoordinator {
             }, 250);
           }, 250);
         }, 250);
-      }, 250);
+      }, 250); 
     }, 2000);
   }
 

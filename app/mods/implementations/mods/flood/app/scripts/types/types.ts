@@ -1,4 +1,5 @@
-export enum ObjectsType {
+export enum ObjectsGroup {
     OBJECT = "objects",
     ENTITY = "entities"
 }
+
