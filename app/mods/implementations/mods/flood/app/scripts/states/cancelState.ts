@@ -1,7 +1,7 @@
-import DrownManager from "../core/drownManager.ts"
+import WaveManager from "../core/waveManager.ts"
 import { State } from "./state.ts"
 class CancelState extends State {
-     constructor(drownManager: DrownManager) {
+     constructor(drownManager: WaveManager) {
         super(drownManager)
     }  
     start() {

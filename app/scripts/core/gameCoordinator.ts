@@ -351,12 +351,12 @@ class GameCoordinator {
       //add dots,  pacman, ghosts sprites to the stage
       this.drawMaze(this.mazeArray, this.entityList);
       this.pickups.forEach(p => {
-        this.stage.addChild(p.sprite!)
+        this.stage.addChild(p)
       })
       this.stage.addChild(this.pacman)
       this.stage.addChild(this.pacman.spriteArrow!)
       this.ghosts.forEach(g => {
-        this.stage.addChild(g.sprite!)
+        this.stage.addChild(g)
       })
       this.soundManager = new SoundManager();
       this.setUiDimensions();

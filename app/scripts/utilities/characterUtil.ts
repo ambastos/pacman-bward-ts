@@ -1,6 +1,7 @@
 import { ObservablePoint } from "pixi.js";
 import StaticEntity from "../characters/staticEntity.ts";
 import { copyPosition, createObservablePoint } from "./utils.ts";
+import MovableEntity from "../characters/movableEntity.ts";
 
 class CharacterUtil { 
   directions  
@@ -248,7 +249,7 @@ class CharacterUtil {
    * Advances spritesheet by one frame if needed
    * @param {Object} character - The character which needs to be animated
    */
-  advanceSpriteSheet(character:StaticEntity):any {
+  advanceSpriteSheet(character:MovableEntity):any {
     const {
       msSinceLastSprite,
       frame,

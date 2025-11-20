@@ -1,8 +1,10 @@
 import { Container, DisplayObject, Graphics, Polygon, Sprite, Texture } from "pixi.js"
-import DrownManager from "./drownManager.ts"
+import WaveManager from "./waveManager.ts"
 import Maze from "../../../../../../../scripts/mazes/maze.ts"
 import EntitiesManager from "./entitiesManager.ts"
 import { getMazeWays } from "../utils/util.ts"
+import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
+import { ObjectsType } from "../types/types.ts"
 
 class Wave extends Sprite {
     speedY = 15    
@@ -12,15 +14,15 @@ class Wave extends Sprite {
     lastTime = 0
     maze: Maze
     entitiesManager: EntitiesManager
-    drownManager: DrownManager
+    waveManager: WaveManager
     gp: Graphics
     container: Container
     startTopY: number
     bubblesLocation!: any[] 
     duration!:number
-    elements:unknown[] = []
+    elements:Map<ObjectsType, Sprite[]> = new Map()
     queuedList:any[] = []
-    constructor(drownManager: DrownManager, maze: Maze, width: number, height: number) {        
+    constructor(drownManager: WaveManager, maze: Maze, width: number, height: number) {        
         super(Texture.WHITE)           
         this.width = width
         this.height = height 
@@ -29,12 +31,14 @@ class Wave extends Sprite {
         this.zIndex = 2
         //this.tint = "0x56DBE3"
         this.maze = maze                             
-        this.drownManager = drownManager                 
-        this.gp = this.drownManager.gp 
+        this.waveManager = drownManager                 
+        this.gp = this.waveManager.gp 
         this.entitiesManager = new EntitiesManager(this)
+        this.elements.set(ObjectsType.OBJECT, [])
+        this.elements.set(ObjectsType.ENTITY, [])
          
         this.gp.zIndex = this.zIndex
-        this.container = this.drownManager.gc.stage 
+        this.container = this.waveManager.gc.stage 
         //if (this.container.children.length > 0) 
         this.container.addChild(this.gp)
 
@@ -57,25 +61,25 @@ class Wave extends Sprite {
         this.queuedList = this.queuedList.filter(f=>f.id != element.id)
         return contains
     }
-    addElement(element:any) { 
-        this.elements.push(element)
+    addElement(type:ObjectsType,  element:Sprite) { 
+        this.elements.get(type)!.push(element)
         this.container.addChild(element)  
     }    
-    removeElement(element:any) {
-        this.elements.splice(this.elements.indexOf(element), 1)
+    removeElement(type:ObjectsType, element:Sprite) {
+        const list = this.elements.get(type)
+        list!.splice(list!.indexOf(element), 1)
         this.container.removeChild(element)
     }
     clearElements() {
-        this.elements.forEach((el:any)=>{
+        //Exclude the entities after test
+        const objects =  this.elements.get(ObjectsType.OBJECT)
+        objects!.forEach((el:any)=>{            
             this.container.removeChild(el)
         })
-        this.elements.length = 0
+        objects!.length = 0
     }
-    getElementsBy(type:string):any[] {
-        const elements = this.elements.filter((f:any)=>{
-            return f.name == type
-        })
-        return elements
+    getElementsBy(type:ObjectsType,name?:string):Sprite[]  {        
+        return this.elements.get(type)!.filter(f=>f.name == name)
     }
     private generateBubbles() { 
         let numberOfBubles = Math.ceil(Math.random() * 3)
@@ -90,7 +94,7 @@ class Wave extends Sprite {
             let col = cols[indexCol]
             const pixelBounds = this.maze.getPixelCoordinates(col!, row!) 
 
-            const bubble = new Sprite(this.drownManager.flood.am.getTexture("bubbles"))
+            const bubble = new Sprite(this.waveManager.flood.am.getTexture("bubbles"))
             //bubleSprite.tint = 0x002400
             //bubleSprite.alpha = 0.6 
             bubble.height = tileSize  
@@ -104,7 +108,7 @@ class Wave extends Sprite {
         for (let i = 0; i < bubbles.length; i++) {
             const bubble = bubbles[i]
             if (bubble.position.y == this.y) {  
-                this.addElement(bubble)    
+                this.addElement(ObjectsType.OBJECT, bubble)    
                 this.dequeueElement(bubble)
             }
         }
@@ -115,6 +119,17 @@ class Wave extends Sprite {
             this.decreasing = false
             this.updatePosition()
             this.getGeneratedBubbles()      
+            const entities = this.queuedElementsBy("entity") as MovableEntity[]
+            //TODO only for debug erase that
+            if (entities.length > 1)
+                return
+            entities.forEach((e)=>{
+              e.name = "sonic"
+              this.addElement(ObjectsType.ENTITY, e)  
+              this.dequeueElement(e)  
+              //Put it in the maze 
+              this.waveManager.gc.entityList.push(e)
+            })
         }
     }
     decrease(elapsedMs: number) {
@@ -123,11 +138,11 @@ class Wave extends Sprite {
             this.decreasing = true
             this.updatePosition()            
             //console.log("decrease wave: ", this.height, this.position)
-            const bubbles =  this.getElementsBy("bubble")
+            const bubbles =  this.getElementsBy(ObjectsType.OBJECT, "bubble")
             for (let i=0;i< bubbles.length; i++) {                
-                const bubble = bubbles[i] 
+                const bubble = bubbles[i] as Sprite
                 if (bubble.y <= this.y) {                                          
-                    this.removeElement(bubble)
+                    this.removeElement(ObjectsType.OBJECT,bubble)
                 }
             } 
         }

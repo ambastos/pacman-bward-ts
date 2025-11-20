@@ -1,4 +1,4 @@
-import { Container, DisplayObject, IHitArea, ObservablePoint, Rectangle, Sprite } from "pixi.js"
+import { Container, DisplayObject, IHitArea, ObservablePoint, Point, Rectangle, Sprite } from "pixi.js"
 import GameCoordinator from "../core/gameCoordinator.ts"
 import CharacterUtil from "../utilities/characterUtil.ts"
 import EventEmitter from "eventemitter3"
@@ -9,8 +9,6 @@ class StaticEntity extends Sprite {
     emitter:EventEmitter
     gameCoordinator:GameCoordinator
     scaledTileSize:number
-    characterUtil?:undefined | CharacterUtil    
-    sprite!:Sprite | undefined
     hitArea!:IHitArea | null
     msSinceLastSprite:number=0
     msBetweenSprites:number = 0
@@ -21,18 +19,14 @@ class StaticEntity extends Sprite {
     loopAnimation:boolean = false
     mazeArray:any
     display!:boolean    
-    constructor(gameCoordinator: GameCoordinator, name: string, characterUtil?: CharacterUtil) {
+    constructor(gameCoordinator: GameCoordinator, name: string) {
         super()
         this.gameCoordinator = gameCoordinator
         this.name = name
-        this.scaledTileSize = gameCoordinator.scaledTileSize        
-        this.characterUtil = characterUtil
+        this.scaledTileSize = gameCoordinator.scaledTileSize                
         this.emitter = gameCoordinator.emitter
     }
-    getGridPosition():ObservablePoint | undefined {
-        return this.characterUtil?.determineGridPosition(
-            this.position, this.scaledTileSize)
-    }
+   
     registerEventListeners() {   
         
     }
@@ -44,7 +38,7 @@ class StaticEntity extends Sprite {
     }
     reset(){
 
-    }
+    }    
     update(elapsedMs:number) {
         const half = this.scaledTileSize * 0.5
         const x = this.x + this.width * 0.5 - half

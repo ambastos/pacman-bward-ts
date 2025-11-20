@@ -15,7 +15,7 @@ class Pickup extends StaticEntity {
   center:any
   constructor(type:string, column:number, row:number, 
     points:number, gameCoordinator:GameCoordinator) {
-    super(gameCoordinator, "pickup", undefined)
+    super(gameCoordinator, "pickup")
     this.type = type;
     this.pacman = gameCoordinator.pacman;
     this.mazeDiv = gameCoordinator.mazeDiv;
@@ -41,7 +41,7 @@ class Pickup extends StaticEntity {
    * Resets the pickup's visibility
    */
   reset() {
-    this.sprite!.visible = (this.type === 'fruit') ? false : true
+    this.visible = (this.type === 'fruit') ? false : true
   }
 
   /**
@@ -72,9 +72,9 @@ class Pickup extends StaticEntity {
       x: column * scaledTileSize,
       y: row * scaledTileSize,
     };
-    this.setSprite(type)
-    this.sprite!.visible = false
-    this.sprite!.position.set(this.x, this.y)
+    this.setTexture(type)
+    this.visible = false
+    //this.position.set(this.x, this.y)
     
     if (type === 'powerPellet') {
       //Blink effect of the pellets
@@ -130,12 +130,8 @@ class Pickup extends StaticEntity {
       let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale      
       return this.gameCoordinator.am.getTexture("pickups",frameX, frameY,w,w,spWidth, spWidth)
   }
-  setSprite(type:string) {
-    const texture = this.getTexture(type)
-    if(!this.sprite)
-      this.sprite = new Sprite(texture)
-    else
-      this.sprite.texture = texture as Texture   
+  setTexture(type:string) {
+    this.texture = this.getTexture(type) as Texture
   }
   /**
    * Shows a bonus fruit, resetting its point value and image
@@ -144,15 +140,15 @@ class Pickup extends StaticEntity {
   showFruit(points:number) {
     this.points = points;
     const tx = this.gameCoordinator.am.getTexture(this.getFruitName(points))
-    this.sprite!.texture = tx as Texture
-    this.sprite!.visible = true
+    this.texture = tx as Texture
+    this.visible = true
   }
 
   /**
    * Makes the fruit invisible (happens if Pacman was too slow)
    */
   hideFruit() {
-    this.sprite!.visible = false
+    this.visible = false
   }
 
   /**
@@ -182,7 +178,7 @@ class Pickup extends StaticEntity {
    * @param {Boolean} debugging - Flag to change the appearance of pickups for testing
    */
   checkPacmanProximity(maxDistance: number, pacmanCenter: ObservablePoint, debugging: boolean) {
-    if (this.sprite!.visible) {
+    if (this.visible) {
       const distance = Math.sqrt(
         ((this.center.x - pacmanCenter.x) ** 2)
         + ((this.center.y - pacmanCenter.y) ** 2),
@@ -191,7 +187,7 @@ class Pickup extends StaticEntity {
       this.nearPacman = (distance <= maxDistance);
 
       if (debugging) {
-        this.sprite!.tint = this.nearPacman
+        this.tint = this.nearPacman
            ? '0x00ff00' : '0xff0000';
       }
     }
@@ -202,7 +198,7 @@ class Pickup extends StaticEntity {
    * @returns {Boolean}
    */
   shouldCheckForCollision():boolean {
-    return this.sprite!.visible && this.nearPacman
+    return this.visible && this.nearPacman
   }
 
   /**
@@ -224,7 +220,7 @@ class Pickup extends StaticEntity {
           size: this.pacman.measurement,
         },
       )) {
-        this.sprite!.visible = false
+        this.visible = false
         this.emitter.emit("item-taken", this)
         window.dispatchEvent(new CustomEvent('awardPoints', {
           detail: {

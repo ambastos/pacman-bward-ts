@@ -4,7 +4,7 @@ import IdleState from "../states/idleState.ts"
 import StartState from "../states/startState.ts"
 import EndState from "../states/endState.ts"
 import CancelState from "../states/cancelState.ts"
-import DrownManager from "./drownManager.ts"
+import WaveManager from "./waveManager.ts"
 import Mod from "../mod.ts"
 import { State, States } from "../states/state.ts"
 import AssetsManager from "./assetsManager.ts"
@@ -22,7 +22,7 @@ class Flood extends Mod{
     nextWaveTime:any
     gp:Graphics
     am: AssetsManager
-    drownManager:DrownManager
+    waveManager:WaveManager
     pacman!:Pacman
     ghosts!:Ghost[]
     states!:State[]
@@ -36,7 +36,7 @@ class Flood extends Mod{
         this.nextWaveTime = null
         this.am = new AssetsManager(this)
         this.gp = new Graphics()      
-        this.drownManager = new DrownManager(this)  
+        this.waveManager = new WaveManager(this)  
         console.log("Flood mod is active!")
     }
     async initialize() {
@@ -45,9 +45,9 @@ class Flood extends Mod{
         console.log("lives for debugging ", this.gc.lives)
         this.ghosts = this.gc.ghosts
 
-        this.drownManager.initialize()
-        this.states = [new IdleState(this.drownManager), new StartState(this.drownManager),
-            new EndState(this.drownManager), new CancelState(this.drownManager)
+        this.waveManager.initialize()
+        this.states = [new IdleState(this.waveManager), new StartState(this.waveManager),
+            new EndState(this.waveManager), new CancelState(this.waveManager)
         ]
         //@ts-ignore
         this.state = this.states[States.IDLE_STATE]
@@ -68,7 +68,7 @@ class Flood extends Mod{
         this.gc.emitter.removeAllListeners("pacman-death")
         const _this = this 
         this.gc.emitter.on("pacman-death", ()=>{
-             const wave = _this.drownManager.wave
+             const wave = _this.waveManager.wave
             if (wave && wave.started) {
                 const detail = {
                     detail: {
@@ -107,7 +107,7 @@ class Flood extends Mod{
     stop() { 
         super.stop()
         this.gp.clear() 
-        this.drownManager.stop()
+        this.waveManager.stop()
     }
     generateWave(timeToStartMS?: number) {
         this.changeState(States.IDLE_STATE)
@@ -120,18 +120,18 @@ class Flood extends Mod{
     update(elapsedMs:number) {
         if (!this.started) return
         
-        this.drownManager.update(elapsedMs)         
+        this.waveManager.update(elapsedMs)         
         this.state.update(elapsedMs)   
         if ( !(this.state instanceof CancelState) ) {
             //start to drown Pacman
-            this.drownManager.tryDrownEntities(elapsedMs)
+            this.waveManager.tryDrownEntities(elapsedMs)
         }
         // }
     }
     draw() {
         if (!this.started) return
-        if (this.drownManager?.wave) {
-            this.drownManager.wave.draw()
+        if (this.waveManager?.wave) {
+            this.waveManager.wave.draw()
         }
     }
 }

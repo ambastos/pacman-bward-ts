@@ -11,7 +11,7 @@ class EntitiesManager {
     gc!:GameCoordinator
     constructor(wave:Wave) {
         this.wave = wave
-        this.gc = wave.drownManager.gc 
+        this.gc = wave.waveManager.gc 
     }
     tryToGenerateEntity() { 
         const random = Math.random()
@@ -25,7 +25,8 @@ class EntitiesManager {
                 return arr 
             }).flat()
             const index =  Math.floor(Math.random() * (cells.length -1)) 
-            const sonic = new Sonic(this.wave.drownManager.flood)
+            const sonic = new Sonic(this.wave.waveManager.flood)
+            this.wave.waveManager.createBreath(sonic)
             const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
             sonic.position.set(coords.x, coords.y   )
             this.wave.queueElement("entity", sonic)

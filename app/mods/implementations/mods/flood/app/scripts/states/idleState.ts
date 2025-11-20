@@ -1,8 +1,8 @@
-import DrownManager from '../core/drownManager.ts'
+import WaveManager from '../core/waveManager.ts'
 import Wave from '../core/wave.ts'
 import {State, States} from './state.ts'
 class IdleState extends State {    
-    constructor(drownManager: DrownManager) {
+    constructor(drownManager: WaveManager) {
         super(drownManager)        
     }    
     generateWave(timeToStartMS?: number) {

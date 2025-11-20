@@ -1,4 +1,4 @@
-import DrownManager from "../core/drownManager.ts"
+import WaveManager from "../core/waveManager.ts"
 import Flood from "../core/flood.ts"
 
 const States = {
@@ -9,10 +9,10 @@ const States = {
 }
 
 class State {      
-    drownManager:DrownManager
+    drownManager:WaveManager
     started = false
     flood:Flood
-    constructor(drownManager:DrownManager) {
+    constructor(drownManager:WaveManager) {
         this.drownManager = drownManager
         this.started = false
         this.flood = drownManager.flood

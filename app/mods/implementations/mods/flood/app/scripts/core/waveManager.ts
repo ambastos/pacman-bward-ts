@@ -10,10 +10,11 @@ import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.t
 import Pacman from "../../../../../../../scripts/characters/pacman.ts"
 import Ghost from "../../../../../../../scripts/characters/ghost.ts"
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
+import { ObjectsType } from "../types/types.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
-class DrownManager {
+class WaveManager {
     wave!:Wave | null
     waveTime:any = null
     nextWaveTime:any = null
@@ -53,7 +54,7 @@ class DrownManager {
             //console.log("animation", args)
         })
     }
-    private createBreath(entity:MovableEntity, options?:any) {   
+    createBreath(entity:MovableEntity, options?:any) {   
         //@ts-ignore            
         entity[breathNamespace] = new Breath(options)
     }
@@ -161,7 +162,7 @@ class DrownManager {
         if (this.wave) {
             this.animator.update()
             const container = this.wave.container
-            const bubbles = this.wave.getElementsBy("bubble")            
+            const bubbles = this.wave.getElementsBy(ObjectsType.OBJECT,"bubble")            
             const pacman = this.gc.pacman 
             //@ts-ignore
             const hitArea = enlarge(pacman.hitArea.clone(),2)
@@ -182,4 +183,4 @@ class DrownManager {
         }        
     }
 }
-export default DrownManager
+export default WaveManager

@@ -1,7 +1,7 @@
-import DrownManager from '../core/drownManager.ts'
+import WaveManager from '../core/waveManager.ts'
 import {State, States} from './state.ts'
 class EndState extends State {
-    constructor(drownManager: DrownManager) {
+    constructor(drownManager: WaveManager) {
         super(drownManager)
     }    
     terminateWave() {

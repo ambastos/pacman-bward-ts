@@ -37,7 +37,6 @@ class Ghost extends MovableEntity{
     this.level = level;
     this.characterUtil = characterUtil;
     this.blinky = blinky;
-    this.sprite = undefined
 
     this.reset();    
     
@@ -150,7 +149,7 @@ class Ghost extends MovableEntity{
    * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
    */
   setDefaultPosition(scaledTileSize:number, name:string) {
-    const f = ()=>{}
+    
     switch (name) {
       case 'blinky':
         this.defaultPosition = createObservablePoint(this,
@@ -185,7 +184,7 @@ class Ghost extends MovableEntity{
     }
     this.position =  createObservablePoint(this,this.defaultPosition.x, this.defaultPosition.y)
     this.oldPosition = createObservablePoint(this,this.position.x, this.position.y)
-    this.sprite?.position.set(this.position.x, this.position.y)
+    //this.sprite?.position.set(this.position.x, this.position.y)
   }
 
   /**
@@ -204,15 +203,15 @@ class Ghost extends MovableEntity{
     if (mode === 'scared') {
       this.frame = 0
       let scared = this.scaredColor == "blue" ? "scared" : "scaredWhite"
-      this.setTexture(this.name!, this.direction,scared,this.frame)
+      this.setTexture(this.name!, this.direction,this.frame,scared)
     } else if (mode === 'eyes') {
       this.frame = 0
-      this.setTexture(this.name!, this.direction,"eyes",this.frame)
+      this.setTexture(this.name!, this.direction,this.frame,"eyes")
     } else {
-      this.setTexture(this.name!, this.direction,this.emotion,this.frame)
+      this.setTexture(this.name!, this.direction,this.frame,this.emotion)
     }
   }
-  getTexture(name:string, direction:string, emotion:string, frameX:number ) {
+  getTexture(name:string, direction:string, frameX:number, emotion:string) {
     let frameY:number=0, fx = frameX ? frameX : 0
     switch (name) {
       case "blinky":
@@ -265,13 +264,10 @@ class Ghost extends MovableEntity{
     let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale    
     return this.gameCoordinator.am.getTexture("ghosts", frameX, frameY, w, w)
   }
-  setTexture(name:string, direction:string, emotion:string, frameX:number):void {
-      const texture = this.getTexture(name, direction, emotion,frameX)
-      if (!this.sprite)
-        this.sprite = new Sprite(texture)
-      else
-        this.sprite.texture = texture  as Texture      
-      this.sprite.zIndex = 1
+  setTexture(name:string, direction:string,frameX:number, 
+    emotion:string | null, frameY?:number, width?:number, height?:number):void {
+      this.texture = this.getTexture(name, direction,frameX, emotion!) as Texture
+      this.zIndex = 1
   }
   /**
    * Checks to see if the ghost is currently in the 'tunnels' on the outer edges of the maze
@@ -900,15 +896,16 @@ class Ghost extends MovableEntity{
    * @param {number} interp - The animation accuracy as a percentage
    */
   draw(interp:number) {
-    const newY = this.characterUtil!.calculateNewDrawValue(
-      interp, 'y', this.oldPosition, this.position,
-    );
-    const newX = this.characterUtil!.calculateNewDrawValue(
-      interp, 'x', this.oldPosition, this.position,
-    );
+    // const newY = this.characterUtil!.calculateNewDrawValue(
+    //   interp, 'y', this.oldPosition, this.position,
+    // );
+    // const newX = this.characterUtil!.calculateNewDrawValue(
+    //   interp, 'x', this.oldPosition, this.position,
+    // );
 
-    this.sprite!.position.set(newX, newY)
-    this.sprite!.visible = this.display
+    // this.sprite!.position.set(newX, newY)
+
+    this.visible = this.display
 
     const updatedProperties = this.characterUtil!.advanceSpriteSheet(this);
     this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
@@ -920,7 +917,7 @@ class Ghost extends MovableEntity{
       emotion = scared
     else if (this.mode == 'eyes')
       emotion = 'eyes'
-    this.setTexture(this.name!, this.direction, emotion, updatedProperties.frame)
+    this.setTexture(this.name!, this.direction, updatedProperties.frame, emotion)
   }
 
   /**
