@@ -1,5 +1,5 @@
 import { Container, DisplayObject, Graphics, Polygon, Sprite, Texture } from "pixi.js"
-import WaveManager from "./waveManager.ts"
+import WavesManager from "./wavesManager.ts"
 import Maze from "../../../../../../../scripts/mazes/maze.ts"
 import EntitiesManager from "./entitiesManager.ts"
 import { getMazeWays } from "../utils/util.ts"
@@ -13,16 +13,15 @@ class Wave extends Sprite {
     decreasing = false
     lastTime = 0
     maze: Maze
-    entitiesManager: EntitiesManager
-    waveManager: WaveManager
+    //entitiesManager: EntitiesManager
+    wavesManager: WavesManager
     gp: Graphics
     container: Container
     startTopY: number
-    bubblesLocation!: any[] 
     duration!:number
     elements:Map<ObjectsGroup, Sprite[]> = new Map()
     queuedList:any[] = []
-    constructor(drownManager: WaveManager, maze: Maze, width: number, height: number) {        
+    constructor(wavesManager: WavesManager, maze: Maze, width: number, height: number) {        
         super(Texture.WHITE)           
         this.width = width
         this.height = height 
@@ -31,21 +30,21 @@ class Wave extends Sprite {
         this.zIndex = 2
         //this.tint = "0x56DBE3"
         this.maze = maze                             
-        this.waveManager = drownManager                 
-        this.gp = this.waveManager.gp 
-        this.entitiesManager = new EntitiesManager(this)
+        this.wavesManager = wavesManager  
+        this.wavesManager.wave = this                       
+        this.gp = this.wavesManager.gp 
         this.elements.set(ObjectsGroup.OBJECT, [])
         this.elements.set(ObjectsGroup.ENTITY, [])
          
         this.gp.zIndex = this.zIndex
-        this.container = this.waveManager.gc.stage 
+        this.container = this.wavesManager.gc.stage 
         //if (this.container.children.length > 0) 
         this.container.addChild(this.gp)
 
         this.startTopY = Math.PI * 2
-
+   
         this.generateBubbles()
-        this.entitiesManager.tryToGenerateEntity() 
+        this.wavesManager.tryToGenerateEntities() 
     }
     queueElement(type:string, element:Sprite) {
         const id = Date.now()
@@ -71,7 +70,7 @@ class Wave extends Sprite {
         this.container.removeChild(element)
     }
     clearElements() {
-        //Exclude the entities after test
+        //Exclude the entities after test or not always
         const objects =  this.elements.get(ObjectsGroup.OBJECT)
         objects!.forEach((el:any)=>{            
             this.container.removeChild(el)
@@ -94,7 +93,7 @@ class Wave extends Sprite {
             let col = cols[indexCol]
             const pixelBounds = this.maze.getPixelCoordinates(col!, row!) 
 
-            const bubble = new Sprite(this.waveManager.flood.am.getTexture("bubbles"))
+            const bubble = new Sprite(this.wavesManager.flood.am.getTexture("bubbles"))
             //bubleSprite.tint = 0x002400
             //bubleSprite.alpha = 0.6 
             bubble.height = tileSize  

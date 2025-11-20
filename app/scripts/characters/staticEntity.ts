@@ -37,15 +37,19 @@ class StaticEntity extends Sprite {
 
     }
     reset(){
-
+        this.createHitArea() 
     }    
     update(elapsedMs:number) {
+        this.createHitArea() 
+    }
+    private createHitArea() {
         const half = this.scaledTileSize * 0.5
         const x = this.x + this.width * 0.5 - half
-        const y = this.y + this.height * 0.5 - half  
-        this.hitArea = 
-            new Rectangle(x, y, this.scaledTileSize, this.scaledTileSize) 
+        const y = this.y + this.height * 0.5 - half
+        this.hitArea =
+            new Rectangle(x, y, this.scaledTileSize, this.scaledTileSize)
     }
+
     draw(interp:number) {
 
     }

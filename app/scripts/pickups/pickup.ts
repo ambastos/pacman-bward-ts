@@ -42,6 +42,7 @@ class Pickup extends StaticEntity {
    */
   reset() {
     this.visible = (this.type === 'fruit') ? false : true
+    super.reset()
   }
 
   /**

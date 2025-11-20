@@ -1,8 +1,9 @@
 import {
-  Application, BaseTexture, Sprite, Texture, Container, Text,
+  Sprite, Texture, Container, Text,
   SCALE_MODES
 } from "pixi.js";
 import * as PIXI from 'pixi.js'
+import {initDevtools} from '@pixi/devtools'
 import EventEmitter from "eventemitter3"
 import Maze from "../mazes/maze.ts";
 import MazeManager from "./mazeManagert.ts";
@@ -25,8 +26,9 @@ const options = {
   resolution: 1,
   antialias: false,
 }
+
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST
+PIXI.BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST
 class GameCoordinator {
   mod: Mod
   gameUi: any
@@ -346,10 +348,10 @@ class GameCoordinator {
 
     this.stage.addChild(
       this.pacman,
-      this.blinky,
-      this.pinky,
-      this.inky, 
-      this.clyde,
+      // this.blinky,
+      // this.pinky,
+      // this.inky, 
+      // this.clyde,
       this.fruit,
     )
   
@@ -465,6 +467,8 @@ class GameCoordinator {
       opts[opt] = options[opt]
 
     this.renderer = new PIXI.Renderer(opts)
+ 
+    initDevtools({stage:this.stage, renderer: this.renderer})
   }
 
   setUiDimensions() {

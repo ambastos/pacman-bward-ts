@@ -1,4 +1,4 @@
-import { Container, ObservablePoint, Rectangle, RenderTexture, Sprite, Texture } from "pixi.js";
+import { Container, ObservablePoint, Point, Rectangle, RenderTexture, Sprite, Texture } from "pixi.js";
 import StaticEntity from "./staticEntity.ts";
 import GameCoordinator from "../core/gameCoordinator.ts";
 import CharacterUtil from "../utilities/characterUtil.ts";
@@ -58,6 +58,7 @@ class Ghost extends MovableEntity{
     this.setStyleMeasurements(this.scaledTileSize, this.spriteFrames);
     this.setDefaultPosition(this.scaledTileSize, this.name!);
     this.setSpriteSheet(this.name!, this.direction, this.mode);
+    super.reset()
   }
 
   registerEventListeners() {
@@ -209,7 +210,7 @@ class Ghost extends MovableEntity{
       this.setTexture(this.name!, this.direction,this.frame,"eyes")
     } else {
       this.setTexture(this.name!, this.direction,this.frame,this.emotion)
-    }
+    }    
   }
   getTexture(name:string, direction:string, frameX:number, emotion:string) {
     let frameY:number=0, fx = frameX ? frameX : 0
@@ -267,7 +268,7 @@ class Ghost extends MovableEntity{
   setTexture(name:string, direction:string,frameX:number, 
     emotion:string | null, frameY?:number, width?:number, height?:number):void {
       this.texture = this.getTexture(name, direction,frameX, emotion!) as Texture
-      this.zIndex = 1
+      this.zIndex = 1      
   }
   /**
    * Checks to see if the ghost is currently in the 'tunnels' on the outer edges of the maze
@@ -345,12 +346,14 @@ class Ghost extends MovableEntity{
   /**
    * Uses the Pythagorean Theorem to measure the distance between a given postion and Pacman
    * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
-   * @param {({x: number, y: number})} pacman - Pacman's current x-y position on the 2D Maze Array
+   * @param {({x: number, y: number})} targetPosition - Pacman's current x-y position on the 2D Maze Array
    * @returns {number}
    */
-  calculateDistance(position:ObservablePoint, pacman:ObservablePoint):number {
+  calculateDistance(position:ObservablePoint, targetPosition?:ObservablePoint):number {
+    if (!targetPosition)
+      return 0
     return Math.sqrt(
-      ((position.x - pacman.x) ** 2) + ((position.y - pacman.y) ** 2),
+      ((position.x - targetPosition.x) ** 2) + ((position.y - targetPosition.y) ** 2),
     );
   }
 
@@ -423,7 +426,7 @@ class Ghost extends MovableEntity{
    * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
    * @returns {({x: number, y: number})}
    */
-  getTarget(name:string, gridPosition:ObservablePoint, pacmanGridPosition:ObservablePoint, mode:string):ObservablePoint {
+  getTarget(name:string, gridPosition:ObservablePoint, pacmanGridPosition:ObservablePoint, mode:string):ObservablePoint<Point> | undefined {
     // Ghosts return to the ghost-house after eaten
     if (mode === 'eyes') {
       return createObservablePoint(this,13.5,10)
@@ -843,12 +846,12 @@ class Ghost extends MovableEntity{
   /**
    * Checks if the ghost contacts Pacman - starts the death sequence if so
    * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
-   * @param {({x: number, y: number})} pacman - Pacman's current x-y position on the 2D Maze Array
+   * @param {({x: number, y: number})} targetPosition - Pacman's current x-y position on the 2D Maze Array
    */
-  checkCollision(position:ObservablePoint, pacman:ObservablePoint) {
+  checkCollision(position:ObservablePoint, targetPosition:ObservablePoint) {
     //if pacman is not allowing collision, then, he doesn't die!
     if (!this.pacman.allowCollision) return
-    if (this.calculateDistance(position, pacman) < 1
+    if (this.calculateDistance(position, targetPosition) < 1
       && this.mode !== 'eyes'
       && this.allowCollision) {
       if (this.mode === 'scared') {

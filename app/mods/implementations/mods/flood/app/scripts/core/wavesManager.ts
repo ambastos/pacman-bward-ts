@@ -11,17 +11,19 @@ import Pacman from "../../../../../../../scripts/characters/pacman.ts"
 import Ghost from "../../../../../../../scripts/characters/ghost.ts"
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
 import { ObjectsGroup } from "../types/types.ts"
+import EntitiesManager from "./entitiesManager.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
-class WaveManager {
+class WavesManager {
     wave!:Wave | null
     waveTime:any = null
     nextWaveTime:any = null
     maxHeight:number  
-    gc:GameCoordinator
-    animator:Animator
     flood:Flood
+    gc:GameCoordinator
+    entitiesManager!: EntitiesManager
+    animator:Animator
     gp:Graphics
     container: Container
     pacman!:Pacman    
@@ -37,6 +39,7 @@ class WaveManager {
         this.container = flood.container
     }
     initialize() {
+        this.entitiesManager = new EntitiesManager(this.gc)
         this.gc = this.flood.gc        
         this.pacman = this.flood.gc.pacman
         this.ghosts = this.flood.gc.ghosts
@@ -66,6 +69,9 @@ class WaveManager {
     }
     private resetEntity(entity:any) {        
         entity[breathNamespace].reset()
+    }
+    tryToGenerateEntities() {
+        this.entitiesManager.tryToGenerateEntities(this.wave)
     }
     stopDrown(entity:any) {
         entity[breathNamespace].stopped = true
@@ -176,11 +182,9 @@ class WaveManager {
                     //console.log("play breath")
                     //this.animator.play("breath", {entity: pacman})
                 }
-            })
-            this.wave.entitiesManager.entities.forEach((e)=>{
-                e.animator.update() 
-            }) 
-        }        
+            })           
+        }
+        this.entitiesManager.update(elapsedMs)        
     }
 }
-export default WaveManager
+export default WavesManager

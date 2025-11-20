@@ -5,9 +5,11 @@ import GameCoordinator from "../scripts/core/gameCoordinator.ts";
   }
   declare global {
     interface Window {
+      webkitAudioContext: any
+      //For debug puporses
       gc: any
       debug:any
-      webkitAudioContext: any
+      f:any
       PIXI: any
     }    
   }

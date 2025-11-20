@@ -31,6 +31,7 @@ class Pacman extends MovableEntity{
     this.setStyleMeasurements(this.scaledTileSize, this.spriteFrames);
     this.setDefaultPosition(this.scaledTileSize);
     this.setSpriteSheet(this.direction);
+    super.reset()
   }
 
   registerEventListeners() {

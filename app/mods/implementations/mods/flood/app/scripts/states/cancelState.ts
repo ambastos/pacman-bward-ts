@@ -1,24 +1,24 @@
-import WaveManager from "../core/waveManager.ts"
+import WavesManager from "../core/wavesManager.ts"
 import { State } from "./state.ts"
 class CancelState extends State {
-     constructor(drownManager: WaveManager) {
-        super(drownManager)
+     constructor(wavesManager: WavesManager) {
+        super(wavesManager)
     }  
     start() {
         super.start()
-        if (this.drownManager.wave)
-            this.drownManager.wave.speedY*=3
+        if (this.wavesManager.wave)
+            this.wavesManager.wave.speedY*=3
     }  
     endFlood() {
-        const wave = this.drownManager.wave
+        const wave = this.wavesManager.wave
         if (!wave) return
         wave.height = -1
-        this.drownManager.wave!.cancel()
+        this.wavesManager.wave!.cancel()
         this.flood.container.removeChild(wave)
     //    console.log("wave ends")
-        this.drownManager.resetEntitiesBreathing()
-        this.drownManager.nextWaveTime = null
-        this.drownManager.wave = null
+        this.wavesManager.resetEntitiesBreathing()
+        this.wavesManager.nextWaveTime = null
+        this.wavesManager.wave = null
         this.flood.stop()
         // this.flood.pacman.moving = true
         // this.flood.ghosts.forEach(g=>{
@@ -31,7 +31,7 @@ class CancelState extends State {
     update(elapsedMs: number) {        
         if (!this.started) return
         super.update(elapsedMs)
-        const wave = this.drownManager.wave
+        const wave = this.wavesManager.wave
         if (!wave) return
 
         wave.decrease(elapsedMs)

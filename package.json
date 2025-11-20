@@ -21,6 +21,7 @@
   "version": "1.0.0",
   "main": ".eslintrc.js",
   "dependencies": {
+    "@pixi/devtools": "^2.0.1",
     "async": "^2.6.3",
     "basic-auth": "^1.1.0",
     "colors": "^1.4.0",

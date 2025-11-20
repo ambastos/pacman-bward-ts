@@ -10,5 +10,7 @@ import Debugger from "./utilities/debugger.ts"
     window.gc = new GameCoordinator() 
     const mod = new FloodModImp(window.gc) 
     window.gc.setMod(mod)    
+    window.f = mod.flood
     window.debug = new Debugger(window.gc) 
+    
 }

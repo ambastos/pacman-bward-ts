@@ -5,19 +5,17 @@ import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.t
 import { getMazeWays } from "../utils/util.ts";
 import Entity from "../entities/entity.ts";
 import { ObjectsGroup } from "../types/types.ts";
+import { createObservablePoint } from "../../../../../../../scripts/utilities/utils.ts";
 
 class EntitiesManager {
-    wave: Wave;
-    entities:Entity[] = []
     gc!:GameCoordinator
-    constructor(wave:Wave) {
-        this.wave = wave
-        this.gc = wave.waveManager.gc 
-    }
-    tryToGenerateEntity() { 
+    constructor(gc:GameCoordinator) {
+        this.gc = gc
+    }    
+    tryToGenerateEntities(wave:Wave | null) { 
         const random = Math.random()
-        if (random > 0) {
-            const ways =  getMazeWays(this.wave.maze)
+        if (wave && random > 0) {
+            const ways =  getMazeWays(wave.maze)
             const cells = ways.map((f,index)=>{
                 const arr = [] as  {row:number, col:number}[]
                 f.cols.forEach(col=>{
@@ -27,14 +25,23 @@ class EntitiesManager {
             }).flat()
             const index =  Math.floor(Math.random() * (cells.length -1)) 
             //TODO only for debuggin, Just adding one sonic
-            if (this.wave.elements.get(ObjectsGroup.ENTITY)!.length > 0)
+            if (this.gc.stage.children.filter(e=>e instanceof Sonic).length > 4)
                 return 
-            const sonic = new Sonic(this.wave.waveManager.flood)
-            this.wave.waveManager.createBreath(sonic)
-            const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
-            sonic.position.set(coords.x, coords.y   )
-            this.wave.queueElement("entity", sonic)
+            const sonic = new Sonic(wave.wavesManager.flood)
+            wave.wavesManager.createBreath(sonic)
+            const position = sonic.characterUtil.snapToGrid(
+                createObservablePoint(this,cells[index]!.col, cells[index]!.row),
+                sonic.characterUtil.directions.left,                
+                sonic.scaledTileSize 
+            )
+            //const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
+            sonic.reset()
+            sonic.position.set(position.x, position.y)
+            wave.queueElement("entity", sonic)
         } 
+    }
+    update(elapsedMs:number) {
+    
     }
 }
 export default EntitiesManager
