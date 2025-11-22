@@ -19,7 +19,7 @@ class Wave extends Sprite {
     container: Container
     startTopY: number
     duration!:number
-    elements:Map<ObjectsGroup, Sprite[]> = new Map()
+    elements:Sprite[] = []
     queuedList:any[] = []
     constructor(wavesManager: WavesManager, maze: Maze, width: number, height: number) {        
         super(Texture.WHITE)           
@@ -33,8 +33,6 @@ class Wave extends Sprite {
         this.wavesManager = wavesManager  
         this.wavesManager.wave = this                       
         this.gp = this.wavesManager.gp 
-        this.elements.set(ObjectsGroup.OBJECT, [])
-        this.elements.set(ObjectsGroup.ENTITY, [])
          
         this.gp.zIndex = this.zIndex
         this.container = this.wavesManager.gc.stage 
@@ -46,7 +44,7 @@ class Wave extends Sprite {
         this.generateBubbles()
         this.wavesManager.tryToGenerateEntities() 
     }
-    queueElement(type:string, element:Sprite) {
+    queueElement(type:string, element:Exclude<Sprite, MovableEntity>) {
         const id = Date.now()
         element.name = type
         Object.defineProperty(element,"id",{value:id})
@@ -60,25 +58,23 @@ class Wave extends Sprite {
         this.queuedList = this.queuedList.filter(f=>f.id != element.id)
         return contains
     }
-    addElement(type:ObjectsGroup,  element:Sprite) { 
-        this.elements.get(type)!.push(element)
+    addElement(element:Sprite) { 
+        this.elements.push(element)
         this.container.addChild(element)  
     }    
-    removeElement(type:ObjectsGroup, element:Sprite) {
-        const list = this.elements.get(type)
-        list!.splice(list!.indexOf(element), 1)
+    removeElement(element:Sprite) {
+        this.elements.splice(this.elements.indexOf(element), 1)
         this.container.removeChild(element)
     }
     clearElements() {
-        //Exclude the entities after test or not always
-        const objects =  this.elements.get(ObjectsGroup.OBJECT)
+        const objects =  this.elements
         objects!.forEach((el:any)=>{            
             this.container.removeChild(el)
         })
-        objects!.length = 0
+        objects!.length = 0        
     }
-    getElementsBy(type:ObjectsGroup,name?:string):Sprite[]  {        
-        return this.elements.get(type)!.filter(f=>f.name == name)
+    getElementsBy(name?:string):Sprite[]  {        
+        return this.elements.filter(f=>f.name == name)
     }
     private generateBubbles() { 
         let numberOfBubles = Math.ceil(Math.random() * 3)
@@ -106,28 +102,29 @@ class Wave extends Sprite {
         const bubbles =  this.queuedElementsBy("bubble")
         for (let i = 0; i < bubbles.length; i++) {
             const bubble = bubbles[i]
-            if (bubble.position.y == this.y) {  
-                this.addElement(ObjectsGroup.OBJECT, bubble)    
+            const grid = this.maze.getGridPosition(bubble.x, bubble.y)
+            const waveGrid = this.maze.getGridPosition(this.x, this.y)
+            if (grid.y == waveGrid.y) {  
+                this.addElement(bubble)    
                 this.dequeueElement(bubble)
             }
         }
+    }
+    private getGeneratedEntities() {
+        const em = this.wavesManager.entitiesManager
+        const entities = em.dequeEntitiesBy()                       
+        entities.forEach((e)=>{
+            e.name = "sonic"
+            em.addEntity(e)            
+        })
     }
     increase(elapsedMs: number) {
         if (this.visible) {
             this.height+=this.speedY * (elapsedMs/1000)
             this.decreasing = false
             this.updatePosition()
-            this.getGeneratedBubbles()      
-            const entities = this.queuedElementsBy("entity")
-            //TODO only for debug erase that
-            if (this.elements.get(ObjectsGroup.ENTITY)!.length > 1 )
-                return
-            
-            entities.forEach((e)=>{
-              e.name = "sonic"
-              this.addElement(ObjectsGroup.ENTITY, e)  
-              this.dequeueElement(e)  
-            })
+            this.getGeneratedBubbles()   
+            this.getGeneratedEntities()               
         }
     }
     decrease(elapsedMs: number) {
@@ -136,11 +133,11 @@ class Wave extends Sprite {
             this.decreasing = true
             this.updatePosition()            
             //console.log("decrease wave: ", this.height, this.position)
-            const bubbles =  this.getElementsBy(ObjectsGroup.OBJECT, "bubble")
+            const bubbles =  this.getElementsBy("bubble")
             for (let i=0;i< bubbles.length; i++) {                
                 const bubble = bubbles[i] as Sprite
                 if (bubble.y <= this.y) {                                          
-                    this.removeElement(ObjectsGroup.OBJECT,bubble)
+                    this.removeElement(bubble)
                 }
             } 
         }

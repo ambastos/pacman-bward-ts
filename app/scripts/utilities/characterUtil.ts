@@ -1,6 +1,6 @@
 import { ObservablePoint } from "pixi.js";
 import StaticEntity from "../characters/staticEntity.ts";
-import { copyPosition, createObservablePoint } from "./utils.ts";
+import { copyPosition, createObservablePoint, getGridPosition } from "./utils.ts";
 import MovableEntity from "../characters/movableEntity.ts";
 
 class CharacterUtil { 
@@ -86,11 +86,7 @@ class CharacterUtil {
    * @returns {({x: number, y: number})}
    */
   determineGridPosition(position:ObservablePoint, scaledTileSize:number):ObservablePoint {
-    return createObservablePoint(
-      this,
-      (position.x / scaledTileSize) + 0.5,
-      (position.y / scaledTileSize) + 0.5,
-    );
+    return getGridPosition(this,position, scaledTileSize)
   }
 
   /**

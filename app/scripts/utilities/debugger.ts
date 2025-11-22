@@ -1,22 +1,29 @@
+import { ObservablePoint, Rectangle } from "pixi.js"
+import GameCoordinator from "../core/gameCoordinator.ts"
+import MovableEntity from "../characters/movableEntity.ts"
 
 
 class Debugger {
-    gc: any
+    gc: GameCoordinator
     overflowMask: any
     mazeDiv: any
     mazeArray: any
-    tileSize: any
+    tileSize: number
+    scale:number
     pacmanImmortal: boolean
     printMazeGrid: boolean
     infoPanel: any
     canvas!: HTMLCanvasElement
+    ctx!:CanvasRenderingContext2D
     shouldPrintGrid!: boolean
+    enableBoundsAndHitBoxes: boolean = false
     printing: any
-    constructor(gameCoordinator: any) {
+    constructor(gameCoordinator: GameCoordinator) {
         this.gc = gameCoordinator
         this.overflowMask = $("#overflow-mask")
         this.mazeDiv = $(this.gc.mazeDiv)
         this.mazeArray = this.gc.mazeArray
+        this.scale = this.gc.scale
         this.tileSize = this.gc.scaledTileSize
         this.pacmanImmortal = false
         this.printMazeGrid = false
@@ -24,6 +31,7 @@ class Debugger {
         this.handleInput()  
         this.configInfoPanel()
         window.debug = this
+        this.animate()
     }
 
     handleInput() {
@@ -34,9 +42,9 @@ class Debugger {
             else if (event.key == '4')
                 dbg.makePacmanImortal(false)
             else if (event.key == '1')
-                dbg.mazeGrid(true)
+                dbg.shouldPrintGrid = true
             else if (event.key == '2')
-                dbg.mazeGrid(false)
+                dbg.shouldPrintGrid = false
             else if (event.key == '5')
                 dbg.infoPanel.log()
             else if (event.key == '7') 
@@ -53,9 +61,9 @@ class Debugger {
                 dbg.notifyPacmanMovement()
             else if (event.key.toLowerCase() == 'f')    
                 dbg.startWave()
-            // if (event.key !=  'HanjaMode') {
-            //     alert(event.key)
-            // }
+            else if( event.key.toLowerCase() == 'h') {
+                dbg.enableBoundsAndHitBoxes = !dbg.enableBoundsAndHitBoxes
+            }            
         } )
     }
  
@@ -73,7 +81,7 @@ class Debugger {
         canvas.height(this.overflowMask.height())
         this.canvas.width = this.overflowMask.width()
         this.canvas.height = this.overflowMask.height()
-
+        this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D
         
         // let canvasP = document.createElement('canvas')
         // canvasP.width = 400
@@ -111,76 +119,77 @@ class Debugger {
         }
         this.gc.pacman.position = position
     }
-
-    mazeGrid(printGrid: boolean) {
-        const fc = this.gc.gameEngine.update
-        const _this = this
-        this.shouldPrintGrid = printGrid
-        if (_this.printing)
-            return
-        const interval =  window.setInterval(()=>{
-            _this.printing = true
-            if (_this.shouldPrintGrid) {
-                _this.printGrid()
-            }else {
-                _this.printing = false
-                _this.clearGrid()
-                window.clearInterval(interval)
+    animate() {
+        const an = () =>{
+            this.clearGrid()
+            if (this.shouldPrintGrid) {
+                this.printGrid()
+            }else if(this.enableBoundsAndHitBoxes) {
+                this.drawBoundsAndHitBoxes(true)
             }
-        },25)
+            requestAnimationFrame(an)
+        }
+        an()
     }
 
     printGrid() {
-        const mazeX = this.mazeDiv.offset().left
-        const mazeY = this.mazeDiv.offset().top
-        const width = this.mazeDiv.width()
-        const height = this.mazeDiv.height()
-        let ctx = this.canvas.getContext("2d") 
+        const mazeX = this.mazeDiv.position().left
+        const mazeY = this.mazeDiv.position().top
+        const width = this.mazeDiv.width() / this.scale
+        const height = this.mazeDiv.height()/ this.scale
+        let ctx = this.canvas.getContext("2d")      
+        ctx?.save()
+        ctx?.translate(mazeX, mazeY)
+        ctx?.scale(2,2)
         ctx!.strokeStyle = 'green'   
         ctx!.lineWidth = 1
     
-        let x = mazeX, y =mazeY
-        ctx!.clearRect(mazeX,mazeY, width, height)
+        let x = 0, y =0
+        const tileSize = this.tileSize
+        //ctx!.scale(this.scale,this.scale)
+        ctx!.clearRect(0,0, width, height) 
         ctx!.beginPath()
-        ctx!.moveTo(mazeX,mazeY)
+        ctx!.moveTo(0,0)
         this.mazeArray.forEach((row: any[], rowIndex: number)=>{
             if (rowIndex > 0) {
-                x = mazeX
-                y+= this.tileSize
+                x = 0
+                y+= tileSize 
             }
             ctx!.moveTo(x,y)
-            ctx!.lineTo(width + mazeX, y)
+            ctx!.lineTo(width, y)
             row.forEach((col: any, colIndex: number)=>{
                 //ctx!.strokeRect(x,y, this.tileSize, this.tileSize) 
                 ctx!.moveTo(x,y)
-                ctx!.lineTo(x,y+ this.tileSize)
+                ctx!.lineTo(x,y+ tileSize)
                 x+=this.tileSize
                 if (colIndex == this.mazeArray[rowIndex].length - 1) {
                     ctx!.moveTo(x, y)  
-                    ctx!.lineTo(x,y+ this.tileSize)      
+                    ctx!.lineTo(x,y+ tileSize)      
                 }
             })
             if (rowIndex == this.mazeArray.length - 1) {
-                y+=this.tileSize
-                ctx!.moveTo(mazeX, y)
-                ctx!.lineTo(width + mazeX, y)
-            }
-        })
-        ctx!.stroke()
+                y+=tileSize
+                ctx!.moveTo(0, y)
+                ctx!.lineTo(width, y)
+            }            
+        })   
+        ctx!.stroke()     
         ctx!.strokeStyle = 'yellow'
-        const pacX = this.gc.pacman.position.left + mazeX
-        const pacY = this.gc.pacman.position.top + mazeY
-        ctx!.strokeRect(pacX, pacY, this.tileSize * 2, this.tileSize * 2)
+        const pacX = this.gc.pacman.position.x 
+        const pacY = this.gc.pacman.position.y 
+        ctx!.strokeRect(pacX, pacY, tileSize * 2, tileSize * 2)
         ctx!.strokeStyle = 'red'
-        ctx!.strokeRect(pacX, pacY, this.tileSize, this.tileSize)
+        ctx!.strokeRect(pacX, pacY, tileSize, tileSize)
+        ctx!.stroke()
+        ctx?.restore()
     }
     clearGrid() {
         const mazeX = this.mazeDiv.offset().left
         const mazeY = this.mazeDiv.offset().top
         const width = this.mazeDiv.width()
         const height = this.mazeDiv.height() 
-        let ctx = this.canvas.getContext("2d") 
-        ctx!.clearRect(mazeX-1,mazeY-1, width+2, height+2)
+        let ctx = this.ctx
+        ctx!.clearRect(0,0, this.canvas.width, this.canvas.height)
     }
     configInfoPanel() {
         const db = this
@@ -207,8 +216,9 @@ class Debugger {
                     const formater = new Intl.NumberFormat("en-US",{maximumFractionDigits:3})
                     const gridPosition = 
                         db.gc.pacman.characterUtil.determineGridPosition(
-                            {left: db.gc.pacman.position.left,
-                            top: db.gc.pacman.position.top}, db.tileSize)
+                            {x: db.gc.pacman.position.x,
+                             y: db.gc.pacman.position.y} as ObservablePoint, 
+                             db.tileSize)
 
                     const pacX = formater.format(gridPosition.x)
                     const pacY = formater.format(gridPosition.y)
@@ -259,6 +269,7 @@ class Debugger {
     }
     makePacmanImortal(isImmortal: boolean) {
         if (this.gc.allowPacmanMovement) {
+            //@ts-ignore
             this.gc.pacman.immortal = isImmortal
             this.pacmanImmortal = isImmortal
             this.gc.pacman.allowCollision = !isImmortal
@@ -283,24 +294,57 @@ class Debugger {
             ghost.moving = !ghost.moving
         })
     }
+    startWave() {
+        console.log("Key f pressed")
+        //@ts-ignore 
+        if (this.gc.mod.flood)  {
+            //@ts-ignore
+            this.gc.mod.flood.generateWave(0)
+        }
+        
+    }
+    drawBoundsAndHitBoxes(onlyMovableEntities:boolean) {        
+        if (!this.enableBoundsAndHitBoxes)
+            return
+        const ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D
+        const mazePos = this.mazeDiv.position()
+        ctx.save()
+        ctx.translate(mazePos.left, mazePos.top)
+        ctx.clearRect(0,0,this.mazeDiv.width(), this.mazeDiv.height())
+        let list = this.gc.entityList
+        if (onlyMovableEntities)
+            list = list.filter(e=>e instanceof MovableEntity)
+        list.forEach(e => {
+            ctx.lineWidth = 2
+            ctx.strokeStyle = "yellow"
+            const b = e.getBounds()
+            ctx.strokeRect(b.x, b.y, b.width, b.height)
 
+            const h = e.hitArea as Rectangle
+            ctx.lineWidth = 2
+            ctx.strokeStyle = "red"
+            ctx.strokeRect(h.x * this.scale, h.y * this.scale, 
+                h.width * this.scale, h.height * this.scale)
+        })
+        //ctx.stroke()
+        ctx.restore()       
+    }    
+     //@ts-nocheck
     notifyPacmanMovement() {
-        const fc =  this.gc.pacman['update']
+        //@ts-ignore
         if (!this.gc.pacman['update']['changed']) {
+            //@ts-ignore
             this.gc.pacman['update2'] = this.gc.pacman['update']
 
             const _this = this
+            
             this.gc.pacman['update'] = function(elapsedMs: any) {
+                //@ts-ignore
                 this['update2'](elapsedMs)
                 _this._notify2('update')
             }
+            //@ts-ignore
             this.gc.pacman['update']['changed'] = true
-        }
-    }
-    startWave() {
-        console.log("Key f pressed")
-        if (this.gc.mod.flood)  {
-            this.gc.mod.flood.generateWave(0)
         }
     }
     _notify(functionName: any) {
@@ -326,21 +370,28 @@ class Debugger {
         const infoPanel = this.infoPanel
         const handleUnsnappedMovement =  pacman.handleUnsnappedMovement
         const handleSnappedMovement =  pacman.handleSnappedMovement
-
+        //@ts-ignore
         if (!pacman['handleSnappedMovement']['changed']) {
+            //@ts-ignore
             pacman['handleSnappedMovement2'] = handleSnappedMovement
             pacman['handleSnappedMovement'] = function(elapsedMs: any) {
                 infoPanel.messages.push('Pacman "handleSnappedMovement" called')
+                //@ts-ignore
                 return this['handleSnappedMovement2'](elapsedMs)
             }
+            //@ts-ignore
             pacman['handleSnappedMovement']['changed'] = true
         }
+        //@ts-ignore
         if (!pacman['handleUnsnappedMovement']['changed']) {
+            //@ts-ignore
             pacman['handleUnsnappedMovement2'] = handleUnsnappedMovement
             pacman['handleUnsnappedMovement'] = function(gridPosition: any, elapsedMs: any) {
                 infoPanel.messages.push('Pacman "handleUnsnappedMovement" called')
+                //@ts-ignore
                 return this['handleUnsnappedMovement2'](gridPosition, elapsedMs)
             }
+            //@ts-ignore
             pacman['handleUnsnappedMovement']['changed'] = true
         }
         if (pacman.moving != infoPanel.info.moving) {
@@ -361,10 +412,6 @@ class Debugger {
         infoPanel.info.direction = pacman.direction
     }
 }
-
-// if (!process.env.NYC_PROCESS_ID) 
-//     global.window.Debugger = Debugger
-
 //removeIf(production)
 export default Debugger
 //endRemoveIf

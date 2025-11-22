@@ -8,8 +8,8 @@ class StaticEntity extends Sprite {
     allowCollision = true
     emitter:EventEmitter
     gameCoordinator:GameCoordinator
-    scaledTileSize:number
-    hitArea!:IHitArea | null
+    scaledTileSize:number  
+    hitArea!: Rectangle | null  
     msSinceLastSprite:number=0
     msBetweenSprites:number = 0
     frame:number = 0
@@ -47,7 +47,7 @@ class StaticEntity extends Sprite {
         const x = this.x + this.width * 0.5 - half
         const y = this.y + this.height * 0.5 - half
         this.hitArea =
-            new Rectangle(x, y, this.scaledTileSize, this.scaledTileSize)
+            new Rectangle(x, y, this.scaledTileSize, this.scaledTileSize)            
     }
 
     draw(interp:number) {

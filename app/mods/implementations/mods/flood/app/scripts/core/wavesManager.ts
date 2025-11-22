@@ -56,6 +56,9 @@ class WavesManager {
             const pacman = args.entity           
             //console.log("animation", args)
         })
+    }    
+    restart() {
+        this.entitiesManager.restart()
     }
     createBreath(entity:MovableEntity, options?:any) {   
         //@ts-ignore            
@@ -149,11 +152,16 @@ class WavesManager {
             this.gc.displayText(position,
                 text,
                 5000, measurement)
-    }   
+    }  
+    private clearEntities() {
+        this.entitiesManager.clearEntities()
+    } 
     clear() {
         if (this.wave) { 
             this.gp.clear()
             this.wave.clearElements()
+            //Commented for debugging
+            //this.clearEntities()
             this.gc.stage.removeChild(this.wave)
         }        
     }
@@ -162,13 +170,14 @@ class WavesManager {
         this.wave = null
         this.waveTime = null    
         this.nextWaveTime = null
-        this.gc.ghostCombo = 0   
+        this.gc.ghostCombo = 0 
+        this.entitiesManager.stop()  
     }
     update(elapsedMs: number) {
         if (this.wave) {
             this.animator.update()
             const container = this.wave.container
-            const bubbles = this.wave.getElementsBy(ObjectsGroup.OBJECT,"bubble")            
+            const bubbles = this.wave.getElementsBy("bubble")            
             const pacman = this.gc.pacman 
             //@ts-ignore
             const hitArea = enlarge(pacman.hitArea.clone(),2)

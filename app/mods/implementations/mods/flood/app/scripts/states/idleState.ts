@@ -29,8 +29,8 @@ class IdleState extends State {
     }
     start() {
         if (this.wavesManager)
-            this.wavesManager.stop()
-        super.start()
+            this.wavesManager.restart()
+        super.start()                
     }
     update(elapsedMs: number) {        
         if (!this.started) return

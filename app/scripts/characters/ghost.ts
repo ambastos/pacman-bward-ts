@@ -419,12 +419,12 @@ class Ghost extends MovableEntity{
   }
 
   /**
-   * Determines the appropriate target for the ghost's AI
+   * Determines the appropriate target for the ghost's AI in grid coordinates
    * @param {('inky'|'blinky'|'pinky'|'clyde')} name - The name of the current ghost
    * @param {({x: number, y: number})} gridPosition - The current x-y position on the 2D Maze Array
    * @param {({x: number, y: number})} pacmanGridPosition - x-y position on the 2D Maze Array
    * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
-   * @returns {({x: number, y: number})}
+   * @returns ObservablePoint - Returns the target GRID position(position in tiles)
    */
   getTarget(name:string, gridPosition:ObservablePoint, pacmanGridPosition:ObservablePoint, mode:string):ObservablePoint<Point> | undefined {
     // Ghosts return to the ghost-house after eaten

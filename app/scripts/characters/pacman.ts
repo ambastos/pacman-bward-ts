@@ -260,8 +260,8 @@ class Pacman extends MovableEntity{
   }
   /**
    */
-  onDeath() {    
-    window.dispatchEvent(new Event('deathSequence'))
+  onDeath(detail?:CustomEvent) {    
+    window.dispatchEvent(new CustomEvent('deathSequence', {detail}))
   }
   /**
    * Updates the css position, hides if there is a stutter, and animates the spritesheet

@@ -2,7 +2,6 @@ import { ObservablePoint, Point, Resource, Sprite, Texture } from "pixi.js";
 import Flood from "../core/flood.ts";
 import Wave from "../core/wave.ts";
 import Animator from "../animations/animator.ts";
-import Entity from "./entity.ts";
 import Ghost from "../../../../../../../scripts/characters/ghost.ts";
 import CharacterUtil from "../../../../../../../scripts/utilities/characterUtil.ts";
 import Pacman from "../../../../../../../scripts/characters/pacman.ts";
@@ -93,6 +92,8 @@ class Sonic extends Ghost {
                 targetDef.type = "ghost";
             }
         }
+        //for debug
+        targetDef.type = "pacman"
         return targetDef as TargetDef
     }
 
@@ -153,10 +154,10 @@ class Sonic extends Ghost {
                     bestDistance = distance
                 }
             })
-            return this.characterUtil.snapToGrid(target!.getGridPosition(),this.direction,this.scaledTileSize) 
+            return target!.getGridPosition()
         }else if (this.targetDef.type ==  "pacman") {
             const pacman = this.flood.gc.pacman
-            return this.characterUtil.snapToGrid(pacman.getGridPosition(),this.direction,this.scaledTileSize) 
+            return pacman.getGridPosition() 
         }
             
         return undefined    

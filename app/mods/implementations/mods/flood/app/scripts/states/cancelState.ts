@@ -26,6 +26,7 @@ class CancelState extends State {
         // })
         setTimeout(()=>{
             this.flood.emitter.emit("start")
+            this.flood.emitter.emit("flood-start")
         }, 2250)
     }
     update(elapsedMs: number) {        

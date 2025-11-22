@@ -1,4 +1,5 @@
 import { Coordinate } from "../characters/types.ts"
+import { getGridPosition } from "../utilities/utils.ts"
 
 class Maze {
     width!: number
@@ -139,6 +140,17 @@ class Maze {
         this.height = height
         this.tileSize = this.height/ this.rows
         this.#calculateBounds()
+    }
+    /**
+     * Transform values in cordinates from grid coordinates
+     * @param x 
+     * @param y 
+     */
+    getGridPosition(x:number, y:number) {
+        return { 
+            x:(x / this.tileSize) + 0.5,
+            y:(y / this.tileSize) + 0.5
+        }
     }
     getPixelCoordinates(x: number,y: number) {
         return {x: x * this.tileSize, y: y * this.tileSize}

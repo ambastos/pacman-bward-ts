@@ -59,27 +59,30 @@ class Flood extends Mod{
     
     #registerListeners() {
        this.emitter = this.gc.emitter
+       this.#changePacmanDeathSequence() 
        this.emitter.on("game-over",()=>{
         this.stop()
        })
-       this.#changePacmanDeathSequence() 
+       this.emitter.on("flood-start",()=>{
+        this.wavesManager.restart()
+       })
     }  
     #changePacmanDeathSequence() {
         this.gc.emitter.removeAllListeners("pacman-death")
         const _this = this 
         this.gc.emitter.on("pacman-death", ()=>{
-             const wave = _this.wavesManager.wave
+            const wave = _this.wavesManager.wave
+            this.gc.pacman.moving = false
+            this.wavesManager.stop()
             if (wave && wave.started) {
-                const detail = {
-                    detail: {
-                        restart:false,
-                        callbackAfter: ()=>{ 
-                            _this.changeState(States.CANCEL_STATE)                            
-                        }
-                    } 
+                const detail = {                    
+                    restart:false,
+                    callbackAfter: ()=>{ 
+                        _this.changeState(States.CANCEL_STATE)                            
+                    }
                 }
                 //@ts-ignore
-                this.pacman.onDeath()
+                this.pacman.onDeath(detail)
             }else {
                 this.pacman.onDeath()
             }
@@ -103,6 +106,7 @@ class Flood extends Mod{
         //@ts-ignore
         this.state = this.states[States.IDLE_STATE]
         this.state.start()
+        this.emitter.emit("flood-start")
     } 
     stop() { 
         super.stop()
