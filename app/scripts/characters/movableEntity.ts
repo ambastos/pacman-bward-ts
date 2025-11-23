@@ -17,7 +17,8 @@ class MovableEntity extends StaticEntity{
     }
      getGridPosition():ObservablePoint<Point>  {
         return this.characterUtil?.determineGridPosition(
-            this.position, this.scaledTileSize)
+            this.position, this.scaledTileSize, 
+            this.anchor, this.gameCoordinator.scale)
     }
 }
 export default MovableEntity

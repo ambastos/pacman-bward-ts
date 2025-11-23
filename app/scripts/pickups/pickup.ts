@@ -55,18 +55,25 @@ class Pickup extends StaticEntity {
    */
   setStyleMeasurements(type:string, scaledTileSize:number, 
       column:number, row:number, points:number) {
+    let ax=0, ay = 0    
     if (type === 'pacdot') {
       this.size = scaledTileSize * 0.25;
-      this.x = (column * scaledTileSize) + ((scaledTileSize / 8) * 3);
-      this.y = (row * scaledTileSize) + ((scaledTileSize / 8) * 3);
+      ax = this.anchor.x * this.size * this.gameCoordinator.scale
+      ay = this.anchor.y * this.size * this.gameCoordinator.scale
+      this.x = (column * scaledTileSize) + ((scaledTileSize / 8) * 3) + ax;
+      this.y = (row * scaledTileSize) + ((scaledTileSize / 8) * 3) + ay;
     } else if (type === 'powerPellet') {
       this.size = scaledTileSize;
-      this.x = (column * scaledTileSize);
-      this.y = (row * scaledTileSize);
+      ax = this.anchor.x * scaledTileSize * 0.5 * this.gameCoordinator.scale
+      ay = this.anchor.y * scaledTileSize * 0.5 * this.gameCoordinator.scale
+      this.x = (column * scaledTileSize) + ax;
+      this.y = (row * scaledTileSize) + ay;
     } else {
       this.size = scaledTileSize * 2;
-      this.x = (column * scaledTileSize) - (scaledTileSize * 0.5);
-      this.y = (row * scaledTileSize) - (scaledTileSize * 0.5);
+      ax = this.anchor.x * scaledTileSize * this.gameCoordinator.scale
+      ay = this.anchor.y * scaledTileSize * this.gameCoordinator.scale
+      this.x = (column * scaledTileSize) - (scaledTileSize * 0.5) + ax;
+      this.y = (row * scaledTileSize) - (scaledTileSize * 0.5) + ay;
     }
 
     this.center = {
@@ -158,18 +165,20 @@ class Pickup extends StaticEntity {
    * @param {({ x: number, y: number, size: number})} originalPacman
    * @returns {boolean}
    */
-  checkForCollision(pickup: { x: number; y: number; size: number; }, 
-      originalPacman: { x: number; y: number; size: number; }):boolean {
-    const pacman = Object.assign({}, originalPacman);
+  checkForCollision(pickup: Pickup, 
+      originalPacman: Pacman):boolean {
+    //const pacman = Object.assign({}, originalPacman);
 
-    pacman.x += (pacman.size * 0.25);
-    pacman.y += (pacman.size * 0.25);
-    pacman.size /= 2;
+    // pacman.x += (pacman.size * 0.25);
+    // pacman.y += (pacman.size * 0.25);
+    // pacman.size /= 2;
+    
 
-    return (pickup.x < pacman.x + pacman.size
-      && pickup.x + pickup.size > pacman.x
-      && pickup.y < pacman.y + pacman.size
-      && pickup.y + pickup.size > pacman.y);
+    // return (pickup.x < pacman.x + pacman.size
+    //   && pickup.x + pickup.size > pacman.x
+    //   && pickup.y < pacman.y + pacman.size
+    //   && pickup.y + pickup.size > pacman.y);
+    return pickup.hitArea!.intersects(this.pacman.hitArea!)
   }
 
   /**
@@ -210,17 +219,18 @@ class Pickup extends StaticEntity {
   update(elapsedMs:number) {
     if (this.shouldCheckForCollision()) {
       super.update(elapsedMs)
-      if (this.checkForCollision(
-        {
-          x: this.x,
-          y: this.y,
-          size: this.size,
-        }, {
-          x: this.pacman.position.x,
-          y: this.pacman.position.y,
-          size: this.pacman.measurement,
-        },
-      )) {
+      // if (this.checkForCollision(
+      //   {
+      //     x: this.x,
+      //     y: this.y,
+      //     size: this.size,
+      //   }, {
+      //     x: this.pacman.position.x,
+      //     y: this.pacman.position.y,
+      //     size: this.pacman.measurement,
+      //   },
+      // )) {
+      if (this.checkForCollision(this, this.pacman)) { 
         this.visible = false
         this.emitter.emit("item-taken", this)
         window.dispatchEvent(new CustomEvent('awardPoints', {

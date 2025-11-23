@@ -114,7 +114,9 @@ class Debugger {
         let newPositions
         for (let i = 0; i < units; i++) {
             newPositions = this.gc.pacman.characterUtil.determineNewPositions(position, 
-                direction, velocityPerMs, elapsedMs, this.gc.pacman.scaledTileSize)
+                direction, velocityPerMs, elapsedMs, this.gc.pacman.scaledTileSize,
+                this.gc.pacman.anchor, this.gc.scale
+            )
             position = newPositions.newPosition
         }
         this.gc.pacman.position = position
@@ -125,7 +127,7 @@ class Debugger {
             if (this.shouldPrintGrid) {
                 this.printGrid()
             }else if(this.enableBoundsAndHitBoxes) {
-                this.drawBoundsAndHitBoxes(true)
+                this.drawBoundsAndHitBoxes(false)
             }
             requestAnimationFrame(an)
         }
@@ -218,7 +220,8 @@ class Debugger {
                         db.gc.pacman.characterUtil.determineGridPosition(
                             {x: db.gc.pacman.position.x,
                              y: db.gc.pacman.position.y} as ObservablePoint, 
-                             db.tileSize)
+                             db.tileSize,db.gc.pacman.anchor,
+                            db.gc.scale)
 
                     const pacX = formater.format(gridPosition.x)
                     const pacY = formater.format(gridPosition.y)
@@ -350,9 +353,12 @@ class Debugger {
     _notify(functionName: any) {
         const pacman = this.gc.pacman
         const gridPosition  = pacman.characterUtil.determineGridPosition(
-            pacman.oldPosition,pacman.scaledTileSize)
+            pacman.oldPosition,pacman.scaledTileSize,
+            pacman.anchor, this.gc.scale
+        )
         const newGridPosition  = pacman.characterUtil.determineGridPosition(
-              pacman.position,pacman.scaledTileSize)    
+              pacman.position,pacman.scaledTileSize,
+            pacman.anchor, this.gc.scale)    
         if (pacman.characterUtil.changingGridPosition(
             gridPosition, newGridPosition)) {
                 const round = pacman.characterUtil.determineRoundingFunction(pacman.direction)

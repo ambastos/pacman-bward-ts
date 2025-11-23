@@ -40,8 +40,8 @@ class EntitiesManager {
             wave.wavesManager.createBreath(sonic)
             const position = sonic.characterUtil.snapToGrid(
                 createObservablePoint(this,cells[index]!.col, cells[index]!.row),
-                sonic.characterUtil.directions.left,                
-                sonic.scaledTileSize 
+                sonic.characterUtil.directions.left, sonic.scaledTileSize,
+                sonic.anchor, this.gc.scale 
             )
             //const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
             sonic.reset()

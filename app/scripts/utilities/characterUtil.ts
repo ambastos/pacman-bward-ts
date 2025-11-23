@@ -1,6 +1,6 @@
 import { ObservablePoint } from "pixi.js";
 import StaticEntity from "../characters/staticEntity.ts";
-import { copyPosition, createObservablePoint, getGridPosition } from "./utils.ts";
+import { copyPosition, createObservablePoint, getAnchorAxis, getGridPosition } from "./utils.ts";
 import MovableEntity from "../characters/movableEntity.ts";
 
 class CharacterUtil { 
@@ -85,8 +85,10 @@ class CharacterUtil {
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({x: number, y: number})}
    */
-  determineGridPosition(position:ObservablePoint, scaledTileSize:number):ObservablePoint {
-    return getGridPosition(this,position, scaledTileSize)
+  determineGridPosition(position:ObservablePoint, scaledTileSize:number,
+    anchor:ObservablePoint, scale:number
+  ):ObservablePoint {
+    return getGridPosition(this,position, scaledTileSize, anchor, scale)
   }
 
   /**
@@ -179,13 +181,13 @@ class CharacterUtil {
    */
   determineNewPositions(
     position:ObservablePoint, direction:string, velocityPerMs:number, elapsedMs:number, 
-      scaledTileSize:number,
+      scaledTileSize:number, anchor: ObservablePoint, scale:number
   ):any {
     const newPosition = copyPosition(this, position)
     newPosition[this.getPropertyToChange(direction)]
       += this.getVelocity(direction, velocityPerMs) * elapsedMs;
     const newGridPosition = this.determineGridPosition(
-      newPosition, scaledTileSize,
+      newPosition, scaledTileSize, anchor, scale
     );
 
     return {
@@ -201,7 +203,16 @@ class CharacterUtil {
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({top: number, left: number})}
    */
-  snapToGrid(position:ObservablePoint, direction:string, scaledTileSize:number):ObservablePoint {
+  snapToGrid(position:ObservablePoint, direction:string, scaledTileSize:number, 
+    anchor:ObservablePoint, scale:number 
+   ):ObservablePoint {
+    let ax = 0, ay = 0
+    if (anchor) {
+      const axis = getAnchorAxis(this,anchor, scaledTileSize, scale!)
+      ax = axis.x
+      ay = axis.y
+    }
+
     const newPosition = copyPosition(this, position );
     const roundingFunction = this.determineRoundingFunction(
       direction,
@@ -218,25 +229,37 @@ class CharacterUtil {
     }
     return createObservablePoint(
       this,
-      (newPosition.x - 0.5) * scaledTileSize,
-      (newPosition.y - 0.5) * scaledTileSize
+      ((newPosition.x - 0.5) * scaledTileSize) + ax,
+      ((newPosition.y - 0.5) * scaledTileSize) + ay
     )
   }
 
   /**
+   * //TODO: includes anchor and scale to handleWarp
    * Returns a modified position if the character needs to warp
    * @param {({top: number, left: number})} position - css position during the current frame
    * @param {({x: number, y: number})} gridPosition - x-y position during the current frame
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({top: number, left: number})}
    */
-  handleWarp(position:ObservablePoint, scaledTileSize:number, mazeArray:any):ObservablePoint{
+  handleWarp(direction:string, position:ObservablePoint, scaledTileSize:number, mazeArray:any,
+    anchor:ObservablePoint, scale:number
+  ):ObservablePoint{
     const newPosition = createObservablePoint(this, position.x, position.y);
-    const gridPosition = this.determineGridPosition(position, scaledTileSize);
-    if (gridPosition.x < -0.75) {
-      newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
-    } else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
-      newPosition.x = (scaledTileSize * -1.25);
+    const gridPosition = this.determineGridPosition(position, scaledTileSize,
+      anchor,scale
+    );
+    const axis = getAnchorAxis(this, anchor,scaledTileSize,scale)    
+    
+    //gridPosition.x < -0.75
+    if (direction == "left" && gridPosition.x  <  -0.75-(-0.75 + anchor.x)) {
+      //newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
+      newPosition.x = (axis.x * (mazeArray[0].length - 0.75));
+    //} else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
+    } else if ( direction == "right" && 
+      (gridPosition.x  > mazeArray[0].length - 0.25-(-0.25 + anchor.x) )) {
+      newPosition.x = (axis.x * -1.25);
+      //newPosition.x = (scaledTileSize * -1.25);
     }
     return newPosition;
   }

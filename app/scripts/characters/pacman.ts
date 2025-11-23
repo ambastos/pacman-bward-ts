@@ -48,6 +48,7 @@ class Pacman extends MovableEntity{
     this.direction = this.characterUtil!.directions.left;
     this.moving = false;
     this.allowCollision = true
+    this.anchor.set(0.5)
   }
 
   /**
@@ -82,9 +83,10 @@ class Pacman extends MovableEntity{
    * @param {number} scaledTileSize - The dimensions of a single tile
    */
   setDefaultPosition(scaledTileSize: number) {
+    const axis = this.axis
     this.defaultPosition.set(
-      scaledTileSize * 13,
-      scaledTileSize * 22.5   
+      scaledTileSize * 13 + axis.x, 
+      scaledTileSize * 22.5 + axis.y  
     )
     this.position.set(this.defaultPosition.x, this.defaultPosition.y);
     this.oldPosition.set(this.position.x, this.position.y)
@@ -168,6 +170,7 @@ class Pacman extends MovableEntity{
       this.spriteArrow = new Sprite(textureArrow as Texture)
     else 
       this.spriteArrow.texture = textureArrow as Texture
+    this.spriteArrow.anchor.set(this.anchor.x, this.anchor.y)
     this.spriteArrow.zIndex = 1    
   }
   prepDeathAnimation() {
@@ -204,11 +207,13 @@ class Pacman extends MovableEntity{
   handleSnappedMovement(elapsedMs: number) {
     const desired = this.characterUtil!.determineNewPositions(
       this.position, this.desiredDirection, this.velocityPerMs,
-      elapsedMs, this.scaledTileSize,
+      elapsedMs, this.scaledTileSize, 
+      this.anchor, this.gameCoordinator.scale
     );
     const alternate = this.characterUtil!.determineNewPositions(
       this.position, this.direction, this.velocityPerMs,
       elapsedMs, this.scaledTileSize,
+      this.anchor,this.gameCoordinator.scale
     );
 
     if (this.characterUtil!.checkForWallCollision(
@@ -237,10 +242,12 @@ class Pacman extends MovableEntity{
     const desired = this.characterUtil!.determineNewPositions(
       this.position, this.desiredDirection, this.velocityPerMs,
       elapsedMs, this.scaledTileSize,
+      this.anchor, this.gameCoordinator.scale
     );
     const alternate = this.characterUtil!.determineNewPositions(
       this.position, this.direction, this.velocityPerMs,
       elapsedMs, this.scaledTileSize,
+      this.anchor, this.gameCoordinator.scale
     );
 
     if (this.characterUtil!.turningAround(
@@ -254,6 +261,7 @@ class Pacman extends MovableEntity{
     )) {
       return this.characterUtil!.snapToGrid(
         gridPosition, this.direction, this.scaledTileSize,
+        this.anchor, this.gameCoordinator.scale
       );
     }
     return alternate.newPosition;
@@ -275,8 +283,8 @@ class Pacman extends MovableEntity{
       interp, 'x', this.oldPosition, this.position,
     );
 
-    const arrowX = newX //-this.gameCoordinator.tileSize
-    const arrowY = newY //-this.gameCoordinator.tileSize
+    const arrowX = newX //+ this.spriteArrow!.width * 0.5
+    const arrowY = newY 
     this.spriteArrow!.position.set(arrowX, arrowY)
 
     const updatedProperties = this.characterUtil!.advanceSpriteSheet(this);
@@ -298,10 +306,12 @@ class Pacman extends MovableEntity{
 
     if (this.moving) {
       const gridPosition = this.characterUtil!.determineGridPosition(
-        this.position, this.scaledTileSize,
+        this.position, this.scaledTileSize, 
+        this.anchor, this.gameCoordinator.scale
       );
       const snapToGrid =this.characterUtil!.snapToGrid(
           gridPosition, this.direction, this.scaledTileSize,
+          this.anchor, this.gameCoordinator.scale
         )
  
       if (this.position.equals(snapToGrid) 
@@ -311,7 +321,9 @@ class Pacman extends MovableEntity{
         this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
       }
       this.position = this.characterUtil!.handleWarp(
+        this.direction,
         this.position, this.scaledTileSize, this.mazeArray,
+        this.anchor, this.gameCoordinator.scale
       );
     }
 

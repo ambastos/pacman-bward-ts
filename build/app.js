@@ -524,7 +524,7 @@ var EntitiesManager = /*#__PURE__*/function () {
         }).length > 0) return;
         var sonic = new _sonic["default"](wave.wavesManager.flood);
         wave.wavesManager.createBreath(sonic);
-        var position = sonic.characterUtil.snapToGrid((0, _utils.createObservablePoint)(this, cells[index].col, cells[index].row), sonic.characterUtil.directions.left, sonic.scaledTileSize);
+        var position = sonic.characterUtil.snapToGrid((0, _utils.createObservablePoint)(this, cells[index].col, cells[index].row), sonic.characterUtil.directions.left, sonic.scaledTileSize, sonic.anchor, this.gc.scale);
         //const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
         sonic.reset();
         sonic.position.set(position.x, position.y);
@@ -2318,19 +2318,19 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     value: function setDefaultPosition(scaledTileSize, name) {
       switch (name) {
         case 'blinky':
-          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 13, scaledTileSize * 10.5);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 13 + this.axis.x, scaledTileSize * 10.5 + this.axis.y);
           break;
         case 'pinky':
-          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 13, scaledTileSize * 13.5);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 13 + this.axis.x, scaledTileSize * 13.5 + this.axis.y);
           break;
         case 'inky':
-          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 11, scaledTileSize * 13.5);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 11 + this.axis.x, scaledTileSize * 13.5 + this.axis.y);
           break;
         case 'clyde':
-          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 15, scaledTileSize * 13.5);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, scaledTileSize * 15 + this.axis.x, scaledTileSize * 13.5 + this.axis.y);
           break;
         default:
-          this.defaultPosition = (0, _utils.createObservablePoint)(this, 0, 0);
+          this.defaultPosition = (0, _utils.createObservablePoint)(this, 0 + this.axis.x, 0 + this.axis.y);
           break;
       }
       this.position = (0, _utils.createObservablePoint)(this, this.defaultPosition.x, this.defaultPosition.y);
@@ -2421,7 +2421,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     key: "setTexture",
     value: function setTexture(name, direction, frameX, emotion, frameY, width, height) {
       this.texture = this.getTexture(name, direction, frameX, emotion);
-      this.zIndex = 1;
+      this.zIndex = 2;
     }
     /**
      * Checks to see if the ghost is currently in the 'tunnels' on the outer edges of the maze
@@ -2544,7 +2544,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "determineInkyTarget",
     value: function determineInkyTarget(pacmanGridPosition) {
-      var blinkyGridPosition = this.characterUtil.determineGridPosition(this.blinky.position, this.scaledTileSize);
+      var blinkyGridPosition = this.characterUtil.determineGridPosition(this.blinky.position, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       var pivotPoint = this.getPositionInFrontOfPacman(pacmanGridPosition, 2);
       return (0, _utils.createObservablePoint)(this, pivotPoint.x + (pivotPoint.x - blinkyGridPosition.x), pivotPoint.y + (pivotPoint.y - blinkyGridPosition.y));
     }
@@ -2691,14 +2691,14 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
       if (this.idleMode === 'leaving') {
         if (position.x === 13.5 && position.y > 10.8 && position.y < 11) {
           this.idleMode = undefined;
-          newPosition.y = this.scaledTileSize * 10.5;
+          newPosition.y = this.scaledTileSize * 10.5 + this.axis.y;
           this.direction = this.characterUtil.directions.left;
           window.dispatchEvent(new Event('releaseGhost'));
         } else if (position.x > 13.4 && position.x < 13.6) {
-          newPosition.x = this.scaledTileSize * 13;
+          newPosition.x = this.scaledTileSize * 13 + this.axis.x;
           this.direction = this.characterUtil.directions.up;
         } else if (position.y > 13.9 && position.y < 14.1) {
-          newPosition.y = this.scaledTileSize * 13.5;
+          newPosition.y = this.scaledTileSize * 13.5 + this.axis.y;
           this.direction = position.x < 13.5 ? this.characterUtil.directions.right : this.characterUtil.directions.left;
         }
       }
@@ -2780,18 +2780,18 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
       if (this.enteringGhostHouse(this.mode, gridPosition)) {
         this.direction = this.characterUtil.directions.down;
         gridPositionCopy.x = 13.5;
-        this.position = this.characterUtil.snapToGrid(gridPositionCopy, this.direction, this.scaledTileSize);
+        this.position = this.characterUtil.snapToGrid(gridPositionCopy, this.direction, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       }
       if (this.enteredGhostHouse(this.mode, gridPosition)) {
         this.direction = this.characterUtil.directions.up;
         gridPositionCopy.y = 14;
-        this.position = this.characterUtil.snapToGrid(gridPositionCopy, this.direction, this.scaledTileSize);
+        this.position = this.characterUtil.snapToGrid(gridPositionCopy, this.direction, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
         this.mode = this.defaultMode;
         window.dispatchEvent(new Event('restoreGhost'));
       }
       if (this.leavingGhostHouse(this.mode, gridPosition)) {
         gridPositionCopy.y = 11;
-        this.position = this.characterUtil.snapToGrid(gridPositionCopy, this.direction, this.scaledTileSize);
+        this.position = this.characterUtil.snapToGrid(gridPositionCopy, this.direction, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
         this.direction = this.characterUtil.directions.left;
       }
       return gridPositionCopy;
@@ -2808,9 +2808,9 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     key: "handleUnsnappedMovement",
     value: function handleUnsnappedMovement(elapsedMs, gridPosition, velocity) {
       var gridPositionCopy = this.handleGhostHouse(gridPosition);
-      var desired = this.characterUtil.determineNewPositions(this.position, this.direction, velocity, elapsedMs, this.scaledTileSize);
+      var desired = this.characterUtil.determineNewPositions(this.position, this.direction, velocity, elapsedMs, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       if (this.characterUtil.changingGridPosition(gridPositionCopy, desired.newGridPosition)) {
-        return this.characterUtil.snapToGrid(gridPositionCopy, this.direction, this.scaledTileSize);
+        return this.characterUtil.snapToGrid(gridPositionCopy, this.direction, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       }
       return desired.newPosition;
     }
@@ -2824,10 +2824,10 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     key: "handleMovement",
     value: function handleMovement(elapsedMs) {
       var newPosition;
-      var gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize);
-      var pacmanGridPosition = this.characterUtil.determineGridPosition(this.pacman.position, this.scaledTileSize);
+      var gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
+      var pacmanGridPosition = this.characterUtil.determineGridPosition(this.pacman.position, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       var velocity = this.determineVelocity(gridPosition, this.mode);
-      var snapToGrid = this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize);
+      var snapToGrid = this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       if (this.idleMode) {
         newPosition = this.handleIdleMovement(elapsedMs, gridPosition, velocity);
       } else if (this.position.equals(snapToGrid)) {
@@ -2835,7 +2835,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
       } else {
         newPosition = this.handleUnsnappedMovement(elapsedMs, gridPosition, velocity);
       }
-      newPosition = this.characterUtil.handleWarp(newPosition, this.scaledTileSize, this.mazeArray);
+      newPosition = this.characterUtil.handleWarp(this.direction, newPosition, this.scaledTileSize, this.mazeArray, this.anchor, this.gameCoordinator.scale);
       this.checkCollision(gridPosition, pacmanGridPosition);
       return newPosition;
     }
@@ -2849,7 +2849,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     key: "changeMode",
     value: function changeMode(newMode) {
       this.defaultMode = newMode;
-      var gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize);
+      var gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       if ((this.mode === 'chase' || this.mode === 'scatter') && !this.cruiseElroy) {
         this.mode = newMode;
         if (!this.isInGhostHouse(gridPosition)) {
@@ -2875,7 +2875,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "becomeScared",
     value: function becomeScared() {
-      var gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize);
+      var gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       if (this.mode !== 'eyes') {
         if (!this.isInGhostHouse(gridPosition) && this.mode !== 'scared') {
           this.direction = this.characterUtil.getOppositeDirection(this.direction);
@@ -3071,7 +3071,7 @@ var MovableEntity = /*#__PURE__*/function (_StaticEntity) {
     key: "getGridPosition",
     value: function getGridPosition() {
       var _this$characterUtil;
-      return (_this$characterUtil = this.characterUtil) === null || _this$characterUtil === void 0 ? void 0 : _this$characterUtil.determineGridPosition(this.position, this.scaledTileSize);
+      return (_this$characterUtil = this.characterUtil) === null || _this$characterUtil === void 0 ? void 0 : _this$characterUtil.determineGridPosition(this.position, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
     }
   }]);
 }(_staticEntity["default"]);
@@ -3155,6 +3155,7 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
       this.direction = this.characterUtil.directions.left;
       this.moving = false;
       this.allowCollision = true;
+      this.anchor.set(0.5);
     }
 
     /**
@@ -3194,7 +3195,8 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "setDefaultPosition",
     value: function setDefaultPosition(scaledTileSize) {
-      this.defaultPosition.set(scaledTileSize * 13, scaledTileSize * 22.5);
+      var axis = this.axis;
+      this.defaultPosition.set(scaledTileSize * 13 + axis.x, scaledTileSize * 22.5 + axis.y);
       this.position.set(this.defaultPosition.x, this.defaultPosition.y);
       this.oldPosition.set(this.position.x, this.position.y);
       //this.oldPosition = Object.assign({}, this.position);
@@ -3281,6 +3283,7 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
     value: function setArrowSprite(direction, frameX, death) {
       var textureArrow = this.getArrowTexture(direction, death);
       if (!this.spriteArrow) this.spriteArrow = new _pixi.Sprite(textureArrow);else this.spriteArrow.texture = textureArrow;
+      this.spriteArrow.anchor.set(this.anchor.x, this.anchor.y);
       this.spriteArrow.zIndex = 1;
     }
   }, {
@@ -3319,8 +3322,8 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "handleSnappedMovement",
     value: function handleSnappedMovement(elapsedMs) {
-      var desired = this.characterUtil.determineNewPositions(this.position, this.desiredDirection, this.velocityPerMs, elapsedMs, this.scaledTileSize);
-      var alternate = this.characterUtil.determineNewPositions(this.position, this.direction, this.velocityPerMs, elapsedMs, this.scaledTileSize);
+      var desired = this.characterUtil.determineNewPositions(this.position, this.desiredDirection, this.velocityPerMs, elapsedMs, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
+      var alternate = this.characterUtil.determineNewPositions(this.position, this.direction, this.velocityPerMs, elapsedMs, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       if (this.characterUtil.checkForWallCollision(desired.newGridPosition, this.mazeArray, this.desiredDirection)) {
         if (this.characterUtil.checkForWallCollision(alternate.newGridPosition, this.mazeArray, this.direction)) {
           this.moving = false;
@@ -3342,15 +3345,15 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "handleUnsnappedMovement",
     value: function handleUnsnappedMovement(gridPosition, elapsedMs) {
-      var desired = this.characterUtil.determineNewPositions(this.position, this.desiredDirection, this.velocityPerMs, elapsedMs, this.scaledTileSize);
-      var alternate = this.characterUtil.determineNewPositions(this.position, this.direction, this.velocityPerMs, elapsedMs, this.scaledTileSize);
+      var desired = this.characterUtil.determineNewPositions(this.position, this.desiredDirection, this.velocityPerMs, elapsedMs, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
+      var alternate = this.characterUtil.determineNewPositions(this.position, this.direction, this.velocityPerMs, elapsedMs, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       if (this.characterUtil.turningAround(this.direction, this.desiredDirection)) {
         this.direction = this.desiredDirection;
         this.setSpriteSheet(this.direction);
         return desired.newPosition;
       }
       if (this.characterUtil.changingGridPosition(gridPosition, alternate.newGridPosition)) {
-        return this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize);
+        return this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       }
       return alternate.newPosition;
     }
@@ -3372,8 +3375,8 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
     value: function draw(interp) {
       var newY = this.characterUtil.calculateNewDrawValue(interp, 'y', this.oldPosition, this.position);
       var newX = this.characterUtil.calculateNewDrawValue(interp, 'x', this.oldPosition, this.position);
-      var arrowX = newX; //-this.gameCoordinator.tileSize
-      var arrowY = newY; //-this.gameCoordinator.tileSize
+      var arrowX = newX; //+ this.spriteArrow!.width * 0.5
+      var arrowY = newY;
       this.spriteArrow.position.set(arrowX, arrowY);
       var updatedProperties = this.characterUtil.advanceSpriteSheet(this);
       this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
@@ -3393,14 +3396,14 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
       _superPropGet(Pacman, "update", this, 3)([elapsedMs]);
       this.oldPosition.set(this.position.x, this.position.y);
       if (this.moving) {
-        var gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize);
-        var snapToGrid = this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize);
+        var gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
+        var snapToGrid = this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
         if (this.position.equals(snapToGrid)) {
           this.position = this.handleSnappedMovement(elapsedMs);
         } else {
           this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
         }
-        this.position = this.characterUtil.handleWarp(this.position, this.scaledTileSize, this.mazeArray);
+        this.position = this.characterUtil.handleWarp(this.direction, this.position, this.scaledTileSize, this.mazeArray, this.anchor, this.gameCoordinator.scale);
       }
       if (this.moving || this.specialAnimation) {
         this.msSinceLastSprite += elapsedMs;
@@ -3418,6 +3421,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var _pixi = require("pixi.js");
+var _utils = require("../utilities/utils.ts");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
 function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
@@ -3455,6 +3459,7 @@ var StaticEntity = /*#__PURE__*/function (_Sprite) {
     _this.name = name;
     _this.scaledTileSize = gameCoordinator.scaledTileSize;
     _this.emitter = gameCoordinator.emitter;
+    _this.anchor.set(0.5);
     return _this;
   }
   _inherits(StaticEntity, _Sprite);
@@ -3473,6 +3478,11 @@ var StaticEntity = /*#__PURE__*/function (_Sprite) {
       this.createHitArea();
     }
   }, {
+    key: "axis",
+    get: function get() {
+      return (0, _utils.getAnchorAxis)(this, this.anchor, this.scaledTileSize, this.gameCoordinator.scale);
+    }
+  }, {
     key: "update",
     value: function update(elapsedMs) {
       this.createHitArea();
@@ -3480,9 +3490,11 @@ var StaticEntity = /*#__PURE__*/function (_Sprite) {
   }, {
     key: "createHitArea",
     value: function createHitArea() {
+      var ax = this.anchor.x * this.width;
+      var ay = this.anchor.y * this.height;
       var half = this.scaledTileSize * 0.5;
-      var x = this.x + this.width * 0.5 - half;
-      var y = this.y + this.height * 0.5 - half;
+      var x = this.x + this.width * 0.5 - half - ax;
+      var y = this.y + this.height * 0.5 - half - ay;
       this.hitArea = new _pixi.Rectangle(x, y, this.scaledTileSize, this.scaledTileSize);
     }
   }, {
@@ -3492,7 +3504,7 @@ var StaticEntity = /*#__PURE__*/function (_Sprite) {
 }(_pixi.Sprite);
 var _default = exports["default"] = StaticEntity;
 
-},{"pixi.js":449}],24:[function(require,module,exports){
+},{"../utilities/utils.ts":36,"pixi.js":449}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4492,12 +4504,7 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.clyde = new _ghost["default"](this, 'clyde', this.level, new _characterUtil["default"]());
         this.fruit = new _pickup["default"]('fruit', 13.5, 17, 100, this);
       }
-      this.stage.addChild(this.pacman,
-      // this.blinky,
-      // this.pinky,
-      // this.inky, 
-      // this.clyde,
-      this.fruit);
+      this.stage.addChild(this.pacman, this.blinky, this.pinky, this.inky, this.clyde, this.fruit);
       this.ghosts = [this.blinky, this.pinky, this.inky, this.clyde];
       this.scaredGhosts = [];
       this.eyeGhosts = 0;
@@ -6171,18 +6178,26 @@ var Pickup = /*#__PURE__*/function (_StaticEntity) {
   }, {
     key: "setStyleMeasurements",
     value: function setStyleMeasurements(type, scaledTileSize, column, row, points) {
+      var ax = 0,
+        ay = 0;
       if (type === 'pacdot') {
         this.size = scaledTileSize * 0.25;
-        this.x = column * scaledTileSize + scaledTileSize / 8 * 3;
-        this.y = row * scaledTileSize + scaledTileSize / 8 * 3;
+        ax = this.anchor.x * this.size * this.gameCoordinator.scale;
+        ay = this.anchor.y * this.size * this.gameCoordinator.scale;
+        this.x = column * scaledTileSize + scaledTileSize / 8 * 3 + ax;
+        this.y = row * scaledTileSize + scaledTileSize / 8 * 3 + ay;
       } else if (type === 'powerPellet') {
         this.size = scaledTileSize;
-        this.x = column * scaledTileSize;
-        this.y = row * scaledTileSize;
+        ax = this.anchor.x * scaledTileSize * 0.5 * this.gameCoordinator.scale;
+        ay = this.anchor.y * scaledTileSize * 0.5 * this.gameCoordinator.scale;
+        this.x = column * scaledTileSize + ax;
+        this.y = row * scaledTileSize + ay;
       } else {
         this.size = scaledTileSize * 2;
-        this.x = column * scaledTileSize - scaledTileSize * 0.5;
-        this.y = row * scaledTileSize - scaledTileSize * 0.5;
+        ax = this.anchor.x * scaledTileSize * this.gameCoordinator.scale;
+        ay = this.anchor.y * scaledTileSize * this.gameCoordinator.scale;
+        this.x = column * scaledTileSize - scaledTileSize * 0.5 + ax;
+        this.y = row * scaledTileSize - scaledTileSize * 0.5 + ay;
       }
       this.center = {
         x: column * scaledTileSize,
@@ -6284,11 +6299,17 @@ var Pickup = /*#__PURE__*/function (_StaticEntity) {
   }, {
     key: "checkForCollision",
     value: function checkForCollision(pickup, originalPacman) {
-      var pacman = Object.assign({}, originalPacman);
-      pacman.x += pacman.size * 0.25;
-      pacman.y += pacman.size * 0.25;
-      pacman.size /= 2;
-      return pickup.x < pacman.x + pacman.size && pickup.x + pickup.size > pacman.x && pickup.y < pacman.y + pacman.size && pickup.y + pickup.size > pacman.y;
+      //const pacman = Object.assign({}, originalPacman);
+
+      // pacman.x += (pacman.size * 0.25);
+      // pacman.y += (pacman.size * 0.25);
+      // pacman.size /= 2;
+
+      // return (pickup.x < pacman.x + pacman.size
+      //   && pickup.x + pickup.size > pacman.x
+      //   && pickup.y < pacman.y + pacman.size
+      //   && pickup.y + pickup.size > pacman.y);
+      return pickup.hitArea.intersects(this.pacman.hitArea);
     }
 
     /**
@@ -6329,15 +6350,18 @@ var Pickup = /*#__PURE__*/function (_StaticEntity) {
     value: function update(elapsedMs) {
       if (this.shouldCheckForCollision()) {
         _superPropGet(Pickup, "update", this, 3)([elapsedMs]);
-        if (this.checkForCollision({
-          x: this.x,
-          y: this.y,
-          size: this.size
-        }, {
-          x: this.pacman.position.x,
-          y: this.pacman.position.y,
-          size: this.pacman.measurement
-        })) {
+        // if (this.checkForCollision(
+        //   {
+        //     x: this.x,
+        //     y: this.y,
+        //     size: this.size,
+        //   }, {
+        //     x: this.pacman.position.x,
+        //     y: this.pacman.position.y,
+        //     size: this.pacman.measurement,
+        //   },
+        // )) {
+        if (this.checkForCollision(this, this.pacman)) {
           this.visible = false;
           this.emitter.emit("item-taken", this);
           window.dispatchEvent(new CustomEvent('awardPoints', {
@@ -6464,8 +6488,8 @@ var CharacterUtil = /*#__PURE__*/function () {
      */
   }, {
     key: "determineGridPosition",
-    value: function determineGridPosition(position, scaledTileSize) {
-      return (0, _utils.getGridPosition)(this, position, scaledTileSize);
+    value: function determineGridPosition(position, scaledTileSize, anchor, scale) {
+      return (0, _utils.getGridPosition)(this, position, scaledTileSize, anchor, scale);
     }
 
     /**
@@ -6560,10 +6584,10 @@ var CharacterUtil = /*#__PURE__*/function () {
      */
   }, {
     key: "determineNewPositions",
-    value: function determineNewPositions(position, direction, velocityPerMs, elapsedMs, scaledTileSize) {
+    value: function determineNewPositions(position, direction, velocityPerMs, elapsedMs, scaledTileSize, anchor, scale) {
       var newPosition = (0, _utils.copyPosition)(this, position);
       newPosition[this.getPropertyToChange(direction)] += this.getVelocity(direction, velocityPerMs) * elapsedMs;
-      var newGridPosition = this.determineGridPosition(newPosition, scaledTileSize);
+      var newGridPosition = this.determineGridPosition(newPosition, scaledTileSize, anchor, scale);
       return {
         newPosition: newPosition,
         newGridPosition: newGridPosition
@@ -6579,7 +6603,14 @@ var CharacterUtil = /*#__PURE__*/function () {
      */
   }, {
     key: "snapToGrid",
-    value: function snapToGrid(position, direction, scaledTileSize) {
+    value: function snapToGrid(position, direction, scaledTileSize, anchor, scale) {
+      var ax = 0,
+        ay = 0;
+      if (anchor) {
+        var axis = (0, _utils.getAnchorAxis)(this, anchor, scaledTileSize, scale);
+        ax = axis.x;
+        ay = axis.y;
+      }
       var newPosition = (0, _utils.copyPosition)(this, position);
       var roundingFunction = this.determineRoundingFunction(direction);
       switch (direction) {
@@ -6591,10 +6622,11 @@ var CharacterUtil = /*#__PURE__*/function () {
           newPosition.x = roundingFunction(newPosition.x);
           break;
       }
-      return (0, _utils.createObservablePoint)(this, (newPosition.x - 0.5) * scaledTileSize, (newPosition.y - 0.5) * scaledTileSize);
+      return (0, _utils.createObservablePoint)(this, (newPosition.x - 0.5) * scaledTileSize + ax, (newPosition.y - 0.5) * scaledTileSize + ay);
     }
 
     /**
+     * //TODO: includes anchor and scale to handleWarp
      * Returns a modified position if the character needs to warp
      * @param {({top: number, left: number})} position - css position during the current frame
      * @param {({x: number, y: number})} gridPosition - x-y position during the current frame
@@ -6603,13 +6635,19 @@ var CharacterUtil = /*#__PURE__*/function () {
      */
   }, {
     key: "handleWarp",
-    value: function handleWarp(position, scaledTileSize, mazeArray) {
+    value: function handleWarp(direction, position, scaledTileSize, mazeArray, anchor, scale) {
       var newPosition = (0, _utils.createObservablePoint)(this, position.x, position.y);
-      var gridPosition = this.determineGridPosition(position, scaledTileSize);
-      if (gridPosition.x < -0.75) {
-        newPosition.x = scaledTileSize * (mazeArray[0].length - 0.75);
-      } else if (gridPosition.x > mazeArray[0].length - 0.25) {
-        newPosition.x = scaledTileSize * -1.25;
+      var gridPosition = this.determineGridPosition(position, scaledTileSize, anchor, scale);
+      var axis = (0, _utils.getAnchorAxis)(this, anchor, scaledTileSize, scale);
+
+      //gridPosition.x < -0.75
+      if (direction == "left" && gridPosition.x < -0.75 - (-0.75 + anchor.x)) {
+        //newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
+        newPosition.x = axis.x * (mazeArray[0].length - 0.75);
+        //} else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
+      } else if (direction == "right" && gridPosition.x > mazeArray[0].length - 0.25 - (-0.25 + anchor.x)) {
+        newPosition.x = axis.x * -1.25;
+        //newPosition.x = (scaledTileSize * -1.25);
       }
       return newPosition;
     }
@@ -6753,7 +6791,7 @@ var Debugger = /*#__PURE__*/function () {
       var velocityPerMs = this.gc.pacman.velocityPerMs;
       var newPositions;
       for (var i = 0; i < units; i++) {
-        newPositions = this.gc.pacman.characterUtil.determineNewPositions(position, direction, velocityPerMs, elapsedMs, this.gc.pacman.scaledTileSize);
+        newPositions = this.gc.pacman.characterUtil.determineNewPositions(position, direction, velocityPerMs, elapsedMs, this.gc.pacman.scaledTileSize, this.gc.pacman.anchor, this.gc.scale);
         position = newPositions.newPosition;
       }
       this.gc.pacman.position = position;
@@ -6767,7 +6805,7 @@ var Debugger = /*#__PURE__*/function () {
         if (_this2.shouldPrintGrid) {
           _this2.printGrid();
         } else if (_this2.enableBoundsAndHitBoxes) {
-          _this2.drawBoundsAndHitBoxes(true);
+          _this2.drawBoundsAndHitBoxes(false);
         }
         requestAnimationFrame(_an);
       };
@@ -6867,7 +6905,7 @@ var Debugger = /*#__PURE__*/function () {
             var gridPosition = db.gc.pacman.characterUtil.determineGridPosition({
               x: db.gc.pacman.position.x,
               y: db.gc.pacman.position.y
-            }, db.tileSize);
+            }, db.tileSize, db.gc.pacman.anchor, db.gc.scale);
             var pacX = formater.format(gridPosition.x);
             var pacY = formater.format(gridPosition.y);
             _this.messages = ['Pacman position:', 'l:' + pacY + ',c:' + pacX];
@@ -7003,8 +7041,8 @@ var Debugger = /*#__PURE__*/function () {
     key: "_notify",
     value: function _notify(functionName) {
       var pacman = this.gc.pacman;
-      var gridPosition = pacman.characterUtil.determineGridPosition(pacman.oldPosition, pacman.scaledTileSize);
-      var newGridPosition = pacman.characterUtil.determineGridPosition(pacman.position, pacman.scaledTileSize);
+      var gridPosition = pacman.characterUtil.determineGridPosition(pacman.oldPosition, pacman.scaledTileSize, pacman.anchor, this.gc.scale);
+      var newGridPosition = pacman.characterUtil.determineGridPosition(pacman.position, pacman.scaledTileSize, pacman.anchor, this.gc.scale);
       if (pacman.characterUtil.changingGridPosition(gridPosition, newGridPosition)) {
         var round = pacman.characterUtil.determineRoundingFunction(pacman.direction);
         this.infoPanel.messages = ['Pacman changed to tile (x,y:):', round(newGridPosition.x) + ', ' + round(newGridPosition.y)];
@@ -7352,6 +7390,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.copyPosition = copyPosition;
 exports.createObservablePoint = createObservablePoint;
+exports.getAnchorAxis = getAnchorAxis;
 exports.getGridPosition = getGridPosition;
 var _pixi = require("pixi.js");
 function copyPosition(classThis, position) {
@@ -7360,8 +7399,21 @@ function copyPosition(classThis, position) {
 function createObservablePoint(classThis, x, y) {
   return new _pixi.ObservablePoint(function () {}, classThis, x, y);
 }
-function getGridPosition(classThis, position, scaledTileSize) {
-  return createObservablePoint(classThis, position.x / scaledTileSize + 0.5, position.y / scaledTileSize + 0.5);
+function getGridPosition(classThis, position, scaledTileSize, anchor, scale) {
+  var ax = 0,
+    ay = 0;
+  if (anchor) {
+    ax = anchor.x * scale;
+    ay = anchor.y * scale;
+  }
+  var x = position.x / scaledTileSize + 0.5 - ax;
+  var y = position.y / scaledTileSize + 0.5 - ay;
+  return createObservablePoint(classThis, x, y);
+}
+function getAnchorAxis(classThis, anchor, tileSize, scale) {
+  var ax = anchor.x * tileSize * scale;
+  var ay = anchor.y * tileSize * scale;
+  return createObservablePoint(classThis, ax, ay);
 }
 
 },{"pixi.js":449}],37:[function(require,module,exports){

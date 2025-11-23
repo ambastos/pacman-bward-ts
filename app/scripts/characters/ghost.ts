@@ -154,32 +154,32 @@ class Ghost extends MovableEntity{
     switch (name) {
       case 'blinky':
         this.defaultPosition = createObservablePoint(this,
-          scaledTileSize * 13,
-          scaledTileSize * 10.5,
+          scaledTileSize * 13 + this.axis.x,
+          scaledTileSize * 10.5 + this.axis.y,
         );
         break;
       case 'pinky':
         this.defaultPosition = createObservablePoint(this,
-          scaledTileSize * 13,
-          scaledTileSize * 13.5,
+          scaledTileSize * 13 + this.axis.x,
+          scaledTileSize * 13.5 + this.axis.y,
         );
         break;
       case 'inky':
         this.defaultPosition = createObservablePoint(this,
-          scaledTileSize * 11,
-          scaledTileSize * 13.5,
+          scaledTileSize * 11 + this.axis.x,
+          scaledTileSize * 13.5 + this.axis.y,
         );
         break;
       case 'clyde':
         this.defaultPosition = createObservablePoint(this,
-          scaledTileSize * 15,
-          scaledTileSize * 13.5,
+          scaledTileSize * 15 + this.axis.x,
+          scaledTileSize * 13.5 + this.axis.y,
         );
         break;
       default:
         this.defaultPosition = createObservablePoint(this,
-          0,
-          0,
+          0 + this.axis.x,
+          0 + this.axis.y,
         );
         break;
     }
@@ -268,7 +268,7 @@ class Ghost extends MovableEntity{
   setTexture(name:string, direction:string,frameX:number, 
     emotion:string | null, frameY?:number, width?:number, height?:number):void {
       this.texture = this.getTexture(name, direction,frameX, emotion!) as Texture
-      this.zIndex = 1      
+      this.zIndex = 2     
   }
   /**
    * Checks to see if the ghost is currently in the 'tunnels' on the outer edges of the maze
@@ -395,13 +395,14 @@ class Ghost extends MovableEntity{
   determineInkyTarget(pacmanGridPosition:ObservablePoint):ObservablePoint {
     const blinkyGridPosition = this.characterUtil!.determineGridPosition(
       this.blinky!.position, this.scaledTileSize,
+      this.anchor, this.gameCoordinator.scale
     );
     const pivotPoint = this.getPositionInFrontOfPacman(
       pacmanGridPosition, 2,
     );
     return createObservablePoint(
       this,
-      pivotPoint.x + (pivotPoint.x - blinkyGridPosition.x),
+      pivotPoint.x + (pivotPoint.x - blinkyGridPosition.x) ,
       pivotPoint.y + (pivotPoint.y - blinkyGridPosition.y)
     )
   }
@@ -553,14 +554,14 @@ class Ghost extends MovableEntity{
     if (this.idleMode === 'leaving') {
       if (position.x === 13.5 && (position.y > 10.8 && position.y < 11)) {
         this.idleMode = undefined;
-        newPosition.y = this.scaledTileSize * 10.5;
+        newPosition.y = this.scaledTileSize * 10.5 + this.axis.y;
         this.direction = this.characterUtil!.directions.left;
         window.dispatchEvent(new Event('releaseGhost'));
       } else if (position.x > 13.4 && position.x < 13.6) {
-        newPosition.x = this.scaledTileSize * 13;
+        newPosition.x = this.scaledTileSize * 13 + this.axis.x;
         this.direction = this.characterUtil!.directions.up;
       } else if (position.y > 13.9 && position.y < 14.1) {
-        newPosition.y = this.scaledTileSize * 13.5;
+        newPosition.y = this.scaledTileSize * 13.5 + this.axis.y;
         this.direction = (position.x < 13.5)
           ? this.characterUtil!.directions.right
           : this.characterUtil!.directions.left;
@@ -657,6 +658,7 @@ class Ghost extends MovableEntity{
       gridPositionCopy.x = 13.5;
       this.position = this.characterUtil!.snapToGrid(
         gridPositionCopy, this.direction, this.scaledTileSize,
+        this.anchor, this.gameCoordinator.scale
       );
     }
 
@@ -665,6 +667,7 @@ class Ghost extends MovableEntity{
       gridPositionCopy.y = 14;
       this.position = this.characterUtil!.snapToGrid(
         gridPositionCopy, this.direction, this.scaledTileSize,
+        this.anchor, this.gameCoordinator.scale
       );
       this.mode = this.defaultMode;
       window.dispatchEvent(new Event('restoreGhost'));
@@ -674,6 +677,7 @@ class Ghost extends MovableEntity{
       gridPositionCopy.y = 11;
       this.position = this.characterUtil!.snapToGrid(
         gridPositionCopy, this.direction, this.scaledTileSize,
+        this.anchor, this.gameCoordinator.scale
       );
       this.direction = this.characterUtil!.directions.left;
     }
@@ -693,6 +697,7 @@ class Ghost extends MovableEntity{
 
     const desired = this.characterUtil!.determineNewPositions( 
       this.position, this.direction, velocity, elapsedMs, this.scaledTileSize,
+      this.anchor, this.gameCoordinator.scale
     );
 
     if (this.characterUtil!.changingGridPosition(
@@ -700,6 +705,7 @@ class Ghost extends MovableEntity{
     )) {
       return this.characterUtil!.snapToGrid(
         gridPositionCopy, this.direction, this.scaledTileSize,
+        this.anchor, this.gameCoordinator.scale
       );
     }
 
@@ -716,9 +722,11 @@ class Ghost extends MovableEntity{
 
     const gridPosition = this.characterUtil!.determineGridPosition(
       this.position, this.scaledTileSize,
+      this.anchor, this.gameCoordinator.scale
     );
     const pacmanGridPosition = this.characterUtil!.determineGridPosition(
       this.pacman.position, this.scaledTileSize,
+      this.anchor, this.gameCoordinator.scale
     );
     const velocity = this.determineVelocity(
       gridPosition, this.mode,
@@ -726,6 +734,7 @@ class Ghost extends MovableEntity{
 
     const snapToGrid = this.characterUtil!.snapToGrid(
           gridPosition, this.direction, this.scaledTileSize,
+          this.anchor,this.gameCoordinator.scale
         )
 
     if (this.idleMode) {
@@ -743,7 +752,9 @@ class Ghost extends MovableEntity{
     }
 
     newPosition = this.characterUtil!.handleWarp(
+      this.direction,
       newPosition, this.scaledTileSize, this.mazeArray,
+      this.anchor, this.gameCoordinator.scale
     );
 
     this.checkCollision(gridPosition, pacmanGridPosition);
@@ -761,6 +772,7 @@ class Ghost extends MovableEntity{
 
     const gridPosition = this.characterUtil!.determineGridPosition(
       this.position, this.scaledTileSize,
+      this.anchor, this.gameCoordinator.scale
     );
 
     if ((this.mode === 'chase' || this.mode === 'scatter')
@@ -791,6 +803,7 @@ class Ghost extends MovableEntity{
   becomeScared() {
     const gridPosition = this.characterUtil!.determineGridPosition(
       this.position, this.scaledTileSize,
+      this.anchor, this.gameCoordinator.scale
     );
 
     if (this.mode !== 'eyes') {
