@@ -122,7 +122,7 @@ class GameCoordinator {
     //this.scaledTileSize = this.tileSize * this.scale;
     this.scaledTileSize = this.tileSize * 1;
     this.height = this.scaledTileSize * 31
-    this.width = this.scaledTileSize * 28
+    this.width = this.scaledTileSize * 28 
     this.maze!.setDimensions(this.width, this.height)
 
     //This contains all the objects of the game

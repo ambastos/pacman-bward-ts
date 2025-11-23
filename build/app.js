@@ -2414,7 +2414,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
             break;
         }
       }
-      var w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale;
+      var w = 16; //this.gameCoordinator.scaledTileSize //* this.gameCoordinator.scale    
       return this.gameCoordinator.am.getTexture("ghosts", frameX, frameY, w, w);
     }
   }, {
@@ -3227,7 +3227,7 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "getArrowTexture",
     value: function getArrowTexture(direction, death) {
-      var w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale * 2;
+      var w = 32; //this.gameCoordinator.scaledTileSize// * this.gameCoordinator.scale * 2   
       var frameX;
       switch (direction) {
         case 'left':
@@ -3249,7 +3249,7 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "getTexture",
     value: function getTexture(direction, frameX, death) {
-      var w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale;
+      var w = 16; // this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale    
       var frameY;
       switch (direction) {
         case 'left':
@@ -3372,11 +3372,8 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
     value: function draw(interp) {
       var newY = this.characterUtil.calculateNewDrawValue(interp, 'y', this.oldPosition, this.position);
       var newX = this.characterUtil.calculateNewDrawValue(interp, 'x', this.oldPosition, this.position);
-
-      //this.sprite!.position.set(newX, newY)  
-      //this.position.set(newX, newY)
-      var arrowX = newX - this.gameCoordinator.tileSize;
-      var arrowY = newY - this.gameCoordinator.tileSize;
+      var arrowX = newX; //-this.gameCoordinator.tileSize
+      var arrowY = newY; //-this.gameCoordinator.tileSize
       this.spriteArrow.position.set(arrowX, arrowY);
       var updatedProperties = this.characterUtil.advanceSpriteSheet(this);
       this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
@@ -3397,23 +3394,12 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
       this.oldPosition.set(this.position.x, this.position.y);
       if (this.moving) {
         var gridPosition = this.characterUtil.determineGridPosition(this.position, this.scaledTileSize);
-        // const posString = JSON.stringify(this.position.copyTo(new Point))
         var snapToGrid = this.characterUtil.snapToGrid(gridPosition, this.direction, this.scaledTileSize);
         if (this.position.equals(snapToGrid)) {
           this.position = this.handleSnappedMovement(elapsedMs);
         } else {
           this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
         }
-        // if (JSON.stringify(this.position, replacer ) === JSON.stringify(
-        //   this.characterUtil!.snapToGrid(
-        //     gridPosition, this.direction, this.scaledTileSize,
-        //   ),replacer
-        // )) {
-        //   this.position = this.handleSnappedMovement(elapsedMs);
-        // } else {
-        //   this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
-        // }
-
         this.position = this.characterUtil.handleWarp(this.position, this.scaledTileSize, this.mazeArray);
       }
       if (this.moving || this.specialAnimation) {
@@ -6221,7 +6207,7 @@ var Pickup = /*#__PURE__*/function (_StaticEntity) {
     value: function getTexture(type) {
       var frameY = 0;
       var frameX = 0;
-      var spWidth = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale;
+      var spWidth = 16; //this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale
       switch (type) {
         case "pacdot":
           frameY = 0;
@@ -6259,7 +6245,7 @@ var Pickup = /*#__PURE__*/function (_StaticEntity) {
         default:
           break;
       }
-      var w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale;
+      var w = 16; //this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale      
       return this.gameCoordinator.am.getTexture("pickups", frameX, frameY, w, w, spWidth, spWidth);
     }
   }, {

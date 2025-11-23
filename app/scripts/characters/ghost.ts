@@ -262,7 +262,7 @@ class Ghost extends MovableEntity{
           break;
       }
     }
-    let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale    
+    let w = 16  //this.gameCoordinator.scaledTileSize //* this.gameCoordinator.scale    
     return this.gameCoordinator.am.getTexture("ghosts", frameX, frameY, w, w)
   }
   setTexture(name:string, direction:string,frameX:number, 

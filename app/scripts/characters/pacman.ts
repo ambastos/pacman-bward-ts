@@ -99,7 +99,7 @@ class Pacman extends MovableEntity{
   calculateVelocityPerMs(scaledTileSize: number) {
     // In the original game, Pacman moved at 11 tiles per second.
     const velocityPerSecond = scaledTileSize * 11;
-    return velocityPerSecond / 1000;
+    return velocityPerSecond / 1000; 
   }
 
   /**
@@ -113,7 +113,7 @@ class Pacman extends MovableEntity{
   }
 
   getArrowTexture(direction: any, death: any) {
-    let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale * 2   
+    let w = 32 //this.gameCoordinator.scaledTileSize// * this.gameCoordinator.scale * 2   
     let frameX
     switch (direction) {
       case 'left':
@@ -135,7 +135,7 @@ class Pacman extends MovableEntity{
         frameX, 0, w, w)
   }
   getTexture(direction: any, frameX: number | undefined, death: any) {
-    let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale    
+    let w = 16 // this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale    
     let frameY
     switch (direction) {
       case 'left':
@@ -275,10 +275,8 @@ class Pacman extends MovableEntity{
       interp, 'x', this.oldPosition, this.position,
     );
 
-    //this.sprite!.position.set(newX, newY)  
-    //this.position.set(newX, newY)
-    const arrowX = newX-this.gameCoordinator.tileSize
-    const arrowY = newY-this.gameCoordinator.tileSize
+    const arrowX = newX //-this.gameCoordinator.tileSize
+    const arrowY = newY //-this.gameCoordinator.tileSize
     this.spriteArrow!.position.set(arrowX, arrowY)
 
     const updatedProperties = this.characterUtil!.advanceSpriteSheet(this);
@@ -302,7 +300,6 @@ class Pacman extends MovableEntity{
       const gridPosition = this.characterUtil!.determineGridPosition(
         this.position, this.scaledTileSize,
       );
-      // const posString = JSON.stringify(this.position.copyTo(new Point))
       const snapToGrid =this.characterUtil!.snapToGrid(
           gridPosition, this.direction, this.scaledTileSize,
         )
@@ -313,16 +310,6 @@ class Pacman extends MovableEntity{
       } else {
         this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
       }
-      // if (JSON.stringify(this.position, replacer ) === JSON.stringify(
-      //   this.characterUtil!.snapToGrid(
-      //     gridPosition, this.direction, this.scaledTileSize,
-      //   ),replacer
-      // )) {
-      //   this.position = this.handleSnappedMovement(elapsedMs);
-      // } else {
-      //   this.position = this.handleUnsnappedMovement(gridPosition, elapsedMs);
-      // }
-
       this.position = this.characterUtil!.handleWarp(
         this.position, this.scaledTileSize, this.mazeArray,
       );

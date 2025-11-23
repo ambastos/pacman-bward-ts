@@ -90,7 +90,7 @@ class Pickup extends StaticEntity {
   getTexture(type:string) {
     let frameY = 0
     let frameX = 0
-    let spWidth = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale
+    let spWidth = 16 //this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale
     switch (type) {
       case "pacdot":
         frameY = 0
@@ -128,7 +128,7 @@ class Pickup extends StaticEntity {
       default:
           break;
         }
-      let w = this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale      
+      let w = 16//this.gameCoordinator.scaledTileSize * this.gameCoordinator.scale      
       return this.gameCoordinator.am.getTexture("pickups",frameX, frameY,w,w,spWidth, spWidth)
   }
   setTexture(type:string) {
