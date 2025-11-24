@@ -251,14 +251,17 @@ class CharacterUtil {
     );
     const axis = getAnchorAxis(this, anchor,scaledTileSize,scale)    
     
-    //gridPosition.x < -0.75
-    if (direction == "left" && gridPosition.x  <  -0.75-(-0.75 + anchor.x)) {
+   // gridPosition.x < -0.75
+    //direction == "left" && gridPosition.x  <  -0.75-(-0.75 + anchor.x)
+    if (direction == "left" && gridPosition.x  < -0.75 + anchor.x) {
       //newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
-      newPosition.x = (axis.x * (mazeArray[0].length - 0.75));
+      newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75)) + 
+        (anchor.x * scaledTileSize * 0.75) ;
     //} else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
+    //(gridPosition.x  > mazeArray[0].length - 0.25-(-0.25 + anchor.x) )
     } else if ( direction == "right" && 
-      (gridPosition.x  > mazeArray[0].length - 0.25-(-0.25 + anchor.x) )) {
-      newPosition.x = (axis.x * -1.25);
+      (gridPosition.x  > mazeArray[0].length - 0.25-anchor.x )) {
+      newPosition.x = (scaledTileSize * -1.25) + (anchor.x * scaledTileSize * 1.25);
       //newPosition.x = (scaledTileSize * -1.25);
     }
     return newPosition;

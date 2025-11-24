@@ -132,7 +132,7 @@ function watch(cb) {
   //gulp.watch('app/style/**/*.scss', styles);
 
   gulp.watch(['app/scripts/**/*.ts', 'app/mods/**/*.ts'],
-    {delay: 600,
+    {delay: 300,
       queue:true
     },
     gulp.series('default'));

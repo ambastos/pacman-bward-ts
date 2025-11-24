@@ -48,7 +48,6 @@ class Pacman extends MovableEntity{
     this.direction = this.characterUtil!.directions.left;
     this.moving = false;
     this.allowCollision = true
-    this.anchor.set(0.5)
   }
 
   /**
@@ -283,8 +282,8 @@ class Pacman extends MovableEntity{
       interp, 'x', this.oldPosition, this.position,
     );
 
-    const arrowX = newX //+ this.spriteArrow!.width * 0.5
-    const arrowY = newY 
+    const arrowX = newX - this.width * (0.5-this.anchor.x)
+    const arrowY = newY - this.width * (0.5-this.anchor.y)
     this.spriteArrow!.position.set(arrowX, arrowY)
 
     const updatedProperties = this.characterUtil!.advanceSpriteSheet(this);

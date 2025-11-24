@@ -25,7 +25,7 @@ class StaticEntity extends Sprite {
         this.name = name
         this.scaledTileSize = gameCoordinator.scaledTileSize                
         this.emitter = gameCoordinator.emitter
-        this.anchor.set(0.5)
+        this.anchor.set(0.5) 
     }
    
     registerEventListeners() {   

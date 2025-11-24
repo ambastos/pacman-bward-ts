@@ -3155,7 +3155,6 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
       this.direction = this.characterUtil.directions.left;
       this.moving = false;
       this.allowCollision = true;
-      this.anchor.set(0.5);
     }
 
     /**
@@ -3375,8 +3374,8 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
     value: function draw(interp) {
       var newY = this.characterUtil.calculateNewDrawValue(interp, 'y', this.oldPosition, this.position);
       var newX = this.characterUtil.calculateNewDrawValue(interp, 'x', this.oldPosition, this.position);
-      var arrowX = newX; //+ this.spriteArrow!.width * 0.5
-      var arrowY = newY;
+      var arrowX = newX - this.width * (0.5 - this.anchor.x);
+      var arrowY = newY - this.width * (0.5 - this.anchor.y);
       this.spriteArrow.position.set(arrowX, arrowY);
       var updatedProperties = this.characterUtil.advanceSpriteSheet(this);
       this.msSinceLastSprite = updatedProperties.msSinceLastSprite;
@@ -6640,13 +6639,15 @@ var CharacterUtil = /*#__PURE__*/function () {
       var gridPosition = this.determineGridPosition(position, scaledTileSize, anchor, scale);
       var axis = (0, _utils.getAnchorAxis)(this, anchor, scaledTileSize, scale);
 
-      //gridPosition.x < -0.75
-      if (direction == "left" && gridPosition.x < -0.75 - (-0.75 + anchor.x)) {
+      // gridPosition.x < -0.75
+      //direction == "left" && gridPosition.x  <  -0.75-(-0.75 + anchor.x)
+      if (direction == "left" && gridPosition.x < -0.75 + anchor.x) {
         //newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
-        newPosition.x = axis.x * (mazeArray[0].length - 0.75);
+        newPosition.x = scaledTileSize * (mazeArray[0].length - 0.75) + anchor.x * scaledTileSize * 0.75;
         //} else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
-      } else if (direction == "right" && gridPosition.x > mazeArray[0].length - 0.25 - (-0.25 + anchor.x)) {
-        newPosition.x = axis.x * -1.25;
+        //(gridPosition.x  > mazeArray[0].length - 0.25-(-0.25 + anchor.x) )
+      } else if (direction == "right" && gridPosition.x > mazeArray[0].length - 0.25 - anchor.x) {
+        newPosition.x = scaledTileSize * -1.25 + anchor.x * scaledTileSize * 1.25;
         //newPosition.x = (scaledTileSize * -1.25);
       }
       return newPosition;
