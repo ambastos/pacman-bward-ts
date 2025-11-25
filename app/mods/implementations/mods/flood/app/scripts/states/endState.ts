@@ -3,14 +3,17 @@ import {State, States} from './state.ts'
 class EndState extends State {
     constructor(wavesManager: WavesManager) {
         super(wavesManager)
-    }    
+    }  
+    start(): void {
+        super.start()        
+    }  
     terminateWave() {
         const wave = this.wavesManager.wave
         wave!.height = -1
         wave!.clearElements()
         
         this.flood.container.removeChild(wave!)
-    //    console.log("wave ends")
+        console.log("wave ends")
         this.wavesManager.resetEntitiesBreathing()
         this.wavesManager.nextWaveTime = null
         this.wavesManager.wave = null

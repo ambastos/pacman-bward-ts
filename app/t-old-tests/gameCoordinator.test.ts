@@ -3,7 +3,7 @@
 // const GameCoordinator = require('../scripts/core/gameCoordinator');
 import assert from 'assert'
 import sinon from 'sinon'
-import GameCoordinator from '../scripts/core/gameCoordinator.js';
+import GameCoordinator from '../scripts/core/gameCoordinator.ts';
 
 let comp;
 const mazeArray = [

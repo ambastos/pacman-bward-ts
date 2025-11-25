@@ -530,9 +530,6 @@ class GameCoordinator {
 
     new Timer(() => {
 
-      //for mods. start the mod 
-      this.mod.start()
-
       this.allowPause = true;
       this.cutscene = false;
       this.soundManager.setCutscene(this.cutscene);
@@ -550,6 +547,8 @@ class GameCoordinator {
 
       this.idleGhosts = [this.pinky, this.inky, this.clyde];
       this.releaseGhost();
+      //for mods. start the mod 
+      this.mod.start()
       this.emitter.emit("post-start")
     }, duration);
   }
@@ -837,7 +836,7 @@ class GameCoordinator {
             let shouldRestart = (event?.detail?.restart) === undefined ? true : (event.detail.restart)
 
             if (shouldRestart)
-              this.emitter.emit("start")
+              this.emitter.emit("start") 
           }, 500);
         }, 2250);
       } else {

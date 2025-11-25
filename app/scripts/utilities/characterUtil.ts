@@ -21,7 +21,7 @@ class CharacterUtil {
    * @param {({top: number, left: number})} oldPosition - Position during the previous frame
    * @returns {('hidden'|'visible')} - The new 'visibility' css property value for the character.
    */
-  checkForStutter(position:ObservablePoint, oldPosition:ObservablePoint):string {
+  checkForStutter(position?:ObservablePoint, oldPosition?:ObservablePoint):string {
     let stutter = false;
     const threshold = 5; 
 
@@ -40,7 +40,7 @@ class CharacterUtil {
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
    * @returns {('top'|'left')}
    */
-  getPropertyToChange(direction: string):"x" | "y" {
+  getPropertyToChange(direction?: string):"x" | "y" {
     switch (direction) {
       case this.directions.up:
       case this.directions.down:
@@ -154,7 +154,7 @@ class CharacterUtil {
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
    * @returns {boolean}
    */
-  checkForWallCollision(desiredNewGridPosition:ObservablePoint, mazeArray:[], direction:string):boolean {
+  checkForWallCollision(desiredNewGridPosition:ObservablePoint, mazeArray:string[][], direction:string):boolean {
     const roundingFunction = this.determineRoundingFunction(
       direction,
     );

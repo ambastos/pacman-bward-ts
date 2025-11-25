@@ -694,6 +694,7 @@ var Flood = /*#__PURE__*/function (_Mod) {
       //@ts-ignore
       this.state = this.states[state];
       this.state.start();
+      console.log(this.state.constructor.name);
     }
   }, {
     key: "start",
@@ -768,7 +769,10 @@ function _changePacmanDeathSequence() {
   this.gc.emitter.on("pacman-death", function () {
     var wave = _this.wavesManager.wave;
     _this4.gc.pacman.moving = false;
-    _this4.wavesManager.stop();
+    _this4.gc.pacman.allowCollision = false;
+    _this4.gc.allowPacmanMovement = false;
+    _this4.wavesManager.entitiesManager.stop();
+    //this.wavesManager.stop()
     if (wave && wave.started) {
       var detail = {
         restart: false,
@@ -1708,6 +1712,7 @@ var CancelState = /*#__PURE__*/function (_State) {
     key: "start",
     value: function start() {
       _superPropGet(CancelState, "start", this, 3)([]);
+      console.log("start cancel", Date.now());
       if (this.wavesManager.wave) this.wavesManager.wave.speedY *= 3;
     }
   }, {
@@ -1728,9 +1733,10 @@ var CancelState = /*#__PURE__*/function (_State) {
       // this.flood.ghosts.forEach(g=>{
       //     g.moving = true
       // })
+      console.log("end cancel", Date.now());
       setTimeout(function () {
         _this.flood.emitter.emit("start");
-        _this.flood.emitter.emit("flood-start");
+        //this.flood.emitter.emit("flood-start")
       }, 2250);
     }
   }, {
@@ -1788,13 +1794,18 @@ var EndState = /*#__PURE__*/function (_State) {
   }
   _inherits(EndState, _State);
   return _createClass(EndState, [{
+    key: "start",
+    value: function start() {
+      _superPropGet(EndState, "start", this, 3)([]);
+    }
+  }, {
     key: "terminateWave",
     value: function terminateWave() {
       var wave = this.wavesManager.wave;
       wave.height = -1;
       wave.clearElements();
       this.flood.container.removeChild(wave);
-      //    console.log("wave ends")
+      console.log("wave ends");
       this.wavesManager.resetEntitiesBreathing();
       this.wavesManager.nextWaveTime = null;
       this.wavesManager.wave = null;
@@ -4672,8 +4683,6 @@ var GameCoordinator = /*#__PURE__*/function () {
       }, 'ready', duration, width, height);
       this.updateExtraLivesDisplay();
       new _timer["default"](function () {
-        //for mods. start the mod 
-        _this5.mod.start();
         _this5.allowPause = true;
         _this5.cutscene = false;
         _this5.soundManager.setCutscene(_this5.cutscene);
@@ -4687,6 +4696,8 @@ var GameCoordinator = /*#__PURE__*/function () {
         _this5.ghostCycle('scatter');
         _this5.idleGhosts = [_this5.pinky, _this5.inky, _this5.clyde];
         _this5.releaseGhost();
+        //for mods. start the mod 
+        _this5.mod.start();
         _this5.emitter.emit("post-start");
       }, duration);
     }
@@ -35130,322 +35141,6 @@ Object.keys(textHtml).forEach(function(k) {
 
 
 },{"./filters.js":448,"@pixi/accessibility":39,"@pixi/app":42,"@pixi/assets":63,"@pixi/compressed-textures":96,"@pixi/core":150,"@pixi/display":228,"@pixi/events":239,"@pixi/extract":242,"@pixi/filter-alpha":245,"@pixi/filter-blur":250,"@pixi/filter-color-matrix":253,"@pixi/filter-displacement":257,"@pixi/filter-fxaa":261,"@pixi/filter-noise":263,"@pixi/graphics":269,"@pixi/mesh":307,"@pixi/mesh-extras":302,"@pixi/mixin-cache-as-bitmap":310,"@pixi/mixin-get-child-by-name":311,"@pixi/mixin-get-global-position":312,"@pixi/particle-container":316,"@pixi/prepare":323,"@pixi/sprite":344,"@pixi/sprite-animated":334,"@pixi/sprite-tiling":337,"@pixi/spritesheet":346,"@pixi/text":373,"@pixi/text-bitmap":356,"@pixi/text-html":368}],450:[function(require,module,exports){
-'use strict';
-
-var inspect = require('object-inspect');
-
-var $TypeError = require('es-errors/type');
-
-/*
-* This function traverses the list returning the node corresponding to the given key.
-*
-* That node is also moved to the head of the list, so that if it's accessed again we don't need to traverse the whole list.
-* By doing so, all the recently used nodes can be accessed relatively quickly.
-*/
-/** @type {import('./list.d.ts').listGetNode} */
-// eslint-disable-next-line consistent-return
-var listGetNode = function (list, key, isDelete) {
-	/** @type {typeof list | NonNullable<(typeof list)['next']>} */
-	var prev = list;
-	/** @type {(typeof list)['next']} */
-	var curr;
-	// eslint-disable-next-line eqeqeq
-	for (; (curr = prev.next) != null; prev = curr) {
-		if (curr.key === key) {
-			prev.next = curr.next;
-			if (!isDelete) {
-				// eslint-disable-next-line no-extra-parens
-				curr.next = /** @type {NonNullable<typeof list.next>} */ (list.next);
-				list.next = curr; // eslint-disable-line no-param-reassign
-			}
-			return curr;
-		}
-	}
-};
-
-/** @type {import('./list.d.ts').listGet} */
-var listGet = function (objects, key) {
-	if (!objects) {
-		return void undefined;
-	}
-	var node = listGetNode(objects, key);
-	return node && node.value;
-};
-/** @type {import('./list.d.ts').listSet} */
-var listSet = function (objects, key, value) {
-	var node = listGetNode(objects, key);
-	if (node) {
-		node.value = value;
-	} else {
-		// Prepend the new node to the beginning of the list
-		objects.next = /** @type {import('./list.d.ts').ListNode<typeof value, typeof key>} */ ({ // eslint-disable-line no-param-reassign, no-extra-parens
-			key: key,
-			next: objects.next,
-			value: value
-		});
-	}
-};
-/** @type {import('./list.d.ts').listHas} */
-var listHas = function (objects, key) {
-	if (!objects) {
-		return false;
-	}
-	return !!listGetNode(objects, key);
-};
-/** @type {import('./list.d.ts').listDelete} */
-// eslint-disable-next-line consistent-return
-var listDelete = function (objects, key) {
-	if (objects) {
-		return listGetNode(objects, key, true);
-	}
-};
-
-/** @type {import('.')} */
-module.exports = function getSideChannelList() {
-	/** @typedef {ReturnType<typeof getSideChannelList>} Channel */
-	/** @typedef {Parameters<Channel['get']>[0]} K */
-	/** @typedef {Parameters<Channel['set']>[1]} V */
-
-	/** @type {import('./list.d.ts').RootNode<V, K> | undefined} */ var $o;
-
-	/** @type {Channel} */
-	var channel = {
-		assert: function (key) {
-			if (!channel.has(key)) {
-				throw new $TypeError('Side channel does not contain ' + inspect(key));
-			}
-		},
-		'delete': function (key) {
-			var root = $o && $o.next;
-			var deletedNode = listDelete($o, key);
-			if (deletedNode && root && root === deletedNode) {
-				$o = void undefined;
-			}
-			return !!deletedNode;
-		},
-		get: function (key) {
-			return listGet($o, key);
-		},
-		has: function (key) {
-			return listHas($o, key);
-		},
-		set: function (key, value) {
-			if (!$o) {
-				// Initialize the linked list as an empty node, so that we don't have to special-case handling of the first node: we can always refer to it as (previous node).next, instead of something like (list).head
-				$o = {
-					next: void undefined
-				};
-			}
-			// eslint-disable-next-line no-extra-parens
-			listSet(/** @type {NonNullable<typeof $o>} */ ($o), key, value);
-		}
-	};
-	// @ts-expect-error TODO: figure out why this is erroring
-	return channel;
-};
-
-},{"es-errors/type":422,"object-inspect":447}],451:[function(require,module,exports){
-'use strict';
-
-var GetIntrinsic = require('get-intrinsic');
-var callBound = require('call-bound');
-var inspect = require('object-inspect');
-
-var $TypeError = require('es-errors/type');
-var $Map = GetIntrinsic('%Map%', true);
-
-/** @type {<K, V>(thisArg: Map<K, V>, key: K) => V} */
-var $mapGet = callBound('Map.prototype.get', true);
-/** @type {<K, V>(thisArg: Map<K, V>, key: K, value: V) => void} */
-var $mapSet = callBound('Map.prototype.set', true);
-/** @type {<K, V>(thisArg: Map<K, V>, key: K) => boolean} */
-var $mapHas = callBound('Map.prototype.has', true);
-/** @type {<K, V>(thisArg: Map<K, V>, key: K) => boolean} */
-var $mapDelete = callBound('Map.prototype.delete', true);
-/** @type {<K, V>(thisArg: Map<K, V>) => number} */
-var $mapSize = callBound('Map.prototype.size', true);
-
-/** @type {import('.')} */
-module.exports = !!$Map && /** @type {Exclude<import('.'), false>} */ function getSideChannelMap() {
-	/** @typedef {ReturnType<typeof getSideChannelMap>} Channel */
-	/** @typedef {Parameters<Channel['get']>[0]} K */
-	/** @typedef {Parameters<Channel['set']>[1]} V */
-
-	/** @type {Map<K, V> | undefined} */ var $m;
-
-	/** @type {Channel} */
-	var channel = {
-		assert: function (key) {
-			if (!channel.has(key)) {
-				throw new $TypeError('Side channel does not contain ' + inspect(key));
-			}
-		},
-		'delete': function (key) {
-			if ($m) {
-				var result = $mapDelete($m, key);
-				if ($mapSize($m) === 0) {
-					$m = void undefined;
-				}
-				return result;
-			}
-			return false;
-		},
-		get: function (key) { // eslint-disable-line consistent-return
-			if ($m) {
-				return $mapGet($m, key);
-			}
-		},
-		has: function (key) {
-			if ($m) {
-				return $mapHas($m, key);
-			}
-			return false;
-		},
-		set: function (key, value) {
-			if (!$m) {
-				// @ts-expect-error TS can't handle narrowing a variable inside a closure
-				$m = new $Map();
-			}
-			$mapSet($m, key, value);
-		}
-	};
-
-	// @ts-expect-error TODO: figure out why TS is erroring here
-	return channel;
-};
-
-},{"call-bound":413,"es-errors/type":422,"get-intrinsic":428,"object-inspect":447}],452:[function(require,module,exports){
-'use strict';
-
-var GetIntrinsic = require('get-intrinsic');
-var callBound = require('call-bound');
-var inspect = require('object-inspect');
-var getSideChannelMap = require('side-channel-map');
-
-var $TypeError = require('es-errors/type');
-var $WeakMap = GetIntrinsic('%WeakMap%', true);
-
-/** @type {<K extends object, V>(thisArg: WeakMap<K, V>, key: K) => V} */
-var $weakMapGet = callBound('WeakMap.prototype.get', true);
-/** @type {<K extends object, V>(thisArg: WeakMap<K, V>, key: K, value: V) => void} */
-var $weakMapSet = callBound('WeakMap.prototype.set', true);
-/** @type {<K extends object, V>(thisArg: WeakMap<K, V>, key: K) => boolean} */
-var $weakMapHas = callBound('WeakMap.prototype.has', true);
-/** @type {<K extends object, V>(thisArg: WeakMap<K, V>, key: K) => boolean} */
-var $weakMapDelete = callBound('WeakMap.prototype.delete', true);
-
-/** @type {import('.')} */
-module.exports = $WeakMap
-	? /** @type {Exclude<import('.'), false>} */ function getSideChannelWeakMap() {
-		/** @typedef {ReturnType<typeof getSideChannelWeakMap>} Channel */
-		/** @typedef {Parameters<Channel['get']>[0]} K */
-		/** @typedef {Parameters<Channel['set']>[1]} V */
-
-		/** @type {WeakMap<K & object, V> | undefined} */ var $wm;
-		/** @type {Channel | undefined} */ var $m;
-
-		/** @type {Channel} */
-		var channel = {
-			assert: function (key) {
-				if (!channel.has(key)) {
-					throw new $TypeError('Side channel does not contain ' + inspect(key));
-				}
-			},
-			'delete': function (key) {
-				if ($WeakMap && key && (typeof key === 'object' || typeof key === 'function')) {
-					if ($wm) {
-						return $weakMapDelete($wm, key);
-					}
-				} else if (getSideChannelMap) {
-					if ($m) {
-						return $m['delete'](key);
-					}
-				}
-				return false;
-			},
-			get: function (key) {
-				if ($WeakMap && key && (typeof key === 'object' || typeof key === 'function')) {
-					if ($wm) {
-						return $weakMapGet($wm, key);
-					}
-				}
-				return $m && $m.get(key);
-			},
-			has: function (key) {
-				if ($WeakMap && key && (typeof key === 'object' || typeof key === 'function')) {
-					if ($wm) {
-						return $weakMapHas($wm, key);
-					}
-				}
-				return !!$m && $m.has(key);
-			},
-			set: function (key, value) {
-				if ($WeakMap && key && (typeof key === 'object' || typeof key === 'function')) {
-					if (!$wm) {
-						$wm = new $WeakMap();
-					}
-					$weakMapSet($wm, key, value);
-				} else if (getSideChannelMap) {
-					if (!$m) {
-						$m = getSideChannelMap();
-					}
-					// eslint-disable-next-line no-extra-parens
-					/** @type {NonNullable<typeof $m>} */ ($m).set(key, value);
-				}
-			}
-		};
-
-		// @ts-expect-error TODO: figure out why this is erroring
-		return channel;
-	}
-	: getSideChannelMap;
-
-},{"call-bound":413,"es-errors/type":422,"get-intrinsic":428,"object-inspect":447,"side-channel-map":451}],453:[function(require,module,exports){
-'use strict';
-
-var $TypeError = require('es-errors/type');
-var inspect = require('object-inspect');
-var getSideChannelList = require('side-channel-list');
-var getSideChannelMap = require('side-channel-map');
-var getSideChannelWeakMap = require('side-channel-weakmap');
-
-var makeChannel = getSideChannelWeakMap || getSideChannelMap || getSideChannelList;
-
-/** @type {import('.')} */
-module.exports = function getSideChannel() {
-	/** @typedef {ReturnType<typeof getSideChannel>} Channel */
-
-	/** @type {Channel | undefined} */ var $channelData;
-
-	/** @type {Channel} */
-	var channel = {
-		assert: function (key) {
-			if (!channel.has(key)) {
-				throw new $TypeError('Side channel does not contain ' + inspect(key));
-			}
-		},
-		'delete': function (key) {
-			return !!$channelData && $channelData['delete'](key);
-		},
-		get: function (key) {
-			return $channelData && $channelData.get(key);
-		},
-		has: function (key) {
-			return !!$channelData && $channelData.has(key);
-		},
-		set: function (key, value) {
-			if (!$channelData) {
-				$channelData = makeChannel();
-			}
-
-			$channelData.set(key, value);
-		}
-	};
-	// @ts-expect-error TODO: figure out why this is erroring
-	return channel;
-};
-
-},{"es-errors/type":422,"object-inspect":447,"side-channel-list":450,"side-channel-map":451,"side-channel-weakmap":452}],454:[function(require,module,exports){
 (function (global){(function (){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -35982,7 +35677,7 @@ module.exports = function getSideChannel() {
 }(this));
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],455:[function(require,module,exports){
+},{}],451:[function(require,module,exports){
 'use strict';
 
 var replace = String.prototype.replace;
@@ -36007,7 +35702,7 @@ module.exports = {
     RFC3986: Format.RFC3986
 };
 
-},{}],456:[function(require,module,exports){
+},{}],452:[function(require,module,exports){
 'use strict';
 
 var stringify = require('./stringify');
@@ -36020,7 +35715,7 @@ module.exports = {
     stringify: stringify
 };
 
-},{"./formats":455,"./parse":457,"./stringify":458}],457:[function(require,module,exports){
+},{"./formats":451,"./parse":453,"./stringify":454}],453:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -36350,7 +36045,7 @@ module.exports = function (str, opts) {
     return utils.compact(obj);
 };
 
-},{"./utils":459}],458:[function(require,module,exports){
+},{"./utils":455}],454:[function(require,module,exports){
 'use strict';
 
 var getSideChannel = require('side-channel');
@@ -36708,7 +36403,7 @@ module.exports = function (object, opts) {
     return joined.length > 0 ? prefix + joined : '';
 };
 
-},{"./formats":455,"./utils":459,"side-channel":453}],459:[function(require,module,exports){
+},{"./formats":451,"./utils":455,"side-channel":459}],455:[function(require,module,exports){
 'use strict';
 
 var formats = require('./formats');
@@ -36978,7 +36673,323 @@ module.exports = {
     merge: merge
 };
 
-},{"./formats":455}],460:[function(require,module,exports){
+},{"./formats":451}],456:[function(require,module,exports){
+'use strict';
+
+var inspect = require('object-inspect');
+
+var $TypeError = require('es-errors/type');
+
+/*
+* This function traverses the list returning the node corresponding to the given key.
+*
+* That node is also moved to the head of the list, so that if it's accessed again we don't need to traverse the whole list.
+* By doing so, all the recently used nodes can be accessed relatively quickly.
+*/
+/** @type {import('./list.d.ts').listGetNode} */
+// eslint-disable-next-line consistent-return
+var listGetNode = function (list, key, isDelete) {
+	/** @type {typeof list | NonNullable<(typeof list)['next']>} */
+	var prev = list;
+	/** @type {(typeof list)['next']} */
+	var curr;
+	// eslint-disable-next-line eqeqeq
+	for (; (curr = prev.next) != null; prev = curr) {
+		if (curr.key === key) {
+			prev.next = curr.next;
+			if (!isDelete) {
+				// eslint-disable-next-line no-extra-parens
+				curr.next = /** @type {NonNullable<typeof list.next>} */ (list.next);
+				list.next = curr; // eslint-disable-line no-param-reassign
+			}
+			return curr;
+		}
+	}
+};
+
+/** @type {import('./list.d.ts').listGet} */
+var listGet = function (objects, key) {
+	if (!objects) {
+		return void undefined;
+	}
+	var node = listGetNode(objects, key);
+	return node && node.value;
+};
+/** @type {import('./list.d.ts').listSet} */
+var listSet = function (objects, key, value) {
+	var node = listGetNode(objects, key);
+	if (node) {
+		node.value = value;
+	} else {
+		// Prepend the new node to the beginning of the list
+		objects.next = /** @type {import('./list.d.ts').ListNode<typeof value, typeof key>} */ ({ // eslint-disable-line no-param-reassign, no-extra-parens
+			key: key,
+			next: objects.next,
+			value: value
+		});
+	}
+};
+/** @type {import('./list.d.ts').listHas} */
+var listHas = function (objects, key) {
+	if (!objects) {
+		return false;
+	}
+	return !!listGetNode(objects, key);
+};
+/** @type {import('./list.d.ts').listDelete} */
+// eslint-disable-next-line consistent-return
+var listDelete = function (objects, key) {
+	if (objects) {
+		return listGetNode(objects, key, true);
+	}
+};
+
+/** @type {import('.')} */
+module.exports = function getSideChannelList() {
+	/** @typedef {ReturnType<typeof getSideChannelList>} Channel */
+	/** @typedef {Parameters<Channel['get']>[0]} K */
+	/** @typedef {Parameters<Channel['set']>[1]} V */
+
+	/** @type {import('./list.d.ts').RootNode<V, K> | undefined} */ var $o;
+
+	/** @type {Channel} */
+	var channel = {
+		assert: function (key) {
+			if (!channel.has(key)) {
+				throw new $TypeError('Side channel does not contain ' + inspect(key));
+			}
+		},
+		'delete': function (key) {
+			var root = $o && $o.next;
+			var deletedNode = listDelete($o, key);
+			if (deletedNode && root && root === deletedNode) {
+				$o = void undefined;
+			}
+			return !!deletedNode;
+		},
+		get: function (key) {
+			return listGet($o, key);
+		},
+		has: function (key) {
+			return listHas($o, key);
+		},
+		set: function (key, value) {
+			if (!$o) {
+				// Initialize the linked list as an empty node, so that we don't have to special-case handling of the first node: we can always refer to it as (previous node).next, instead of something like (list).head
+				$o = {
+					next: void undefined
+				};
+			}
+			// eslint-disable-next-line no-extra-parens
+			listSet(/** @type {NonNullable<typeof $o>} */ ($o), key, value);
+		}
+	};
+	// @ts-expect-error TODO: figure out why this is erroring
+	return channel;
+};
+
+},{"es-errors/type":422,"object-inspect":447}],457:[function(require,module,exports){
+'use strict';
+
+var GetIntrinsic = require('get-intrinsic');
+var callBound = require('call-bound');
+var inspect = require('object-inspect');
+
+var $TypeError = require('es-errors/type');
+var $Map = GetIntrinsic('%Map%', true);
+
+/** @type {<K, V>(thisArg: Map<K, V>, key: K) => V} */
+var $mapGet = callBound('Map.prototype.get', true);
+/** @type {<K, V>(thisArg: Map<K, V>, key: K, value: V) => void} */
+var $mapSet = callBound('Map.prototype.set', true);
+/** @type {<K, V>(thisArg: Map<K, V>, key: K) => boolean} */
+var $mapHas = callBound('Map.prototype.has', true);
+/** @type {<K, V>(thisArg: Map<K, V>, key: K) => boolean} */
+var $mapDelete = callBound('Map.prototype.delete', true);
+/** @type {<K, V>(thisArg: Map<K, V>) => number} */
+var $mapSize = callBound('Map.prototype.size', true);
+
+/** @type {import('.')} */
+module.exports = !!$Map && /** @type {Exclude<import('.'), false>} */ function getSideChannelMap() {
+	/** @typedef {ReturnType<typeof getSideChannelMap>} Channel */
+	/** @typedef {Parameters<Channel['get']>[0]} K */
+	/** @typedef {Parameters<Channel['set']>[1]} V */
+
+	/** @type {Map<K, V> | undefined} */ var $m;
+
+	/** @type {Channel} */
+	var channel = {
+		assert: function (key) {
+			if (!channel.has(key)) {
+				throw new $TypeError('Side channel does not contain ' + inspect(key));
+			}
+		},
+		'delete': function (key) {
+			if ($m) {
+				var result = $mapDelete($m, key);
+				if ($mapSize($m) === 0) {
+					$m = void undefined;
+				}
+				return result;
+			}
+			return false;
+		},
+		get: function (key) { // eslint-disable-line consistent-return
+			if ($m) {
+				return $mapGet($m, key);
+			}
+		},
+		has: function (key) {
+			if ($m) {
+				return $mapHas($m, key);
+			}
+			return false;
+		},
+		set: function (key, value) {
+			if (!$m) {
+				// @ts-expect-error TS can't handle narrowing a variable inside a closure
+				$m = new $Map();
+			}
+			$mapSet($m, key, value);
+		}
+	};
+
+	// @ts-expect-error TODO: figure out why TS is erroring here
+	return channel;
+};
+
+},{"call-bound":413,"es-errors/type":422,"get-intrinsic":428,"object-inspect":447}],458:[function(require,module,exports){
+'use strict';
+
+var GetIntrinsic = require('get-intrinsic');
+var callBound = require('call-bound');
+var inspect = require('object-inspect');
+var getSideChannelMap = require('side-channel-map');
+
+var $TypeError = require('es-errors/type');
+var $WeakMap = GetIntrinsic('%WeakMap%', true);
+
+/** @type {<K extends object, V>(thisArg: WeakMap<K, V>, key: K) => V} */
+var $weakMapGet = callBound('WeakMap.prototype.get', true);
+/** @type {<K extends object, V>(thisArg: WeakMap<K, V>, key: K, value: V) => void} */
+var $weakMapSet = callBound('WeakMap.prototype.set', true);
+/** @type {<K extends object, V>(thisArg: WeakMap<K, V>, key: K) => boolean} */
+var $weakMapHas = callBound('WeakMap.prototype.has', true);
+/** @type {<K extends object, V>(thisArg: WeakMap<K, V>, key: K) => boolean} */
+var $weakMapDelete = callBound('WeakMap.prototype.delete', true);
+
+/** @type {import('.')} */
+module.exports = $WeakMap
+	? /** @type {Exclude<import('.'), false>} */ function getSideChannelWeakMap() {
+		/** @typedef {ReturnType<typeof getSideChannelWeakMap>} Channel */
+		/** @typedef {Parameters<Channel['get']>[0]} K */
+		/** @typedef {Parameters<Channel['set']>[1]} V */
+
+		/** @type {WeakMap<K & object, V> | undefined} */ var $wm;
+		/** @type {Channel | undefined} */ var $m;
+
+		/** @type {Channel} */
+		var channel = {
+			assert: function (key) {
+				if (!channel.has(key)) {
+					throw new $TypeError('Side channel does not contain ' + inspect(key));
+				}
+			},
+			'delete': function (key) {
+				if ($WeakMap && key && (typeof key === 'object' || typeof key === 'function')) {
+					if ($wm) {
+						return $weakMapDelete($wm, key);
+					}
+				} else if (getSideChannelMap) {
+					if ($m) {
+						return $m['delete'](key);
+					}
+				}
+				return false;
+			},
+			get: function (key) {
+				if ($WeakMap && key && (typeof key === 'object' || typeof key === 'function')) {
+					if ($wm) {
+						return $weakMapGet($wm, key);
+					}
+				}
+				return $m && $m.get(key);
+			},
+			has: function (key) {
+				if ($WeakMap && key && (typeof key === 'object' || typeof key === 'function')) {
+					if ($wm) {
+						return $weakMapHas($wm, key);
+					}
+				}
+				return !!$m && $m.has(key);
+			},
+			set: function (key, value) {
+				if ($WeakMap && key && (typeof key === 'object' || typeof key === 'function')) {
+					if (!$wm) {
+						$wm = new $WeakMap();
+					}
+					$weakMapSet($wm, key, value);
+				} else if (getSideChannelMap) {
+					if (!$m) {
+						$m = getSideChannelMap();
+					}
+					// eslint-disable-next-line no-extra-parens
+					/** @type {NonNullable<typeof $m>} */ ($m).set(key, value);
+				}
+			}
+		};
+
+		// @ts-expect-error TODO: figure out why this is erroring
+		return channel;
+	}
+	: getSideChannelMap;
+
+},{"call-bound":413,"es-errors/type":422,"get-intrinsic":428,"object-inspect":447,"side-channel-map":457}],459:[function(require,module,exports){
+'use strict';
+
+var $TypeError = require('es-errors/type');
+var inspect = require('object-inspect');
+var getSideChannelList = require('side-channel-list');
+var getSideChannelMap = require('side-channel-map');
+var getSideChannelWeakMap = require('side-channel-weakmap');
+
+var makeChannel = getSideChannelWeakMap || getSideChannelMap || getSideChannelList;
+
+/** @type {import('.')} */
+module.exports = function getSideChannel() {
+	/** @typedef {ReturnType<typeof getSideChannel>} Channel */
+
+	/** @type {Channel | undefined} */ var $channelData;
+
+	/** @type {Channel} */
+	var channel = {
+		assert: function (key) {
+			if (!channel.has(key)) {
+				throw new $TypeError('Side channel does not contain ' + inspect(key));
+			}
+		},
+		'delete': function (key) {
+			return !!$channelData && $channelData['delete'](key);
+		},
+		get: function (key) {
+			return $channelData && $channelData.get(key);
+		},
+		has: function (key) {
+			return !!$channelData && $channelData.has(key);
+		},
+		set: function (key, value) {
+			if (!$channelData) {
+				$channelData = makeChannel();
+			}
+
+			$channelData.set(key, value);
+		}
+	};
+	// @ts-expect-error TODO: figure out why this is erroring
+	return channel;
+};
+
+},{"es-errors/type":422,"object-inspect":447,"side-channel-list":456,"side-channel-map":457,"side-channel-weakmap":458}],460:[function(require,module,exports){
 /*
  * Copyright Joyent, Inc. and other Node contributors.
  *
@@ -37756,4 +37767,4 @@ exports.format = urlFormat;
 
 exports.Url = Url;
 
-},{"punycode/":454,"qs":456}]},{},[28]);
+},{"punycode/":450,"qs":452}]},{},[28]);

@@ -73,7 +73,10 @@ class Flood extends Mod{
         this.gc.emitter.on("pacman-death", ()=>{
             const wave = _this.wavesManager.wave
             this.gc.pacman.moving = false
-            this.wavesManager.stop()
+            this.gc.pacman.allowCollision = false
+            this.gc.allowPacmanMovement = false
+            this.wavesManager.entitiesManager.stop()
+            //this.wavesManager.stop()
             if (wave && wave.started) {
                 const detail = {                    
                     restart:false,
@@ -89,10 +92,12 @@ class Flood extends Mod{
         })
     }  
     changeState(state:number) {
-        this.state.stop()
+        this.state.stop() 
         //@ts-ignore
         this.state = this.states[state]
         this.state.start()
+        
+        console.log(this.state.constructor.name)
     }
     start() {
         super.start() 

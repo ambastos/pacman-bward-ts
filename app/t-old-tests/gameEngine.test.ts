@@ -3,7 +3,7 @@
 // const GameEngine = require('../scripts/core/gameEngine');
 import assert from 'assert'
 import sinon from 'sinon'
-import GameEngine from '../scripts/core/gameEngine.js';
+import GameEngine from '../scripts/core/gameEngine.ts';
 
 let gameEngine;
 const maxFps = 120;

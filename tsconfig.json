@@ -2,18 +2,19 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    "rootDir": "./app",
-    "outDir": "./dist",
+    // "rootDir": "./app",
+    // "outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
-    "target": "es2019",
+    "target": "esnext",
    // "moduleResolution": "nodenext",
     "esModuleInterop": true,
     "types": [
       "jquery",
-      "mocha"
+      "mocha",
+      "jest",  
     ],
     // For nodejs:
     // "lib": ["esnext"],
@@ -51,9 +52,10 @@
   },
   "include": [
     "app/**/*.ts",
+    "app/tests/**/*.ts",
     "app/@types/declarations.d.ts"
   ],
-  "exclude": [
-    "app/tests"
-  ]
+  // "exclude": [
+  //   "app/tests"
+  // ]
 }

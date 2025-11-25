@@ -3,7 +3,7 @@
 // const Timer = require('../scripts/utilities/timer');
 import assert from 'assert'
 import sinon from 'sinon'
-import Timer from '../scripts/utilities/timer.js';
+import Timer from '../scripts/utilities/timer.ts';
 
 let comp;
 let clock;

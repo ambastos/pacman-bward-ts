@@ -4,8 +4,8 @@
 // const CharacterUtil = require('../scripts/utilities/characterUtil');
 import assert from 'assert'
 import sinon from 'sinon'
-import Ghost from '../scripts/characters/ghost.js';
-import CharacterUtil from '../scripts/utilities/characterUtil.js';
+import Ghost from '../scripts/characters/ghost.ts';
+import CharacterUtil from '../scripts/utilities/characterUtil.ts';
 
 const scaledTileSize = 8;
 const mazeArray = [
