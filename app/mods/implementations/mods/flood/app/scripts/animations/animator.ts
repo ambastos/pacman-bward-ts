@@ -2,7 +2,7 @@ import Animation from "./animation.ts"
 
 class Animator {
     thisClass:any
-    animations = new Map()
+    animations = new Map<string, Animation>()
     started 
     onStart!:any
     onStop!:any
@@ -20,7 +20,15 @@ class Animator {
      * @param {String} name 
      * @param {any} args 
      */
-    play(name: any, args?: any) {
+    play(name: string, args?: any, keepRunningPreviousAnimation?: boolean) {
+        if (!keepRunningPreviousAnimation) {
+            const anims = this.animations.keys().filter(k=>k!=name)
+            let key = anims.next()
+            while(key?.value != undefined) {
+                this.animations.get(key.value!)?.stop()
+                key = anims.next()
+            }
+        }
         const an = this.animations.get(name)
         if (!an)
             throw new Error(`There is no Animation with name ${name}.`)
@@ -31,7 +39,7 @@ class Animator {
      * @param {String} animationName 
      */
     stopAnimation(animationName: any) {
-        this.animations.get(animationName).stop()
+        this.animations.get(animationName)?.stop()
     }
     setOnStart(callback: any) {
         this.onStart = callback
@@ -59,11 +67,11 @@ class Animator {
         this.startAnimator()
         this.animations.forEach(an=>{
             an.update(args)
-            if (an.endTime > 0)
+            if (an.endTime && an.endTime > 0)
                 shouldStop = true
         })
-        if (shouldStop)
-            this.stopAnimator()
+        // if (shouldStop)
+        //     this.stopAnimator()
     }
 }
 export default Animator

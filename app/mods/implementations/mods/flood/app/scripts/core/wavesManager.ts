@@ -12,6 +12,8 @@ import Ghost from "../../../../../../../scripts/characters/ghost.ts"
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
 import { ObjectsGroup } from "../types/types.ts"
 import EntitiesManager from "./entitiesManager.ts"
+import Sonic from "../entities/sonic.ts"
+import { Mode } from "../../../../../../../scripts/characters/types.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -130,7 +132,7 @@ class WavesManager {
             //this.emitter.emit(`ghost-eaten-${entity.name}`,event)
             const pauseDuration = 1000
             const {position, measurement} = entity
-            entity.mode = 'eyes'            
+            entity.mode = Mode.eyes         
             this.gc.eyeGhosts += 1;
             this.gc.ghostCombo += 1;            
             const comboPoints = this.gc.determineComboPoints();
@@ -192,6 +194,17 @@ class WavesManager {
                     //this.animator.play("breath", {entity: pacman})
                 }
             })           
+        }
+        if (this.gc.debug) {
+            this.entitiesManager.entities.forEach(e=>{
+                const s =  (e as Sonic)
+                if (s.targetDef.targetEntity) {
+                    const target = s.targetDef.targetEntity
+                    this.gp.lineStyle({width:0})
+                    this.gp.beginFill(0x005522,0.4)
+                    this.gp.drawCircle(target.x, target.y, 5)
+                }
+            })
         }
         this.entitiesManager.update(elapsedMs)        
     }

@@ -5,15 +5,16 @@ import CharacterUtil from "../utilities/characterUtil.ts";
 import Pacman from "./pacman.ts";
 import { copyPosition, createObservablePoint } from "../utilities/utils.ts";
 import MovableEntity from "./movableEntity.ts";
+import { Mode } from "./types.ts";
 
 class Ghost extends MovableEntity{
     pacman:Pacman
     blinky:Ghost | undefined;    
-    defaultSpeed!:any    
+    defaultSpeed!:any
     cruiseElroy!:any
-    mode!:string 
-    defaultMode!:string
-    idleMode!:string | undefined
+    mode!:Mode
+    defaultMode!:Mode
+    idleMode!:Mode | undefined
     slowSpeed!:number
     mediumSpeed!:number
     fastSpeed!:number
@@ -68,10 +69,10 @@ class Ghost extends MovableEntity{
    */
   setDefaultMode() {
     this.allowCollision = true;
-    this.defaultMode = 'scatter';
-    this.mode = 'scatter';
+    this.defaultMode = Mode.scatter;
+    this.mode = Mode.scatter;
     if (this.name !== 'blinky') {
-      this.idleMode = 'idle';
+      this.idleMode = Mode.idle;
     }
   }
 
@@ -577,7 +578,7 @@ class Ghost extends MovableEntity{
    * Sets idleMode to 'leaving', allowing the ghost to leave the Ghost House
    */
   endIdleMode() {
-    this.idleMode = 'leaving';
+    this.idleMode = Mode.leaving;
   }
 
   /**
@@ -766,7 +767,7 @@ class Ghost extends MovableEntity{
    * if needed
    * @param {('chase'|'scatter')} newMode
    */
-  changeMode(newMode:string) {
+  changeMode(newMode:Mode) {
     this.defaultMode = newMode;
 
     const gridPosition = this.characterUtil!.determineGridPosition(
@@ -774,7 +775,7 @@ class Ghost extends MovableEntity{
       this.anchor, this.gameCoordinator.scale
     );
 
-    if ((this.mode === 'chase' || this.mode === 'scatter')
+    if ((this.mode ===  Mode.chase || this.mode === Mode.scatter)
       && !this.cruiseElroy) {
       this.mode = newMode;
 
@@ -805,13 +806,13 @@ class Ghost extends MovableEntity{
       this.anchor, this.gameCoordinator.scale
     );
 
-    if (this.mode !== 'eyes') {
-      if (!this.isInGhostHouse(gridPosition) && this.mode !== 'scared') {
+    if (this.mode !== Mode.eyes) {
+      if (!this.isInGhostHouse(gridPosition) && this.mode !== Mode.scared) {
         this.direction = this.characterUtil!.getOppositeDirection(
           this.direction,
         );
       }
-      this.mode = 'scared';
+      this.mode = Mode.scared;
       this.scaredColor = 'blue';
       this.setSpriteSheet("scared", this.direction, this.mode);
     }
@@ -859,7 +860,7 @@ class Ghost extends MovableEntity{
       && this.allowCollision) {
       if (this.mode === 'scared') {
         this.emitter.emit("ghost-eaten-"+this.name, {ghost: this})
-        this.mode = 'eyes';
+        this.mode = Mode.eyes;
       } else {        
         this.emitter.emit("pacman-death")                
       }
@@ -872,7 +873,7 @@ class Ghost extends MovableEntity{
    * @param {('chase'|'scatter'|'scared'|'eyes')} mode - The character's behavior mode
    * @returns {number}
    */
-  determineVelocity(position:ObservablePoint, mode:string):any {
+  determineVelocity(position:ObservablePoint, mode:Mode):any {
     if (mode === 'eyes') {
       return this.eyeSpeed;
     }
@@ -942,6 +943,7 @@ class Ghost extends MovableEntity{
     } 
   }
 }
+
 //removeIf(production)
 export default Ghost
 //endRemoveIf(production)

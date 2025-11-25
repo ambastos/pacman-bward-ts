@@ -19,6 +19,7 @@ import Timer from "../utilities/timer.ts";
 import Mod from "../../mods/mod.ts";
 import EmptyMod from "../../mods/empty-mod.ts";
 import MovableEntity from "../characters/movableEntity.ts";
+import { Mode } from "../characters/types.ts";
 //global.window.Assets = Assets
 //import path from 'path'
 const options = {
@@ -94,6 +95,7 @@ class GameCoordinator {
   topRender!: RendererTop
   bottomRender!: RendererBottom
   view!: any
+  debug:boolean = true
   constructor() {
     //super(options)
     this.mod = new EmptyMod(this)
@@ -543,7 +545,7 @@ class GameCoordinator {
         ghostRef.moving = true;
       });
 
-      this.ghostCycle('scatter');
+      this.ghostCycle(Mode.scatter);
 
       this.idleGhosts = [this.pinky, this.inky, this.clyde];
       this.releaseGhost();
@@ -612,9 +614,9 @@ class GameCoordinator {
    * Cycles the ghosts between 'chase' and 'scatter' mode
    * @param {('chase'|'scatter')} mode
    */
-  ghostCycle(mode: string) {
-    const delay = mode === 'scatter' ? 7000 : 20000;
-    const nextMode = mode === 'scatter' ? 'chase' : 'scatter';
+  ghostCycle(mode: Mode) {
+    const delay = mode === Mode.scatter ? 7000 : 20000;
+    const nextMode:Mode = mode === Mode.scatter ? Mode.chase : Mode.scatter;
 
     this.ghostCycleTimer = new Timer(() => {
       this.ghosts.forEach((ghost) => {

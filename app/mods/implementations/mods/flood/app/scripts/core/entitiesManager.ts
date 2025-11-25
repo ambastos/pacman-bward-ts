@@ -95,7 +95,7 @@ class EntitiesManager {
         })
     }
     update(elapsedMs:number) {
-    
+        
     }
 }
 export default EntitiesManager

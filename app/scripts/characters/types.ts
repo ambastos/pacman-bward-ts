@@ -1,9 +1,11 @@
-export type Position = {
-  top:number
-  left:number 
-}
+export enum Mode{
+  idle = "idle",
+  scatter = "scatter",
+  chase = "chase",
+  scared = "scared",
+  eyes = "eyes",
+  leaving = "leaving",
 
-export type Coordinate = {
-  x:number
-  y:number
+  target = "target",
+  attack = "attack"
 }
