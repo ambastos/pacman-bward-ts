@@ -24,7 +24,6 @@ class Ghost extends MovableEntity{
     emotion!:string
     scaredColor!:string
     defaultDirection!:string
-    paused!:boolean
 
   constructor(gameCoordinator:GameCoordinator, name:string, 
     level:number, characterUtil:CharacterUtil, blinky?:Ghost
@@ -62,7 +61,7 @@ class Ghost extends MovableEntity{
   }
 
   registerEventListeners() {
-    this.emitter.on("ghost-eaten-"+this.name, this.onEaten)
+    this.emitter.on("ghost-eaten-"+this.name, this.onEaten.bind(this))
   }
   /**
    * Sets the default mode and idleMode behavior
@@ -847,15 +846,6 @@ class Ghost extends MovableEntity{
     this.cruiseElroy = false;
     this.setSpriteSheet(this.name!, this.direction, this.mode);
   }
-
-  /**
-   * Sets a flag to indicate when the ghost should pause its movement
-   * @param {Boolean} newValue
-   */
-  pause(newValue:boolean) {
-    this.paused = newValue;
-  }
-
   /**
    * Checks if the ghost contacts Pacman - starts the death sequence if so
    * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
@@ -903,9 +893,10 @@ class Ghost extends MovableEntity{
   }
 
   onEaten(detail:any) {
-    window.dispatchEvent(new CustomEvent('eatGhost', {
-          detail: detail 
-    }));  
+    // window.dispatchEvent(new CustomEvent('eatGhost', {
+    //       detail: detail 
+    // }));  
+    this.gameCoordinator.eatGhost(detail)    
   }
   /**
    * Updates the css position, hides if there is a stutter, and animates the spritesheet

@@ -11,6 +11,7 @@ import AssetsManager from "./assetsManager.ts"
 import Pacman from "../../../../../../../scripts/characters/pacman.ts"
 import Ghost from "../../../../../../../scripts/characters/ghost.ts"
 import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts"
+import Timer from "../../../../../../../scripts/utilities/timer.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -60,6 +61,28 @@ class Flood extends Mod{
     #registerListeners() {
        this.emitter = this.gc.emitter
        this.#changePacmanDeathSequence() 
+       this.emitter.on("eat-ghost",(detail:any)=>{
+        const em = this.wavesManager?.entitiesManager
+         if (em) {
+            const pauseDuration = 1000
+            //Stop animating the entities
+            em.entities.forEach((e)=>{
+                e.animate = false;
+                e.moving = false
+                e.pause(false);
+                e.allowCollision = true;
+            })
+            //Restart animating the entities
+            new Timer(()=>{
+                em.entities.forEach((e)=>{
+                    e.animate = true;
+                    e.moving = true
+                    e.pause(false);
+                    e.allowCollision = true;
+                })
+            }, pauseDuration)
+         }
+       })
        this.emitter.on("game-over",()=>{
         this.stop()
        })
@@ -70,6 +93,12 @@ class Flood extends Mod{
     #changePacmanDeathSequence() {
         this.gc.emitter.removeAllListeners("pacman-death")
         const _this = this 
+        this.gc.emitter.on("advance-level",()=>{
+            const entities = this.wavesManager.entitiesManager.entities
+            entities.forEach(e=>{
+                e.display = false
+            })
+        })
         this.gc.emitter.on("pacman-death", ()=>{
             const wave = _this.wavesManager.wave
             this.gc.pacman.moving = false
@@ -89,6 +118,9 @@ class Flood extends Mod{
             }else {
                 this.pacman.onDeath()
             }
+        })
+        this.gc.emitter.on("post-death",()=>{
+            this.wavesManager.entitiesManager.hide()
         })
     }  
     changeState(state:number) {

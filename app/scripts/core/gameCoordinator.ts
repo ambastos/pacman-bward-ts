@@ -644,8 +644,11 @@ class GameCoordinator {
    */
   registerEventListeners() {
     //events: 
-    //  load, start, post-start, pacman-death, post-death, ghost-eaten-<ghostName>, item-taken (item as argument),
-    //  advance-level, game-over, speed-up-blinky, create-fruit
+    //  load, start, post-start, pacman-death, post-death, 
+    // ghost-eaten-<ghostName>, eat-ghost
+    // item-taken (item as argument),
+    // advance-level, post-advance-level, game-over, 
+    // speed-up-blinky, create-fruit
     this.emitter = new EventEmitter()
     this.entityList.forEach((e) => {
       e.emitter = this.emitter
@@ -656,6 +659,7 @@ class GameCoordinator {
     this.emitter.on("speed-up-blinky", this.speedUpBlinky.bind(this))
     this.emitter.on("create-fruit", this.createFruit.bind(this))
     this.emitter.on("game-over", this.gameOver.bind(this))
+    
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     //@ts-ignore
     window.addEventListener('awardPoints', this.awardPoints.bind(this));
@@ -664,7 +668,7 @@ class GameCoordinator {
     window.addEventListener('dotEaten', this.dotEaten.bind(this));
     window.addEventListener('powerUp', this.powerUp.bind(this));
     //@ts-ignore
-    window.addEventListener('eatGhost', this.eatGhost.bind(this));
+    //window.addEventListener('eatGhost', this.eatGhost.bind(this));
     window.addEventListener('restoreGhost', this.restoreGhost.bind(this));
     //@ts-ignore
     window.addEventListener('addTimer', this.addTimer.bind(this));
@@ -1008,6 +1012,7 @@ class GameCoordinator {
                         this.remainingDots += 1;
                       }
                     });
+                    this.emitter.emit("post-advance-level")
                     this.startGameplay();
                   }, 500);
                 }, 250);
@@ -1082,11 +1087,11 @@ class GameCoordinator {
 
   /**
    * Upon eating a ghost, award points and temporarily pause movement
-   * @param {CustomEvent} e - Contains a target ghost object
+   * @param {detail} detail - Contains a target ghost object
    */
-  eatGhost(e: CustomEvent) {
+  eatGhost(detail:any) {
     const pauseDuration = 1000;
-    const { position, measurement } = e.detail.ghost;
+    const { position, measurement } = detail.ghost;
 
     this.pauseTimer({ detail: { timer: this.ghostFlashTimer } } as CustomEvent);
     this.pauseTimer({ detail: { timer: this.ghostCycleTimer } } as CustomEvent);
@@ -1094,7 +1099,7 @@ class GameCoordinator {
     this.soundManager.play('eat_ghost');
 
     this.scaredGhosts = this.scaredGhosts.filter(
-      ghost => ghost.name !== e.detail.ghost.name,
+      ghost => ghost.name !== detail.ghost.name,
     );
     this.eyeGhosts += 1;
 
@@ -1112,8 +1117,8 @@ class GameCoordinator {
     this.allowPacmanMovement = false;
     this.pacman.display = false;
     this.pacman.moving = false;
-    e.detail.ghost.display = false;
-    e.detail.ghost.moving = false;
+    detail.ghost.display = false;
+    detail.ghost.moving = false;
 
     this.ghosts.forEach((ghost) => {
       const ghostRef = ghost;
@@ -1121,7 +1126,7 @@ class GameCoordinator {
       ghostRef.pause(true);
       ghostRef.allowCollision = false;
     });
-
+    this.emitter.emit("eat-ghost")
     new Timer(() => {
       this.soundManager.setAmbience('eyes');
 
@@ -1131,8 +1136,8 @@ class GameCoordinator {
       this.allowPacmanMovement = true;
       this.pacman.display = true;
       this.pacman.moving = true;
-      e.detail.ghost.display = true;
-      e.detail.ghost.moving = true;
+      detail.ghost.display = true;
+      detail.ghost.moving = true;
       this.ghosts.forEach((ghost) => {
         const ghostRef = ghost;
         ghostRef.animate = true;

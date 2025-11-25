@@ -15,11 +15,13 @@ class EntitiesManager {
     constructor(gc:GameCoordinator) {
         this.gc = gc
         this.container = gc.stage
-    }    
+    }      
     restart() {
         this.entities.forEach(e=>{
             e.moving = true
-        })
+            e.display = true
+            e.allowCollision = true
+        }) 
     }
     tryToGenerateEntities(wave:Wave | null) { 
         const random = Math.random()
@@ -50,6 +52,14 @@ class EntitiesManager {
             //wave.queueElement("entity", sonic)
         } 
     }
+    dequeAllEntities() {
+        const entities = this.dequeEntitiesBy()                       
+        entities.forEach((e)=>{
+            e.name = "sonic"
+            e.moving = true
+            this.addEntity(e)            
+        })
+    }
     queueEntity(entity:MovableEntity) {
         this.queuedList.push(entity)
     }
@@ -73,10 +83,15 @@ class EntitiesManager {
             this.container.removeChild(e)
         })
     }
+    hide() {
+        this.entities.forEach(e=>{
+            e.display = false            
+        })
+    }
     stop() {
         //clear all entities
         this.entities.forEach(e=>{
-            e.moving = false
+            e.moving = false            
         })
     }
     update(elapsedMs:number) {

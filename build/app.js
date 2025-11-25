@@ -499,6 +499,8 @@ var EntitiesManager = /*#__PURE__*/function () {
     value: function restart() {
       this.entities.forEach(function (e) {
         e.moving = true;
+        e.display = true;
+        e.allowCollision = true;
       });
     }
   }, {
@@ -533,6 +535,17 @@ var EntitiesManager = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "dequeAllEntities",
+    value: function dequeAllEntities() {
+      var _this = this;
+      var entities = this.dequeEntitiesBy();
+      entities.forEach(function (e) {
+        e.name = "sonic";
+        e.moving = true;
+        _this.addEntity(e);
+      });
+    }
+  }, {
     key: "queueEntity",
     value: function queueEntity(entity) {
       this.queuedList.push(entity);
@@ -540,12 +553,12 @@ var EntitiesManager = /*#__PURE__*/function () {
   }, {
     key: "dequeEntitiesBy",
     value: function dequeEntitiesBy(name) {
-      var _this = this;
+      var _this2 = this;
       var entities = this.queuedList.filter(function (f) {
         return f.name != name;
       });
       var indexes = entities.map(function (e) {
-        return _this.queuedList.indexOf(e);
+        return _this2.queuedList.indexOf(e);
       });
       for (var i = this.queuedList.length - 1; i >= 0; i--) {
         if (indexes.lastIndexOf(i) > -1) this.queuedList.splice(i, 1);
@@ -561,12 +574,19 @@ var EntitiesManager = /*#__PURE__*/function () {
   }, {
     key: "clearEntities",
     value: function clearEntities(name) {
-      var _this2 = this;
+      var _this3 = this;
       this.entities = this.entities.filter(function (e) {
         return e.name != name;
       });
       this.entities.forEach(function (e) {
-        _this2.container.removeChild(e);
+        _this3.container.removeChild(e);
+      });
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      this.entities.forEach(function (e) {
+        e.display = false;
       });
     }
   }, {
@@ -601,6 +621,7 @@ var _wavesManager = _interopRequireDefault(require("./wavesManager.ts"));
 var _mod = _interopRequireDefault(require("../mod.ts"));
 var _state = require("../states/state.ts");
 var _assetsManager = _interopRequireDefault(require("./assetsManager.ts"));
+var _timer = _interopRequireDefault(require("../../../../../../../scripts/utilities/timer.ts"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
@@ -755,6 +776,29 @@ function _registerListeners() {
   var _this3 = this;
   this.emitter = this.gc.emitter;
   _assertClassBrand(_Flood_brand, this, _changePacmanDeathSequence).call(this);
+  this.emitter.on("eat-ghost", function (detail) {
+    var _this3$wavesManager;
+    var em = (_this3$wavesManager = _this3.wavesManager) === null || _this3$wavesManager === void 0 ? void 0 : _this3$wavesManager.entitiesManager;
+    if (em) {
+      var pauseDuration = 1000;
+      //Stop animating the entities
+      em.entities.forEach(function (e) {
+        e.animate = false;
+        e.moving = false;
+        e.pause(false);
+        e.allowCollision = true;
+      });
+      //Restart animating the entities
+      new _timer["default"](function () {
+        em.entities.forEach(function (e) {
+          e.animate = true;
+          e.moving = true;
+          e.pause(false);
+          e.allowCollision = true;
+        });
+      }, pauseDuration);
+    }
+  });
   this.emitter.on("game-over", function () {
     _this3.stop();
   });
@@ -766,6 +810,12 @@ function _changePacmanDeathSequence() {
   var _this4 = this;
   this.gc.emitter.removeAllListeners("pacman-death");
   var _this = this;
+  this.gc.emitter.on("advance-level", function () {
+    var entities = _this4.wavesManager.entitiesManager.entities;
+    entities.forEach(function (e) {
+      e.display = false;
+    });
+  });
   this.gc.emitter.on("pacman-death", function () {
     var wave = _this.wavesManager.wave;
     _this4.gc.pacman.moving = false;
@@ -786,10 +836,13 @@ function _changePacmanDeathSequence() {
       _this4.pacman.onDeath();
     }
   });
+  this.gc.emitter.on("post-death", function () {
+    _this4.wavesManager.entitiesManager.hide();
+  });
 }
 var _default = exports["default"] = Flood; //endRemoveIf
 
-},{"../mod.ts":12,"../states/cancelState.ts":13,"../states/endState.ts":14,"../states/idleState.ts":15,"../states/startState.ts":16,"../states/state.ts":17,"./assetsManager.ts":5,"./wavesManager.ts":10,"pixi.js":449}],9:[function(require,module,exports){
+},{"../../../../../../../scripts/utilities/timer.ts":35,"../mod.ts":12,"../states/cancelState.ts":13,"../states/endState.ts":14,"../states/idleState.ts":15,"../states/startState.ts":16,"../states/state.ts":17,"./assetsManager.ts":5,"./wavesManager.ts":10,"pixi.js":449}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -952,16 +1005,6 @@ var Wave = /*#__PURE__*/function (_Sprite) {
       }
     }
   }, {
-    key: "getGeneratedEntities",
-    value: function getGeneratedEntities() {
-      var em = this.wavesManager.entitiesManager;
-      var entities = em.dequeEntitiesBy();
-      entities.forEach(function (e) {
-        e.name = "sonic";
-        em.addEntity(e);
-      });
-    }
-  }, {
     key: "increase",
     value: function increase(elapsedMs) {
       if (this.visible) {
@@ -969,7 +1012,7 @@ var Wave = /*#__PURE__*/function (_Sprite) {
         this.decreasing = false;
         this.updatePosition();
         this.getGeneratedBubbles();
-        this.getGeneratedEntities();
+        this.wavesManager.entitiesManager.dequeAllEntities();
       }
     }
   }, {
@@ -1471,7 +1514,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
       this.transitionSpeed = pacmanSpeed * 0.4;
       this.eyeSpeed = pacmanSpeed * 2;
       this.velocityPerMs = this.defaultSpeed;
-      this.moving = true;
+      this.moving = false;
       //Logic to try to move Sonic based on his temper
 
       this.bad = Math.random() > 0.7;
@@ -1495,7 +1538,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         }
       }
       //for debug
-      targetDef.type = "pacman";
+      //targetDef.type = "pacman"
       return targetDef;
     }
   }, {
@@ -1550,7 +1593,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         var row = way === null || way === void 0 ? void 0 : way.row;
         var col = way === null || way === void 0 ? void 0 : way.cols[Math.floor(Math.random() * way.cols.length)];
         var point = (0, _utils.createObservablePoint)(this, col, row);
-        return this.characterUtil.snapToGrid(point, this.direction, this.scaledTileSize);
+        return this.characterUtil.snapToGrid(point, this.direction, this.scaledTileSize, this.anchor, this.gameCoordinator.scale);
       } else if (this.targetDef.type == "ghost") {
         var ghosts = this.flood.gc.ghosts;
         var bestDistance = Infinity;
@@ -2200,7 +2243,6 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     _defineProperty(_this, "emotion", void 0);
     _defineProperty(_this, "scaredColor", void 0);
     _defineProperty(_this, "defaultDirection", void 0);
-    _defineProperty(_this, "paused", void 0);
     _this.scaledTileSize = gameCoordinator.scaledTileSize;
     _this.mazeArray = gameCoordinator.mazeArray;
     _this.pacman = gameCoordinator.pacman;
@@ -2235,7 +2277,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "registerEventListeners",
     value: function registerEventListeners() {
-      this.emitter.on("ghost-eaten-" + this.name, this.onEaten);
+      this.emitter.on("ghost-eaten-" + this.name, this.onEaten.bind(this));
     }
     /**
      * Sets the default mode and idleMode behavior
@@ -2931,17 +2973,6 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
       this.cruiseElroy = false;
       this.setSpriteSheet(this.name, this.direction, this.mode);
     }
-
-    /**
-     * Sets a flag to indicate when the ghost should pause its movement
-     * @param {Boolean} newValue
-     */
-  }, {
-    key: "pause",
-    value: function pause(newValue) {
-      this.paused = newValue;
-    }
-
     /**
      * Checks if the ghost contacts Pacman - starts the death sequence if so
      * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
@@ -2990,9 +3021,10 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "onEaten",
     value: function onEaten(detail) {
-      window.dispatchEvent(new CustomEvent('eatGhost', {
-        detail: detail
-      }));
+      // window.dispatchEvent(new CustomEvent('eatGhost', {
+      //       detail: detail 
+      // }));  
+      this.gameCoordinator.eatGhost(detail);
     }
     /**
      * Updates the css position, hides if there is a stutter, and animates the spritesheet
@@ -3072,13 +3104,23 @@ var MovableEntity = /*#__PURE__*/function (_StaticEntity) {
     _defineProperty(_this, "defaultPosition", (0, _utils.createObservablePoint)(_this, 0, 0));
     _defineProperty(_this, "oldPosition", (0, _utils.createObservablePoint)(_this, 0, 0));
     _defineProperty(_this, "moving", void 0);
+    _defineProperty(_this, "paused", false);
     _defineProperty(_this, "level", void 0);
     _defineProperty(_this, "direction", void 0);
     _this.characterUtil = characterUtil;
     return _this;
   }
+  /**
+  * Sets a flag to indicate when the ghost should pause its movement
+  * @param {Boolean} newValue
+  */
   _inherits(MovableEntity, _StaticEntity);
   return _createClass(MovableEntity, [{
+    key: "pause",
+    value: function pause(newValue) {
+      this.paused = newValue;
+    }
+  }, {
     key: "getGridPosition",
     value: function getGridPosition() {
       var _this$characterUtil;
@@ -4809,8 +4851,11 @@ var GameCoordinator = /*#__PURE__*/function () {
     value: function registerEventListeners() {
       var _this8 = this;
       //events: 
-      //  load, start, post-start, pacman-death, post-death, ghost-eaten-<ghostName>, item-taken (item as argument),
-      //  advance-level, game-over, speed-up-blinky, create-fruit
+      //  load, start, post-start, pacman-death, post-death, 
+      // ghost-eaten-<ghostName>, eat-ghost
+      // item-taken (item as argument),
+      // advance-level, post-advance-level, game-over, 
+      // speed-up-blinky, create-fruit
       this.emitter = new _eventemitter["default"]();
       this.entityList.forEach(function (e) {
         e.emitter = _this8.emitter;
@@ -4829,7 +4874,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       window.addEventListener('dotEaten', this.dotEaten.bind(this));
       window.addEventListener('powerUp', this.powerUp.bind(this));
       //@ts-ignore
-      window.addEventListener('eatGhost', this.eatGhost.bind(this));
+      //window.addEventListener('eatGhost', this.eatGhost.bind(this));
       window.addEventListener('restoreGhost', this.restoreGhost.bind(this));
       //@ts-ignore
       window.addEventListener('addTimer', this.addTimer.bind(this));
@@ -5197,6 +5242,7 @@ var GameCoordinator = /*#__PURE__*/function () {
                           _this11.remainingDots += 1;
                         }
                       });
+                      _this11.emitter.emit("post-advance-level");
                       _this11.startGameplay();
                     }, 500);
                   }, 250);
@@ -5277,16 +5323,16 @@ var GameCoordinator = /*#__PURE__*/function () {
 
     /**
      * Upon eating a ghost, award points and temporarily pause movement
-     * @param {CustomEvent} e - Contains a target ghost object
+     * @param {detail} detail - Contains a target ghost object
      */
   }, {
     key: "eatGhost",
-    value: function eatGhost(e) {
+    value: function eatGhost(detail) {
       var _this14 = this;
       var pauseDuration = 1000;
-      var _e$detail$ghost = e.detail.ghost,
-        position = _e$detail$ghost.position,
-        measurement = _e$detail$ghost.measurement;
+      var _detail$ghost = detail.ghost,
+        position = _detail$ghost.position,
+        measurement = _detail$ghost.measurement;
       this.pauseTimer({
         detail: {
           timer: this.ghostFlashTimer
@@ -5304,7 +5350,7 @@ var GameCoordinator = /*#__PURE__*/function () {
       });
       this.soundManager.play('eat_ghost');
       this.scaredGhosts = this.scaredGhosts.filter(function (ghost) {
-        return ghost.name !== e.detail.ghost.name;
+        return ghost.name !== detail.ghost.name;
       });
       this.eyeGhosts += 1;
       this.ghostCombo += 1;
@@ -5318,14 +5364,15 @@ var GameCoordinator = /*#__PURE__*/function () {
       this.allowPacmanMovement = false;
       this.pacman.display = false;
       this.pacman.moving = false;
-      e.detail.ghost.display = false;
-      e.detail.ghost.moving = false;
+      detail.ghost.display = false;
+      detail.ghost.moving = false;
       this.ghosts.forEach(function (ghost) {
         var ghostRef = ghost;
         ghostRef.animate = false;
         ghostRef.pause(true);
         ghostRef.allowCollision = false;
       });
+      this.emitter.emit("eat-ghost");
       new _timer["default"](function () {
         _this14.soundManager.setAmbience('eyes');
         _this14.resumeTimer({
@@ -5346,8 +5393,8 @@ var GameCoordinator = /*#__PURE__*/function () {
         _this14.allowPacmanMovement = true;
         _this14.pacman.display = true;
         _this14.pacman.moving = true;
-        e.detail.ghost.display = true;
-        e.detail.ghost.moving = true;
+        detail.ghost.display = true;
+        detail.ghost.moving = true;
         _this14.ghosts.forEach(function (ghost) {
           var ghostRef = ghost;
           ghostRef.animate = true;

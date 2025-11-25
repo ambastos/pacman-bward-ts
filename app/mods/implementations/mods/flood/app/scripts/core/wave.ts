@@ -110,21 +110,13 @@ class Wave extends Sprite {
             }
         }
     }
-    private getGeneratedEntities() {
-        const em = this.wavesManager.entitiesManager
-        const entities = em.dequeEntitiesBy()                       
-        entities.forEach((e)=>{
-            e.name = "sonic"
-            em.addEntity(e)            
-        })
-    }
     increase(elapsedMs: number) {
         if (this.visible) {
             this.height+=this.speedY * (elapsedMs/1000)
             this.decreasing = false
             this.updatePosition()
             this.getGeneratedBubbles()   
-            this.getGeneratedEntities()               
+            this.wavesManager.entitiesManager.dequeAllEntities()             
         }
     }
     decrease(elapsedMs: number) {

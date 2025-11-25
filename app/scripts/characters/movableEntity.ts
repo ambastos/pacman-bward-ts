@@ -9,11 +9,19 @@ class MovableEntity extends StaticEntity{
     defaultPosition = createObservablePoint(this,0,0);
     oldPosition = createObservablePoint(this,0,0); 
     moving!:boolean
+    paused:boolean = false
     level!:number
     direction!:string
     constructor(gameCoordinator:GameCoordinator, name:string, characterUtil:CharacterUtil) {
         super(gameCoordinator,name)
         this.characterUtil = characterUtil
+    }
+    /**
+   * Sets a flag to indicate when the ghost should pause its movement
+   * @param {Boolean} newValue
+   */
+    pause(newValue:boolean) {
+        this.paused = newValue;
     }
      getGridPosition():ObservablePoint<Point>  {
         return this.characterUtil?.determineGridPosition(

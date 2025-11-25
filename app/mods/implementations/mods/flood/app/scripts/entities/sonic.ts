@@ -62,7 +62,7 @@ class Sonic extends Ghost {
         this.eyeSpeed = pacmanSpeed * 2;
 
         this.velocityPerMs = this.defaultSpeed;
-        this.moving = true;
+        this.moving = false;
         //Logic to try to move Sonic based on his temper
         
         this.bad =  Math.random() > 0.7
@@ -93,7 +93,7 @@ class Sonic extends Ghost {
             }
         }
         //for debug
-        targetDef.type = "pacman"
+        //targetDef.type = "pacman"
         return targetDef as TargetDef
     }
 
@@ -142,7 +142,8 @@ class Sonic extends Ghost {
             const row = way?.row as number
             const col = way?.cols[ Math.floor(Math.random() * way.cols.length) ] as number
             const point = createObservablePoint(this, col, row)
-            return this.characterUtil.snapToGrid(point,this.direction,this.scaledTileSize)
+            return this.characterUtil.snapToGrid(point,this.direction,
+                this.scaledTileSize, this.anchor, this.gameCoordinator.scale)
         }else if (this.targetDef.type == "ghost") {             
             const ghosts = this.flood.gc.ghosts
             let bestDistance = Infinity
