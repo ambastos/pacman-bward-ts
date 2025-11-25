@@ -37,7 +37,7 @@ class StaticEntity extends Sprite {
     onDeath() {
 
     }
-    reset(){
+    reset(){        
         this.createHitArea() 
     }    
     get axis():ObservablePoint<Point> {        

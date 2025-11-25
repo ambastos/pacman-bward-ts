@@ -15,14 +15,15 @@ class MovableEntity extends StaticEntity{
     constructor(gameCoordinator:GameCoordinator, name:string, characterUtil:CharacterUtil) {
         super(gameCoordinator,name)
         this.characterUtil = characterUtil
-    }
+    }    
     /**
    * Sets a flag to indicate when the ghost should pause its movement
    * @param {Boolean} newValue
    */
     pause(newValue:boolean) {
-        this.paused = newValue;
+        this.paused = newValue; 
     }
+
      getGridPosition():ObservablePoint<Point>  {
         return this.characterUtil?.determineGridPosition(
             this.position, this.scaledTileSize, 

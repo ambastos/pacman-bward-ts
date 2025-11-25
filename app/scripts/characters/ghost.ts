@@ -25,7 +25,8 @@ class Ghost extends MovableEntity{
     emotion!:string
     scaredColor!:string
     defaultDirection!:string
-
+    target!:MovableEntity | null
+    
   constructor(gameCoordinator:GameCoordinator, name:string, 
     level:number, characterUtil:CharacterUtil, blinky?:Ghost
   ) {
@@ -53,6 +54,7 @@ class Ghost extends MovableEntity{
     }
 
     this.setDefaultMode();
+    this.setTarget()
     this.setMovementStats(this.pacman, this.name!, this.level);
     this.setSpriteAnimationStats();
     this.setStyleMeasurements(this.scaledTileSize, this.spriteFrames);
@@ -74,6 +76,9 @@ class Ghost extends MovableEntity{
     if (this.name !== 'blinky') {
       this.idleMode = Mode.idle;
     }
+  }
+  setTarget() {
+    this.target = this.pacman
   }
 
   /**
@@ -757,7 +762,7 @@ class Ghost extends MovableEntity{
       this.anchor, this.gameCoordinator.scale
     );
 
-    this.checkCollision(gridPosition, pacmanGridPosition);
+    this.checkCollision(gridPosition, this.target as MovableEntity);
 
     return newPosition;
   }
@@ -850,12 +855,12 @@ class Ghost extends MovableEntity{
   /**
    * Checks if the ghost contacts Pacman - starts the death sequence if so
    * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
-   * @param {({x: number, y: number})} targetPosition - Pacman's current x-y position on the 2D Maze Array
+   * @param {MovableEntity} target - Pacman's 
    */
-  checkCollision(position:ObservablePoint, targetPosition:ObservablePoint) {
+  checkCollision(position:ObservablePoint, target:MovableEntity) {
     //if pacman is not allowing collision, then, he doesn't die!
     if (!this.pacman.allowCollision) return
-    if (this.calculateDistance(position, targetPosition) < 1
+    if (this.calculateDistance(position, target.getGridPosition()) < 1
       && this.mode !== 'eyes'
       && this.allowCollision) {
       if (this.mode === 'scared') {
@@ -936,7 +941,7 @@ class Ghost extends MovableEntity{
     super.update(elapsedMs)
     this.oldPosition = createObservablePoint(this,this.position.x, this.position.y);
 
-    if (this.moving) {
+    if (this.moving) {      
       this.position = this.handleMovement(elapsedMs);
       this.setSpriteSheet(this.name!, this.direction, this.mode);
       this.msSinceLastSprite += elapsedMs;

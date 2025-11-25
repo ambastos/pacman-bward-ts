@@ -17,6 +17,7 @@ class Sonic extends Ghost {
     animator:Animator
     frameY:number = 0
     bad:boolean = false
+    seenTarget = false
     targetDef!:TargetDef
     attackSpeed!:number
     constructor(flood:Flood) {        
@@ -27,6 +28,7 @@ class Sonic extends Ghost {
         this.setTexture(this.name, this.direction, 1, null, 1, 32, 32) 
         this.animator = new Animator(this);
         this.createAnimations();
+        this.registerEventListeners()
     }    
     private createAnimations() {
         this.animator.createAnimation("walk", 200, null, () => {
@@ -69,9 +71,34 @@ class Sonic extends Ghost {
             this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
         });
+          this.animator.createAnimation("ghost-kick", 200, null,
+            (args) => {
+                //console.log("ghost-kick", args.direction, args.ghost);                
+                const ghost = args.ghost as Ghost
+                ghost.moving = false
+                const velocity = ghost.fastSpeed * 1.5
+                switch (this.direction) {
+                    case "left":
+                        this.x -= velocity     
+                        break;
+                    case "right":
+                        this.x += velocity     
+                        break;    
+                    case "up":
+                        this.y -= velocity     
+                        break;
+                    case "down":
+                        this.y += velocity     
+                        break;    
+                }
+            }
+        );
         this.animator.play("walk");
     }
-
+    registerEventListeners(): void {
+        super.registerEventListeners()
+        this.emitter.on("ghost-kick", this.onGhostKick.bind(this))
+    }
     setDefaultMode(): void {
         this.allowCollision = true
         this.defaultMode = Mode.idle
@@ -124,12 +151,9 @@ class Sonic extends Ghost {
             } else {
                 targetDef.type = "ghost";
             }
-        }
-        //for debug
-        //targetDef.type = "pacman"
+        }    
         return targetDef as TargetDef
     }
-
     setSpriteAnimationStats(): void {
         this.display = true
         this.loopAnimation = true;
@@ -191,6 +215,7 @@ class Sonic extends Ghost {
     }
     getTarget(name: string, gridPosition: ObservablePoint, pacmanGridPosition: ObservablePoint, 
             mode: string): ObservablePoint<Point> | undefined {
+        let targetPosition = createObservablePoint(this, this.x, this.y)
         if (this.targetDef.type == "point") {
             const wayCells = getMazeWays(this.flood.gc.maze!)
             const way = wayCells[ Math.floor(Math.random() * wayCells.length) ]
@@ -210,6 +235,7 @@ class Sonic extends Ghost {
                     bestDistance = distance
                 }
             })
+
             this.targetDef.targetEntity = target!
             return target!.getGridPosition()
         }else if (this.targetDef.type ==  "pacman") {
@@ -230,8 +256,32 @@ class Sonic extends Ghost {
             this.animator.play("attack")
         }else if (this.mode == Mode.target) {
             this.animator.play("target")
-        }
+        } 
         this.animator.update()
+    }
+    handleMovement(elapsedMs: number): ObservablePoint{
+        const point = super.handleMovement(elapsedMs)
+        if (this.target && this.calculateDistance(this.getGridPosition(), 
+            this.target.getGridPosition()) < 4) {
+            this.mode = Mode.attack
+        }
+        return point
+    }
+    checkCollision(position: ObservablePoint, target: MovableEntity): void {
+        if (!target.allowCollision) return
+        if (this.calculateDistance(position, target.getGridPosition()) < 1
+            && this.allowCollision) {
+            if (target instanceof Ghost) 
+                this.emitter.emit(`ghost-kick`,target)
+            else if (target instanceof Pacman)
+                this.emitter.emit('pacman-death')
+        }
+    }
+    private onGhostKick(ghost:Ghost) {
+        ghost.moving = false
+        ghost.allowCollision = false  
+        ghost.animate = false      
+        this.animator.play("ghost-kick", {direction: this.direction, ghost:ghost})
     }
     draw(interp: number): void {
         this.visible = this.display

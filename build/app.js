@@ -1465,6 +1465,7 @@ exports["default"] = void 0;
 var _animator = _interopRequireDefault(require("../animations/animator.ts"));
 var _ghost = _interopRequireDefault(require("../../../../../../../scripts/characters/ghost.ts"));
 var _characterUtil = _interopRequireDefault(require("../../../../../../../scripts/utilities/characterUtil.ts"));
+var _pacman = _interopRequireDefault(require("../../../../../../../scripts/characters/pacman.ts"));
 var _utils = require("../../../../../../../scripts/utilities/utils.ts");
 var _util = require("../utils/util.ts");
 var _types = require("../../../../../../../scripts/characters/types.ts");
@@ -1495,6 +1496,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     _defineProperty(_this, "animator", void 0);
     _defineProperty(_this, "frameY", 0);
     _defineProperty(_this, "bad", false);
+    _defineProperty(_this, "seenTarget", false);
     _defineProperty(_this, "targetDef", void 0);
     _defineProperty(_this, "attackSpeed", void 0);
     _this.name = "sonic";
@@ -1503,6 +1505,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     _this.setTexture(_this.name, _this.direction, 1, null, 1, 32, 32);
     _this.animator = new _animator["default"](_this);
     _this.createAnimations();
+    _this.registerEventListeners();
     return _this;
   }
   _inherits(Sonic, _Ghost);
@@ -1546,7 +1549,33 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         _this2.setTexture(_this2.name, _this2.direction, _this2.frame, null, _this2.frameY, 32, 32);
         _this2.frame++;
       });
+      this.animator.createAnimation("ghost-kick", 200, null, function (args) {
+        //console.log("ghost-kick", args.direction, args.ghost);                
+        var ghost = args.ghost;
+        ghost.moving = false;
+        var velocity = ghost.fastSpeed * 1.5;
+        switch (_this2.direction) {
+          case "left":
+            _this2.x -= velocity;
+            break;
+          case "right":
+            _this2.x += velocity;
+            break;
+          case "up":
+            _this2.y -= velocity;
+            break;
+          case "down":
+            _this2.y += velocity;
+            break;
+        }
+      });
       this.animator.play("walk");
+    }
+  }, {
+    key: "registerEventListeners",
+    value: function registerEventListeners() {
+      _superPropGet(Sonic, "registerEventListeners", this, 3)([]);
+      this.emitter.on("ghost-kick", this.onGhostKick.bind(this));
     }
   }, {
     key: "setDefaultMode",
@@ -1594,8 +1623,6 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
           targetDef.type = "ghost";
         }
       }
-      //for debug
-      //targetDef.type = "pacman"
       return targetDef;
     }
   }, {
@@ -1666,6 +1693,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     key: "getTarget",
     value: function getTarget(name, gridPosition, pacmanGridPosition, mode) {
       var _this3 = this;
+      var targetPosition = (0, _utils.createObservablePoint)(this, this.x, this.y);
       if (this.targetDef.type == "point") {
         var wayCells = (0, _util.getMazeWays)(this.flood.gc.maze);
         var way = wayCells[Math.floor(Math.random() * wayCells.length)];
@@ -1709,6 +1737,34 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
       this.animator.update();
     }
   }, {
+    key: "handleMovement",
+    value: function handleMovement(elapsedMs) {
+      var point = _superPropGet(Sonic, "handleMovement", this, 3)([elapsedMs]);
+      if (this.target && this.calculateDistance(this.getGridPosition(), this.target.getGridPosition()) < 4) {
+        this.mode = _types.Mode.attack;
+      }
+      return point;
+    }
+  }, {
+    key: "checkCollision",
+    value: function checkCollision(position, target) {
+      if (!target.allowCollision) return;
+      if (this.calculateDistance(position, target.getGridPosition()) < 1 && this.allowCollision) {
+        if (target instanceof _ghost["default"]) this.emitter.emit("ghost-kick", target);else if (target instanceof _pacman["default"]) this.emitter.emit('pacman-death');
+      }
+    }
+  }, {
+    key: "onGhostKick",
+    value: function onGhostKick(ghost) {
+      ghost.moving = false;
+      ghost.allowCollision = false;
+      ghost.animate = false;
+      this.animator.play("ghost-kick", {
+        direction: this.direction,
+        ghost: ghost
+      });
+    }
+  }, {
     key: "draw",
     value: function draw(interp) {
       this.visible = this.display;
@@ -1721,7 +1777,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
 }(_ghost["default"]);
 var _default = exports["default"] = Sonic;
 
-},{"../../../../../../../scripts/characters/ghost.ts":20,"../../../../../../../scripts/characters/types.ts":24,"../../../../../../../scripts/utilities/characterUtil.ts":33,"../../../../../../../scripts/utilities/utils.ts":37,"../animations/animator.ts":4,"../utils/util.ts":18}],12:[function(require,module,exports){
+},{"../../../../../../../scripts/characters/ghost.ts":20,"../../../../../../../scripts/characters/pacman.ts":22,"../../../../../../../scripts/characters/types.ts":24,"../../../../../../../scripts/utilities/characterUtil.ts":33,"../../../../../../../scripts/utilities/utils.ts":37,"../animations/animator.ts":4,"../utils/util.ts":18}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2335,6 +2391,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     _defineProperty(_this, "emotion", void 0);
     _defineProperty(_this, "scaredColor", void 0);
     _defineProperty(_this, "defaultDirection", void 0);
+    _defineProperty(_this, "target", void 0);
     _this.scaledTileSize = gameCoordinator.scaledTileSize;
     _this.mazeArray = gameCoordinator.mazeArray;
     _this.pacman = gameCoordinator.pacman;
@@ -2359,6 +2416,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
         delete this.cruiseElroy;
       }
       this.setDefaultMode();
+      this.setTarget();
       this.setMovementStats(this.pacman, this.name, this.level);
       this.setSpriteAnimationStats();
       this.setStyleMeasurements(this.scaledTileSize, this.spriteFrames);
@@ -2383,6 +2441,11 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
       if (this.name !== 'blinky') {
         this.idleMode = _types.Mode.idle;
       }
+    }
+  }, {
+    key: "setTarget",
+    value: function setTarget() {
+      this.target = this.pacman;
     }
 
     /**
@@ -2981,7 +3044,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
         newPosition = this.handleUnsnappedMovement(elapsedMs, gridPosition, velocity);
       }
       newPosition = this.characterUtil.handleWarp(this.direction, newPosition, this.scaledTileSize, this.mazeArray, this.anchor, this.gameCoordinator.scale);
-      this.checkCollision(gridPosition, pacmanGridPosition);
+      this.checkCollision(gridPosition, this.target);
       return newPosition;
     }
 
@@ -3068,14 +3131,14 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     /**
      * Checks if the ghost contacts Pacman - starts the death sequence if so
      * @param {({x: number, y: number})} position - An x-y position on the 2D Maze Array
-     * @param {({x: number, y: number})} targetPosition - Pacman's current x-y position on the 2D Maze Array
+     * @param {MovableEntity} target - Pacman's 
      */
   }, {
     key: "checkCollision",
-    value: function checkCollision(position, targetPosition) {
+    value: function checkCollision(position, target) {
       //if pacman is not allowing collision, then, he doesn't die!
       if (!this.pacman.allowCollision) return;
-      if (this.calculateDistance(position, targetPosition) < 1 && this.mode !== 'eyes' && this.allowCollision) {
+      if (this.calculateDistance(position, target.getGridPosition()) < 1 && this.mode !== 'eyes' && this.allowCollision) {
         if (this.mode === 'scared') {
           this.emitter.emit("ghost-eaten-" + this.name, {
             ghost: this
