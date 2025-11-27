@@ -54,7 +54,7 @@ class Ghost extends MovableEntity{
     }
 
     this.setDefaultMode();
-    this.setTarget()
+    this.setTarget(this.pacman)
     this.setMovementStats(this.pacman, this.name!, this.level);
     this.setSpriteAnimationStats();
     this.setStyleMeasurements(this.scaledTileSize, this.spriteFrames);
@@ -77,8 +77,8 @@ class Ghost extends MovableEntity{
       this.idleMode = Mode.idle;
     }
   }
-  setTarget() {
-    this.target = this.pacman
+  setTarget(target: MovableEntity | null) {
+    this.target = target
   }
 
   /**
@@ -859,7 +859,7 @@ class Ghost extends MovableEntity{
    */
   checkCollision(position:ObservablePoint, target:MovableEntity) {
     //if pacman is not allowing collision, then, he doesn't die!
-    if (!this.pacman.allowCollision) return
+    if (!this.target!.allowCollision) return
     if (this.calculateDistance(position, target.getGridPosition()) < 1
       && this.mode !== 'eyes'
       && this.allowCollision) {

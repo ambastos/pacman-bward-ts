@@ -8,7 +8,9 @@ class Animation {
     endTime:number | null = 0
     callback!:Function
     args = []
-    thisClass: any
+    thisClass: any    
+    startEvent!:Function
+    endEvent!:Function
     constructor(interval: number, duration: number | null, callback: ((args: any) => void), thisClass: any) {
         this.interval = interval
         this.duration = duration
@@ -29,9 +31,22 @@ class Animation {
         this.currentTime = this.startTime
         if (keys_values_args)
            this.updateArguments(keys_values_args, false)
+        if (this.startEvent) this.startEvent(this.args)
+    }
+    pause() {
+        this.playing = false
+    }
+    unpause() {
+        this.playing = true
     }
     stop() {
         this.#end()
+    }   
+    onStart(callback:Function) {
+        this.startEvent = callback
+    }
+    onEnd(callback:Function) {
+        this.endEvent = callback      
     }
     update(args: any) {
         if (!this.playing) return
@@ -91,6 +106,7 @@ class Animation {
         this.endTime = Date.now()
         this.end = true
         this.playing = false
+        if (this.endEvent) this.endEvent(this.args)
     }
 }
 export default Animation

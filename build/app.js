@@ -153,6 +153,8 @@ var Animation = /*#__PURE__*/function () {
     _defineProperty(this, "callback", void 0);
     _defineProperty(this, "args", []);
     _defineProperty(this, "thisClass", void 0);
+    _defineProperty(this, "startEvent", void 0);
+    _defineProperty(this, "endEvent", void 0);
     this.interval = interval;
     this.duration = duration;
     this.callback = callback;
@@ -174,11 +176,32 @@ var Animation = /*#__PURE__*/function () {
       this.startTime = Date.now();
       this.currentTime = this.startTime;
       if (keys_values_args) this.updateArguments(keys_values_args, false);
+      if (this.startEvent) this.startEvent(this.args);
+    }
+  }, {
+    key: "pause",
+    value: function pause() {
+      this.playing = false;
+    }
+  }, {
+    key: "unpause",
+    value: function unpause() {
+      this.playing = true;
     }
   }, {
     key: "stop",
     value: function stop() {
       _assertClassBrand(_Animation_brand, this, _end).call(this);
+    }
+  }, {
+    key: "onStart",
+    value: function onStart(callback) {
+      this.startEvent = callback;
+    }
+  }, {
+    key: "onEnd",
+    value: function onEnd(callback) {
+      this.endEvent = callback;
     }
   }, {
     key: "update",
@@ -237,6 +260,7 @@ function _end() {
   this.endTime = Date.now();
   this.end = true;
   this.playing = false;
+  if (this.endEvent) this.endEvent(this.args);
 }
 var _default = exports["default"] = Animation;
 
@@ -261,6 +285,10 @@ var Animator = /*#__PURE__*/function () {
     _classCallCheck(this, Animator);
     _defineProperty(this, "thisClass", void 0);
     _defineProperty(this, "animations", new Map());
+    _defineProperty(this, "currentAnimation", {
+      name: null,
+      animation: null
+    });
     _defineProperty(this, "started", void 0);
     _defineProperty(this, "onStart", void 0);
     _defineProperty(this, "onStop", void 0);
@@ -272,10 +300,31 @@ var Animator = /*#__PURE__*/function () {
     value: function createAnimation(name, interval, duration, callback) {
       var an = new _animation["default"](interval, duration, callback, this.thisClass);
       this.animations.set(name, an);
+      return an;
     }
     /**
-     * Plays the animation with this name
-     * @param {String} name 
+     * Reset the current animation to replay again
+     * @param name 
+     */
+  }, {
+    key: "restart",
+    value: function restart(name) {
+      var an = this.animations.get(name);
+      if (an) {
+        an.reset();
+      }
+    }
+  }, {
+    key: "isPlaying",
+    value: function isPlaying(name) {
+      var an = this.animations.get(name);
+      return an && an.playing;
+    }
+    /**
+     * Plays the animation with this name 
+     * @param {string} name 
+     * Default is pause previous animations, if it's true keep play previous ones
+     * @param keepRunningPreviousAnimation {boolean} 
      * @param {any} args 
      */
   }, {
@@ -288,13 +337,19 @@ var Animator = /*#__PURE__*/function () {
         var key = anims.next();
         while (((_key = key) === null || _key === void 0 ? void 0 : _key.value) != undefined) {
           var _key, _this$animations$get;
-          (_this$animations$get = this.animations.get(key.value)) === null || _this$animations$get === void 0 || _this$animations$get.stop();
+          (_this$animations$get = this.animations.get(key.value)) === null || _this$animations$get === void 0 || _this$animations$get.pause();
           key = anims.next();
         }
       }
       var an = this.animations.get(name);
       if (!an) throw new Error("There is no Animation with name ".concat(name, "."));
+      if (an.end) {
+        console.warn("Animation: '", name, "' was finished. Run 'restart' to play it again");
+        return;
+      }
       an.play(args);
+      this.currentAnimation.name = name;
+      this.currentAnimation.animation = an;
     }
     /**
      * Stops the animation with this name
@@ -305,16 +360,6 @@ var Animator = /*#__PURE__*/function () {
     value: function stopAnimation(animationName) {
       var _this$animations$get2;
       (_this$animations$get2 = this.animations.get(animationName)) === null || _this$animations$get2 === void 0 || _this$animations$get2.stop();
-    }
-  }, {
-    key: "setOnStart",
-    value: function setOnStart(callback) {
-      this.onStart = callback;
-    }
-  }, {
-    key: "setOnStop",
-    value: function setOnStop(callback) {
-      this.onStop = callback;
     }
   }, {
     key: "startAnimator",
@@ -342,7 +387,6 @@ var Animator = /*#__PURE__*/function () {
       this.startAnimator();
       this.animations.forEach(function (an) {
         an.update(args);
-        if (an.endTime && an.endTime > 0) shouldStop = true;
       });
       // if (shouldStop)
       //     this.stopAnimator()
@@ -1410,13 +1454,18 @@ var WavesManager = /*#__PURE__*/function () {
       if (this.gc.debug) {
         this.entitiesManager.entities.forEach(function (e) {
           var s = e;
-          if (s.targetDef.targetEntity) {
-            var target = s.targetDef.targetEntity;
-            _this4.gp.lineStyle({
-              width: 0
-            });
-            _this4.gp.beginFill(0x005522, 0.4);
-            _this4.gp.drawCircle(target.x, target.y, 5);
+          if (s.target) {
+            var target = s.target;
+            var gp = _this4.gp;
+            //this.gp.lineStyle({width:0})
+            gp.lineStyle(3, 0xff0000);
+            gp.moveTo(target.x - 4, target.y - 4);
+            gp.lineTo(target.x + 4, target.y + 4);
+            gp.moveTo(target.x + 4, target.y - 4);
+            gp.lineTo(target.x - 4, target.y + 4);
+            gp.closePath();
+            //this.gp.beginFill(0x005522,0.4)
+            //this.gp.drawCircle(target.x, target.y, 5)
           }
         });
       }
@@ -1467,6 +1516,7 @@ var _ghost = _interopRequireDefault(require("../../../../../../../scripts/charac
 var _characterUtil = _interopRequireDefault(require("../../../../../../../scripts/utilities/characterUtil.ts"));
 var _pacman = _interopRequireDefault(require("../../../../../../../scripts/characters/pacman.ts"));
 var _utils = require("../../../../../../../scripts/utilities/utils.ts");
+var _timer = _interopRequireDefault(require("../../../../../../../scripts/utilities/timer.ts"));
 var _util = require("../utils/util.ts");
 var _types = require("../../../../../../../scripts/characters/types.ts");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
@@ -1515,44 +1565,54 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
       var _this2 = this;
       this.animator.createAnimation("walk", 200, null, function () {
         if (!_this2.animate) return;
+        console.log("walk animation");
         var an = _this2.animator.animations.get("walk");
+        _this2.msBetweenSprites = 200;
         _this2.spriteFrames = 4;
         _this2.frameY = 0;
         if (_this2.frame >= _this2.spriteFrames) _this2.frame = 0;
-        _this2.setTexture(_this2.name, _this2.direction, _this2.frame, null, _this2.frameY, 32, 32);
+        //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
         _this2.frame++;
       });
       this.animator.createAnimation("run", 100, null, function () {
         if (!_this2.animate) return;
+        console.log("run animation");
         var an = _this2.animator.animations.get("run");
+        _this2.msBetweenSprites = 100;
         _this2.spriteFrames = 5;
         _this2.frameY = 0;
-        if (_this2.frame >= _this2.spriteFrames) _this2.frame = 4;
-        _this2.setTexture(_this2.name, _this2.direction, _this2.frame, null, _this2.frameY, 32, 32);
+        if (_this2.frame >= _this2.spriteFrames - 1) _this2.frame = 4;
+        //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
         _this2.frame++;
       });
       this.animator.createAnimation("target", 200, 1500, function () {
         if (!_this2.animate) return;
+        console.log("target animation");
         var an = _this2.animator.animations.get("target");
+        _this2.msBetweenSprites = 200;
         _this2.spriteFrames = 1;
         _this2.frameY = 1;
-        if (_this2.frame >= _this2.spriteFrames) _this2.frame = 0;
-        _this2.setTexture(_this2.name, _this2.direction, _this2.frame, null, _this2.frameY, 32, 32);
+        if (_this2.frame >= _this2.spriteFrames - 1) _this2.frame = 0;
+        //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
         _this2.frame++;
+      }).onEnd(function (args) {
+        _this2.mode = _types.Mode.attack;
       });
       this.animator.createAnimation("attack", 100, null, function () {
         if (!_this2.animate) return;
+        console.log("attack animation");
         var an = _this2.animator.animations.get("attack");
+        _this2.msBetweenSprites = 100;
         _this2.spriteFrames = 7;
         _this2.frameY = 1;
-        if (_this2.frame >= _this2.spriteFrames) _this2.frame = 0;
-        _this2.setTexture(_this2.name, _this2.direction, _this2.frame, null, _this2.frameY, 32, 32);
+        if (_this2.frame >= _this2.spriteFrames - 1) _this2.frame = 0;
+        //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
         _this2.frame++;
       });
       this.animator.createAnimation("ghost-kick", 200, null, function (args) {
-        //console.log("ghost-kick", args.direction, args.ghost);                
+        console.log("ghost-kick animation   ", args.direction, args.ghost);
+        _this2.mode = _types.Mode.idle;
         var ghost = args.ghost;
-        ghost.moving = false;
         var velocity = ghost.fastSpeed * 1.5;
         switch (_this2.direction) {
           case "left":
@@ -1569,7 +1629,15 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
             break;
         }
       });
-      this.animator.play("walk");
+      new _timer["default"](function () {
+        _this2.animator.play("walk");
+      }, 500);
+    }
+  }, {
+    key: "reset",
+    value: function reset(fullGameReset) {
+      _superPropGet(Sonic, "reset", this, 3)([]);
+      this.setTarget(null);
     }
   }, {
     key: "registerEventListeners",
@@ -1623,6 +1691,8 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
           targetDef.type = "ghost";
         }
       }
+      //for debug
+      targetDef.type = "ghost";
       return targetDef;
     }
   }, {
@@ -1694,6 +1764,8 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     value: function getTarget(name, gridPosition, pacmanGridPosition, mode) {
       var _this3 = this;
       var targetPosition = (0, _utils.createObservablePoint)(this, this.x, this.y);
+      //debug
+
       if (this.targetDef.type == "point") {
         var wayCells = (0, _util.getMazeWays)(this.flood.gc.maze);
         var way = wayCells[Math.floor(Math.random() * wayCells.length)];
@@ -1712,11 +1784,11 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
             bestDistance = distance;
           }
         });
-        this.targetDef.targetEntity = target;
+        this.target = target;
         return target.getGridPosition();
       } else if (this.targetDef.type == "pacman") {
         var pacman = this.flood.gc.pacman;
-        this.targetDef.targetEntity = pacman;
+        this.target = pacman;
         return pacman.getGridPosition();
       }
       return undefined;
@@ -1726,13 +1798,13 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     value: function update(elapsedMs) {
       _superPropGet(Sonic, "update", this, 3)([elapsedMs]);
       if (this.mode == _types.Mode.idle) {
-        this.animator.play("walk");
+        if (!this.animator.isPlaying("walk")) this.animator.play("walk");
       } else if (this.mode == _types.Mode.chase) {
-        this.animator.play("run");
+        if (!this.animator.isPlaying("run")) this.animator.play("run");
       } else if (this.mode == _types.Mode.attack) {
-        this.animator.play("attack");
+        if (!this.animator.isPlaying("attack")) this.animator.play("attack");
       } else if (this.mode == _types.Mode.target) {
-        this.animator.play("target");
+        if (!this.animator.isPlaying("target")) this.animator.play("target");
       }
       this.animator.update();
     }
@@ -1740,17 +1812,18 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     key: "handleMovement",
     value: function handleMovement(elapsedMs) {
       var point = _superPropGet(Sonic, "handleMovement", this, 3)([elapsedMs]);
-      if (this.target && this.calculateDistance(this.getGridPosition(), this.target.getGridPosition()) < 4) {
-        this.mode = _types.Mode.attack;
+      if (this.target && !this.seenTarget && this.calculateDistance(this.getGridPosition(), this.target.getGridPosition()) < 4) {
+        this.mode = _types.Mode.target;
+        this.seenTarget = true;
       }
       return point;
     }
   }, {
     key: "checkCollision",
     value: function checkCollision(position, target) {
-      if (!target.allowCollision) return;
+      if (!target || !target.allowCollision) return;
       if (this.calculateDistance(position, target.getGridPosition()) < 1 && this.allowCollision) {
-        if (target instanceof _ghost["default"]) this.emitter.emit("ghost-kick", target);else if (target instanceof _pacman["default"]) this.emitter.emit('pacman-death');
+        if (target instanceof _ghost["default"] && target.mode != _types.Mode.eyes) this.emitter.emit("ghost-kick", target);else if (target instanceof _pacman["default"]) this.emitter.emit('pacman-death');
       }
     }
   }, {
@@ -1777,7 +1850,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
 }(_ghost["default"]);
 var _default = exports["default"] = Sonic;
 
-},{"../../../../../../../scripts/characters/ghost.ts":20,"../../../../../../../scripts/characters/pacman.ts":22,"../../../../../../../scripts/characters/types.ts":24,"../../../../../../../scripts/utilities/characterUtil.ts":33,"../../../../../../../scripts/utilities/utils.ts":37,"../animations/animator.ts":4,"../utils/util.ts":18}],12:[function(require,module,exports){
+},{"../../../../../../../scripts/characters/ghost.ts":20,"../../../../../../../scripts/characters/pacman.ts":22,"../../../../../../../scripts/characters/types.ts":24,"../../../../../../../scripts/utilities/characterUtil.ts":33,"../../../../../../../scripts/utilities/timer.ts":36,"../../../../../../../scripts/utilities/utils.ts":37,"../animations/animator.ts":4,"../utils/util.ts":18}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2416,7 +2489,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
         delete this.cruiseElroy;
       }
       this.setDefaultMode();
-      this.setTarget();
+      this.setTarget(this.pacman);
       this.setMovementStats(this.pacman, this.name, this.level);
       this.setSpriteAnimationStats();
       this.setStyleMeasurements(this.scaledTileSize, this.spriteFrames);
@@ -2444,8 +2517,8 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     }
   }, {
     key: "setTarget",
-    value: function setTarget() {
-      this.target = this.pacman;
+    value: function setTarget(target) {
+      this.target = target;
     }
 
     /**
@@ -3137,7 +3210,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
     key: "checkCollision",
     value: function checkCollision(position, target) {
       //if pacman is not allowing collision, then, he doesn't die!
-      if (!this.pacman.allowCollision) return;
+      if (!this.target.allowCollision) return;
       if (this.calculateDistance(position, target.getGridPosition()) < 1 && this.mode !== 'eyes' && this.allowCollision) {
         if (this.mode === 'scared') {
           this.emitter.emit("ghost-eaten-" + this.name, {

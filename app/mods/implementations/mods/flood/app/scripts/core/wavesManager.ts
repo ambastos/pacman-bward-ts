@@ -198,11 +198,18 @@ class WavesManager {
         if (this.gc.debug) {
             this.entitiesManager.entities.forEach(e=>{
                 const s =  (e as Sonic)
-                if (s.targetDef.targetEntity) {
-                    const target = s.targetDef.targetEntity
-                    this.gp.lineStyle({width:0})
-                    this.gp.beginFill(0x005522,0.4)
-                    this.gp.drawCircle(target.x, target.y, 5)
+                if (s.target) {
+                    const target = s.target
+                    const gp = this.gp
+                    //this.gp.lineStyle({width:0})
+                    gp.lineStyle(3,0xff0000)
+                    gp.moveTo(target.x - 4, target.y - 4)
+                    gp.lineTo(target.x + 4, target.y + 4)
+                    gp.moveTo(target.x + 4, target.y - 4)
+                    gp.lineTo(target.x - 4, target.y + 4)
+                    gp.closePath()
+                    //this.gp.beginFill(0x005522,0.4)
+                    //this.gp.drawCircle(target.x, target.y, 5)
                 }
             })
         }

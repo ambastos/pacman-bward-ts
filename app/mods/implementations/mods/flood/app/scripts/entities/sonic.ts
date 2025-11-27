@@ -33,49 +33,59 @@ class Sonic extends Ghost {
     private createAnimations() {
         this.animator.createAnimation("walk", 200, null, () => {
             if (!this.animate) return;
+            console.log("walk animation")
             const an = this.animator.animations.get("walk");
+            this.msBetweenSprites = 200
             this.spriteFrames = 4;
             this.frameY = 0;
             if (this.frame >= this.spriteFrames)
                 this.frame = 0;
-            this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
+            //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
         });        
         this.animator.createAnimation("run", 100, null, () => {
             if (!this.animate) return;
+            console.log("run animation")
             const an = this.animator.animations.get("run");
+            this.msBetweenSprites = 100
             this.spriteFrames = 5;
             this.frameY = 0;
-            if (this.frame >= this.spriteFrames)
+            if (this.frame >= this.spriteFrames-1)
                 this.frame = 4;
-            this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
+            //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
         });
         this.animator.createAnimation("target", 200, 1500, () => {
             if (!this.animate) return;
+            console.log("target animation")
             const an = this.animator.animations.get("target");
+            this.msBetweenSprites = 200
             this.spriteFrames = 1;
             this.frameY = 1;
-            if (this.frame >= this.spriteFrames)
+            if (this.frame >= this.spriteFrames-1)
                 this.frame = 0;
-            this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
+            //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
-        });
+        }).onEnd((args:any)=>{
+            this.mode = Mode.attack
+        })
         this.animator.createAnimation("attack", 100, null, () => {
             if (!this.animate) return;
+            console.log("attack animation")
             const an = this.animator.animations.get("attack");
+            this.msBetweenSprites = 100
             this.spriteFrames = 7;
             this.frameY = 1;
-            if (this.frame >= this.spriteFrames)
+            if (this.frame >= this.spriteFrames-1)
                 this.frame = 0;
-            this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
+            //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
         });
           this.animator.createAnimation("ghost-kick", 200, null,
             (args) => {
-                //console.log("ghost-kick", args.direction, args.ghost);                
-                const ghost = args.ghost as Ghost
-                ghost.moving = false
+                console.log("ghost-kick animation   ", args.direction, args.ghost);    
+                this.mode = Mode.idle            
+                const ghost = args.ghost as Ghost               
                 const velocity = ghost.fastSpeed * 1.5
                 switch (this.direction) {
                     case "left":
@@ -93,12 +103,19 @@ class Sonic extends Ghost {
                 }
             }
         );
-        this.animator.play("walk");
+        
+        new Timer(()=>{
+            this.animator.play("walk");
+        }, 500)
+    }
+    reset(fullGameReset?: boolean): void {
+        super.reset()
+        this.setTarget(null)
     }
     registerEventListeners(): void {
         super.registerEventListeners()
         this.emitter.on("ghost-kick", this.onGhostKick.bind(this))
-    }
+    }        
     setDefaultMode(): void {
         this.allowCollision = true
         this.defaultMode = Mode.idle
@@ -152,6 +169,8 @@ class Sonic extends Ghost {
                 targetDef.type = "ghost";
             }
         }    
+        //for debug
+        targetDef.type = "ghost"
         return targetDef as TargetDef
     }
     setSpriteAnimationStats(): void {
@@ -216,6 +235,8 @@ class Sonic extends Ghost {
     getTarget(name: string, gridPosition: ObservablePoint, pacmanGridPosition: ObservablePoint, 
             mode: string): ObservablePoint<Point> | undefined {
         let targetPosition = createObservablePoint(this, this.x, this.y)
+        //debug
+        
         if (this.targetDef.type == "point") {
             const wayCells = getMazeWays(this.flood.gc.maze!)
             const way = wayCells[ Math.floor(Math.random() * wayCells.length) ]
@@ -236,42 +257,48 @@ class Sonic extends Ghost {
                 }
             })
 
-            this.targetDef.targetEntity = target!
+            this.target = target!
             return target!.getGridPosition()
         }else if (this.targetDef.type ==  "pacman") {
             const pacman = this.flood.gc.pacman
-            this.targetDef.targetEntity = pacman
+            this.target = pacman
             return pacman.getGridPosition() 
         }
             
         return undefined    
     }   
     update(elapsedMs:number) {
-        super.update(elapsedMs)
-        if (this.mode == Mode.idle) {
-            this.animator.play("walk")
+        super.update(elapsedMs)        
+        if (this.mode == Mode.idle) {            
+            if (!this.animator.isPlaying("walk"))
+                this.animator.play("walk")
         }else if (this.mode == Mode.chase){
-            this.animator.play("run")
+            if (!this.animator.isPlaying("run"))
+                this.animator.play("run")
         }else if (this.mode == Mode.attack){
-            this.animator.play("attack")
+            if (!this.animator.isPlaying("attack"))
+                this.animator.play("attack")
         }else if (this.mode == Mode.target) {
-            this.animator.play("target")
+            if (!this.animator.isPlaying("target"))
+                this.animator.play("target")
         } 
         this.animator.update()
     }
     handleMovement(elapsedMs: number): ObservablePoint{
         const point = super.handleMovement(elapsedMs)
-        if (this.target && this.calculateDistance(this.getGridPosition(), 
+        if (this.target && !this.seenTarget 
+            && this.calculateDistance(this.getGridPosition(), 
             this.target.getGridPosition()) < 4) {
-            this.mode = Mode.attack
+            this.mode = Mode.target 
+            this.seenTarget = true           
         }
         return point
     }
     checkCollision(position: ObservablePoint, target: MovableEntity): void {
-        if (!target.allowCollision) return
+        if (!target || !target.allowCollision) return
         if (this.calculateDistance(position, target.getGridPosition()) < 1
             && this.allowCollision) {
-            if (target instanceof Ghost) 
+            if (target instanceof Ghost && target.mode != Mode.eyes) 
                 this.emitter.emit(`ghost-kick`,target)
             else if (target instanceof Pacman)
                 this.emitter.emit('pacman-death')
@@ -291,7 +318,6 @@ class Sonic extends Ghost {
       
         this.setTexture(this.name!, this.direction, updatedProperties.frame, "", this.frameY,this.width, this.height)  
     }
-    
 }
 export default Sonic
 
@@ -299,6 +325,5 @@ type TargetDef = {
     type: "point" | "pacman" | "ghost"
     nextTargetTime:number
     targetPoint?:ObservablePoint | undefined
-    targetEntity?:MovableEntity | undefined
     targetReached?:boolean         
 }
