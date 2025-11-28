@@ -1,11 +1,14 @@
-import { Container, DisplayObject, Graphics, Polygon, Sprite, Texture } from "pixi.js"
+import { Container, DisplayObject, Graphics, Point, Polygon, Sprite, Texture } from "pixi.js"
+import '@pixi/graphics-extras'
 import WavesManager from "./wavesManager.ts"
 import Maze from "../../../../../../../scripts/mazes/maze.ts"
 import EntitiesManager from "./entitiesManager.ts"
 import { getMazeWays } from "../utils/util.ts"
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
 import { ObjectsGroup } from "../types/types.ts"
+import { createObservablePoint, getGridPosition } from "../../../../../../../scripts/utilities/utils.ts"
 
+const gp2 = new Graphics()
 class Wave extends Sprite {
     speedY = 15    
     startTime = 0
@@ -17,7 +20,7 @@ class Wave extends Sprite {
     wavesManager: WavesManager
     gp: Graphics
     container: Container
-    startTopY: number
+    startTopX: number
     duration!:number
     elements:Sprite[] = []
     queuedList:any[] = []
@@ -39,10 +42,12 @@ class Wave extends Sprite {
         //if (this.container.children.length > 0) 
         this.container.addChild(this.gp)
 
-        this.startTopY = Math.PI * 2
+        this.startTopX = Math.PI * 2
    
         this.generateBubbles()
         this.wavesManager.tryToGenerateEntities() 
+
+        this.gp.addChild(gp2)
     }
     queueElement(type:string, element:Exclude<Sprite, MovableEntity>) {
         const id = Date.now()
@@ -153,70 +158,90 @@ class Wave extends Sprite {
         this.visible = true
     }
     draw() { 
-        const gp = this.gp        
+        const gp = this.gp  
         gp.clear() 
+        gp2.clear()
+        
         const tileSize = this.maze.tileSize
-        if (this.height < 4)
+        let boundsChanges = this.maze.bounds.right.map((e:any ,i,arr:any[])=>{    
+            const next = i < arr.length - 1 ? arr[i+1]?.x !=e.x : true     
+            if (next )               
+                return {x:e.x, y:e.y}           
+        }).filter(e=>e!=undefined)
+
+        if (this.height < 4) 
             return
         let bounds = this.maze.getPixelBounds(this.x, this.y)
-        // this.x = bounds.left[0].x 
-        // this.width = bounds.right[0].x
+        let firstPoint
         if (bounds.left == null) {
             bounds.left = [{x: this.x, y: this.y}]
             bounds.right = [{x: this.width, y: this.y}] 
         }
         let x = bounds.left[0].x + tileSize/2
         let y= bounds.left[0].y + (this.y - bounds.left[0].y)
-        const points = []        
+        const pointsData:Point[] = []        
         let percent = 0.1
-        // y += 2 * Math.sin(this.startTopY) 
-        // points.push(x,y)
-        //This create the wave itself
+    //This create the wave itself
         let index = 0   
         let coefX = 2, coefY = 1.2
         gp.lineStyle(2,0xffffff)
+        
         while(x <= bounds.right[0].x) {  
             if (index == 0) {                
-                x-=this.startTopY;
+                x-=this.startTopX;
             } 
             y = this.y            
-            //points.push(x,y)             
             for (let i=0; i < Math.PI; i+=Math.PI*percent) {
                 x +=coefX * Math.sin(i ) 
-                y +=coefY * Math.cos(i)     
-                points.push(x,y)
+                y +=coefY * Math.cos(i)                   
+                if (x > bounds.left[0].x + tileSize/2 && 
+                    x <= bounds.right[0].x + tileSize/2
+                ) {                    
+                    if (pointsData.length == 0)
+                        firstPoint = {x:x,y:y}
+                    pointsData.push(new Point(x,y) )
+                }          
             }
             index++
         }
-        //gp.lineStyle(0,0x000000, 0)
-        //TOP bound
-        points.push(x,y)
+    //end Wave
         x = bounds.right[0].x + tileSize/2
-        points.push(x,y)
-        //Right BOUNDs
-        let y2, lastY = y, prevBounds
+
+        pointsData.push(new Point(x,y) )
+        x = bounds.right[0].x + tileSize/2
+
+    //Right BOUNDs
+        let y2, lastY = y, prevBounds        
         for (let h=0; h < this.height; h+=tileSize) {
             y2 = lastY +  h
             prevBounds = bounds
             bounds = this.maze.getPixelBounds(x, y2)
             if (!bounds.right || bounds.right[0].y < this.y) 
                 continue
-            y = bounds.right[0].y
+            y = bounds.right[0].y 
             if (prevBounds?.right && prevBounds.right[0].x != bounds.right[0].x) {
-                x = prevBounds.right[0].x + tileSize/2
-                //y = prevBounds.right[0].y
-                points.push(x,y)
+                x = prevBounds.right[0].x + tileSize * 0.5
+                const find =  boundsChanges.map((e,i)=>{                    
+                if (e.y * tileSize+tileSize ==bounds.right[0].y)
+                        return i
+                }).find(e=>e!=undefined)
+                if (find! % 2 == 0 )
+                    y+=tileSize * 0.5  
+                else 
+                    y-=tileSize * 0.5                
+                pointsData.push(new Point(x,y) )
             }
-            x = bounds.right[0].x + tileSize/2
-            points.push(x,y)
+            x = bounds.right[0].x + tileSize * 0.5
+            pointsData.push(new Point(x,y) )
         }
-        //x += tileSize
-        //points.push(x, y)
-        //BOTTOM bound
+     //BOTTOM bound (RIGHT)
+        pointsData.push(new Point(x,y+tileSize * 0.5) )
+    //BOTTOM bound (LEFT)
         bounds = this.maze.getPixelBounds(x, y)        
-        x -= bounds.right[0].x + tileSize/2
-        points.push(x,y)
-        //Left Bounds
+        x -= bounds.right[0].x
+        pointsData.push(new Point(x,y+tileSize * 0.5) )
+
+    //Left Bounds
         lastY = y 
         let nextBounds
         for (let h=0; h < this.height; h+=tileSize) {
@@ -227,34 +252,73 @@ class Wave extends Sprite {
                 continue
             y = bounds.left[0].y 
             x = bounds.left[0].x + tileSize/2//+this.startTopY
-            points.push(x,y)
-            if (nextBounds?.left && nextBounds.left[0].x != bounds.left[0].x) {
+            const find =  boundsChanges.map((e,i)=>{                    
+            if (e.y * tileSize+tileSize ==bounds.left[0].y)
+                return i
+            }).find(e=>e!=undefined)                
+                if (find! % 2 == 0)
+                y += tileSize * 0.5
+            else 
+                y -=tileSize * 0.5
+            pointsData.push(new Point(x,y))
+            if (nextBounds?.left && nextBounds.left[0].x != bounds.left[0].x) {                
                 x = nextBounds.left[0].x + tileSize/2
-                points.push(x,y)
+                pointsData.push(new Point(x,y))
             }
         }
-        //x = this.x
-        //y = this.y
-        //Close the path
-        if (bounds.left) {
-            x = bounds.left[0].x + tileSize/2
-            y = bounds.left[0].y
-            points.push(x,y)
-        }
-        const poly = new Polygon(points)
-        gp.beginFill(0x56DBE3,0.5)
-        gp.drawShape(poly)
 
+        // gp2.lineStyle({width:1,color:0xff0000}) 
+        // gp2.moveTo(points[0],points[1])
+        // for (let i =0; i < points.length; i++) {
+        //     gp2.lineTo(points[i],points[++i]) 
+        // }          
+        // gp2.lineTo(firstPoint?.x, firstPoint?.y)
+        // const pointsData:Point[] = []
+        // points.forEach((e,i,arr)=>{
+        //     if (i % 2 !=0) 
+        //         pointsData.push(new Point(arr[i-1],e))
+        // })
+        gp.beginFill(0x56DBE3,0.5)        
+        //gp.lineStyle({width:2, color:0x00ff00})
+        gp.drawRoundedShape!(pointsData, Math.PI)         
+        gp.endFill()
+
+        //  draw a Hole to not includes the ghost house
+        this.maze.ghostHouses.forEach((house:any)=>{
+            const top = this.maze.getPixelCoordinates(house.x1, house.y1)
+            const bottom = this.maze.getPixelCoordinates(house.x1, house.y2)
+            const right = this.maze.getPixelCoordinates(house.x2, house.y2)
+            if (bottom.y >= firstPoint!.y ) {                
+                gp.beginHole()
+                gp.lineStyle(2,0xff0000, 0.8)
+                gp.moveTo(bottom.x,bottom.y)
+                gp.lineTo(right.x, bottom.y)
+                if (top.y >= firstPoint!.y) {
+                    gp.lineTo(right.x, top.y)
+                    gp.lineTo(top.x, top.y)
+                    gp.lineTo(bottom.x, bottom.y)
+                }else { 
+                    gp.lineTo(right.x, firstPoint!.y)
+                    gp.lineTo(bottom.x, firstPoint!.y)
+                    gp.lineTo(bottom.x, bottom.y)
+                }
+                gp.endHole()
+            }  
+        })  
+
+        //for debug
+        // gp.lineStyle(2,0x00ff00)
+        // gp.drawRect(this.x, this.y, this.width, this.height)
         //Interval to draw the waves in mileseconds
         const shouldChange = Date.now() - this.lastTime >= 200
         if (shouldChange) {
             this.lastTime = Date.now()            
-            if(this.startTopY ==  Math.PI * 2) {
-               this.startTopY = Math.PI
-            }else if (this.startTopY == Math.PI) {  
-                this.startTopY = 0
+            if(this.startTopX ==  Math.PI * 2) {
+               this.startTopX = Math.PI
+            }else if (this.startTopX == Math.PI) {  
+                this.startTopX = 0
             }else {
-                this.startTopY = Math.PI * 2
+                this.startTopX = Math.PI * 2
             }
         }
     }

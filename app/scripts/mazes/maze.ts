@@ -1,5 +1,5 @@
-import { Coordinate } from "../characters/types.ts"
-import { getGridPosition } from "../utilities/utils.ts"
+import { ObservablePoint } from "pixi.js"
+import { createObservablePoint, getGridPosition } from "../utilities/utils.ts"
 
 class Maze {
     width!: number
@@ -9,6 +9,7 @@ class Maze {
     rows:number
     cols:number
     tileSize!: number
+    /**Ghost houses boundaries in grid coordinates */
     ghostHouses: any
     pixelBounds: any
     constructor(mazePrp: any) {        
@@ -46,37 +47,37 @@ class Maze {
         this.bounds = bounds
         this.pixelBounds = pixelBounds
     }
-    #createLeftRightBounds(bounds: { left: Coordinate[]; right: Coordinate[] }, 
-            pixelBounds: { left: Coordinate[]; right: Coordinate[] }, holes: string | any[], row: number, lastCol: number) {
+    #createLeftRightBounds(bounds: { left: ObservablePoint[]; right: ObservablePoint[] }, 
+            pixelBounds: { left: ObservablePoint[]; right: ObservablePoint[] }, holes: string | any[], row: number, lastCol: number) {
         if (holes.length > 0) {
             bounds.left.push(
-                { x: holes[0].x - 1, y: row }
+                createObservablePoint(this, holes[0].x - 1, row)
             )               
             bounds.right.push(
-                { x: holes[holes.length - 1].x+1, y: row } 
+                createObservablePoint(this, holes[holes.length - 1].x+1, row)
             )            
             pixelBounds.left.push(
-                { x: (holes[0].x - 1) * this.tileSize, y: row * this.tileSize }
+                createObservablePoint(this, (holes[0].x - 1) * this.tileSize, row* this.tileSize)
             )
             pixelBounds.right.push(
-                { x: (holes[holes.length - 1].x+1) * this.tileSize, y: row * this.tileSize} 
+                createObservablePoint(this, (holes[holes.length - 1].x+1) * this.tileSize, row*this.tileSize)
             )
         } else {
             bounds.left.push(
-                { x: 0, y: row }
+                createObservablePoint(this,0,row)
             )
             bounds.right.push(
-                { x: lastCol, y: row }
+                createObservablePoint(this,lastCol,row)
             )
             pixelBounds.left.push(
-                { x: 0, y: row * this.tileSize}
+                createObservablePoint(this,0,row * this.tileSize)
             )
             pixelBounds.right.push(
-                { x: lastCol * this.tileSize, y: row * this.tileSize }
+                createObservablePoint(this, lastCol * this.tileSize,row * this.tileSize)
             )
         }
     }
-    private createTopBounds(bounds: { top: { x: any; y: number }[] }, pixelBounds: { top: { x: number; y: number }[] }, holes: string | any[], lastCol: number) {
+    private createTopBounds(bounds: { top: { x: number; y: number }[] }, pixelBounds: { top: { x: number; y: number }[] }, holes: string | any[], lastCol: number) {
         if (holes.length > 0) {
             bounds.top.push({ x: 1, y: 0 })
             for (let i = 0; i < holes.length; i++) {
@@ -152,6 +153,12 @@ class Maze {
             y:(y / this.tileSize) + 0.5
         }
     }
+    /**
+     * Gets the pixel position from GridPosition
+     * @param x GridPosition.x
+     * @param y GridPostion.y
+     * @returns 
+     */
     getPixelCoordinates(x: number,y: number) {
         return {x: x * this.tileSize, y: y * this.tileSize}
     }    

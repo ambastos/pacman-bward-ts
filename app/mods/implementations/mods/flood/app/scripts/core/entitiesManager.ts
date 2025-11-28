@@ -20,6 +20,7 @@ class EntitiesManager {
         this.entities.forEach(e=>{
             e.moving = true
             e.display = true
+            e.animate = true
             e.allowCollision = true
         }) 
     }
@@ -57,6 +58,7 @@ class EntitiesManager {
         entities.forEach((e)=>{
             e.name = "sonic"
             e.moving = true
+            e.animate = true
             this.addEntity(e)            
         })
     }
@@ -91,6 +93,7 @@ class EntitiesManager {
     stop() {
         //clear all entities
         this.entities.forEach(e=>{
+            e.animate = false
             e.moving = false            
         })
     }

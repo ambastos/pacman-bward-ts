@@ -202,7 +202,8 @@ class WavesManager {
                     const target = s.target
                     const gp = this.gp
                     //this.gp.lineStyle({width:0})
-                    gp.lineStyle(3,0xff0000)
+                    gp.lineStyle(2,0xffffff)
+                    gp.beginFill(0xff0000, 0.7)
                     gp.moveTo(target.x - 4, target.y - 4)
                     gp.lineTo(target.x + 4, target.y + 4)
                     gp.moveTo(target.x + 4, target.y - 4)

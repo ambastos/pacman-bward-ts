@@ -1,4 +1,4 @@
-import { ObservablePoint, Rectangle } from "pixi.js"
+import { BaseImageResource, CanvasResource, ICanvas, ObservablePoint, Rectangle, Texture } from "pixi.js"
 import GameCoordinator from "../core/gameCoordinator.ts"
 import MovableEntity from "../characters/movableEntity.ts"
 
@@ -332,6 +332,30 @@ class Debugger {
         //ctx.stroke()
         ctx.restore()       
     }    
+
+    getImageData(texture:Texture) {
+        const resource =  (texture.baseTexture.resource as CanvasResource)        
+        const canvas = resource.source as ICanvas
+        const context = canvas.getContext("2d") 
+        const w = canvas.width, h = canvas.height;        
+        const threshold = 255
+
+        let imageData = context!.getImageData(0, 0, w, h);
+        //create array
+        let hitmap = new Uint32Array(Math.ceil(w * h / 32));
+        //fill array
+        for (let i = 0; i < w * h; i++) {
+            //lower resolution to make it faster
+            let ind1 = i % 32;
+            let ind2 = i / 32 | 0;        
+            //check every 4th value of image data (alpha number; opacity of the pixel)
+            //if it's visible add to the array
+            if (imageData.data[i * 4 + 3]! >= threshold) {
+                hitmap[ind2] = hitmap[ind2]! | (1 << ind1);
+                    console.log(`hitmap[${ind2}]:`, hitmap[ind2]);
+            }
+        }
+    }
      //@ts-nocheck
     notifyPacmanMovement() {
         //@ts-ignore
