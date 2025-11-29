@@ -60,7 +60,7 @@ class Flood extends Mod{
     
     #registerListeners() {
        this.emitter = this.gc.emitter
-       this.#changePacmanDeathSequence() 
+       this.#pacmanDeathSequenceEvent() 
        this.emitter.on("eat-ghost",(detail:any)=>{
         const em = this.wavesManager?.entitiesManager
          if (em) {
@@ -89,8 +89,15 @@ class Flood extends Mod{
        this.emitter.on("flood-start",()=>{
         this.wavesManager.restart()
        })
+       this.emitter.on("flood-end",()=>{
+        this.ghosts.forEach(g=>{
+            g.allowCollision = true
+            g.skew.set(0,0)
+            g.animate = true
+        })
+       })
     }  
-    #changePacmanDeathSequence() {
+    #pacmanDeathSequenceEvent() {
         this.gc.emitter.removeAllListeners("pacman-death")
         const _this = this 
         this.gc.emitter.on("advance-level",()=>{
@@ -147,8 +154,8 @@ class Flood extends Mod{
     } 
     stop() { 
         super.stop()
-        this.gp.clear() 
-        this.wavesManager.stop()
+        this.gp.clear()         
+        this.emitter.emit("flood-end")
     }
     generateWave(timeToStartMS?: number) {
         this.changeState(States.IDLE_STATE)

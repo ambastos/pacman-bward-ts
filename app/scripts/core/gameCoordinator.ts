@@ -351,13 +351,15 @@ class GameCoordinator {
     this.stage.addChild(
       this.pacman,
       this.blinky,
-      this.pinky,
-      this.inky, 
-      this.clyde,
+      // this.pinky,
+      // this.inky, 
+      // this.clyde,
       this.fruit,
     )
   
-    this.ghosts = [this.blinky, this.pinky, this.inky, this.clyde];
+    this.ghosts = [this.blinky, 
+     // this.pinky, this.inky, this.clyde
+    ];
 
     this.scaredGhosts = [];
     this.eyeGhosts = 0;

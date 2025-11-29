@@ -17,7 +17,7 @@ class IdleState extends State {
         if(timeToStartMS! >=0)
             waveTimeMs = timeToStartMS
         else 
-            while ((waveTimeMs = Math.random() * 15) <=10 ){}   
+            while ((waveTimeMs = Math.random() * 15) <=5 ){}   
         //between 15 and 40 seconds to generate a new wave     
         this.wavesManager.waveTime = waveTimeMs! * 1000
 

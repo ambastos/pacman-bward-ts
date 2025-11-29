@@ -58,6 +58,9 @@ class WavesManager {
             const pacman = args.entity           
             //console.log("animation", args)
         })
+        this.emitter.on("flood-end",()=>{
+            this.stop()
+        })
     }    
     restart() {
         this.entitiesManager.restart()
@@ -172,8 +175,7 @@ class WavesManager {
         this.wave = null
         this.waveTime = null    
         this.nextWaveTime = null
-        this.gc.ghostCombo = 0 
-        this.entitiesManager.stop()  
+        this.gc.ghostCombo = 0          
     }
     update(elapsedMs: number) {
         if (this.wave) {

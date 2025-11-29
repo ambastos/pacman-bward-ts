@@ -543,6 +543,7 @@ function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" 
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var EntitiesManager = /*#__PURE__*/function () {
   function EntitiesManager(gc) {
+    var _this = this;
     _classCallCheck(this, EntitiesManager);
     _defineProperty(this, "gc", void 0);
     _defineProperty(this, "queuedList", []);
@@ -550,6 +551,9 @@ var EntitiesManager = /*#__PURE__*/function () {
     _defineProperty(this, "container", void 0);
     this.gc = gc;
     this.container = gc.stage;
+    this.gc.emitter.on("flood-end", function () {
+      _this.clearEntities();
+    });
   }
   return _createClass(EntitiesManager, [{
     key: "restart",
@@ -595,13 +599,13 @@ var EntitiesManager = /*#__PURE__*/function () {
   }, {
     key: "dequeAllEntities",
     value: function dequeAllEntities() {
-      var _this = this;
+      var _this2 = this;
       var entities = this.dequeEntitiesBy();
       entities.forEach(function (e) {
         e.name = "sonic";
         e.moving = true;
         e.animate = true;
-        _this.addEntity(e);
+        _this2.addEntity(e);
       });
     }
   }, {
@@ -612,12 +616,12 @@ var EntitiesManager = /*#__PURE__*/function () {
   }, {
     key: "dequeEntitiesBy",
     value: function dequeEntitiesBy(name) {
-      var _this2 = this;
+      var _this3 = this;
       var entities = this.queuedList.filter(function (f) {
         return f.name != name;
       });
       var indexes = entities.map(function (e) {
-        return _this2.queuedList.indexOf(e);
+        return _this3.queuedList.indexOf(e);
       });
       for (var i = this.queuedList.length - 1; i >= 0; i--) {
         if (indexes.lastIndexOf(i) > -1) this.queuedList.splice(i, 1);
@@ -632,14 +636,20 @@ var EntitiesManager = /*#__PURE__*/function () {
     }
   }, {
     key: "clearEntities",
-    value: function clearEntities(name) {
-      var _this3 = this;
-      this.entities = this.entities.filter(function (e) {
-        return e.name != name;
-      });
+    value: function clearEntities() {
+      var _this4 = this;
       this.entities.forEach(function (e) {
-        _this3.container.removeChild(e);
+        if (e instanceof _sonic["default"]) {
+          //clear all timers related to sonic
+          var activeTimers = e.activeTimers;
+          activeTimers.forEach(function (t) {
+            window.clearTimeout(t.timerId);
+          });
+          activeTimers.length = 0;
+        }
+        _this4.container.removeChild(e);
       });
+      this.entities.length = 0;
     }
   }, {
     key: "hide",
@@ -651,11 +661,7 @@ var EntitiesManager = /*#__PURE__*/function () {
   }, {
     key: "stop",
     value: function stop() {
-      //clear all entities
-      this.entities.forEach(function (e) {
-        e.animate = false;
-        e.moving = false;
-      });
+      this.clearEntities();
     }
   }, {
     key: "update",
@@ -798,7 +804,7 @@ var Flood = /*#__PURE__*/function (_Mod) {
     value: function stop() {
       _superPropGet(Flood, "stop", this, 3)([]);
       this.gp.clear();
-      this.wavesManager.stop();
+      this.emitter.emit("flood-end");
     }
   }, {
     key: "generateWave",
@@ -835,7 +841,7 @@ var Flood = /*#__PURE__*/function (_Mod) {
 function _registerListeners() {
   var _this3 = this;
   this.emitter = this.gc.emitter;
-  _assertClassBrand(_Flood_brand, this, _changePacmanDeathSequence).call(this);
+  _assertClassBrand(_Flood_brand, this, _pacmanDeathSequenceEvent).call(this);
   this.emitter.on("eat-ghost", function (detail) {
     var _this3$wavesManager;
     var em = (_this3$wavesManager = _this3.wavesManager) === null || _this3$wavesManager === void 0 ? void 0 : _this3$wavesManager.entitiesManager;
@@ -865,8 +871,15 @@ function _registerListeners() {
   this.emitter.on("flood-start", function () {
     _this3.wavesManager.restart();
   });
+  this.emitter.on("flood-end", function () {
+    _this3.ghosts.forEach(function (g) {
+      g.allowCollision = true;
+      g.skew.set(0, 0);
+      g.animate = true;
+    });
+  });
 }
-function _changePacmanDeathSequence() {
+function _pacmanDeathSequenceEvent() {
   var _this4 = this;
   this.gc.emitter.removeAllListeners("pacman-death");
   var _this = this;
@@ -1373,6 +1386,9 @@ var WavesManager = /*#__PURE__*/function () {
         var pacman = args.entity;
         //console.log("animation", args)
       });
+      this.emitter.on("flood-end", function () {
+        _this.stop();
+      });
     }
   }, {
     key: "restart",
@@ -1489,7 +1505,6 @@ var WavesManager = /*#__PURE__*/function () {
       this.waveTime = null;
       this.nextWaveTime = null;
       this.gc.ghostCombo = 0;
-      this.entitiesManager.stop();
     }
   }, {
     key: "update",
@@ -1613,6 +1628,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     _defineProperty(_this, "seenTarget", false);
     _defineProperty(_this, "targetDef", void 0);
     _defineProperty(_this, "attackSpeed", void 0);
+    _defineProperty(_this, "activeTimers", []);
     _this.name = "sonic";
     _this.flood = flood;
     _this.scale.set(flood.scale);
@@ -1673,29 +1689,78 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
         _this2.frame++;
       });
-      this.animator.createAnimation("ghost-kick", 200, null, function (args) {
-        console.log("ghost-kick animation   ", args.direction, args.ghost);
+      this.animator.createAnimation("sonic-out", 80, null, function (args) {});
+      this.animator.createAnimation("ghost-kick", 40, null, function (args) {
+        var _this2$gameCoordinato;
+        //console.log("ghost-kick animation   ", args.direction, args.ghost);    
         _this2.mode = _types.Mode.idle;
         var ghost = args.ghost;
-        var velocity = ghost.fastSpeed * 1.5;
-        switch (_this2.direction) {
+        ghost.allowCollision = false;
+        var velocity = ghost.fastSpeed * 1.5 * 20;
+        var bounds = (_this2$gameCoordinato = _this2.gameCoordinator.maze) === null || _this2$gameCoordinato === void 0 ? void 0 : _this2$gameCoordinato.bounds;
+        var gridPos = ghost.getGridPosition();
+        var collides = false;
+        switch (args.direction) {
           case "left":
-            _this2.x -= velocity;
+            ghost.skew.set(Math.PI * 0.5, Math.PI * 0.5);
+            collides = bounds === null || bounds === void 0 ? void 0 : bounds.left.some(function (e) {
+              return e.x == Math.floor(gridPos.x) && e.y == Math.floor(gridPos.y);
+            });
+            if (collides) {
+              ghost.x = (gridPos.x + 0.5) * _this2.scaledTileSize;
+              //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
+            } else ghost.x -= velocity;
             break;
           case "right":
-            _this2.x += velocity;
+            ghost.skew.set(-Math.PI * 0.5, Math.PI * 0.5);
+            collides = bounds === null || bounds === void 0 ? void 0 : bounds.right.some(function (e) {
+              return e.x == Math.floor(gridPos.x) && e.y == Math.ceil(gridPos.y);
+            });
+            if (collides) {
+              ghost.x = (gridPos.x - 0.5) * _this2.scaledTileSize;
+              //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
+            } else ghost.x += velocity;
             break;
           case "up":
-            _this2.y -= velocity;
+            ghost.skew.set(0, 0);
+            collides = bounds === null || bounds === void 0 ? void 0 : bounds.top.some(function (e) {
+              return e.y == Math.ceil(gridPos.y);
+            });
+            if (collides) ghost.y = (gridPos.y + 0.5) * _this2.scaledTileSize;else ghost.y -= velocity;
             break;
           case "down":
-            _this2.y += velocity;
+            ghost.skew.set(Math.PI, Math.PI);
+            collides = bounds === null || bounds === void 0 ? void 0 : bounds.bottom.some(function (e) {
+              return e.y == Math.ceil(gridPos.y);
+            });
+            if (collides) ghost.y = (gridPos.y - 0.5) * _this2.scaledTileSize;else ghost.y += velocity;
             break;
         }
+        if (collides) {
+          var an = _this2.animator.animations.get("ghost-kick");
+          an === null || an === void 0 || an.pause();
+          ghost.mode = _types.Mode.scared;
+          ghost.scaredColor = "white";
+          //make sonic walk again
+          _this2.activeTimers.push(new _timer["default"](function () {
+            _this2.animator.play("walk");
+            _this2.scheduleGoOut();
+            //programs to go out of the maze                            
+          }, 500));
+          //make ghost came back again
+          var nextTimeGhostRespawn = Math.max(6, Math.random() * 10) * 1000;
+          _this2.activeTimers.push(new _timer["default"](function () {
+            ghost.skew.set(0, 0);
+            ghost.mode = _types.Mode.eyes;
+            ghost.moving = true;
+            ghost.allowCollision = true;
+            ghost.animate = true;
+          }, nextTimeGhostRespawn));
+        }
       });
-      new _timer["default"](function () {
+      this.activeTimers.push(new _timer["default"](function () {
         _this2.animator.play("walk");
-      }, 500);
+      }, 500));
     }
   }, {
     key: "reset",
@@ -1736,7 +1801,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
       //Logic to try to move Sonic based on his temper
 
       this.bad = Math.random() > 0.7;
-      if (this.bad) this.tint = 0xff0022;
+      if (this.bad) this.tint = 0xcc0022;
       this.targetDef = this.generateTargetType();
       this.defaultDirection = this.characterUtil.directions.left;
       this.direction = this.defaultDirection;
@@ -1827,9 +1892,8 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     key: "getTarget",
     value: function getTarget(name, gridPosition, pacmanGridPosition, mode) {
       var _this3 = this;
-      var targetPosition = (0, _utils.createObservablePoint)(this, this.x, this.y);
-      //debug
-
+      if (this.targetDef.targetReached) return;
+      //debug        
       if (this.targetDef.type == "point") {
         var wayCells = (0, _util.getMazeWays)(this.flood.gc.maze);
         var way = wayCells[Math.floor(Math.random() * wayCells.length)];
@@ -1858,17 +1922,21 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
       return undefined;
     }
   }, {
-    key: "update",
-    value: function update(elapsedMs) {
-      _superPropGet(Sonic, "update", this, 3)([elapsedMs]);
-      if (this.mode == _types.Mode.idle) {
-        if (!this.animator.isPlaying("walk")) this.animator.play("walk");
-      } else if (this.mode == _types.Mode.chase) {
-        if (!this.animator.isPlaying("run")) this.animator.play("run");
-      } else if (this.mode == _types.Mode.attack) {
-        if (!this.animator.isPlaying("attack")) this.animator.play("attack");
-      } else if (this.mode == _types.Mode.target) {
-        if (!this.animator.isPlaying("target")) this.animator.play("target");
+    key: "scheduleGoOut",
+    value: function scheduleGoOut() {}
+  }, {
+    key: "handleAnimations",
+    value: function handleAnimations() {
+      if (!this.targetDef.targetReached) {
+        if (this.mode == _types.Mode.idle) {
+          if (!this.animator.isPlaying("walk")) this.animator.play("walk");
+        } else if (this.mode == _types.Mode.chase) {
+          if (!this.animator.isPlaying("run")) this.animator.play("run");
+        } else if (this.mode == _types.Mode.attack) {
+          if (!this.animator.isPlaying("attack")) this.animator.play("attack");
+        } else if (this.mode == _types.Mode.target) {
+          if (!this.animator.isPlaying("target")) this.animator.play("target");
+        }
       }
       this.animator.update();
     }
@@ -1896,10 +1964,18 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
       ghost.moving = false;
       ghost.allowCollision = false;
       ghost.animate = false;
+      this.targetDef.targetReached = true;
+      this.target = null;
       this.animator.play("ghost-kick", {
         direction: this.direction,
         ghost: ghost
       });
+    }
+  }, {
+    key: "update",
+    value: function update(elapsedMs) {
+      _superPropGet(Sonic, "update", this, 3)([elapsedMs]);
+      this.handleAnimations();
     }
   }, {
     key: "draw",
@@ -2199,7 +2275,7 @@ var IdleState = /*#__PURE__*/function (_State) {
       //this.flood.container.children.length = 1        
       this.flood.container.addChildAt(wave, 0);
       var waveTimeMs;
-      if (timeToStartMS >= 0) waveTimeMs = timeToStartMS;else while ((waveTimeMs = Math.random() * 15) <= 10) {}
+      if (timeToStartMS >= 0) waveTimeMs = timeToStartMS;else while ((waveTimeMs = Math.random() * 15) <= 5) {}
       //between 15 and 40 seconds to generate a new wave     
       this.wavesManager.waveTime = waveTimeMs * 1000;
       var durationMs;
@@ -4869,8 +4945,14 @@ var GameCoordinator = /*#__PURE__*/function () {
         this.clyde = new _ghost["default"](this, 'clyde', this.level, new _characterUtil["default"]());
         this.fruit = new _pickup["default"]('fruit', 13.5, 17, 100, this);
       }
-      this.stage.addChild(this.pacman, this.blinky, this.pinky, this.inky, this.clyde, this.fruit);
-      this.ghosts = [this.blinky, this.pinky, this.inky, this.clyde];
+      this.stage.addChild(this.pacman, this.blinky,
+      // this.pinky,
+      // this.inky, 
+      // this.clyde,
+      this.fruit);
+      this.ghosts = [this.blinky
+      // this.pinky, this.inky, this.clyde
+      ];
       this.scaredGhosts = [];
       this.eyeGhosts = 0;
       if (this.firstGame) {

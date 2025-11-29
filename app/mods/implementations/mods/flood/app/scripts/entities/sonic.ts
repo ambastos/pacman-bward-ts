@@ -20,6 +20,7 @@ class Sonic extends Ghost {
     seenTarget = false
     targetDef!:TargetDef
     attackSpeed!:number
+    activeTimers:Timer[]=[]
     constructor(flood:Flood) {        
         super(flood.gc,"sonic",flood.gc.level, new CharacterUtil())        
         this.name = "sonic"
@@ -81,32 +82,90 @@ class Sonic extends Ghost {
             //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
         });
-          this.animator.createAnimation("ghost-kick", 200, null,
+        this.animator.createAnimation("sonic-out", 80,null, (args)=>{
+
+        })
+        this.animator.createAnimation("ghost-kick", 40, null,
             (args) => {
-                console.log("ghost-kick animation   ", args.direction, args.ghost);    
+                //console.log("ghost-kick animation   ", args.direction, args.ghost);    
                 this.mode = Mode.idle            
-                const ghost = args.ghost as Ghost               
-                const velocity = ghost.fastSpeed * 1.5
-                switch (this.direction) {
+                const ghost = args.ghost as Ghost    
+                ghost.allowCollision = false
+                
+                const velocity = ghost.fastSpeed * 1.5 * 20
+                const bounds = this.gameCoordinator.maze?.bounds
+                const gridPos = ghost.getGridPosition()
+                let collides = false
+                switch (args.direction) {
                     case "left":
-                        this.x -= velocity     
+                        ghost.skew.set(Math.PI*0.5,Math.PI*0.5)                        
+                        collides = bounds?.left.some((e:any)=>
+                            e.x == Math.floor(gridPos.x) && e.y == Math.floor(gridPos.y))!
+                        if (collides) {
+                            ghost.x = (gridPos.x+0.5) * this.scaledTileSize
+                            //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
+                        }else    
+                            ghost.x -= velocity
                         break;
                     case "right":
-                        this.x += velocity     
+                        ghost.skew.set(-Math.PI*0.5,Math.PI * 0.5)
+                        collides = bounds?.right.some((e:any)=>
+                            e.x == Math.floor(gridPos.x) && e.y == Math.ceil(gridPos.y))!
+                        if (collides) {
+                            ghost.x = (gridPos.x - 0.5) * this.scaledTileSize
+                            //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
+                        }else    
+                            ghost.x += velocity     
                         break;    
                     case "up":
-                        this.y -= velocity     
+                        ghost.skew.set(0,0)
+                        collides = bounds?.top.some((e:any)=>e.y == Math.ceil(gridPos.y))!
+                        if (collides)
+                            ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
+                        else    
+                            ghost.y -= velocity     
                         break;
                     case "down":
-                        this.y += velocity     
-                        break;    
-                }
+                        ghost.skew.set(Math.PI, Math.PI)
+                        collides = bounds?.bottom.some((e:any)=>e.y == Math.ceil(gridPos.y))!
+                        if (collides)
+                            ghost.y = (gridPos.y-0.5) * this.scaledTileSize
+                        else    
+                            ghost.y += velocity     
+                        break;  
+                    }
+                    if (collides) {                        
+                        const an = this.animator.animations.get("ghost-kick")
+                        an?.pause()
+                        ghost.mode = Mode.scared
+                        ghost.scaredColor = "white" 
+                        //make sonic walk again
+                        this.activeTimers.push(
+                            new Timer(()=>{
+                                this.animator.play("walk");
+                                this.scheduleGoOut()
+                                //programs to go out of the maze                            
+                            }, 500) 
+                        )
+                        //make ghost came back again
+                        const nextTimeGhostRespawn = Math.max(6, Math.random() * 10)* 1000
+                        this.activeTimers.push(
+                            new Timer(()=>{                            
+                                ghost.skew.set(0,0)
+                                ghost.mode = Mode.eyes
+                                ghost.moving = true
+                                ghost.allowCollision = true
+                                ghost.animate = true
+                            }, nextTimeGhostRespawn)                       
+                        )
+                    }
             }
         );
-        
-        new Timer(()=>{
-            this.animator.play("walk");
-        }, 500)
+        this.activeTimers.push(
+            new Timer(()=>{
+                this.animator.play("walk");
+            }, 500)
+        )
     }
     reset(fullGameReset?: boolean): void {
         super.reset()
@@ -144,7 +203,7 @@ class Sonic extends Ghost {
         
         this.bad =  Math.random() > 0.7
         if (this.bad)
-            this.tint =  0xff0022
+            this.tint =  0xcc0022
         this.targetDef = this.generateTargetType();           
 
         this.defaultDirection = this.characterUtil!.directions.left;
@@ -234,9 +293,8 @@ class Sonic extends Ghost {
     }
     getTarget(name: string, gridPosition: ObservablePoint, pacmanGridPosition: ObservablePoint, 
             mode: string): ObservablePoint<Point> | undefined {
-        let targetPosition = createObservablePoint(this, this.x, this.y)
-        //debug
-        
+        if (this.targetDef.targetReached) return       
+        //debug        
         if (this.targetDef.type == "point") {
             const wayCells = getMazeWays(this.flood.gc.maze!)
             const way = wayCells[ Math.floor(Math.random() * wayCells.length) ]
@@ -266,23 +324,27 @@ class Sonic extends Ghost {
         }
             
         return undefined    
-    }   
-    update(elapsedMs:number) {
-        super.update(elapsedMs)        
-        if (this.mode == Mode.idle) {            
-            if (!this.animator.isPlaying("walk"))
-                this.animator.play("walk")
-        }else if (this.mode == Mode.chase){
-            if (!this.animator.isPlaying("run"))
-                this.animator.play("run")
-        }else if (this.mode == Mode.attack){
-            if (!this.animator.isPlaying("attack"))
-                this.animator.play("attack")
-        }else if (this.mode == Mode.target) {
-            if (!this.animator.isPlaying("target"))
-                this.animator.play("target")
+    }  
+    private scheduleGoOut() {
+
+    }     
+    private handleAnimations() {
+        if (!this.targetDef.targetReached) {
+            if (this.mode == Mode.idle) {
+                if (!this.animator.isPlaying("walk"))
+                    this.animator.play("walk");
+            } else if (this.mode == Mode.chase) {
+                if (!this.animator.isPlaying("run"))
+                    this.animator.play("run");
+            } else if (this.mode == Mode.attack) {
+                if (!this.animator.isPlaying("attack"))
+                    this.animator.play("attack");
+            } else if (this.mode == Mode.target) {
+                if (!this.animator.isPlaying("target"))
+                    this.animator.play("target");
+            }
         } 
-        this.animator.update()
+        this.animator.update();
     }
     handleMovement(elapsedMs: number): ObservablePoint{
         const point = super.handleMovement(elapsedMs)
@@ -307,8 +369,14 @@ class Sonic extends Ghost {
     private onGhostKick(ghost:Ghost) {
         ghost.moving = false
         ghost.allowCollision = false  
-        ghost.animate = false      
+        ghost.animate = false
+        this.targetDef.targetReached = true  
+        this.target = null    
         this.animator.play("ghost-kick", {direction: this.direction, ghost:ghost})
+    }
+    update(elapsedMs:number) {
+        super.update(elapsedMs)  
+        this.handleAnimations();
     }
     draw(interp: number): void {
         this.visible = this.display

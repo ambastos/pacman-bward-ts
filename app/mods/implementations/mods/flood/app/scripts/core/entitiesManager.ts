@@ -14,7 +14,10 @@ class EntitiesManager {
     container:Container
     constructor(gc:GameCoordinator) {
         this.gc = gc
-        this.container = gc.stage
+        this.container = gc.stage        
+        this.gc.emitter.on("flood-end",()=>{
+            this.clearEntities()
+        })
     }      
     restart() {
         this.entities.forEach(e=>{
@@ -79,11 +82,19 @@ class EntitiesManager {
         this.entities.push(entity)
         this.container.addChild(entity)
     }
-    clearEntities(name?:string) {
-        this.entities = this.entities.filter(e=>e.name != name)
+    clearEntities() {        
         this.entities.forEach(e=>{
+            if (e instanceof Sonic) {
+                //clear all timers related to sonic
+                const activeTimers =  (e as Sonic).activeTimers
+                activeTimers.forEach(t=>{
+                    window.clearTimeout(t.timerId)
+                })
+                activeTimers.length = 0 
+            }
             this.container.removeChild(e)
         })
+        this.entities.length = 0
     }
     hide() {
         this.entities.forEach(e=>{
@@ -91,11 +102,7 @@ class EntitiesManager {
         })
     }
     stop() {
-        //clear all entities
-        this.entities.forEach(e=>{
-            e.animate = false
-            e.moving = false            
-        })
+        this.clearEntities()        
     }
     update(elapsedMs:number) {
         
