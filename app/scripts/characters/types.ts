@@ -5,6 +5,7 @@ export enum Mode{
   scared = "scared",
   eyes = "eyes",
   leaving = "leaving",
+  entering = "entering",
 
   target = "target",
   attack = "attack"

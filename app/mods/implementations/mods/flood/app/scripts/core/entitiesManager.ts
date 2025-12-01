@@ -6,11 +6,12 @@ import { getMazeWays } from "../utils/util.ts";
 import { ObjectsGroup } from "../types/types.ts";
 import { createObservablePoint } from "../../../../../../../scripts/utilities/utils.ts";
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
+import { Mode } from "../../../../../../../scripts/characters/types.ts";
 
 class EntitiesManager {
     gc!:GameCoordinator
-    queuedList:MovableEntity[] = []
-    entities:MovableEntity[] = []
+    queuedList:EntityDefs[] = []
+    entitiesDef:EntityDefs[] = []
     container:Container
     constructor(gc:GameCoordinator) {
         this.gc = gc
@@ -20,7 +21,8 @@ class EntitiesManager {
         })
     }      
     restart() {
-        this.entities.forEach(e=>{
+        this.entitiesDef.forEach(def=>{
+            const e = def.entity
             e.moving = true
             e.display = true
             e.animate = true
@@ -52,24 +54,30 @@ class EntitiesManager {
             //const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
             sonic.reset()
             sonic.position.set(position.x, position.y)
-            this.queueEntity(sonic)
+            const defs = { 
+                entity: sonic,
+                startAppearsInMs: 5000//Change to random in ms
+                
+            } as EntityDefs
+            this.queueEntity(defs)
             //wave.queueElement("entity", sonic)
         } 
     }
     dequeAllEntities() {
         const entities = this.dequeEntitiesBy()                       
-        entities.forEach((e)=>{
+        entities.forEach((def)=>{
+            const e = def.entity
             e.name = "sonic"
             e.moving = true
             e.animate = true
-            this.addEntity(e)            
+            this.addEntityDef(def)            
         })
     }
-    queueEntity(entity:MovableEntity) {
+    queueEntity(entity:EntityDefs) {
         this.queuedList.push(entity)
     }
-    dequeEntitiesBy(name?:string):MovableEntity[] {
-        const entities = this.queuedList.filter(f=>f.name != name)
+    dequeEntitiesBy(name?:string):EntityDefs[] {
+        const entities = this.queuedList.filter(f=>f.entity.name != name)
         const indexes = entities
             .map((e)=>this.queuedList.indexOf(e))
         for (let i = this.queuedList.length-1; i >=0; i--) {
@@ -78,12 +86,16 @@ class EntitiesManager {
         }   
         return entities
     }
-    addEntity(entity:MovableEntity) {
-        this.entities.push(entity)
-        this.container.addChild(entity)
+    addEntityDef(entityDef:EntityDefs) {
+        //Includes enter animation        
+        entityDef.timeAdded = Date.now()
+        this.entitiesDef.push(entityDef)
+        
+        //The programmed start is in update() method        
     }
     clearEntities() {        
-        this.entities.forEach(e=>{
+        this.entitiesDef.forEach(def=>{
+            const e = def.entity
             if (e instanceof Sonic) {
                 //clear all timers related to sonic
                 const activeTimers =  (e as Sonic).activeTimers
@@ -94,18 +106,39 @@ class EntitiesManager {
             }
             this.container.removeChild(e)
         })
-        this.entities.length = 0
+        this.entitiesDef.length = 0
     }
     hide() {
-        this.entities.forEach(e=>{
+        this.entitiesDef.forEach(def=>{
+            const e = def.entity
             e.display = false            
-        })
+        }) 
     }
     stop() {
         this.clearEntities()        
     }
     update(elapsedMs:number) {
-        
+        const curTime = Date.now()
+        for (let i=0;i<this.entitiesDef.length; i++ ){
+            const def = this.entitiesDef[i]
+            const entity = def!.entity
+            if (entity.parent == this.container) continue
+
+            if (curTime - def!.timeAdded! >= def!.startAppearsInMs) {
+                //Create an enter animation
+                if (entity instanceof Sonic) {
+                    entity.mode = Mode.entering
+                    this.container.addChild(entity)
+                }
+                
+            }
+        }
     }
 }
 export default EntitiesManager
+
+type EntityDefs = {
+    entity: MovableEntity,
+    timeAdded?: number, 
+    startAppearsInMs: number
+}

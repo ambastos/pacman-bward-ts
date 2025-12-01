@@ -5,7 +5,8 @@ class Maze {
     width!: number
     height!: number
     mazeArray:string[][]
-    bounds!:{top:[], left:[], right:[], bottom:[]}
+    bounds!: {top:ObservablePoint[], left:ObservablePoint[], 
+        right:ObservablePoint[], bottom:ObservablePoint []}
     rows:number
     cols:number
     tileSize!: number
@@ -23,8 +24,10 @@ class Maze {
         this.ghostHouses = mazePrp.ghostHouses
     }    
     #calculateBounds() {
-        const bounds = {top:[] as any, left:[] as any, right:[] as any, bottom:[] as any}
-        const pixelBounds = {top:[], left:[], right:[], bottom:[]}
+        const bounds = {top:[], left: [], 
+            right:[], bottom:[]}
+        const pixelBounds = {top:[], left:[], 
+            right:[], bottom:[]}
         let content, holes=[]
         let lastRow = this.mazeArray.length-1, lastCol        
         for (let row = 0; row < this.mazeArray.length; row++) {
@@ -77,62 +80,65 @@ class Maze {
             )
         }
     }
-    private createTopBounds(bounds: { top: { x: number; y: number }[] }, pixelBounds: { top: { x: number; y: number }[] }, holes: string | any[], lastCol: number) {
+    private createTopBounds(bounds: { top: ObservablePoint[] }, 
+        pixelBounds: {top:ObservablePoint[]}, holes: string | any[], lastCol: number) {
         if (holes.length > 0) {
-            bounds.top.push({ x: 1, y: 0 })
+            bounds.top.push(createObservablePoint(this, 1, 0))
             for (let i = 0; i < holes.length; i++) {
                 if (holes[(i)]) {
-                    bounds.top.push({ x: holes[i].x - 1, y: 0 })
+                    bounds.top.push(createObservablePoint(this, holes[i].x - 1, 0) )
                     pixelBounds.top.push(
-                        {x:Math.floor(holes[i].x * this.tileSize), 
-                        y:0}
+                        createObservablePoint(this,
+                            Math.floor(holes[i].x * this.tileSize),
+                            0)
                     )
                 }else{
-                    bounds.top.push({ x: lastCol, y: 0 })
+                    bounds.top.push(createObservablePoint(this, lastCol, 0))
                     pixelBounds.top.push(
-                        {x:Math.floor(lastCol * this.tileSize), y:0}
+                        createObservablePoint(this, Math.floor(lastCol * this.tileSize), 0)
                     )
                 }
             }
               
         } else {
             bounds.top.push(
-                { x: 0, y: 0 },
-                { x: lastCol, y: 0 }
+                createObservablePoint(this,0,0),
+                createObservablePoint(this,lastCol,0)
             )
             pixelBounds.top.push(
-                {x:0, y:0},
-                {x:Math.floor(lastCol * this.tileSize), y:0}
+                createObservablePoint(this,0,0),
+                createObservablePoint(this,lastCol* this.tileSize,0)
             )
         }
     }
-    private createBottomBounds(bounds: { bottom: { x: any; y: any }[] }, 
+    private createBottomBounds(bounds: { bottom: ObservablePoint[] }, 
         pixelBounds: any, holes: string | any[], lastRow: number, lastCol: number) {
         if (holes.length > 0) {
             bounds.bottom.push(
-                { x: 0, y: lastRow }
+                createObservablePoint(this,0, lastRow)
             )
             for (let i = 0; i < holes.length; i++) {
                 if (holes[(i)]) {
-                    bounds.bottom.push({ x: holes[i].x - 1, y: lastRow })
+                    bounds.bottom.push(createObservablePoint(this,holes[i].x - 1, lastRow))
                     pixelBounds.top.push(
-                        {x:Math.floor((holes[i].x -1) * this.tileSize), y:lastRow * this.tileSize}
+                        createObservablePoint(this,Math.floor((holes[i].x -1) * this.tileSize),
+                            lastRow * this.tileSize)
                     )
                 }else {
-                    bounds.bottom.push({ x: lastCol, y: lastRow })
+                    bounds.bottom.push(createObservablePoint(this,lastCol, lastRow))
                     pixelBounds.top.push(
-                        {x:Math.floor(lastCol * this.tileSize), y:lastRow * this.tileSize}
+                        createObservablePoint(this,Math.floor(lastCol * this.tileSize), lastRow * this.tileSize)
                     )
                 }
             }
         } else {
             bounds.bottom.push(
-                { x: 0, y: lastRow },
-                { x: lastCol, y: lastRow }
+                createObservablePoint(this,0, lastRow),
+                createObservablePoint(this, lastCol, lastRow)
             )
             pixelBounds.bottom.push(
-                { x: 0, y: lastRow *this.tileSize },
-                { x: lastCol * this.tileSize, y: lastRow  * this.tileSize}
+                createObservablePoint(this, 0, lastRow*this.tileSize),
+                createObservablePoint(this, lastCol * this.tileSize,  lastRow  * this.tileSize)
             )
         }
     }
@@ -155,8 +161,8 @@ class Maze {
     }
     /**
      * Gets the pixel position from GridPosition
-     * @param x GridPosition.x
-     * @param y GridPostion.y
+     * @param {x} GridPosition.x
+     * @param {y} GridPostion.y
      * @returns 
      */
     getPixelCoordinates(x: number,y: number) {

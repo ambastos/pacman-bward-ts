@@ -91,6 +91,8 @@ class WavesManager {
         })
     }
     #tryDrownEntity(entity:any, elapsedMs:number) {
+         if (!entity.allowCollision) return 
+
         const breath = entity[breathNamespace]
         const wave = this?.wave
         if (!wave || !wave.started || breath.stopped) return
@@ -121,8 +123,11 @@ class WavesManager {
             }
         }
     }
-    killEntity(entity:any) {
-        const breath = entity[breathNamespace]
+    killEntity(entity:MovableEntity) {
+        if (!entity.allowCollision) return 
+        
+        //@ts-ignore
+        const breath = entity[breathNamespace] as Breath
         if (entity instanceof Pacman) {
            // window.dispatchEvent(new Event('deathSequence'));
             this.emitter.emit("pacman-death")
@@ -198,7 +203,8 @@ class WavesManager {
             })           
         }
         if (this.gc.debug) {
-            this.entitiesManager.entities.forEach(e=>{
+            this.entitiesManager.entitiesDef.forEach(def=>{
+                const e = def.entity
                 const s =  (e as Sonic)
                 if (s.target) {
                     const target = s.target

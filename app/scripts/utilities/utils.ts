@@ -25,3 +25,23 @@ export function getAnchorAxis(classThis:any, anchor:ObservablePoint,tileSize:num
     const ay = anchor.y * tileSize * scale
     return createObservablePoint(classThis, ax, ay)
 }
+
+ export function calculateDistancePos(position:ObservablePoint, targetPosition?:ObservablePoint):number {
+    if (!targetPosition)
+      return 0
+    return Math.sqrt(
+      ((position.x - targetPosition.x) ** 2) + ((position.y - targetPosition.y) ** 2),
+    );
+  }
+
+  export function calculateDistance(x1:number, y1:number, x2:number, y2:number):number {
+    return Math.sqrt( ((x1 - x2) ** 2) + ((y1-y2) ** 2) )
+  }
+
+  export function lerp(a:number, b:number, t:number) {
+    return a + (b-a) * t
+  }
+
+  export function vLerp(a:ObservablePoint, b:ObservablePoint, t:number) {
+    return createObservablePoint({},lerp(a.x, b.x, t), lerp(a.y, b.y, t))
+  }

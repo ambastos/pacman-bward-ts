@@ -197,11 +197,13 @@ var Animation = /*#__PURE__*/function () {
     key: "onStart",
     value: function onStart(callback) {
       this.startEvent = callback;
+      return this;
     }
   }, {
     key: "onEnd",
     value: function onEnd(callback) {
       this.endEvent = callback;
+      return this;
     }
   }, {
     key: "update",
@@ -533,6 +535,7 @@ exports["default"] = void 0;
 var _sonic = _interopRequireDefault(require("../entities/sonic.ts"));
 var _util = require("../utils/util.ts");
 var _utils = require("../../../../../../../scripts/utilities/utils.ts");
+var _types = require("../../../../../../../scripts/characters/types.ts");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
@@ -547,7 +550,7 @@ var EntitiesManager = /*#__PURE__*/function () {
     _classCallCheck(this, EntitiesManager);
     _defineProperty(this, "gc", void 0);
     _defineProperty(this, "queuedList", []);
-    _defineProperty(this, "entities", []);
+    _defineProperty(this, "entitiesDef", []);
     _defineProperty(this, "container", void 0);
     this.gc = gc;
     this.container = gc.stage;
@@ -558,7 +561,8 @@ var EntitiesManager = /*#__PURE__*/function () {
   return _createClass(EntitiesManager, [{
     key: "restart",
     value: function restart() {
-      this.entities.forEach(function (e) {
+      this.entitiesDef.forEach(function (def) {
+        var e = def.entity;
         e.moving = true;
         e.display = true;
         e.animate = true;
@@ -592,7 +596,11 @@ var EntitiesManager = /*#__PURE__*/function () {
         //const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
         sonic.reset();
         sonic.position.set(position.x, position.y);
-        this.queueEntity(sonic);
+        var defs = {
+          entity: sonic,
+          startAppearsInMs: 5000 //Change to random in ms
+        };
+        this.queueEntity(defs);
         //wave.queueElement("entity", sonic)
       }
     }
@@ -601,11 +609,12 @@ var EntitiesManager = /*#__PURE__*/function () {
     value: function dequeAllEntities() {
       var _this2 = this;
       var entities = this.dequeEntitiesBy();
-      entities.forEach(function (e) {
+      entities.forEach(function (def) {
+        var e = def.entity;
         e.name = "sonic";
         e.moving = true;
         e.animate = true;
-        _this2.addEntity(e);
+        _this2.addEntityDef(def);
       });
     }
   }, {
@@ -618,7 +627,7 @@ var EntitiesManager = /*#__PURE__*/function () {
     value: function dequeEntitiesBy(name) {
       var _this3 = this;
       var entities = this.queuedList.filter(function (f) {
-        return f.name != name;
+        return f.entity.name != name;
       });
       var indexes = entities.map(function (e) {
         return _this3.queuedList.indexOf(e);
@@ -629,16 +638,20 @@ var EntitiesManager = /*#__PURE__*/function () {
       return entities;
     }
   }, {
-    key: "addEntity",
-    value: function addEntity(entity) {
-      this.entities.push(entity);
-      this.container.addChild(entity);
+    key: "addEntityDef",
+    value: function addEntityDef(entityDef) {
+      //Includes enter animation        
+      entityDef.timeAdded = Date.now();
+      this.entitiesDef.push(entityDef);
+
+      //The programmed start is in update() method        
     }
   }, {
     key: "clearEntities",
     value: function clearEntities() {
       var _this4 = this;
-      this.entities.forEach(function (e) {
+      this.entitiesDef.forEach(function (def) {
+        var e = def.entity;
         if (e instanceof _sonic["default"]) {
           //clear all timers related to sonic
           var activeTimers = e.activeTimers;
@@ -649,12 +662,13 @@ var EntitiesManager = /*#__PURE__*/function () {
         }
         _this4.container.removeChild(e);
       });
-      this.entities.length = 0;
+      this.entitiesDef.length = 0;
     }
   }, {
     key: "hide",
     value: function hide() {
-      this.entities.forEach(function (e) {
+      this.entitiesDef.forEach(function (def) {
+        var e = def.entity;
         e.display = false;
       });
     }
@@ -665,12 +679,26 @@ var EntitiesManager = /*#__PURE__*/function () {
     }
   }, {
     key: "update",
-    value: function update(elapsedMs) {}
+    value: function update(elapsedMs) {
+      var curTime = Date.now();
+      for (var i = 0; i < this.entitiesDef.length; i++) {
+        var def = this.entitiesDef[i];
+        var entity = def.entity;
+        if (entity.parent == this.container) continue;
+        if (curTime - def.timeAdded >= def.startAppearsInMs) {
+          //Create an enter animation
+          if (entity instanceof _sonic["default"]) {
+            entity.mode = _types.Mode.entering;
+            this.container.addChild(entity);
+          }
+        }
+      }
+    }
   }]);
 }();
 var _default = exports["default"] = EntitiesManager;
 
-},{"../../../../../../../scripts/utilities/utils.ts":37,"../entities/sonic.ts":11,"../utils/util.ts":18}],8:[function(require,module,exports){
+},{"../../../../../../../scripts/characters/types.ts":24,"../../../../../../../scripts/utilities/utils.ts":37,"../entities/sonic.ts":11,"../utils/util.ts":18}],8:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -848,7 +876,8 @@ function _registerListeners() {
     if (em) {
       var pauseDuration = 1000;
       //Stop animating the entities
-      em.entities.forEach(function (e) {
+      em.entitiesDef.forEach(function (def) {
+        var e = def.entity;
         e.animate = false;
         e.moving = false;
         e.pause(false);
@@ -856,7 +885,8 @@ function _registerListeners() {
       });
       //Restart animating the entities
       new _timer["default"](function () {
-        em.entities.forEach(function (e) {
+        em.entitiesDef.forEach(function (def) {
+          var e = def.entity;
           e.animate = true;
           e.moving = true;
           e.pause(false);
@@ -884,7 +914,9 @@ function _pacmanDeathSequenceEvent() {
   this.gc.emitter.removeAllListeners("pacman-death");
   var _this = this;
   this.gc.emitter.on("advance-level", function () {
-    var entities = _this4.wavesManager.entitiesManager.entities;
+    var entities = _this4.wavesManager.entitiesManager.entitiesDef.map(function (e) {
+      return e.entity;
+    });
     entities.forEach(function (e) {
       e.display = false;
     });
@@ -1437,6 +1469,9 @@ var WavesManager = /*#__PURE__*/function () {
   }, {
     key: "killEntity",
     value: function killEntity(entity) {
+      if (!entity.allowCollision) return;
+
+      //@ts-ignore
       var breath = entity[breathNamespace];
       if (entity instanceof _pacman["default"]) {
         // window.dispatchEvent(new Event('deathSequence'));
@@ -1530,7 +1565,8 @@ var WavesManager = /*#__PURE__*/function () {
         });
       }
       if (this.gc.debug) {
-        this.entitiesManager.entities.forEach(function (e) {
+        this.entitiesManager.entitiesDef.forEach(function (def) {
+          var e = def.entity;
           var s = e;
           if (s.target) {
             var target = s.target;
@@ -1553,6 +1589,7 @@ var WavesManager = /*#__PURE__*/function () {
   }]);
 }();
 function _tryDrownEntity(entity, elapsedMs) {
+  if (!entity.allowCollision) return;
   var breath = entity[breathNamespace];
   var wave = this === null || this === void 0 ? void 0 : this.wave;
   if (!wave || !wave.started || breath.stopped) return;
@@ -1645,7 +1682,6 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
       var _this2 = this;
       this.animator.createAnimation("walk", 200, null, function () {
         if (!_this2.animate) return;
-        console.log("walk animation");
         var an = _this2.animator.animations.get("walk");
         _this2.msBetweenSprites = 200;
         _this2.spriteFrames = 4;
@@ -1656,7 +1692,6 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
       });
       this.animator.createAnimation("run", 100, null, function () {
         if (!_this2.animate) return;
-        console.log("run animation");
         var an = _this2.animator.animations.get("run");
         _this2.msBetweenSprites = 100;
         _this2.spriteFrames = 5;
@@ -1667,8 +1702,8 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
       });
       this.animator.createAnimation("target", 200, 1500, function () {
         if (!_this2.animate) return;
-        console.log("target animation");
         var an = _this2.animator.animations.get("target");
+        _this2.allowCollision = false;
         _this2.msBetweenSprites = 200;
         _this2.spriteFrames = 1;
         _this2.frameY = 1;
@@ -1676,11 +1711,11 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
         _this2.frame++;
       }).onEnd(function (args) {
+        _this2.allowCollision = true;
         _this2.mode = _types.Mode.attack;
       });
       this.animator.createAnimation("attack", 100, null, function () {
         if (!_this2.animate) return;
-        console.log("attack animation");
         var an = _this2.animator.animations.get("attack");
         _this2.msBetweenSprites = 100;
         _this2.spriteFrames = 7;
@@ -1689,6 +1724,76 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
         _this2.frame++;
       });
+      this.animator.createAnimation("sonic-enter", 100, null, function () {
+        if (!_this2.animate) return;
+        var an = _this2.animator.animations.get("sonic-enter");
+        var direction = an === null || an === void 0 ? void 0 : an.args[0].direction;
+        var destPos = an === null || an === void 0 ? void 0 : an.args[0].destPos;
+        var curPos = (0, _utils.vLerp)(_this2.position, destPos, 0.1);
+        //TODO create a curve to be more cool 
+
+        _this2.moving = false;
+        _this2.allowCollision = false;
+        _this2.msBetweenSprites = 100;
+        _this2.spriteFrames = 5;
+        _this2.frameY = 1;
+        if (_this2.frame >= _this2.spriteFrames) _this2.frame = 1;
+        //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
+        _this2.frame++;
+        _this2.position.set(curPos.x, curPos.y);
+        if ((0, _utils.calculateDistancePos)(_this2.position, destPos) < 1) {
+          _this2.position.set(destPos.x, destPos.y);
+          an === null || an === void 0 || an.stop();
+        }
+      }).onStart(function () {
+        var pixelBounds = _this2.flood.gc.maze.pixelBounds;
+        var by = pixelBounds.bottom[0].y;
+        var ty = pixelBounds.top[0].y;
+        var lx = pixelBounds.left[1].x;
+        var rx = pixelBounds.right[1].x;
+        //console.log("On start sonic enter")  
+        var pos = _this2.position;
+        var distTopLeft = (0, _utils.calculateDistance)(pos.x, pos.y, lx, ty);
+        var distBottomLeft = (0, _utils.calculateDistance)(pos.x, pos.y, lx, by);
+        var distTopRight = (0, _utils.calculateDistance)(pos.x, pos.y, rx, ty);
+        var distBottomRight = (0, _utils.calculateDistance)(pos.x, pos.y, rx, by);
+        var distancePos = {
+          direction: 'right',
+          x: lx + _this2.scaledTileSize,
+          y: ty + _this2.scaledTileSize
+        };
+        if (distBottomLeft < distTopLeft) distancePos = {
+          direction: 'right',
+          x: lx + _this2.scaledTileSize,
+          y: by * 0.5
+        };else if (distTopRight < distBottomLeft) distancePos = {
+          direction: 'left',
+          x: rx,
+          y: ty + _this2.scaledTileSize
+        };else if (distBottomRight < distTopRight) distancePos = {
+          direction: 'left',
+          x: rx,
+          y: by * 0.5
+        };
+        var an = _this2.animator.animations.get("sonic-enter");
+        an === null || an === void 0 || an.args.push({
+          direction: distancePos.direction,
+          sourcePos: {
+            x: distancePos.x,
+            y: distancePos.y
+          },
+          destPos: {
+            x: pos.x,
+            y: pos.y
+          }
+        });
+        _this2.direction = distancePos.direction;
+        _this2.position.set(distancePos.x, distancePos.y);
+      }).onEnd(function () {
+        _this2.moving = true;
+        _this2.allowCollision = true;
+        _this2.mode = _types.Mode.idle;
+      });
       this.animator.createAnimation("sonic-out", 80, null, function (args) {});
       this.animator.createAnimation("ghost-kick", 40, null, function (args) {
         var _this2$gameCoordinato;
@@ -1696,7 +1801,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         _this2.mode = _types.Mode.idle;
         var ghost = args.ghost;
         ghost.allowCollision = false;
-        var velocity = ghost.fastSpeed * 1.5 * 20;
+        var velocity = ghost.fastSpeed * 1.5 * 30;
         var bounds = (_this2$gameCoordinato = _this2.gameCoordinator.maze) === null || _this2$gameCoordinato === void 0 ? void 0 : _this2$gameCoordinato.bounds;
         var gridPos = ghost.getGridPosition();
         var collides = false;
@@ -1724,7 +1829,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
           case "up":
             ghost.skew.set(0, 0);
             collides = bounds === null || bounds === void 0 ? void 0 : bounds.top.some(function (e) {
-              return e.y == Math.ceil(gridPos.y);
+              return e.y == Math.floor(gridPos.y);
             });
             if (collides) ghost.y = (gridPos.y + 0.5) * _this2.scaledTileSize;else ghost.y -= velocity;
             break;
@@ -1928,7 +2033,9 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     key: "handleAnimations",
     value: function handleAnimations() {
       if (!this.targetDef.targetReached) {
-        if (this.mode == _types.Mode.idle) {
+        if (this.mode == _types.Mode.entering) {
+          if (!this.animator.isPlaying("sonic-enter")) this.animator.play("sonic-enter");
+        } else if (this.mode == _types.Mode.idle) {
           if (!this.animator.isPlaying("walk")) this.animator.play("walk");
         } else if (this.mode == _types.Mode.chase) {
           if (!this.animator.isPlaying("run")) this.animator.play("run");
@@ -2924,8 +3031,7 @@ var Ghost = /*#__PURE__*/function (_MovableEntity) {
   }, {
     key: "calculateDistance",
     value: function calculateDistance(position, targetPosition) {
-      if (!targetPosition) return 0;
-      return Math.sqrt(Math.pow(position.x - targetPosition.x, 2) + Math.pow(position.y - targetPosition.y, 2));
+      return (0, _utils.calculateDistancePos)(position, targetPosition);
     }
 
     /**
@@ -3938,6 +4044,7 @@ var Mode = exports.Mode = /*#__PURE__*/function (Mode) {
   Mode["scared"] = "scared";
   Mode["eyes"] = "eyes";
   Mode["leaving"] = "leaving";
+  Mode["entering"] = "entering";
   Mode["target"] = "target";
   Mode["attack"] = "attack";
   return Mode;
@@ -6332,92 +6439,38 @@ var Maze = /*#__PURE__*/function () {
     key: "createTopBounds",
     value: function createTopBounds(bounds, pixelBounds, holes, lastCol) {
       if (holes.length > 0) {
-        bounds.top.push({
-          x: 1,
-          y: 0
-        });
+        bounds.top.push((0, _utils.createObservablePoint)(this, 1, 0));
         for (var i = 0; i < holes.length; i++) {
           if (holes[i]) {
-            bounds.top.push({
-              x: holes[i].x - 1,
-              y: 0
-            });
-            pixelBounds.top.push({
-              x: Math.floor(holes[i].x * this.tileSize),
-              y: 0
-            });
+            bounds.top.push((0, _utils.createObservablePoint)(this, holes[i].x - 1, 0));
+            pixelBounds.top.push((0, _utils.createObservablePoint)(this, Math.floor(holes[i].x * this.tileSize), 0));
           } else {
-            bounds.top.push({
-              x: lastCol,
-              y: 0
-            });
-            pixelBounds.top.push({
-              x: Math.floor(lastCol * this.tileSize),
-              y: 0
-            });
+            bounds.top.push((0, _utils.createObservablePoint)(this, lastCol, 0));
+            pixelBounds.top.push((0, _utils.createObservablePoint)(this, Math.floor(lastCol * this.tileSize), 0));
           }
         }
       } else {
-        bounds.top.push({
-          x: 0,
-          y: 0
-        }, {
-          x: lastCol,
-          y: 0
-        });
-        pixelBounds.top.push({
-          x: 0,
-          y: 0
-        }, {
-          x: Math.floor(lastCol * this.tileSize),
-          y: 0
-        });
+        bounds.top.push((0, _utils.createObservablePoint)(this, 0, 0), (0, _utils.createObservablePoint)(this, lastCol, 0));
+        pixelBounds.top.push((0, _utils.createObservablePoint)(this, 0, 0), (0, _utils.createObservablePoint)(this, lastCol * this.tileSize, 0));
       }
     }
   }, {
     key: "createBottomBounds",
     value: function createBottomBounds(bounds, pixelBounds, holes, lastRow, lastCol) {
       if (holes.length > 0) {
-        bounds.bottom.push({
-          x: 0,
-          y: lastRow
-        });
+        bounds.bottom.push((0, _utils.createObservablePoint)(this, 0, lastRow));
         for (var i = 0; i < holes.length; i++) {
           if (holes[i]) {
-            bounds.bottom.push({
-              x: holes[i].x - 1,
-              y: lastRow
-            });
-            pixelBounds.top.push({
-              x: Math.floor((holes[i].x - 1) * this.tileSize),
-              y: lastRow * this.tileSize
-            });
+            bounds.bottom.push((0, _utils.createObservablePoint)(this, holes[i].x - 1, lastRow));
+            pixelBounds.top.push((0, _utils.createObservablePoint)(this, Math.floor((holes[i].x - 1) * this.tileSize), lastRow * this.tileSize));
           } else {
-            bounds.bottom.push({
-              x: lastCol,
-              y: lastRow
-            });
-            pixelBounds.top.push({
-              x: Math.floor(lastCol * this.tileSize),
-              y: lastRow * this.tileSize
-            });
+            bounds.bottom.push((0, _utils.createObservablePoint)(this, lastCol, lastRow));
+            pixelBounds.top.push((0, _utils.createObservablePoint)(this, Math.floor(lastCol * this.tileSize), lastRow * this.tileSize));
           }
         }
       } else {
-        bounds.bottom.push({
-          x: 0,
-          y: lastRow
-        }, {
-          x: lastCol,
-          y: lastRow
-        });
-        pixelBounds.bottom.push({
-          x: 0,
-          y: lastRow * this.tileSize
-        }, {
-          x: lastCol * this.tileSize,
-          y: lastRow * this.tileSize
-        });
+        bounds.bottom.push((0, _utils.createObservablePoint)(this, 0, lastRow), (0, _utils.createObservablePoint)(this, lastCol, lastRow));
+        pixelBounds.bottom.push((0, _utils.createObservablePoint)(this, 0, lastRow * this.tileSize), (0, _utils.createObservablePoint)(this, lastCol * this.tileSize, lastRow * this.tileSize));
       }
     }
   }, {
@@ -6443,8 +6496,8 @@ var Maze = /*#__PURE__*/function () {
     }
     /**
      * Gets the pixel position from GridPosition
-     * @param x GridPosition.x
-     * @param y GridPostion.y
+     * @param {x} GridPosition.x
+     * @param {y} GridPostion.y
      * @returns 
      */
   }, {
@@ -7851,10 +7904,14 @@ var _default = exports["default"] = Timer; // endRemoveIf(production)
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.calculateDistance = calculateDistance;
+exports.calculateDistancePos = calculateDistancePos;
 exports.copyPosition = copyPosition;
 exports.createObservablePoint = createObservablePoint;
 exports.getAnchorAxis = getAnchorAxis;
 exports.getGridPosition = getGridPosition;
+exports.lerp = lerp;
+exports.vLerp = vLerp;
 var _pixi = require("pixi.js");
 function copyPosition(classThis, position) {
   return new _pixi.ObservablePoint(function () {}, classThis, position.x, position.y);
@@ -7877,6 +7934,19 @@ function getAnchorAxis(classThis, anchor, tileSize, scale) {
   var ax = anchor.x * tileSize * scale;
   var ay = anchor.y * tileSize * scale;
   return createObservablePoint(classThis, ax, ay);
+}
+function calculateDistancePos(position, targetPosition) {
+  if (!targetPosition) return 0;
+  return Math.sqrt(Math.pow(position.x - targetPosition.x, 2) + Math.pow(position.y - targetPosition.y, 2));
+}
+function calculateDistance(x1, y1, x2, y2) {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+}
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+function vLerp(a, b, t) {
+  return createObservablePoint({}, lerp(a.x, b.x, t), lerp(a.y, b.y, t));
 }
 
 },{"pixi.js":458}],38:[function(require,module,exports){

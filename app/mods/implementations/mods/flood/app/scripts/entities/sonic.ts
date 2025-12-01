@@ -5,7 +5,7 @@ import Animator from "../animations/animator.ts";
 import Ghost from "../../../../../../../scripts/characters/ghost.ts";
 import CharacterUtil from "../../../../../../../scripts/utilities/characterUtil.ts";
 import Pacman from "../../../../../../../scripts/characters/pacman.ts";
-import { createObservablePoint } from "../../../../../../../scripts/utilities/utils.ts";
+import { calculateDistance, calculateDistancePos, createObservablePoint, vLerp } from "../../../../../../../scripts/utilities/utils.ts";
 import Timer from "../../../../../../../scripts/utilities/timer.ts";
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
 import { getMazeWays } from "../utils/util.ts";
@@ -34,7 +34,6 @@ class Sonic extends Ghost {
     private createAnimations() {
         this.animator.createAnimation("walk", 200, null, () => {
             if (!this.animate) return;
-            console.log("walk animation")
             const an = this.animator.animations.get("walk");
             this.msBetweenSprites = 200
             this.spriteFrames = 4;
@@ -46,7 +45,6 @@ class Sonic extends Ghost {
         });        
         this.animator.createAnimation("run", 100, null, () => {
             if (!this.animate) return;
-            console.log("run animation")
             const an = this.animator.animations.get("run");
             this.msBetweenSprites = 100
             this.spriteFrames = 5;
@@ -58,8 +56,8 @@ class Sonic extends Ghost {
         });
         this.animator.createAnimation("target", 200, 1500, () => {
             if (!this.animate) return;
-            console.log("target animation")
             const an = this.animator.animations.get("target");
+            this.allowCollision = false
             this.msBetweenSprites = 200
             this.spriteFrames = 1;
             this.frameY = 1;
@@ -67,12 +65,12 @@ class Sonic extends Ghost {
                 this.frame = 0;
             //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
-        }).onEnd((args:any)=>{
+        }).onEnd((args:any)=>{ 
+            this.allowCollision = true
             this.mode = Mode.attack
         })
         this.animator.createAnimation("attack", 100, null, () => {
             if (!this.animate) return;
-            console.log("attack animation")
             const an = this.animator.animations.get("attack");
             this.msBetweenSprites = 100
             this.spriteFrames = 7;
@@ -82,6 +80,62 @@ class Sonic extends Ghost {
             //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
         });
+        this.animator.createAnimation("sonic-enter", 100, null, () => {
+            if (!this.animate) return;
+            const an = this.animator.animations.get("sonic-enter");
+            const direction = an?.args[0].direction            
+            const destPos = an?.args[0].destPos            
+            const curPos =  vLerp(this.position, destPos, 0.1)
+            //TODO create a curve to be more cool 
+
+            this.moving = false
+            this.allowCollision = false
+            this.msBetweenSprites = 100
+            this.spriteFrames = 5;  
+            this.frameY = 1;
+            if (this.frame >= this.spriteFrames)
+                this.frame = 1;
+            //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
+            this.frame++;
+            this.position.set(curPos.x, curPos.y)
+            if (calculateDistancePos(this.position, destPos) < 1) {
+                this.position.set(destPos.x, destPos.y)
+                an?.stop()
+            }
+        }).onStart(()=>{
+             const pixelBounds = this.flood.gc.maze!.pixelBounds
+             const by = pixelBounds.bottom[0]!.y
+             const ty = pixelBounds.top[0]!.y
+             const lx = pixelBounds.left[1]!.x
+             const rx = pixelBounds.right[1]!.x
+             //console.log("On start sonic enter")  
+             const pos = this.position
+             const distTopLeft = calculateDistance(pos.x, pos.y, lx, ty)
+             const distBottomLeft = calculateDistance(pos.x, pos.y, lx, by)
+             const distTopRight = calculateDistance(pos.x, pos.y, rx, ty)
+             const distBottomRight = calculateDistance(pos.x, pos.y, rx, by)
+             let distancePos = {direction: 'right',  x:lx+this.scaledTileSize, y:ty+this.scaledTileSize}
+             
+             if (distBottomLeft < distTopLeft) 
+                distancePos = {direction: 'right', x:lx+this.scaledTileSize, y:by*0.5} 
+             else if (distTopRight < distBottomLeft) 
+                distancePos = {direction: 'left', x:rx, y:ty+this.scaledTileSize} 
+             else if (distBottomRight < distTopRight)
+                distancePos = {direction: 'left',x:rx, y:by*0.5}
+
+             const an = this.animator.animations.get("sonic-enter")
+             an?.args.push({ 
+                 direction: distancePos.direction,
+                 sourcePos: {x:distancePos.x, y:distancePos.y} as ObservablePoint,
+                 destPos: {x:pos.x, y:pos.y} as ObservablePoint
+            })
+            this.direction = distancePos.direction
+            this.position.set(distancePos.x, distancePos.y)
+        }).onEnd(()=>{
+            this.moving = true
+            this.allowCollision = true
+            this.mode = Mode.idle
+        })
         this.animator.createAnimation("sonic-out", 80,null, (args)=>{
 
         })
@@ -92,7 +146,7 @@ class Sonic extends Ghost {
                 const ghost = args.ghost as Ghost    
                 ghost.allowCollision = false
                 
-                const velocity = ghost.fastSpeed * 1.5 * 20
+                const velocity = ghost.fastSpeed * 1.5 * 30
                 const bounds = this.gameCoordinator.maze?.bounds
                 const gridPos = ghost.getGridPosition()
                 let collides = false
@@ -119,7 +173,7 @@ class Sonic extends Ghost {
                         break;    
                     case "up":
                         ghost.skew.set(0,0)
-                        collides = bounds?.top.some((e:any)=>e.y == Math.ceil(gridPos.y))!
+                        collides = bounds?.top.some((e:any)=>e.y == Math.floor(gridPos.y))!
                         if (collides)
                             ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
                         else    
@@ -330,7 +384,10 @@ class Sonic extends Ghost {
     }     
     private handleAnimations() {
         if (!this.targetDef.targetReached) {
-            if (this.mode == Mode.idle) {
+            if (this.mode == Mode.entering) {
+                if (!this.animator.isPlaying("sonic-enter"))
+                    this.animator.play("sonic-enter");
+            }else if (this.mode == Mode.idle) {
                 if (!this.animator.isPlaying("walk"))
                     this.animator.play("walk");
             } else if (this.mode == Mode.chase) {

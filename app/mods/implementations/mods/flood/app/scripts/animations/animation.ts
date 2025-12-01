@@ -7,7 +7,7 @@ class Animation {
     end = false
     endTime:number | null = 0
     callback!:Function
-    args = []
+    args:any[] = []
     thisClass: any    
     startEvent!:Function
     endEvent!:Function
@@ -44,9 +44,11 @@ class Animation {
     }   
     onStart(callback:Function) {
         this.startEvent = callback
+        return this
     }
     onEnd(callback:Function) {
         this.endEvent = callback      
+        return this
     }
     update(args: any) {
         if (!this.playing) return

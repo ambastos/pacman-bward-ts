@@ -66,7 +66,8 @@ class Flood extends Mod{
          if (em) {
             const pauseDuration = 1000
             //Stop animating the entities
-            em.entities.forEach((e)=>{
+            em.entitiesDef.forEach((def)=>{
+                const e = def.entity
                 e.animate = false;
                 e.moving = false
                 e.pause(false);
@@ -74,7 +75,8 @@ class Flood extends Mod{
             })
             //Restart animating the entities
             new Timer(()=>{
-                em.entities.forEach((e)=>{
+                em.entitiesDef.forEach((def)=>{
+                    const e = def.entity
                     e.animate = true;
                     e.moving = true
                     e.pause(false);
@@ -101,7 +103,7 @@ class Flood extends Mod{
         this.gc.emitter.removeAllListeners("pacman-death")
         const _this = this 
         this.gc.emitter.on("advance-level",()=>{
-            const entities = this.wavesManager.entitiesManager.entities
+            const entities = this.wavesManager.entitiesManager.entitiesDef.map(e=>e.entity)
             entities.forEach(e=>{
                 e.display = false
             })

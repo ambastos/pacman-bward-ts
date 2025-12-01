@@ -3,7 +3,7 @@ import StaticEntity from "./staticEntity.ts";
 import GameCoordinator from "../core/gameCoordinator.ts";
 import CharacterUtil from "../utilities/characterUtil.ts";
 import Pacman from "./pacman.ts";
-import { copyPosition, createObservablePoint } from "../utilities/utils.ts";
+import { calculateDistancePos, copyPosition, createObservablePoint } from "../utilities/utils.ts";
 import MovableEntity from "./movableEntity.ts";
 import { Mode } from "./types.ts";
 
@@ -355,11 +355,7 @@ class Ghost extends MovableEntity{
    * @returns {number}
    */
   calculateDistance(position:ObservablePoint, targetPosition?:ObservablePoint):number {
-    if (!targetPosition)
-      return 0
-    return Math.sqrt(
-      ((position.x - targetPosition.x) ** 2) + ((position.y - targetPosition.y) ** 2),
-    );
+    return calculateDistancePos(position, targetPosition)
   }
 
   /**
