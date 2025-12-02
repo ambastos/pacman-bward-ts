@@ -11,6 +11,7 @@ import MovableEntity from "../../../../../../../scripts/characters/movableEntity
 import { getMazeWays } from "../utils/util.ts";
 import { Mode } from "../../../../../../../scripts/characters/types.ts";
 import { Function } from "lodash";
+import { sound } from "@pixi/sound";
 
 class Sonic extends Ghost {
     flood: Flood;
@@ -30,7 +31,11 @@ class Sonic extends Ghost {
         this.animator = new Animator(this);
         this.createAnimations();
         this.registerEventListeners()
+        this.position = new ObservablePoint(()=>{
+            console.log ("sonic", this.position)
+        },this.position)
     }    
+    
     private createAnimations() {
         this.animator.createAnimation("walk", 200, null, () => {
             if (!this.animate) return;
@@ -73,10 +78,20 @@ class Sonic extends Ghost {
             if (!this.animate) return;
             const an = this.animator.animations.get("attack");
             this.msBetweenSprites = 100
-            this.spriteFrames = 7;
-            this.frameY = 1;
-            if (this.frame >= this.spriteFrames-1)
-                this.frame = 0;
+            if ( Date.now() - an?.startTime! < 500) {
+                this.frameY = 1;
+                this.spriteFrames = 7;
+                if (this.frame >= this.spriteFrames-1)
+                    this.frame = 0;
+            }else {
+                this.spriteFrames = 9
+                if (this.frame >= this.spriteFrames-1) {
+                    this.frame = 0
+                    this.frameY = this.frameY == 1 ? 2 : 1
+                    if (this.frameY == 1)
+                        this.frame = 7
+                }
+            }            
             //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
         });
@@ -100,6 +115,11 @@ class Sonic extends Ghost {
             this.position.set(curPos.x, curPos.y)
             if (calculateDistancePos(this.position, destPos) < 1) {
                 this.position.set(destPos.x, destPos.y)
+                const pos = this.characterUtil.snapToGrid(this.getGridPosition(),direction,this.scaledTileSize,
+                    this.anchor,this.gameCoordinator.scale
+                )
+                this.direction = direction
+                this.position.set(pos.x, pos.y)
                 an?.stop()
             }
         }).onStart(()=>{
@@ -127,7 +147,7 @@ class Sonic extends Ghost {
              an?.args.push({ 
                  direction: distancePos.direction,
                  sourcePos: {x:distancePos.x, y:distancePos.y} as ObservablePoint,
-                 destPos: {x:pos.x, y:pos.y} as ObservablePoint
+                 destPos: {x:pos.x, y:pos.y}
             })
             this.direction = distancePos.direction
             this.position.set(distancePos.x, distancePos.y)
@@ -150,13 +170,18 @@ class Sonic extends Ghost {
                 const bounds = this.gameCoordinator.maze?.bounds
                 const gridPos = ghost.getGridPosition()
                 let collides = false
+                let pos, newGridPos = createObservablePoint(this,gridPos.x, gridPos.y)
+                let newDirection = this.direction
                 switch (args.direction) {
                     case "left":
                         ghost.skew.set(Math.PI*0.5,Math.PI*0.5)                        
                         collides = bounds?.left.some((e:any)=>
                             e.x == Math.floor(gridPos.x) && e.y == Math.floor(gridPos.y))!
                         if (collides) {
-                            ghost.x = (gridPos.x+0.5) * this.scaledTileSize
+                            newGridPos.set(gridPos.x + 1, gridPos.y)
+                            newDirection = ghost.characterUtil.getOppositeDirection("left")
+                            //ghost.x = (gridPos.x+0.5) * this.scaledTileSize
+                             
                             //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
                         }else    
                             ghost.x -= velocity
@@ -166,33 +191,44 @@ class Sonic extends Ghost {
                         collides = bounds?.right.some((e:any)=>
                             e.x == Math.floor(gridPos.x) && e.y == Math.ceil(gridPos.y))!
                         if (collides) {
-                            ghost.x = (gridPos.x - 0.5) * this.scaledTileSize
-                            //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
+                            //ghost.x = (gridPos.x - 0.5) * this.scaledTileSize
+                            newGridPos.set(gridPos.x, gridPos.y)
+                            newDirection = ghost.characterUtil.getOppositeDirection("right")                               
                         }else    
                             ghost.x += velocity     
                         break;    
                     case "up":
                         ghost.skew.set(0,0)
                         collides = bounds?.top.some((e:any)=>e.y == Math.floor(gridPos.y))!
-                        if (collides)
-                            ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
-                        else    
+                        if (collides) {
+                            //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
+                            newGridPos.set(gridPos.x, gridPos.y+1)
+                            newDirection = ghost.characterUtil.getOppositeDirection("up")  
+                        }else    
                             ghost.y -= velocity     
                         break;
                     case "down":
                         ghost.skew.set(Math.PI, Math.PI)
                         collides = bounds?.bottom.some((e:any)=>e.y == Math.ceil(gridPos.y))!
-                        if (collides)
-                            ghost.y = (gridPos.y-0.5) * this.scaledTileSize
-                        else    
+                        if (collides) {
+                            //ghost.y = (gridPos.y-0.5) * this.scaledTileSize
+                            newGridPos.set(gridPos.x, gridPos.y)
+                            newDirection = ghost.characterUtil.getOppositeDirection("down")
+                        }else    
                             ghost.y += velocity     
                         break;  
                     }
-                    if (collides) {                        
+                    if (collides) { 
+                        pos = ghost.characterUtil.snapToGrid(newGridPos, newDirection,
+                            ghost.scaledTileSize,ghost.anchor, ghost.gameCoordinator.scale)
+                        ghost.position.set(pos.x, pos.y)    
+                        sound.play("sonic_break")
+
                         const an = this.animator.animations.get("ghost-kick")
                         an?.pause()
                         ghost.mode = Mode.scared
                         ghost.scaredColor = "white" 
+                        console.log("ghost white") 
                         //make sonic walk again
                         this.activeTimers.push(
                             new Timer(()=>{
@@ -407,7 +443,7 @@ class Sonic extends Ghost {
         const point = super.handleMovement(elapsedMs)
         if (this.target && !this.seenTarget 
             && this.calculateDistance(this.getGridPosition(), 
-            this.target.getGridPosition()) < 4) {
+            this.target.getGridPosition()) < 6) {
             this.mode = Mode.target 
             this.seenTarget = true           
         }

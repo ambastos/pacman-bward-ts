@@ -405,6 +405,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var _pixi = require("pixi.js");
+var _sound = require("@pixi/sound");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
@@ -425,17 +426,19 @@ var AssetsManager = /*#__PURE__*/function () {
   return _createClass(AssetsManager, [{
     key: "getResources",
     value: function getResources() {
-      return ["bubbles", "sonic"];
+      return ["bubbles", "sonic", "sonic_break", "sonic_bubbles", "sonic_death", "sonic_drown", "sonic_impact", "sonic_jump", "sonic_attack"];
     }
   }, {
     key: "loadAssets",
     value: function () {
       var _loadAssets = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(callbackProgress) {
-        var path, resources, textures, name;
+        var path, pathSound, resources, assets, name;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.n) {
             case 0:
               path = 'app/mods/implementations/mods/flood/app/sprites/';
+              pathSound = 'app/mods/implementations/mods/flood/app/sounds/';
+              _sound.Sound.from("".concat(pathSound, "sonic_break_CB.wav"));
               _pixi.Assets.add({
                 alias: "bubbles",
                 src: "".concat(path, "bubbles.png")
@@ -444,14 +447,44 @@ var AssetsManager = /*#__PURE__*/function () {
                 alias: "sonic",
                 src: "".concat(path, "sonic_sprites.png")
               });
+              _pixi.Assets.add({
+                alias: "sonic_break",
+                src: "".concat(pathSound, "sonic_break_CB.wav")
+              });
+              _pixi.Assets.add({
+                alias: "sonic_bubbles",
+                src: "".concat(pathSound, "sonic_bubbles_AD.wav")
+              });
+              _pixi.Assets.add({
+                alias: "sonic_death",
+                src: "".concat(pathSound, "sonic_death_A3.wav")
+              });
+              _pixi.Assets.add({
+                alias: "sonic_drown",
+                src: "".concat(pathSound, "sonic_drown_B2.wav")
+              });
+              _pixi.Assets.add({
+                alias: "sonic_impact",
+                src: "".concat(pathSound, "sonic_impact_C1.wav")
+              });
+              _pixi.Assets.add({
+                alias: "sonic_jump",
+                src: "".concat(pathSound, "sonic_jump_A0.wav")
+              });
+              _pixi.Assets.add({
+                alias: "sonic_attack",
+                src: "".concat(pathSound, "sonic_speed_attack_BE.wav")
+              });
               resources = this.getResources();
               _context.n = 1;
               return _pixi.Assets.load(resources, callbackProgress);
             case 1:
-              textures = _context.v;
+              assets = _context.v;
               //Add textures to the main assetsManager cache
-              for (name in textures) this.flood.gc.am.textures.set(name, textures[name]);
-              return _context.a(2, textures);
+              for (name in assets) {
+                this.flood.gc.am.textures.set(name, assets[name]);
+              }
+              return _context.a(2, assets);
           }
         }, _callee, this);
       }));
@@ -469,7 +502,7 @@ var AssetsManager = /*#__PURE__*/function () {
 }();
 var _default = exports["default"] = AssetsManager;
 
-},{"pixi.js":458}],6:[function(require,module,exports){
+},{"@pixi/sound":359,"pixi.js":489}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -947,7 +980,7 @@ function _pacmanDeathSequenceEvent() {
 }
 var _default = exports["default"] = Flood; //endRemoveIf
 
-},{"../../../../../../../scripts/utilities/timer.ts":36,"../mod.ts":12,"../states/cancelState.ts":13,"../states/endState.ts":14,"../states/idleState.ts":15,"../states/startState.ts":16,"../states/state.ts":17,"./assetsManager.ts":5,"./wavesManager.ts":10,"pixi.js":458}],9:[function(require,module,exports){
+},{"../../../../../../../scripts/utilities/timer.ts":36,"../mod.ts":12,"../states/cancelState.ts":13,"../states/endState.ts":14,"../states/idleState.ts":15,"../states/startState.ts":16,"../states/state.ts":17,"./assetsManager.ts":5,"./wavesManager.ts":10,"pixi.js":489}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1343,7 +1376,7 @@ var Wave = /*#__PURE__*/function (_Sprite) {
 }(_pixi.Sprite);
 var _default = exports["default"] = Wave;
 
-},{"../utils/util.ts":18,"@pixi/graphics-extras":273,"pixi.js":458}],10:[function(require,module,exports){
+},{"../utils/util.ts":18,"@pixi/graphics-extras":273,"pixi.js":489}],10:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -1359,6 +1392,7 @@ var _pacman = _interopRequireDefault(require("../../../../../../../scripts/chara
 var _ghost = _interopRequireDefault(require("../../../../../../../scripts/characters/ghost.ts"));
 var _entitiesManager = _interopRequireDefault(require("./entitiesManager.ts"));
 var _types = require("../../../../../../../scripts/characters/types.ts");
+var _sound = require("@pixi/sound");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
 function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
@@ -1554,6 +1588,7 @@ var WavesManager = /*#__PURE__*/function () {
         var hitArea = (0, _util.enlarge)(pacman.hitArea.clone(), 2);
         bubbles.forEach(function (b) {
           if (b.getBounds().contains(hitArea.x, hitArea.y)) {
+            _sound.sound.play("sonic_bubbles");
             _this4.emitter.emit("bubble-swallow");
             container.removeChild(b);
             //@ts-ignore
@@ -1620,13 +1655,14 @@ function _tryDrownEntity(entity, elapsedMs) {
 }
 var _default = exports["default"] = WavesManager;
 
-},{"../../../../../../../scripts/characters/ghost.ts":20,"../../../../../../../scripts/characters/pacman.ts":22,"../../../../../../../scripts/characters/types.ts":24,"../animations/animator.ts":4,"../states/state.ts":17,"../utils/util.ts":18,"./breath.ts":6,"./entitiesManager.ts":7}],11:[function(require,module,exports){
+},{"../../../../../../../scripts/characters/ghost.ts":20,"../../../../../../../scripts/characters/pacman.ts":22,"../../../../../../../scripts/characters/types.ts":24,"../animations/animator.ts":4,"../states/state.ts":17,"../utils/util.ts":18,"./breath.ts":6,"./entitiesManager.ts":7,"@pixi/sound":359}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+var _pixi = require("pixi.js");
 var _animator = _interopRequireDefault(require("../animations/animator.ts"));
 var _ghost = _interopRequireDefault(require("../../../../../../../scripts/characters/ghost.ts"));
 var _characterUtil = _interopRequireDefault(require("../../../../../../../scripts/utilities/characterUtil.ts"));
@@ -1635,6 +1671,7 @@ var _utils = require("../../../../../../../scripts/utilities/utils.ts");
 var _timer = _interopRequireDefault(require("../../../../../../../scripts/utilities/timer.ts"));
 var _util = require("../utils/util.ts");
 var _types = require("../../../../../../../scripts/characters/types.ts");
+var _sound = require("@pixi/sound");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
@@ -1673,6 +1710,9 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     _this.animator = new _animator["default"](_this);
     _this.createAnimations();
     _this.registerEventListeners();
+    _this.position = new _pixi.ObservablePoint(function () {
+      console.log("sonic", _this.position);
+    }, _this.position);
     return _this;
   }
   _inherits(Sonic, _Ghost);
@@ -1718,9 +1758,18 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         if (!_this2.animate) return;
         var an = _this2.animator.animations.get("attack");
         _this2.msBetweenSprites = 100;
-        _this2.spriteFrames = 7;
-        _this2.frameY = 1;
-        if (_this2.frame >= _this2.spriteFrames - 1) _this2.frame = 0;
+        if (Date.now() - (an === null || an === void 0 ? void 0 : an.startTime) < 500) {
+          _this2.frameY = 1;
+          _this2.spriteFrames = 7;
+          if (_this2.frame >= _this2.spriteFrames - 1) _this2.frame = 0;
+        } else {
+          _this2.spriteFrames = 9;
+          if (_this2.frame >= _this2.spriteFrames - 1) {
+            _this2.frame = 0;
+            _this2.frameY = _this2.frameY == 1 ? 2 : 1;
+            if (_this2.frameY == 1) _this2.frame = 7;
+          }
+        }
         //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
         _this2.frame++;
       });
@@ -1743,6 +1792,9 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         _this2.position.set(curPos.x, curPos.y);
         if ((0, _utils.calculateDistancePos)(_this2.position, destPos) < 1) {
           _this2.position.set(destPos.x, destPos.y);
+          var pos = _this2.characterUtil.snapToGrid(_this2.getGridPosition(), direction, _this2.scaledTileSize, _this2.anchor, _this2.gameCoordinator.scale);
+          _this2.direction = direction;
+          _this2.position.set(pos.x, pos.y);
           an === null || an === void 0 || an.stop();
         }
       }).onStart(function () {
@@ -1805,6 +1857,9 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         var bounds = (_this2$gameCoordinato = _this2.gameCoordinator.maze) === null || _this2$gameCoordinato === void 0 ? void 0 : _this2$gameCoordinato.bounds;
         var gridPos = ghost.getGridPosition();
         var collides = false;
+        var pos,
+          newGridPos = (0, _utils.createObservablePoint)(_this2, gridPos.x, gridPos.y);
+        var newDirection = _this2.direction;
         switch (args.direction) {
           case "left":
             ghost.skew.set(Math.PI * 0.5, Math.PI * 0.5);
@@ -1812,7 +1867,10 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
               return e.x == Math.floor(gridPos.x) && e.y == Math.floor(gridPos.y);
             });
             if (collides) {
-              ghost.x = (gridPos.x + 0.5) * _this2.scaledTileSize;
+              newGridPos.set(gridPos.x + 1, gridPos.y);
+              newDirection = ghost.characterUtil.getOppositeDirection("left");
+              //ghost.x = (gridPos.x+0.5) * this.scaledTileSize
+
               //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
             } else ghost.x -= velocity;
             break;
@@ -1822,8 +1880,9 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
               return e.x == Math.floor(gridPos.x) && e.y == Math.ceil(gridPos.y);
             });
             if (collides) {
-              ghost.x = (gridPos.x - 0.5) * _this2.scaledTileSize;
-              //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
+              //ghost.x = (gridPos.x - 0.5) * this.scaledTileSize
+              newGridPos.set(gridPos.x, gridPos.y);
+              newDirection = ghost.characterUtil.getOppositeDirection("right");
             } else ghost.x += velocity;
             break;
           case "up":
@@ -1831,21 +1890,33 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
             collides = bounds === null || bounds === void 0 ? void 0 : bounds.top.some(function (e) {
               return e.y == Math.floor(gridPos.y);
             });
-            if (collides) ghost.y = (gridPos.y + 0.5) * _this2.scaledTileSize;else ghost.y -= velocity;
+            if (collides) {
+              //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
+              newGridPos.set(gridPos.x, gridPos.y + 1);
+              newDirection = ghost.characterUtil.getOppositeDirection("up");
+            } else ghost.y -= velocity;
             break;
           case "down":
             ghost.skew.set(Math.PI, Math.PI);
             collides = bounds === null || bounds === void 0 ? void 0 : bounds.bottom.some(function (e) {
               return e.y == Math.ceil(gridPos.y);
             });
-            if (collides) ghost.y = (gridPos.y - 0.5) * _this2.scaledTileSize;else ghost.y += velocity;
+            if (collides) {
+              //ghost.y = (gridPos.y-0.5) * this.scaledTileSize
+              newGridPos.set(gridPos.x, gridPos.y);
+              newDirection = ghost.characterUtil.getOppositeDirection("down");
+            } else ghost.y += velocity;
             break;
         }
         if (collides) {
+          pos = ghost.characterUtil.snapToGrid(newGridPos, newDirection, ghost.scaledTileSize, ghost.anchor, ghost.gameCoordinator.scale);
+          ghost.position.set(pos.x, pos.y);
+          _sound.sound.play("sonic_break");
           var an = _this2.animator.animations.get("ghost-kick");
           an === null || an === void 0 || an.pause();
           ghost.mode = _types.Mode.scared;
           ghost.scaredColor = "white";
+          console.log("ghost white");
           //make sonic walk again
           _this2.activeTimers.push(new _timer["default"](function () {
             _this2.animator.play("walk");
@@ -2051,7 +2122,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
     key: "handleMovement",
     value: function handleMovement(elapsedMs) {
       var point = _superPropGet(Sonic, "handleMovement", this, 3)([elapsedMs]);
-      if (this.target && !this.seenTarget && this.calculateDistance(this.getGridPosition(), this.target.getGridPosition()) < 4) {
+      if (this.target && !this.seenTarget && this.calculateDistance(this.getGridPosition(), this.target.getGridPosition()) < 6) {
         this.mode = _types.Mode.target;
         this.seenTarget = true;
       }
@@ -2097,7 +2168,7 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
 }(_ghost["default"]);
 var _default = exports["default"] = Sonic;
 
-},{"../../../../../../../scripts/characters/ghost.ts":20,"../../../../../../../scripts/characters/pacman.ts":22,"../../../../../../../scripts/characters/types.ts":24,"../../../../../../../scripts/utilities/characterUtil.ts":33,"../../../../../../../scripts/utilities/timer.ts":36,"../../../../../../../scripts/utilities/utils.ts":37,"../animations/animator.ts":4,"../utils/util.ts":18}],12:[function(require,module,exports){
+},{"../../../../../../../scripts/characters/ghost.ts":20,"../../../../../../../scripts/characters/pacman.ts":22,"../../../../../../../scripts/characters/types.ts":24,"../../../../../../../scripts/utilities/characterUtil.ts":33,"../../../../../../../scripts/utilities/timer.ts":36,"../../../../../../../scripts/utilities/utils.ts":37,"../animations/animator.ts":4,"../utils/util.ts":18,"@pixi/sound":359,"pixi.js":489}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3939,7 +4010,7 @@ var Pacman = /*#__PURE__*/function (_MovableEntity) {
 }(_movableEntity["default"]); // removeIf(production)
 var _default = exports["default"] = Pacman; // endRemoveIf(production)
 
-},{"./movableEntity.ts":21,"pixi.js":458}],23:[function(require,module,exports){
+},{"./movableEntity.ts":21,"pixi.js":489}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4030,7 +4101,7 @@ var StaticEntity = /*#__PURE__*/function (_Sprite) {
 }(_pixi.Sprite);
 var _default = exports["default"] = StaticEntity;
 
-},{"../utilities/utils.ts":37,"pixi.js":458}],24:[function(require,module,exports){
+},{"../utilities/utils.ts":37,"pixi.js":489}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4712,7 +4783,7 @@ var AssetsManager = /*#__PURE__*/function () {
 }(); //removeIf(production)
 var _default = exports["default"] = AssetsManager; //endRemoveIf
 
-},{"pixi.js":458}],26:[function(require,module,exports){
+},{"pixi.js":489}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6107,7 +6178,7 @@ var RendererBottom = /*#__PURE__*/function (_PIXI$Renderer2) {
   }]);
 }(PIXI.Renderer);
 
-},{"../../mods/empty-mod.ts":1,"../characters/ghost.ts":20,"../characters/movableEntity.ts":21,"../characters/pacman.ts":22,"../characters/staticEntity.ts":23,"../characters/types.ts":24,"../pickups/pickup.ts":32,"../utilities/characterUtil.ts":33,"../utilities/soundManager.ts":35,"../utilities/timer.ts":36,"./assetsManager.ts":25,"./gameEngine.ts":27,"./mazeManagert.ts":28,"@pixi/devtools":225,"eventemitter3":434,"pixi.js":458}],27:[function(require,module,exports){
+},{"../../mods/empty-mod.ts":1,"../characters/ghost.ts":20,"../characters/movableEntity.ts":21,"../characters/pacman.ts":22,"../characters/staticEntity.ts":23,"../characters/types.ts":24,"../pickups/pickup.ts":32,"../utilities/characterUtil.ts":33,"../utilities/soundManager.ts":35,"../utilities/timer.ts":36,"./assetsManager.ts":25,"./gameEngine.ts":27,"./mazeManagert.ts":28,"@pixi/devtools":225,"eventemitter3":465,"pixi.js":489}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7085,14 +7156,15 @@ var CharacterUtil = /*#__PURE__*/function () {
 
     /**
      * Calculates the css position when snapping the character to the x-y grid
-     * @param {({x: number, y: number})} position - The character's position during the current frame
+     * @param {({x: number, y: number})} gridPosition - The character's grid position during the current frame
      * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+     * @param {ObservablePoint x:number,y:number} anchor - The anchor of the sprite (center 0.5,0,5 or top-left 0,0)
      * @param {number} scaledTileSize - The dimensions of a single tile
      * @returns {({top: number, left: number})}
      */
   }, {
     key: "snapToGrid",
-    value: function snapToGrid(position, direction, scaledTileSize, anchor, scale) {
+    value: function snapToGrid(gridPosition, direction, scaledTileSize, anchor, scale) {
       var ax = 0,
         ay = 0;
       if (anchor) {
@@ -7100,18 +7172,18 @@ var CharacterUtil = /*#__PURE__*/function () {
         ax = axis.x;
         ay = axis.y;
       }
-      var newPosition = (0, _utils.copyPosition)(this, position);
+      var newGridPosition = (0, _utils.copyPosition)(this, gridPosition);
       var roundingFunction = this.determineRoundingFunction(direction);
       switch (direction) {
         case this.directions.up:
         case this.directions.down:
-          newPosition.y = roundingFunction(newPosition.y);
+          newGridPosition.y = roundingFunction(newGridPosition.y);
           break;
         default:
-          newPosition.x = roundingFunction(newPosition.x);
+          newGridPosition.x = roundingFunction(newGridPosition.x);
           break;
       }
-      return (0, _utils.createObservablePoint)(this, (newPosition.x - 0.5) * scaledTileSize + ax, (newPosition.y - 0.5) * scaledTileSize + ay);
+      return (0, _utils.createObservablePoint)(this, (newGridPosition.x - 0.5) * scaledTileSize + ax, (newGridPosition.y - 0.5) * scaledTileSize + ay);
     }
 
     /**
@@ -7949,7 +8021,7 @@ function vLerp(a, b, t) {
   return createObservablePoint({}, lerp(a.x, b.x, t), lerp(a.y, b.y, t));
 }
 
-},{"pixi.js":458}],38:[function(require,module,exports){
+},{"pixi.js":489}],38:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), events = require("@pixi/events"), accessibleTarget = require("./accessibleTarget.js");
 display.DisplayObject.mixin(accessibleTarget.accessibleTarget);
@@ -11339,7 +11411,7 @@ extensions.extensions.add(Renderer);
 exports.Renderer = Renderer;
 
 
-},{"./shader/UniformGroup.js":170,"./system/SystemManager.js":195,"@pixi/constants":110,"@pixi/extensions":241,"@pixi/math":299,"@pixi/settings":339,"@pixi/utils":402}],113:[function(require,module,exports){
+},{"./shader/UniformGroup.js":170,"./system/SystemManager.js":195,"@pixi/constants":110,"@pixi/extensions":241,"@pixi/math":299,"@pixi/settings":339,"@pixi/utils":433}],113:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions");
 const renderers = [];
@@ -11717,7 +11789,7 @@ extensions.extensions.add(BatchRenderer);
 exports.BatchRenderer = BatchRenderer;
 
 
-},{"../geometry/ViewableBuffer.js":149,"../shader/utils/checkMaxIfStatementsInShader.js":173,"../state/State.js":191,"../textures/BaseTexture.js":197,"./BatchDrawCall.js":115,"./BatchGeometry.js":116,"./BatchShaderGenerator.js":118,"./BatchTextureArray.js":120,"./ObjectRenderer.js":121,"./canUploadSameBuffer.js":122,"./maxRecommendedTextures.js":123,"./texture.frag.js":124,"./texture.vert.js":125,"@pixi/color":93,"@pixi/constants":110,"@pixi/extensions":241,"@pixi/settings":339,"@pixi/utils":402}],118:[function(require,module,exports){
+},{"../geometry/ViewableBuffer.js":149,"../shader/utils/checkMaxIfStatementsInShader.js":173,"../state/State.js":191,"../textures/BaseTexture.js":197,"./BatchDrawCall.js":115,"./BatchGeometry.js":116,"./BatchShaderGenerator.js":118,"./BatchTextureArray.js":120,"./ObjectRenderer.js":121,"./canUploadSameBuffer.js":122,"./maxRecommendedTextures.js":123,"./texture.frag.js":124,"./texture.vert.js":125,"@pixi/color":93,"@pixi/constants":110,"@pixi/extensions":241,"@pixi/settings":339,"@pixi/utils":433}],118:[function(require,module,exports){
 "use strict";
 var math = require("@pixi/math"), Program = require("../shader/Program.js"), Shader = require("../shader/Shader.js"), UniformGroup = require("../shader/UniformGroup.js");
 class BatchShaderGenerator {
@@ -13509,7 +13581,7 @@ class Geometry {
 exports.Geometry = Geometry;
 
 
-},{"./Attribute.js":143,"./Buffer.js":144,"./utils/interleaveTypedArrays.js":150,"@pixi/constants":110,"@pixi/runner":335,"@pixi/utils":402}],148:[function(require,module,exports){
+},{"./Attribute.js":143,"./Buffer.js":144,"./utils/interleaveTypedArrays.js":150,"@pixi/constants":110,"@pixi/runner":335,"@pixi/utils":433}],148:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), settings = require("@pixi/settings");
 const byteSizeMap = { 5126: 4, 5123: 2, 5121: 1 };
@@ -13799,7 +13871,7 @@ function interleaveTypedArrays(arrays, sizes) {
 exports.interleaveTypedArrays = interleaveTypedArrays;
 
 
-},{"@pixi/utils":402}],151:[function(require,module,exports){
+},{"@pixi/utils":433}],151:[function(require,module,exports){
 "use strict";
 require("./settings.js");
 var color = require("@pixi/color"), constants = require("@pixi/constants"), extensions = require("@pixi/extensions"), math = require("@pixi/math"), runner = require("@pixi/runner"), settings = require("@pixi/settings"), ticker = require("@pixi/ticker"), utils$1 = require("@pixi/utils"), autoDetectRenderer = require("./autoDetectRenderer.js"), BackgroundSystem = require("./background/BackgroundSystem.js"), BatchDrawCall = require("./batch/BatchDrawCall.js"), BatchGeometry = require("./batch/BatchGeometry.js"), BatchRenderer = require("./batch/BatchRenderer.js"), BatchShaderGenerator = require("./batch/BatchShaderGenerator.js"), BatchSystem = require("./batch/BatchSystem.js"), BatchTextureArray = require("./batch/BatchTextureArray.js"), ObjectRenderer = require("./batch/ObjectRenderer.js"), ContextSystem = require("./context/ContextSystem.js"), Filter = require("./filters/Filter.js"), FilterState = require("./filters/FilterState.js"), FilterSystem = require("./filters/FilterSystem.js");
@@ -13970,7 +14042,7 @@ Object.keys(ticker).forEach(function(k) {
 });
 
 
-},{"./IRenderer.js":111,"./Renderer.js":112,"./autoDetectRenderer.js":113,"./background/BackgroundSystem.js":114,"./batch/BatchDrawCall.js":115,"./batch/BatchGeometry.js":116,"./batch/BatchRenderer.js":117,"./batch/BatchShaderGenerator.js":118,"./batch/BatchSystem.js":119,"./batch/BatchTextureArray.js":120,"./batch/ObjectRenderer.js":121,"./context/ContextSystem.js":126,"./filters/Filter.js":127,"./filters/FilterState.js":128,"./filters/FilterSystem.js":129,"./filters/IFilterTarget.js":130,"./filters/spriteMask/SpriteMaskFilter.js":133,"./fragments/index.js":138,"./framebuffer/Framebuffer.js":139,"./framebuffer/FramebufferSystem.js":140,"./framebuffer/GLFramebuffer.js":141,"./framebuffer/MultisampleSystem.js":142,"./geometry/Attribute.js":143,"./geometry/Buffer.js":144,"./geometry/BufferSystem.js":145,"./geometry/Geometry.js":147,"./geometry/GeometrySystem.js":148,"./geometry/ViewableBuffer.js":149,"./mask/MaskData.js":153,"./mask/MaskSystem.js":154,"./mask/ScissorSystem.js":155,"./mask/StencilSystem.js":156,"./plugin/PluginSystem.js":157,"./projection/ProjectionSystem.js":158,"./render/ObjectRendererSystem.js":159,"./renderTexture/BaseRenderTexture.js":160,"./renderTexture/GenerateTextureSystem.js":161,"./renderTexture/RenderTexture.js":162,"./renderTexture/RenderTexturePool.js":163,"./renderTexture/RenderTextureSystem.js":164,"./settings.js":165,"./shader/GLProgram.js":166,"./shader/Program.js":167,"./shader/Shader.js":168,"./shader/ShaderSystem.js":169,"./shader/UniformGroup.js":170,"./shader/utils/checkMaxIfStatementsInShader.js":173,"./shader/utils/generateProgram.js":176,"./shader/utils/generateUniformBufferSync.js":177,"./shader/utils/getTestContext.js":181,"./shader/utils/uniformParsers.js":188,"./shader/utils/unsafeEvalSupported.js":189,"./startup/StartupSystem.js":190,"./state/State.js":191,"./state/StateSystem.js":192,"./system/ISystem.js":194,"./system/SystemManager.js":195,"./systems.js":196,"./textures/BaseTexture.js":197,"./textures/GLTexture.js":198,"./textures/Texture.js":199,"./textures/TextureGCSystem.js":200,"./textures/TextureMatrix.js":201,"./textures/TextureSystem.js":202,"./textures/TextureUvs.js":203,"./textures/resources/AbstractMultiResource.js":204,"./textures/resources/ArrayResource.js":205,"./textures/resources/BaseImageResource.js":206,"./textures/resources/BufferResource.js":207,"./textures/resources/CanvasResource.js":208,"./textures/resources/CubeResource.js":209,"./textures/resources/ImageBitmapResource.js":210,"./textures/resources/ImageResource.js":211,"./textures/resources/Resource.js":212,"./textures/resources/SVGResource.js":213,"./textures/resources/VideoResource.js":215,"./textures/resources/autoDetectResource.js":216,"./textures/resources/index.js":217,"./transformFeedback/TransformFeedback.js":220,"./transformFeedback/TransformFeedbackSystem.js":221,"./utils/Quad.js":222,"./utils/QuadUv.js":223,"./view/ViewSystem.js":224,"@pixi/color":93,"@pixi/constants":110,"@pixi/extensions":241,"@pixi/math":299,"@pixi/runner":335,"@pixi/settings":339,"@pixi/ticker":387,"@pixi/utils":402}],152:[function(require,module,exports){
+},{"./IRenderer.js":111,"./Renderer.js":112,"./autoDetectRenderer.js":113,"./background/BackgroundSystem.js":114,"./batch/BatchDrawCall.js":115,"./batch/BatchGeometry.js":116,"./batch/BatchRenderer.js":117,"./batch/BatchShaderGenerator.js":118,"./batch/BatchSystem.js":119,"./batch/BatchTextureArray.js":120,"./batch/ObjectRenderer.js":121,"./context/ContextSystem.js":126,"./filters/Filter.js":127,"./filters/FilterState.js":128,"./filters/FilterSystem.js":129,"./filters/IFilterTarget.js":130,"./filters/spriteMask/SpriteMaskFilter.js":133,"./fragments/index.js":138,"./framebuffer/Framebuffer.js":139,"./framebuffer/FramebufferSystem.js":140,"./framebuffer/GLFramebuffer.js":141,"./framebuffer/MultisampleSystem.js":142,"./geometry/Attribute.js":143,"./geometry/Buffer.js":144,"./geometry/BufferSystem.js":145,"./geometry/Geometry.js":147,"./geometry/GeometrySystem.js":148,"./geometry/ViewableBuffer.js":149,"./mask/MaskData.js":153,"./mask/MaskSystem.js":154,"./mask/ScissorSystem.js":155,"./mask/StencilSystem.js":156,"./plugin/PluginSystem.js":157,"./projection/ProjectionSystem.js":158,"./render/ObjectRendererSystem.js":159,"./renderTexture/BaseRenderTexture.js":160,"./renderTexture/GenerateTextureSystem.js":161,"./renderTexture/RenderTexture.js":162,"./renderTexture/RenderTexturePool.js":163,"./renderTexture/RenderTextureSystem.js":164,"./settings.js":165,"./shader/GLProgram.js":166,"./shader/Program.js":167,"./shader/Shader.js":168,"./shader/ShaderSystem.js":169,"./shader/UniformGroup.js":170,"./shader/utils/checkMaxIfStatementsInShader.js":173,"./shader/utils/generateProgram.js":176,"./shader/utils/generateUniformBufferSync.js":177,"./shader/utils/getTestContext.js":181,"./shader/utils/uniformParsers.js":188,"./shader/utils/unsafeEvalSupported.js":189,"./startup/StartupSystem.js":190,"./state/State.js":191,"./state/StateSystem.js":192,"./system/ISystem.js":194,"./system/SystemManager.js":195,"./systems.js":196,"./textures/BaseTexture.js":197,"./textures/GLTexture.js":198,"./textures/Texture.js":199,"./textures/TextureGCSystem.js":200,"./textures/TextureMatrix.js":201,"./textures/TextureSystem.js":202,"./textures/TextureUvs.js":203,"./textures/resources/AbstractMultiResource.js":204,"./textures/resources/ArrayResource.js":205,"./textures/resources/BaseImageResource.js":206,"./textures/resources/BufferResource.js":207,"./textures/resources/CanvasResource.js":208,"./textures/resources/CubeResource.js":209,"./textures/resources/ImageBitmapResource.js":210,"./textures/resources/ImageResource.js":211,"./textures/resources/Resource.js":212,"./textures/resources/SVGResource.js":213,"./textures/resources/VideoResource.js":215,"./textures/resources/autoDetectResource.js":216,"./textures/resources/index.js":217,"./transformFeedback/TransformFeedback.js":220,"./transformFeedback/TransformFeedbackSystem.js":221,"./utils/Quad.js":222,"./utils/QuadUv.js":223,"./view/ViewSystem.js":224,"@pixi/color":93,"@pixi/constants":110,"@pixi/extensions":241,"@pixi/math":299,"@pixi/runner":335,"@pixi/settings":339,"@pixi/ticker":418,"@pixi/utils":433}],152:[function(require,module,exports){
 "use strict";
 class AbstractMaskSystem {
   /**
@@ -14401,7 +14473,7 @@ extensions.extensions.add(PluginSystem);
 exports.PluginSystem = PluginSystem;
 
 
-},{"@pixi/extensions":241,"@pixi/utils":402}],158:[function(require,module,exports){
+},{"@pixi/extensions":241,"@pixi/utils":433}],158:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), math = require("@pixi/math");
 class ProjectionSystem {
@@ -14793,7 +14865,7 @@ RenderTexturePool.SCREEN_KEY = -1;
 exports.RenderTexturePool = RenderTexturePool;
 
 
-},{"./BaseRenderTexture.js":160,"./RenderTexture.js":162,"@pixi/constants":110,"@pixi/utils":402}],164:[function(require,module,exports){
+},{"./BaseRenderTexture.js":160,"./RenderTexture.js":162,"@pixi/constants":110,"@pixi/utils":433}],164:[function(require,module,exports){
 "use strict";
 var color = require("@pixi/color"), extensions = require("@pixi/extensions"), math = require("@pixi/math");
 const tempRect = new math.Rectangle(), tempRect2 = new math.Rectangle();
@@ -15114,7 +15186,7 @@ Object.defineProperties(settings.settings, {
 });
 
 
-},{"./background/BackgroundSystem.js":114,"./batch/BatchRenderer.js":117,"./context/ContextSystem.js":126,"./filters/Filter.js":127,"./shader/Program.js":167,"./startup/StartupSystem.js":190,"./systems.js":196,"./textures/BaseTexture.js":197,"./textures/TextureGCSystem.js":200,"./view/ViewSystem.js":224,"@pixi/constants":110,"@pixi/settings":339,"@pixi/utils":402}],166:[function(require,module,exports){
+},{"./background/BackgroundSystem.js":114,"./batch/BatchRenderer.js":117,"./context/ContextSystem.js":126,"./filters/Filter.js":127,"./shader/Program.js":167,"./startup/StartupSystem.js":190,"./systems.js":196,"./textures/BaseTexture.js":197,"./textures/TextureGCSystem.js":200,"./view/ViewSystem.js":224,"@pixi/constants":110,"@pixi/settings":339,"@pixi/utils":433}],166:[function(require,module,exports){
 "use strict";
 class IGLUniformData {
 }
@@ -15203,7 +15275,7 @@ let Program = _Program;
 exports.Program = Program;
 
 
-},{"./defaultProgram.frag.js":171,"./defaultProgram.vert.js":172,"./utils/getMaxFragmentPrecision.js":180,"./utils/index.js":183,"./utils/setPrecision.js":187,"@pixi/constants":110,"@pixi/utils":402}],168:[function(require,module,exports){
+},{"./defaultProgram.frag.js":171,"./defaultProgram.vert.js":172,"./utils/getMaxFragmentPrecision.js":180,"./utils/index.js":183,"./utils/setPrecision.js":187,"@pixi/constants":110,"@pixi/utils":433}],168:[function(require,module,exports){
 "use strict";
 var runner = require("@pixi/runner"), Program = require("./Program.js"), UniformGroup = require("./UniformGroup.js");
 class Shader {
@@ -16831,7 +16903,7 @@ class SystemManager extends utils.EventEmitter {
 exports.SystemManager = SystemManager;
 
 
-},{"@pixi/runner":335,"@pixi/utils":402}],196:[function(require,module,exports){
+},{"@pixi/runner":335,"@pixi/utils":433}],196:[function(require,module,exports){
 "use strict";
 var BackgroundSystem = require("./background/BackgroundSystem.js"), BatchSystem = require("./batch/BatchSystem.js"), ContextSystem = require("./context/ContextSystem.js"), FilterSystem = require("./filters/FilterSystem.js"), FramebufferSystem = require("./framebuffer/FramebufferSystem.js"), GeometrySystem = require("./geometry/GeometrySystem.js"), MaskSystem = require("./mask/MaskSystem.js"), ScissorSystem = require("./mask/ScissorSystem.js"), StencilSystem = require("./mask/StencilSystem.js"), PluginSystem = require("./plugin/PluginSystem.js"), ProjectionSystem = require("./projection/ProjectionSystem.js"), GenerateTextureSystem = require("./renderTexture/GenerateTextureSystem.js"), RenderTextureSystem = require("./renderTexture/RenderTextureSystem.js"), ShaderSystem = require("./shader/ShaderSystem.js"), StartupSystem = require("./startup/StartupSystem.js"), StateSystem = require("./state/StateSystem.js"), SystemManager = require("./system/SystemManager.js"), TextureGCSystem = require("./textures/TextureGCSystem.js"), TextureSystem = require("./textures/TextureSystem.js"), TransformFeedbackSystem = require("./transformFeedback/TransformFeedbackSystem.js"), ViewSystem = require("./view/ViewSystem.js");
 exports.BackgroundSystem = BackgroundSystem.BackgroundSystem;
@@ -17170,7 +17242,7 @@ let BaseTexture = _BaseTexture;
 exports.BaseTexture = BaseTexture;
 
 
-},{"./resources/BufferResource.js":207,"./resources/Resource.js":212,"./resources/autoDetectResource.js":216,"@pixi/constants":110,"@pixi/settings":339,"@pixi/utils":402}],198:[function(require,module,exports){
+},{"./resources/BufferResource.js":207,"./resources/Resource.js":212,"./resources/autoDetectResource.js":216,"@pixi/constants":110,"@pixi/settings":339,"@pixi/utils":433}],198:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 class GLTexture {
@@ -17448,7 +17520,7 @@ class Texture extends utils.EventEmitter {
 exports.Texture = Texture;
 
 
-},{"./BaseTexture.js":197,"./TextureUvs.js":203,"./resources/ImageResource.js":211,"@pixi/math":299,"@pixi/settings":339,"@pixi/utils":402}],200:[function(require,module,exports){
+},{"./BaseTexture.js":197,"./TextureUvs.js":203,"./resources/ImageResource.js":211,"@pixi/math":299,"@pixi/settings":339,"@pixi/utils":433}],200:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), extensions = require("@pixi/extensions");
 const _TextureGCSystem = class _TextureGCSystem2 {
@@ -17748,7 +17820,7 @@ extensions.extensions.add(TextureSystem);
 exports.TextureSystem = TextureSystem;
 
 
-},{"./BaseTexture.js":197,"./GLTexture.js":198,"./utils/mapInternalFormatToSamplerType.js":218,"./utils/mapTypeAndFormatToInternalFormat.js":219,"@pixi/constants":110,"@pixi/extensions":241,"@pixi/utils":402}],203:[function(require,module,exports){
+},{"./BaseTexture.js":197,"./GLTexture.js":198,"./utils/mapInternalFormatToSamplerType.js":218,"./utils/mapTypeAndFormatToInternalFormat.js":219,"@pixi/constants":110,"@pixi/extensions":241,"@pixi/utils":433}],203:[function(require,module,exports){
 "use strict";
 var math = require("@pixi/math");
 class TextureUvs {
@@ -18001,7 +18073,7 @@ class BaseImageResource extends Resource.Resource {
 exports.BaseImageResource = BaseImageResource;
 
 
-},{"./Resource.js":212,"@pixi/constants":110,"@pixi/utils":402}],207:[function(require,module,exports){
+},{"./Resource.js":212,"@pixi/constants":110,"@pixi/utils":433}],207:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants"), Resource = require("./Resource.js");
 class BufferResource extends Resource.Resource {
@@ -18533,7 +18605,7 @@ let SVGResource = _SVGResource;
 exports.SVGResource = SVGResource;
 
 
-},{"./BaseImageResource.js":206,"@pixi/settings":339,"@pixi/utils":402}],214:[function(require,module,exports){
+},{"./BaseImageResource.js":206,"@pixi/settings":339,"@pixi/utils":433}],214:[function(require,module,exports){
 "use strict";
 var BaseImageResource = require("./BaseImageResource.js");
 class VideoFrameResource extends BaseImageResource.BaseImageResource {
@@ -18719,7 +18791,7 @@ let VideoResource = _VideoResource;
 exports.VideoResource = VideoResource;
 
 
-},{"./BaseImageResource.js":206,"@pixi/ticker":387}],216:[function(require,module,exports){
+},{"./BaseImageResource.js":206,"@pixi/ticker":418}],216:[function(require,module,exports){
 "use strict";
 const INSTALLED = [];
 function autoDetectResource(source, options) {
@@ -27241,7 +27313,7 @@ display.DisplayObject.prototype._cacheAsBitmapDestroy = function(options) {
 exports.CacheData = CacheData;
 
 
-},{"@pixi/core":151,"@pixi/display":229,"@pixi/sprite":353}],320:[function(require,module,exports){
+},{"@pixi/core":151,"@pixi/display":229,"@pixi/sprite":384}],320:[function(require,module,exports){
 "use strict";
 var display = require("@pixi/display");
 display.DisplayObject.prototype.name = null;
@@ -27855,7 +27927,7 @@ let BasePrepare = _BasePrepare;
 exports.BasePrepare = BasePrepare;
 
 
-},{"./CountLimiter.js":329,"@pixi/core":151,"@pixi/display":229,"@pixi/text":382}],329:[function(require,module,exports){
+},{"./CountLimiter.js":329,"@pixi/core":151,"@pixi/display":229,"@pixi/text":413}],329:[function(require,module,exports){
 "use strict";
 class CountLimiter {
   /**
@@ -28188,7 +28260,3030 @@ const isMobileCall = isMobileJs.default ?? isMobileJs, isMobile = isMobileCall(g
 exports.isMobile = isMobile;
 
 
-},{"ismobilejs":446}],342:[function(require,module,exports){
+},{"ismobilejs":477}],342:[function(require,module,exports){
+'use strict';
+
+class Filterable {
+  /**
+   * @param input - The source audio node
+   * @param output - The output audio node
+   */
+  constructor(input, output) {
+    this._output = output;
+    this._input = input;
+  }
+  /** The destination output audio node */
+  get destination() {
+    return this._input;
+  }
+  /** The collection of filters. */
+  get filters() {
+    return this._filters;
+  }
+  set filters(filters) {
+    if (this._filters) {
+      this._filters.forEach((filter) => {
+        if (filter) {
+          filter.disconnect();
+        }
+      });
+      this._filters = null;
+      this._input.connect(this._output);
+    }
+    if (filters && filters.length) {
+      this._filters = filters.slice(0);
+      this._input.disconnect();
+      let prevFilter = null;
+      filters.forEach((filter) => {
+        if (prevFilter === null) {
+          this._input.connect(filter.destination);
+        } else {
+          prevFilter.connect(filter.destination);
+        }
+        prevFilter = filter;
+      });
+      prevFilter.connect(this._output);
+    }
+  }
+  /** Cleans up. */
+  destroy() {
+    this.filters = null;
+    this._input = null;
+    this._output = null;
+  }
+}
+
+exports.Filterable = Filterable;
+
+
+},{}],343:[function(require,module,exports){
+'use strict';
+
+var core = require('@pixi/core');
+var HTMLAudioMedia = require('./htmlaudio/HTMLAudioMedia.js');
+var instance = require('./instance.js');
+var SoundSprite = require('./SoundSprite.js');
+var supported = require('./utils/supported.js');
+var WebAudioMedia = require('./webaudio/WebAudioMedia.js');
+
+const _Sound = class {
+  /**
+   * Create a new sound instance from source.
+   * @param source - Either the path or url to the source file.
+   *        or the object of options to use.
+   * @return Created sound instance.
+   */
+  static from(source) {
+    let options = {};
+    if (typeof source === "string") {
+      options.url = source;
+    } else if (source instanceof ArrayBuffer || source instanceof AudioBuffer || source instanceof HTMLAudioElement) {
+      options.source = source;
+    } else if (Array.isArray(source)) {
+      options.url = source;
+    } else {
+      options = source;
+    }
+    options = {
+      autoPlay: false,
+      singleInstance: false,
+      url: null,
+      source: null,
+      preload: false,
+      volume: 1,
+      speed: 1,
+      complete: null,
+      loaded: null,
+      loop: false,
+      ...options
+    };
+    Object.freeze(options);
+    const media = instance.getInstance().useLegacy ? new HTMLAudioMedia.HTMLAudioMedia() : new WebAudioMedia.WebAudioMedia();
+    return new _Sound(media, options);
+  }
+  /**
+   * Use `Sound.from`
+   * @ignore
+   */
+  constructor(media, options) {
+    this.media = media;
+    this.options = options;
+    this._instances = [];
+    this._sprites = {};
+    this.media.init(this);
+    const complete = options.complete;
+    this._autoPlayOptions = complete ? { complete } : null;
+    this.isLoaded = false;
+    this._preloadQueue = null;
+    this.isPlaying = false;
+    this.autoPlay = options.autoPlay;
+    this.singleInstance = options.singleInstance;
+    this.preload = options.preload || this.autoPlay;
+    this.url = Array.isArray(options.url) ? this.preferUrl(options.url) : options.url;
+    this.speed = options.speed;
+    this.volume = options.volume;
+    this.loop = options.loop;
+    if (options.sprites) {
+      this.addSprites(options.sprites);
+    }
+    if (this.preload) {
+      this._preload(options.loaded);
+    }
+  }
+  /**
+   * Internal help for resolving which file to use if there are multiple provide
+   * this is especially helpful for working with bundlers (non Assets loading).
+   */
+  preferUrl(urls) {
+    const [file] = urls.map((url) => ({ url, ext: core.utils.path.extname(url).slice(1) })).filter(({ ext }) => supported.supported[ext]).sort((a, b) => supported.extensions.indexOf(a.ext) - supported.extensions.indexOf(b.ext));
+    if (!file) {
+      throw new Error("No supported file type found");
+    }
+    return file.url;
+  }
+  /** Instance of the media context. */
+  get context() {
+    return instance.getInstance().context;
+  }
+  /** Stops all the instances of this sound from playing. */
+  pause() {
+    this.isPlaying = false;
+    this.paused = true;
+    return this;
+  }
+  /** Resuming all the instances of this sound from playing */
+  resume() {
+    this.isPlaying = this._instances.length > 0;
+    this.paused = false;
+    return this;
+  }
+  /** Stops all the instances of this sound from playing. */
+  get paused() {
+    return this._paused;
+  }
+  set paused(paused) {
+    this._paused = paused;
+    this.refreshPaused();
+  }
+  /** The playback rate. */
+  get speed() {
+    return this._speed;
+  }
+  set speed(speed) {
+    this._speed = speed;
+    this.refresh();
+  }
+  /** Set the filters. Only supported with WebAudio. */
+  get filters() {
+    return this.media.filters;
+  }
+  set filters(filters) {
+    this.media.filters = filters;
+  }
+  /**
+   * @ignore
+   */
+  addSprites(source, data) {
+    if (typeof source === "object") {
+      const results = {};
+      for (const alias in source) {
+        results[alias] = this.addSprites(alias, source[alias]);
+      }
+      return results;
+    }
+    console.assert(!this._sprites[source], `Alias ${source} is already taken`);
+    const sprite = new SoundSprite.SoundSprite(this, data);
+    this._sprites[source] = sprite;
+    return sprite;
+  }
+  /** Destructor, safer to use `SoundLibrary.remove(alias)` to remove this sound. */
+  destroy() {
+    this._removeInstances();
+    this.removeSprites();
+    this.media.destroy();
+    this.media = null;
+    this._sprites = null;
+    this._instances = null;
+  }
+  /**
+   * Remove a sound sprite.
+   * @param alias - The unique name of the sound sprite, if alias is omitted, removes all sprites.
+   */
+  removeSprites(alias) {
+    if (!alias) {
+      for (const name in this._sprites) {
+        this.removeSprites(name);
+      }
+    } else {
+      const sprite = this._sprites[alias];
+      if (sprite !== void 0) {
+        sprite.destroy();
+        delete this._sprites[alias];
+      }
+    }
+    return this;
+  }
+  /** If the current sound is playable (loaded). */
+  get isPlayable() {
+    return this.isLoaded && this.media && this.media.isPlayable;
+  }
+  /** Stops all the instances of this sound from playing. */
+  stop() {
+    if (!this.isPlayable) {
+      this.autoPlay = false;
+      this._autoPlayOptions = null;
+      return this;
+    }
+    this.isPlaying = false;
+    for (let i = this._instances.length - 1; i >= 0; i--) {
+      this._instances[i].stop();
+    }
+    return this;
+  }
+  // Overloaded function
+  play(source, complete) {
+    let options;
+    if (typeof source === "string") {
+      const sprite = source;
+      options = { sprite, loop: this.loop, complete };
+    } else if (typeof source === "function") {
+      options = {};
+      options.complete = source;
+    } else {
+      options = source;
+    }
+    options = {
+      complete: null,
+      loaded: null,
+      sprite: null,
+      end: null,
+      start: 0,
+      volume: 1,
+      speed: 1,
+      muted: false,
+      loop: false,
+      ...options || {}
+    };
+    if (options.sprite) {
+      const alias = options.sprite;
+      console.assert(!!this._sprites[alias], `Alias ${alias} is not available`);
+      const sprite = this._sprites[alias];
+      options.start = sprite.start + (options.start || 0);
+      options.end = sprite.end;
+      options.speed = sprite.speed || 1;
+      options.loop = sprite.loop || options.loop;
+      delete options.sprite;
+    }
+    if (options.offset) {
+      options.start = options.offset;
+    }
+    if (!this.isLoaded) {
+      if (this._preloadQueue) {
+        return new Promise((resolve) => {
+          this._preloadQueue.push(() => {
+            resolve(this.play(options));
+          });
+        });
+      }
+      this._preloadQueue = [];
+      this.autoPlay = true;
+      this._autoPlayOptions = options;
+      return new Promise((resolve, reject) => {
+        this._preload((err, sound, media) => {
+          this._preloadQueue.forEach((resolve2) => resolve2());
+          this._preloadQueue = null;
+          if (err) {
+            reject(err);
+          } else {
+            if (options.loaded) {
+              options.loaded(err, sound, media);
+            }
+            resolve(media);
+          }
+        });
+      });
+    }
+    if (this.singleInstance || options.singleInstance) {
+      this._removeInstances();
+    }
+    const instance = this._createInstance();
+    this._instances.push(instance);
+    this.isPlaying = true;
+    instance.once("end", () => {
+      if (options.complete) {
+        options.complete(this);
+      }
+      this._onComplete(instance);
+    });
+    instance.once("stop", () => {
+      this._onComplete(instance);
+    });
+    instance.play(options);
+    return instance;
+  }
+  /** Internal only, speed, loop, volume change occured. */
+  refresh() {
+    const len = this._instances.length;
+    for (let i = 0; i < len; i++) {
+      this._instances[i].refresh();
+    }
+  }
+  /** Handle changes in paused state. Internal only. */
+  refreshPaused() {
+    const len = this._instances.length;
+    for (let i = 0; i < len; i++) {
+      this._instances[i].refreshPaused();
+    }
+  }
+  /** Gets and sets the volume. */
+  get volume() {
+    return this._volume;
+  }
+  set volume(volume) {
+    this._volume = volume;
+    this.refresh();
+  }
+  /** Gets and sets the muted flag. */
+  get muted() {
+    return this._muted;
+  }
+  set muted(muted) {
+    this._muted = muted;
+    this.refresh();
+  }
+  /** Gets and sets the looping. */
+  get loop() {
+    return this._loop;
+  }
+  set loop(loop) {
+    this._loop = loop;
+    this.refresh();
+  }
+  /** Starts the preloading of sound. */
+  _preload(callback) {
+    this.media.load(callback);
+  }
+  /** Gets the list of instances that are currently being played of this sound. */
+  get instances() {
+    return this._instances;
+  }
+  /** Get the map of sprites. */
+  get sprites() {
+    return this._sprites;
+  }
+  /** Get the duration of the audio in seconds. */
+  get duration() {
+    return this.media.duration;
+  }
+  /** Auto play the first instance. */
+  autoPlayStart() {
+    let instance;
+    if (this.autoPlay) {
+      instance = this.play(this._autoPlayOptions);
+    }
+    return instance;
+  }
+  /** Removes all instances. */
+  _removeInstances() {
+    for (let i = this._instances.length - 1; i >= 0; i--) {
+      this._poolInstance(this._instances[i]);
+    }
+    this._instances.length = 0;
+  }
+  /**
+   * Sound instance completed.
+   * @param instance
+   */
+  _onComplete(instance) {
+    if (this._instances) {
+      const index = this._instances.indexOf(instance);
+      if (index > -1) {
+        this._instances.splice(index, 1);
+      }
+      this.isPlaying = this._instances.length > 0;
+    }
+    this._poolInstance(instance);
+  }
+  /** Create a new instance. */
+  _createInstance() {
+    if (_Sound._pool.length > 0) {
+      const instance = _Sound._pool.pop();
+      instance.init(this.media);
+      return instance;
+    }
+    return this.media.create();
+  }
+  /**
+   * Destroy/recycling the instance object.
+   * @param instance - Instance to recycle
+   */
+  _poolInstance(instance) {
+    instance.destroy();
+    if (_Sound._pool.indexOf(instance) < 0) {
+      _Sound._pool.push(instance);
+    }
+  }
+};
+let Sound = _Sound;
+/** Pool of instances */
+Sound._pool = [];
+
+exports.Sound = Sound;
+
+
+},{"./SoundSprite.js":345,"./htmlaudio/HTMLAudioMedia.js":357,"./instance.js":360,"./utils/supported.js":366,"./webaudio/WebAudioMedia.js":369,"@pixi/core":151}],344:[function(require,module,exports){
+'use strict';
+
+var Sound = require('./Sound.js');
+var HTMLAudioContext = require('./htmlaudio/HTMLAudioContext.js');
+var WebAudioContext = require('./webaudio/WebAudioContext.js');
+
+class SoundLibrary {
+  constructor() {
+    this.init();
+  }
+  /**
+   * Re-initialize the sound library, this will
+   * recreate the AudioContext. If there's a hardware-failure
+   * call `close` and then `init`.
+   * @return Sound instance
+   */
+  init() {
+    if (this.supported) {
+      this._webAudioContext = new WebAudioContext.WebAudioContext();
+    }
+    this._htmlAudioContext = new HTMLAudioContext.HTMLAudioContext();
+    this._sounds = {};
+    this.useLegacy = !this.supported;
+    return this;
+  }
+  /**
+   * The global context to use.
+   * @readonly
+   */
+  get context() {
+    return this._context;
+  }
+  /**
+   * Apply filters to all sounds. Can be useful
+   * for setting global planning or global effects.
+   * **Only supported with WebAudio.**
+   * @example
+   * import { sound, filters } from '@pixi/sound';
+   * // Adds a filter to pan all output left
+   * sound.filtersAll = [
+   *     new filters.StereoFilter(-1)
+   * ];
+   */
+  get filtersAll() {
+    if (!this.useLegacy) {
+      return this._context.filters;
+    }
+    return [];
+  }
+  set filtersAll(filtersAll) {
+    if (!this.useLegacy) {
+      this._context.filters = filtersAll;
+    }
+  }
+  /**
+   * `true` if WebAudio is supported on the current browser.
+   */
+  get supported() {
+    return WebAudioContext.WebAudioContext.AudioContext !== null;
+  }
+  /**
+   * @ignore
+   */
+  add(source, sourceOptions) {
+    if (typeof source === "object") {
+      const results = {};
+      for (const alias in source) {
+        const options2 = this._getOptions(
+          source[alias],
+          sourceOptions
+        );
+        results[alias] = this.add(alias, options2);
+      }
+      return results;
+    }
+    console.assert(!this._sounds[source], `Sound with alias ${source} already exists.`);
+    if (sourceOptions instanceof Sound.Sound) {
+      this._sounds[source] = sourceOptions;
+      return sourceOptions;
+    }
+    const options = this._getOptions(sourceOptions);
+    const sound = Sound.Sound.from(options);
+    this._sounds[source] = sound;
+    return sound;
+  }
+  /**
+   * Internal methods for getting the options object
+   * @private
+   * @param source - The source options
+   * @param overrides - Override default options
+   * @return The construction options
+   */
+  _getOptions(source, overrides) {
+    let options;
+    if (typeof source === "string") {
+      options = { url: source };
+    } else if (Array.isArray(source)) {
+      options = { url: source };
+    } else if (source instanceof ArrayBuffer || source instanceof AudioBuffer || source instanceof HTMLAudioElement) {
+      options = { source };
+    } else {
+      options = source;
+    }
+    options = { ...options, ...overrides || {} };
+    return options;
+  }
+  /**
+   * Do not use WebAudio, force the use of legacy. This **must** be called before loading any files.
+   */
+  get useLegacy() {
+    return this._useLegacy;
+  }
+  set useLegacy(legacy) {
+    this._useLegacy = legacy;
+    this._context = !legacy && this.supported ? this._webAudioContext : this._htmlAudioContext;
+  }
+  /**
+   * This disables auto-pause all playback when the window blurs (WebAudio only).
+   * This is helpful to keep from playing sounds when the user switches tabs.
+   * However, if you're running content within an iframe, this may be undesirable
+   * and you should disable (set to `true`) this behavior.
+   * @default false
+   */
+  get disableAutoPause() {
+    return !this._webAudioContext.autoPause;
+  }
+  set disableAutoPause(autoPause) {
+    this._webAudioContext.autoPause = !autoPause;
+  }
+  /**
+   * Removes a sound by alias.
+   * @param alias - The sound alias reference.
+   * @return Instance for chaining.
+   */
+  remove(alias) {
+    this.exists(alias, true);
+    this._sounds[alias].destroy();
+    delete this._sounds[alias];
+    return this;
+  }
+  /**
+   * Set the global volume for all sounds. To set per-sound volume see {@link SoundLibrary#volume}.
+   */
+  get volumeAll() {
+    return this._context.volume;
+  }
+  set volumeAll(volume) {
+    this._context.volume = volume;
+    this._context.refresh();
+  }
+  /**
+   * Set the global speed for all sounds. To set per-sound speed see {@link SoundLibrary#speed}.
+   */
+  get speedAll() {
+    return this._context.speed;
+  }
+  set speedAll(speed) {
+    this._context.speed = speed;
+    this._context.refresh();
+  }
+  /**
+   * Toggle paused property for all sounds.
+   * @return `true` if all sounds are paused.
+   */
+  togglePauseAll() {
+    return this._context.togglePause();
+  }
+  /**
+   * Pauses any playing sounds.
+   * @return Instance for chaining.
+   */
+  pauseAll() {
+    this._context.paused = true;
+    this._context.refreshPaused();
+    return this;
+  }
+  /**
+   * Resumes any sounds.
+   * @return Instance for chaining.
+   */
+  resumeAll() {
+    this._context.paused = false;
+    this._context.refreshPaused();
+    return this;
+  }
+  /**
+   * Toggle muted property for all sounds.
+   * @return `true` if all sounds are muted.
+   */
+  toggleMuteAll() {
+    return this._context.toggleMute();
+  }
+  /**
+   * Mutes all playing sounds.
+   * @return Instance for chaining.
+   */
+  muteAll() {
+    this._context.muted = true;
+    this._context.refresh();
+    return this;
+  }
+  /**
+   * Unmutes all playing sounds.
+   * @return Instance for chaining.
+   */
+  unmuteAll() {
+    this._context.muted = false;
+    this._context.refresh();
+    return this;
+  }
+  /**
+   * Stops and removes all sounds. They cannot be used after this.
+   * @return Instance for chaining.
+   */
+  removeAll() {
+    for (const alias in this._sounds) {
+      this._sounds[alias].destroy();
+      delete this._sounds[alias];
+    }
+    return this;
+  }
+  /**
+   * Stops all sounds.
+   * @return Instance for chaining.
+   */
+  stopAll() {
+    for (const alias in this._sounds) {
+      this._sounds[alias].stop();
+    }
+    return this;
+  }
+  /**
+   * Checks if a sound by alias exists.
+   * @param alias - Check for alias.
+   * @param assert - Whether enable console.assert.
+   * @return true if the sound exists.
+   */
+  exists(alias, assert = false) {
+    const exists = !!this._sounds[alias];
+    if (assert) {
+      console.assert(exists, `No sound matching alias '${alias}'.`);
+    }
+    return exists;
+  }
+  /**
+   * Convenience function to check to see if any sound is playing.
+   * @returns `true` if any sound is currently playing.
+   */
+  isPlaying() {
+    for (const alias in this._sounds) {
+      if (this._sounds[alias].isPlaying) {
+        return true;
+      }
+    }
+    return false;
+  }
+  /**
+   * Find a sound by alias.
+   * @param alias - The sound alias reference.
+   * @return Sound object.
+   */
+  find(alias) {
+    this.exists(alias, true);
+    return this._sounds[alias];
+  }
+  /**
+   * Plays a sound.
+   * @method play
+   * @instance
+   * @param {string} alias - The sound alias reference.
+   * @param {string} sprite - The alias of the sprite to play.
+   * @return {IMediaInstance|null} The sound instance, this cannot be reused
+   *         after it is done playing. Returns `null` if the sound has not yet loaded.
+   */
+  /**
+   * Plays a sound.
+   * @param alias - The sound alias reference.
+   * @param {PlayOptions|Function} options - The options or callback when done.
+   * @return The sound instance,
+   *        this cannot be reused after it is done playing. Returns a Promise if the sound
+   *        has not yet loaded.
+   */
+  play(alias, options) {
+    return this.find(alias).play(options);
+  }
+  /**
+   * Stops a sound.
+   * @param alias - The sound alias reference.
+   * @return Sound object.
+   */
+  stop(alias) {
+    return this.find(alias).stop();
+  }
+  /**
+   * Pauses a sound.
+   * @param alias - The sound alias reference.
+   * @return Sound object.
+   */
+  pause(alias) {
+    return this.find(alias).pause();
+  }
+  /**
+   * Resumes a sound.
+   * @param alias - The sound alias reference.
+   * @return Instance for chaining.
+   */
+  resume(alias) {
+    return this.find(alias).resume();
+  }
+  /**
+   * Get or set the volume for a sound.
+   * @param alias - The sound alias reference.
+   * @param volume - Optional current volume to set.
+   * @return The current volume.
+   */
+  volume(alias, volume) {
+    const sound = this.find(alias);
+    if (volume !== void 0) {
+      sound.volume = volume;
+    }
+    return sound.volume;
+  }
+  /**
+   * Get or set the speed for a sound.
+   * @param alias - The sound alias reference.
+   * @param speed - Optional current speed to set.
+   * @return The current speed.
+   */
+  speed(alias, speed) {
+    const sound = this.find(alias);
+    if (speed !== void 0) {
+      sound.speed = speed;
+    }
+    return sound.speed;
+  }
+  /**
+   * Get the length of a sound in seconds.
+   * @param alias - The sound alias reference.
+   * @return The current duration in seconds.
+   */
+  duration(alias) {
+    return this.find(alias).duration;
+  }
+  /**
+   * Closes the sound library. This will release/destroy
+   * the AudioContext(s). Can be used safely if you want to
+   * initialize the sound library later. Use `init` method.
+   */
+  close() {
+    this.removeAll();
+    this._sounds = null;
+    if (this._webAudioContext) {
+      this._webAudioContext.destroy();
+      this._webAudioContext = null;
+    }
+    if (this._htmlAudioContext) {
+      this._htmlAudioContext.destroy();
+      this._htmlAudioContext = null;
+    }
+    this._context = null;
+    return this;
+  }
+}
+
+exports.SoundLibrary = SoundLibrary;
+
+
+},{"./Sound.js":343,"./htmlaudio/HTMLAudioContext.js":355,"./webaudio/WebAudioContext.js":367}],345:[function(require,module,exports){
+'use strict';
+
+class SoundSprite {
+  /**
+   * @param parent - The parent sound
+   * @param options - Data associated with object.
+   */
+  constructor(parent, options) {
+    this.parent = parent;
+    Object.assign(this, options);
+    this.duration = this.end - this.start;
+    console.assert(this.duration > 0, "End time must be after start time");
+  }
+  /**
+   * Play the sound sprite.
+   * @param {Function} [complete] - Function call when complete
+   * @return Sound instance being played.
+   */
+  play(complete) {
+    return this.parent.play({
+      complete,
+      speed: this.speed || this.parent.speed,
+      end: this.end,
+      start: this.start,
+      loop: this.loop
+    });
+  }
+  /** Destroy and don't use after this */
+  destroy() {
+    this.parent = null;
+  }
+}
+
+exports.SoundSprite = SoundSprite;
+
+
+},{}],346:[function(require,module,exports){
+'use strict';
+
+var instance = require('../instance.js');
+var Filter = require('./Filter.js');
+
+class DistortionFilter extends Filter.Filter {
+  /** @param amount - The amount of distoration from 0 to 1. */
+  constructor(amount = 0) {
+    let distortion;
+    if (!instance.getInstance().useLegacy) {
+      const { audioContext } = instance.getInstance().context;
+      distortion = audioContext.createWaveShaper();
+    }
+    super(distortion);
+    this._distortion = distortion;
+    this.amount = amount;
+  }
+  /** The amount of distortion to set. */
+  set amount(value) {
+    this._amount = value;
+    if (instance.getInstance().useLegacy) {
+      return;
+    }
+    const scaledValue = value * 1e3;
+    const samples = 44100;
+    const curve = new Float32Array(samples);
+    const deg = Math.PI / 180;
+    let i = 0;
+    let x;
+    for (; i < samples; ++i) {
+      x = i * 2 / samples - 1;
+      curve[i] = (3 + scaledValue) * x * 20 * deg / (Math.PI + scaledValue * Math.abs(x));
+    }
+    this._distortion.curve = curve;
+    this._distortion.oversample = "4x";
+  }
+  get amount() {
+    return this._amount;
+  }
+  destroy() {
+    this._distortion = null;
+    super.destroy();
+  }
+}
+
+exports.DistortionFilter = DistortionFilter;
+
+
+},{"../instance.js":360,"./Filter.js":348}],347:[function(require,module,exports){
+'use strict';
+
+var instance = require('../instance.js');
+var WebAudioUtils = require('../webaudio/WebAudioUtils.js');
+var Filter = require('./Filter.js');
+
+const _EqualizerFilter = class extends Filter.Filter {
+  /**
+   * @param f32 - Default gain for 32 Hz
+   * @param f64 - Default gain for 64 Hz
+   * @param f125 - Default gain for 125 Hz
+   * @param f250 - Default gain for 250 Hz
+   * @param f500 - Default gain for 500 Hz
+   * @param f1k - Default gain for 1000 Hz
+   * @param f2k - Default gain for 2000 Hz
+   * @param f4k - Default gain for 4000 Hz
+   * @param f8k - Default gain for 8000 Hz
+   * @param f16k - Default gain for 16000 Hz
+   */
+  constructor(f32 = 0, f64 = 0, f125 = 0, f250 = 0, f500 = 0, f1k = 0, f2k = 0, f4k = 0, f8k = 0, f16k = 0) {
+    let bands = [];
+    const equalizerBands = [
+      {
+        f: _EqualizerFilter.F32,
+        type: "lowshelf",
+        gain: f32
+      },
+      {
+        f: _EqualizerFilter.F64,
+        type: "peaking",
+        gain: f64
+      },
+      {
+        f: _EqualizerFilter.F125,
+        type: "peaking",
+        gain: f125
+      },
+      {
+        f: _EqualizerFilter.F250,
+        type: "peaking",
+        gain: f250
+      },
+      {
+        f: _EqualizerFilter.F500,
+        type: "peaking",
+        gain: f500
+      },
+      {
+        f: _EqualizerFilter.F1K,
+        type: "peaking",
+        gain: f1k
+      },
+      {
+        f: _EqualizerFilter.F2K,
+        type: "peaking",
+        gain: f2k
+      },
+      {
+        f: _EqualizerFilter.F4K,
+        type: "peaking",
+        gain: f4k
+      },
+      {
+        f: _EqualizerFilter.F8K,
+        type: "peaking",
+        gain: f8k
+      },
+      {
+        f: _EqualizerFilter.F16K,
+        type: "highshelf",
+        gain: f16k
+      }
+    ];
+    if (!instance.getInstance().useLegacy) {
+      bands = equalizerBands.map((band) => {
+        const node = instance.getInstance().context.audioContext.createBiquadFilter();
+        node.type = band.type;
+        WebAudioUtils.WebAudioUtils.setParamValue(node.Q, 1);
+        node.frequency.value = band.f;
+        WebAudioUtils.WebAudioUtils.setParamValue(node.gain, band.gain);
+        return node;
+      });
+    }
+    super(bands[0], bands[bands.length - 1]);
+    this.bands = bands;
+    this.bandsMap = {};
+    for (let i = 0; i < this.bands.length; i++) {
+      const node = this.bands[i];
+      if (i > 0) {
+        this.bands[i - 1].connect(node);
+      }
+      this.bandsMap[node.frequency.value] = node;
+    }
+  }
+  /**
+   * Set gain on a specific frequency.
+   * @param frequency - The frequency, see EqualizerFilter.F* for bands
+   * @param gain - Recommended -40 to 40.
+   */
+  setGain(frequency, gain = 0) {
+    if (!this.bandsMap[frequency]) {
+      throw new Error(`No band found for frequency ${frequency}`);
+    }
+    WebAudioUtils.WebAudioUtils.setParamValue(this.bandsMap[frequency].gain, gain);
+  }
+  /**
+   * Get gain amount on a specific frequency.
+   * @return The amount of gain set.
+   */
+  getGain(frequency) {
+    if (!this.bandsMap[frequency]) {
+      throw new Error(`No band found for frequency ${frequency}`);
+    }
+    return this.bandsMap[frequency].gain.value;
+  }
+  /**
+   * Gain at 32 Hz frequencey.
+   * @default 0
+   */
+  set f32(value) {
+    this.setGain(_EqualizerFilter.F32, value);
+  }
+  get f32() {
+    return this.getGain(_EqualizerFilter.F32);
+  }
+  /**
+   * Gain at 64 Hz frequencey.
+   * @default 0
+   */
+  set f64(value) {
+    this.setGain(_EqualizerFilter.F64, value);
+  }
+  get f64() {
+    return this.getGain(_EqualizerFilter.F64);
+  }
+  /**
+   * Gain at 125 Hz frequencey.
+   * @default 0
+   */
+  set f125(value) {
+    this.setGain(_EqualizerFilter.F125, value);
+  }
+  get f125() {
+    return this.getGain(_EqualizerFilter.F125);
+  }
+  /**
+   * Gain at 250 Hz frequencey.
+   * @default 0
+   */
+  set f250(value) {
+    this.setGain(_EqualizerFilter.F250, value);
+  }
+  get f250() {
+    return this.getGain(_EqualizerFilter.F250);
+  }
+  /**
+   * Gain at 500 Hz frequencey.
+   * @default 0
+   */
+  set f500(value) {
+    this.setGain(_EqualizerFilter.F500, value);
+  }
+  get f500() {
+    return this.getGain(_EqualizerFilter.F500);
+  }
+  /**
+   * Gain at 1 KHz frequencey.
+   * @default 0
+   */
+  set f1k(value) {
+    this.setGain(_EqualizerFilter.F1K, value);
+  }
+  get f1k() {
+    return this.getGain(_EqualizerFilter.F1K);
+  }
+  /**
+   * Gain at 2 KHz frequencey.
+   * @default 0
+   */
+  set f2k(value) {
+    this.setGain(_EqualizerFilter.F2K, value);
+  }
+  get f2k() {
+    return this.getGain(_EqualizerFilter.F2K);
+  }
+  /**
+   * Gain at 4 KHz frequencey.
+   * @default 0
+   */
+  set f4k(value) {
+    this.setGain(_EqualizerFilter.F4K, value);
+  }
+  get f4k() {
+    return this.getGain(_EqualizerFilter.F4K);
+  }
+  /**
+   * Gain at 8 KHz frequencey.
+   * @default 0
+   */
+  set f8k(value) {
+    this.setGain(_EqualizerFilter.F8K, value);
+  }
+  get f8k() {
+    return this.getGain(_EqualizerFilter.F8K);
+  }
+  /**
+   * Gain at 16 KHz frequencey.
+   * @default 0
+   */
+  set f16k(value) {
+    this.setGain(_EqualizerFilter.F16K, value);
+  }
+  get f16k() {
+    return this.getGain(_EqualizerFilter.F16K);
+  }
+  /** Reset all frequency bands to have gain of 0 */
+  reset() {
+    this.bands.forEach((band) => {
+      WebAudioUtils.WebAudioUtils.setParamValue(band.gain, 0);
+    });
+  }
+  destroy() {
+    this.bands.forEach((band) => {
+      band.disconnect();
+    });
+    this.bands = null;
+    this.bandsMap = null;
+  }
+};
+let EqualizerFilter = _EqualizerFilter;
+/**
+ * Band at 32 Hz
+ * @readonly
+ */
+EqualizerFilter.F32 = 32;
+/**
+ * Band at 64 Hz
+ * @readonly
+ */
+EqualizerFilter.F64 = 64;
+/**
+ * Band at 125 Hz
+ * @readonly
+ */
+EqualizerFilter.F125 = 125;
+/**
+ * Band at 250 Hz
+ * @readonly
+ */
+EqualizerFilter.F250 = 250;
+/**
+ * Band at 500 Hz
+ * @readonly
+ */
+EqualizerFilter.F500 = 500;
+/**
+ * Band at 1000 Hz
+ * @readonly
+ */
+EqualizerFilter.F1K = 1e3;
+/**
+ * Band at 2000 Hz
+ * @readonly
+ */
+EqualizerFilter.F2K = 2e3;
+/**
+ * Band at 4000 Hz
+ * @readonly
+ */
+EqualizerFilter.F4K = 4e3;
+/**
+ * Band at 8000 Hz
+ * @readonly
+ */
+EqualizerFilter.F8K = 8e3;
+/**
+ * Band at 16000 Hz
+ * @readonly
+ */
+EqualizerFilter.F16K = 16e3;
+
+exports.EqualizerFilter = EqualizerFilter;
+
+
+},{"../instance.js":360,"../webaudio/WebAudioUtils.js":371,"./Filter.js":348}],348:[function(require,module,exports){
+'use strict';
+
+class Filter {
+  /**
+   * @param {AudioNode} destination - The audio node to use as the destination for the input AudioNode
+   * @param {AudioNode} [source] - Optional output node, defaults to destination node. This is useful
+   *        when creating filters which contains multiple AudioNode elements chained together.
+   */
+  constructor(destination, source) {
+    this.init(destination, source);
+  }
+  /** Reinitialize */
+  init(destination, source) {
+    this.destination = destination;
+    this.source = source || destination;
+  }
+  /**
+   * Connect to the destination.
+   * @param {AudioNode} destination - The destination node to connect the output to
+   */
+  connect(destination) {
+    this.source?.connect(destination);
+  }
+  /** Completely disconnect filter from destination and source nodes. */
+  disconnect() {
+    this.source?.disconnect();
+  }
+  /** Destroy the filter and don't use after this. */
+  destroy() {
+    this.disconnect();
+    this.destination = null;
+    this.source = null;
+  }
+}
+
+exports.Filter = Filter;
+
+
+},{}],349:[function(require,module,exports){
+'use strict';
+
+var instance = require('../instance.js');
+var Filter = require('./Filter.js');
+
+class MonoFilter extends Filter.Filter {
+  constructor() {
+    let merger;
+    let splitter;
+    if (!instance.getInstance().useLegacy) {
+      const { audioContext } = instance.getInstance().context;
+      splitter = audioContext.createChannelSplitter();
+      merger = audioContext.createChannelMerger();
+      merger.connect(splitter);
+    }
+    super(merger, splitter);
+    this._merger = merger;
+  }
+  destroy() {
+    this._merger?.disconnect();
+    this._merger = null;
+    super.destroy();
+  }
+}
+
+exports.MonoFilter = MonoFilter;
+
+
+},{"../instance.js":360,"./Filter.js":348}],350:[function(require,module,exports){
+'use strict';
+
+var instance = require('../instance.js');
+var Filter = require('./Filter.js');
+
+class ReverbFilter extends Filter.Filter {
+  /**
+   * @param seconds - Seconds for reverb
+   * @param decay - The decay length
+   * @param reverse - Reverse reverb
+   */
+  constructor(seconds = 3, decay = 2, reverse = false) {
+    super(null);
+    this._seconds = this._clamp(seconds, 1, 50);
+    this._decay = this._clamp(decay, 0, 100);
+    this._reverse = reverse;
+    this._rebuild();
+  }
+  /**
+   * Clamp a value
+   * @param value
+   * @param min - Minimum value
+   * @param max - Maximum value
+   * @return Clamped number
+   */
+  _clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+  /**
+   * Length of reverb in seconds from 1 to 50
+   * @default 3
+   */
+  get seconds() {
+    return this._seconds;
+  }
+  set seconds(seconds) {
+    this._seconds = this._clamp(seconds, 1, 50);
+    this._rebuild();
+  }
+  /**
+   * Decay value from 0 to 100
+   * @default 2
+   */
+  get decay() {
+    return this._decay;
+  }
+  set decay(decay) {
+    this._decay = this._clamp(decay, 0, 100);
+    this._rebuild();
+  }
+  /**
+   * Reverse value from 0 to 1
+   * @default false
+   */
+  get reverse() {
+    return this._reverse;
+  }
+  set reverse(reverse) {
+    this._reverse = reverse;
+    this._rebuild();
+  }
+  /**
+   * Utility function for building an impulse response
+   * from the module parameters.
+   */
+  _rebuild() {
+    if (instance.getInstance().useLegacy) {
+      return;
+    }
+    const { audioContext } = instance.getInstance().context;
+    const rate = audioContext.sampleRate;
+    const length = rate * this._seconds;
+    const impulse = audioContext.createBuffer(2, length, rate);
+    const impulseL = impulse.getChannelData(0);
+    const impulseR = impulse.getChannelData(1);
+    let n;
+    for (let i = 0; i < length; i++) {
+      n = this._reverse ? length - i : i;
+      impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, this._decay);
+      impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, this._decay);
+    }
+    const convolver = audioContext.createConvolver();
+    convolver.buffer = impulse;
+    this.init(convolver);
+  }
+}
+
+exports.ReverbFilter = ReverbFilter;
+
+
+},{"../instance.js":360,"./Filter.js":348}],351:[function(require,module,exports){
+'use strict';
+
+var instance = require('../instance.js');
+var WebAudioUtils = require('../webaudio/WebAudioUtils.js');
+var Filter = require('./Filter.js');
+
+class StereoFilter extends Filter.Filter {
+  /** @param pan - The amount of panning, -1 is left, 1 is right, 0 is centered. */
+  constructor(pan = 0) {
+    let stereo;
+    let panner;
+    let destination;
+    if (!instance.getInstance().useLegacy) {
+      const { audioContext } = instance.getInstance().context;
+      if (audioContext.createStereoPanner) {
+        stereo = audioContext.createStereoPanner();
+        destination = stereo;
+      } else {
+        panner = audioContext.createPanner();
+        panner.panningModel = "equalpower";
+        destination = panner;
+      }
+    }
+    super(destination);
+    this._stereo = stereo;
+    this._panner = panner;
+    this.pan = pan;
+  }
+  /** Set the amount of panning, where -1 is left, 1 is right, and 0 is centered */
+  set pan(value) {
+    this._pan = value;
+    if (this._stereo) {
+      WebAudioUtils.WebAudioUtils.setParamValue(this._stereo.pan, value);
+    } else if (this._panner) {
+      this._panner.setPosition(value, 0, 1 - Math.abs(value));
+    }
+  }
+  get pan() {
+    return this._pan;
+  }
+  destroy() {
+    super.destroy();
+    this._stereo = null;
+    this._panner = null;
+  }
+}
+
+exports.StereoFilter = StereoFilter;
+
+
+},{"../instance.js":360,"../webaudio/WebAudioUtils.js":371,"./Filter.js":348}],352:[function(require,module,exports){
+'use strict';
+
+var instance = require('../instance.js');
+var Filter = require('./Filter.js');
+
+class StreamFilter extends Filter.Filter {
+  constructor() {
+    let destination;
+    let source;
+    if (!instance.getInstance().useLegacy) {
+      const { audioContext } = instance.getInstance().context;
+      destination = audioContext.createMediaStreamDestination();
+      source = audioContext.createMediaStreamSource(destination.stream);
+    }
+    super(destination, source);
+    this._stream = destination?.stream;
+  }
+  get stream() {
+    return this._stream;
+  }
+  destroy() {
+    this._stream = null;
+    super.destroy();
+  }
+}
+
+exports.StreamFilter = StreamFilter;
+
+
+},{"../instance.js":360,"./Filter.js":348}],353:[function(require,module,exports){
+'use strict';
+
+var instance = require('../instance.js');
+var WebAudioUtils = require('../webaudio/WebAudioUtils.js');
+var Filter = require('./Filter.js');
+
+class TelephoneFilter extends Filter.Filter {
+  constructor() {
+    let destination;
+    let source;
+    if (!instance.getInstance().useLegacy) {
+      const { audioContext } = instance.getInstance().context;
+      const lpf1 = audioContext.createBiquadFilter();
+      const lpf2 = audioContext.createBiquadFilter();
+      const hpf1 = audioContext.createBiquadFilter();
+      const hpf2 = audioContext.createBiquadFilter();
+      lpf1.type = "lowpass";
+      WebAudioUtils.WebAudioUtils.setParamValue(lpf1.frequency, 2e3);
+      lpf2.type = "lowpass";
+      WebAudioUtils.WebAudioUtils.setParamValue(lpf2.frequency, 2e3);
+      hpf1.type = "highpass";
+      WebAudioUtils.WebAudioUtils.setParamValue(hpf1.frequency, 500);
+      hpf2.type = "highpass";
+      WebAudioUtils.WebAudioUtils.setParamValue(hpf2.frequency, 500);
+      lpf1.connect(lpf2);
+      lpf2.connect(hpf1);
+      hpf1.connect(hpf2);
+      destination = lpf1;
+      source = hpf2;
+    }
+    super(destination, source);
+  }
+}
+
+exports.TelephoneFilter = TelephoneFilter;
+
+
+},{"../instance.js":360,"../webaudio/WebAudioUtils.js":371,"./Filter.js":348}],354:[function(require,module,exports){
+'use strict';
+
+var Filter = require('./Filter.js');
+var EqualizerFilter = require('./EqualizerFilter.js');
+var DistortionFilter = require('./DistortionFilter.js');
+var StereoFilter = require('./StereoFilter.js');
+var ReverbFilter = require('./ReverbFilter.js');
+var MonoFilter = require('./MonoFilter.js');
+var StreamFilter = require('./StreamFilter.js');
+var TelephoneFilter = require('./TelephoneFilter.js');
+
+
+
+exports.Filter = Filter.Filter;
+exports.EqualizerFilter = EqualizerFilter.EqualizerFilter;
+exports.DistortionFilter = DistortionFilter.DistortionFilter;
+exports.StereoFilter = StereoFilter.StereoFilter;
+exports.ReverbFilter = ReverbFilter.ReverbFilter;
+exports.MonoFilter = MonoFilter.MonoFilter;
+exports.StreamFilter = StreamFilter.StreamFilter;
+exports.TelephoneFilter = TelephoneFilter.TelephoneFilter;
+
+
+},{"./DistortionFilter.js":346,"./EqualizerFilter.js":347,"./Filter.js":348,"./MonoFilter.js":349,"./ReverbFilter.js":350,"./StereoFilter.js":351,"./StreamFilter.js":352,"./TelephoneFilter.js":353}],355:[function(require,module,exports){
+'use strict';
+
+var core = require('@pixi/core');
+
+class HTMLAudioContext extends core.utils.EventEmitter {
+  constructor() {
+    super(...arguments);
+    /** Current global speed from 0 to 1 */
+    this.speed = 1;
+    /** Current muted status of the context */
+    this.muted = false;
+    /** Current volume from 0 to 1  */
+    this.volume = 1;
+    /** Current paused status */
+    this.paused = false;
+  }
+  /** Internal trigger when volume, mute or speed changes */
+  refresh() {
+    this.emit("refresh");
+  }
+  /** Internal trigger paused changes */
+  refreshPaused() {
+    this.emit("refreshPaused");
+  }
+  /**
+   * HTML Audio does not support filters, this is non-functional API.
+   */
+  get filters() {
+    console.warn("HTML Audio does not support filters");
+    return null;
+  }
+  set filters(_filters) {
+    console.warn("HTML Audio does not support filters");
+  }
+  /**
+   * HTML Audio does not support `audioContext`
+   * @readonly
+   * @type {AudioContext}
+   */
+  get audioContext() {
+    console.warn("HTML Audio does not support audioContext");
+    return null;
+  }
+  /**
+   * Toggles the muted state.
+   * @return The current muted state.
+   */
+  toggleMute() {
+    this.muted = !this.muted;
+    this.refresh();
+    return this.muted;
+  }
+  /**
+   * Toggles the paused state.
+   * @return The current paused state.
+   */
+  togglePause() {
+    this.paused = !this.paused;
+    this.refreshPaused();
+    return this.paused;
+  }
+  /** Destroy and don't use after this */
+  destroy() {
+    this.removeAllListeners();
+  }
+}
+
+exports.HTMLAudioContext = HTMLAudioContext;
+
+
+},{"@pixi/core":151}],356:[function(require,module,exports){
+'use strict';
+
+var core = require('@pixi/core');
+
+let id = 0;
+const _HTMLAudioInstance = class extends core.utils.EventEmitter {
+  /** @param parent - Parent element */
+  constructor(parent) {
+    super();
+    this.id = id++;
+    this.init(parent);
+  }
+  /**
+   * Set a property by name, this makes it easy to chain values
+   * @param name - Name of the property to set
+   * @param value - Value to set property to
+   */
+  set(name, value) {
+    if (this[name] === void 0) {
+      throw new Error(`Property with name ${name} does not exist.`);
+    } else {
+      switch (name) {
+        case "speed":
+          this.speed = value;
+          break;
+        case "volume":
+          this.volume = value;
+          break;
+        case "paused":
+          this.paused = value;
+          break;
+        case "loop":
+          this.loop = value;
+          break;
+        case "muted":
+          this.muted = value;
+          break;
+      }
+    }
+    return this;
+  }
+  /** The current playback progress from 0 to 1. */
+  get progress() {
+    const { currentTime } = this._source;
+    return currentTime / this._duration;
+  }
+  /** Pauses the sound. */
+  get paused() {
+    return this._paused;
+  }
+  set paused(paused) {
+    this._paused = paused;
+    this.refreshPaused();
+  }
+  /**
+   * Reference: http://stackoverflow.com/a/40370077
+   * @private
+   */
+  _onPlay() {
+    this._playing = true;
+  }
+  /**
+   * Reference: http://stackoverflow.com/a/40370077
+   * @private
+   */
+  _onPause() {
+    this._playing = false;
+  }
+  /**
+   * Initialize the instance.
+   * @param {htmlaudio.HTMLAudioMedia} media - Same as constructor
+   */
+  init(media) {
+    this._playing = false;
+    this._duration = media.source.duration;
+    const source = this._source = media.source.cloneNode(false);
+    source.src = media.parent.url;
+    source.onplay = this._onPlay.bind(this);
+    source.onpause = this._onPause.bind(this);
+    media.context.on("refresh", this.refresh, this);
+    media.context.on("refreshPaused", this.refreshPaused, this);
+    this._media = media;
+  }
+  /**
+   * Stop the sound playing
+   * @private
+   */
+  _internalStop() {
+    if (this._source && this._playing) {
+      this._source.onended = null;
+      this._source.pause();
+    }
+  }
+  /** Stop the sound playing */
+  stop() {
+    this._internalStop();
+    if (this._source) {
+      this.emit("stop");
+    }
+  }
+  /** Set the instance speed from 0 to 1 */
+  get speed() {
+    return this._speed;
+  }
+  set speed(speed) {
+    this._speed = speed;
+    this.refresh();
+  }
+  /** Get the set the volume for this instance from 0 to 1 */
+  get volume() {
+    return this._volume;
+  }
+  set volume(volume) {
+    this._volume = volume;
+    this.refresh();
+  }
+  /** If the sound instance should loop playback */
+  get loop() {
+    return this._loop;
+  }
+  set loop(loop) {
+    this._loop = loop;
+    this.refresh();
+  }
+  /** `true` if the sound is muted */
+  get muted() {
+    return this._muted;
+  }
+  set muted(muted) {
+    this._muted = muted;
+    this.refresh();
+  }
+  /**
+   * HTML Audio does not support filters, this is non-functional API.
+   */
+  get filters() {
+    console.warn("HTML Audio does not support filters");
+    return null;
+  }
+  set filters(_filters) {
+    console.warn("HTML Audio does not support filters");
+  }
+  /** Call whenever the loop, speed or volume changes */
+  refresh() {
+    const global = this._media.context;
+    const sound = this._media.parent;
+    this._source.loop = this._loop || sound.loop;
+    const globalVolume = global.volume * (global.muted ? 0 : 1);
+    const soundVolume = sound.volume * (sound.muted ? 0 : 1);
+    const instanceVolume = this._volume * (this._muted ? 0 : 1);
+    this._source.volume = instanceVolume * globalVolume * soundVolume;
+    this._source.playbackRate = this._speed * global.speed * sound.speed;
+  }
+  /** Handle changes in paused state, either globally or sound or instance */
+  refreshPaused() {
+    const global = this._media.context;
+    const sound = this._media.parent;
+    const pausedReal = this._paused || sound.paused || global.paused;
+    if (pausedReal !== this._pausedReal) {
+      this._pausedReal = pausedReal;
+      if (pausedReal) {
+        this._internalStop();
+        this.emit("paused");
+      } else {
+        this.emit("resumed");
+        this.play({
+          start: this._source.currentTime,
+          end: this._end,
+          volume: this._volume,
+          speed: this._speed,
+          loop: this._loop
+        });
+      }
+      this.emit("pause", pausedReal);
+    }
+  }
+  /** Start playing the sound/ */
+  play(options) {
+    const { start, end, speed, loop, volume, muted } = options;
+    if (end) {
+      console.assert(end > start, "End time is before start time");
+    }
+    this._speed = speed;
+    this._volume = volume;
+    this._loop = !!loop;
+    this._muted = muted;
+    this.refresh();
+    if (this.loop && end !== null) {
+      console.warn('Looping not support when specifying an "end" time');
+      this.loop = false;
+    }
+    this._start = start;
+    this._end = end || this._duration;
+    this._start = Math.max(0, this._start - _HTMLAudioInstance.PADDING);
+    this._end = Math.min(this._end + _HTMLAudioInstance.PADDING, this._duration);
+    this._source.onloadedmetadata = () => {
+      if (this._source) {
+        this._source.currentTime = start;
+        this._source.onloadedmetadata = null;
+        this.emit("progress", start, this._duration);
+        core.Ticker.shared.add(this._onUpdate, this);
+      }
+    };
+    this._source.onended = this._onComplete.bind(this);
+    this._source.play();
+    this.emit("start");
+  }
+  /**
+   * Handle time update on sound.
+   * @private
+   */
+  _onUpdate() {
+    this.emit("progress", this.progress, this._duration);
+    if (this._source.currentTime >= this._end && !this._source.loop) {
+      this._onComplete();
+    }
+  }
+  /**
+   * Callback when completed.
+   * @private
+   */
+  _onComplete() {
+    core.Ticker.shared.remove(this._onUpdate, this);
+    this._internalStop();
+    this.emit("progress", 1, this._duration);
+    this.emit("end", this);
+  }
+  /** Don't use after this. */
+  destroy() {
+    core.Ticker.shared.remove(this._onUpdate, this);
+    this.removeAllListeners();
+    const source = this._source;
+    if (source) {
+      source.onended = null;
+      source.onplay = null;
+      source.onpause = null;
+      this._internalStop();
+    }
+    this._source = null;
+    this._speed = 1;
+    this._volume = 1;
+    this._loop = false;
+    this._end = null;
+    this._start = 0;
+    this._duration = 0;
+    this._playing = false;
+    this._pausedReal = false;
+    this._paused = false;
+    this._muted = false;
+    if (this._media) {
+      this._media.context.off("refresh", this.refresh, this);
+      this._media.context.off("refreshPaused", this.refreshPaused, this);
+      this._media = null;
+    }
+  }
+  /**
+   * To string method for instance.
+   * @return The string representation of instance.
+   */
+  toString() {
+    return `[HTMLAudioInstance id=${this.id}]`;
+  }
+};
+let HTMLAudioInstance = _HTMLAudioInstance;
+/** Extra padding, in seconds, to deal with low-latecy of HTMLAudio. */
+HTMLAudioInstance.PADDING = 0.1;
+
+exports.HTMLAudioInstance = HTMLAudioInstance;
+
+
+},{"@pixi/core":151}],357:[function(require,module,exports){
+'use strict';
+
+var core = require('@pixi/core');
+var HTMLAudioInstance = require('./HTMLAudioInstance.js');
+
+class HTMLAudioMedia extends core.utils.EventEmitter {
+  init(parent) {
+    this.parent = parent;
+    this._source = parent.options.source || new Audio();
+    if (parent.url) {
+      this._source.src = parent.url;
+    }
+  }
+  // Implement create
+  create() {
+    return new HTMLAudioInstance.HTMLAudioInstance(this);
+  }
+  /**
+   * If the audio media is playable (ready).
+   * @readonly
+   */
+  get isPlayable() {
+    return !!this._source && this._source.readyState === 4;
+  }
+  /**
+   * THe duration of the media in seconds.
+   * @readonly
+   */
+  get duration() {
+    return this._source.duration;
+  }
+  /**
+   * Reference to the context.
+   * @readonly
+   */
+  get context() {
+    return this.parent.context;
+  }
+  /** The collection of filters, does not apply to HTML Audio. */
+  get filters() {
+    return null;
+  }
+  set filters(_filters) {
+    console.warn("HTML Audio does not support filters");
+  }
+  // Override the destroy
+  destroy() {
+    this.removeAllListeners();
+    this.parent = null;
+    if (this._source) {
+      this._source.src = "";
+      this._source.load();
+      this._source = null;
+    }
+  }
+  /**
+   * Get the audio source element.
+   * @type {HTMLAudioElement}
+   * @readonly
+   */
+  get source() {
+    return this._source;
+  }
+  // Implement the method to being preloading
+  load(callback) {
+    const source = this._source;
+    const sound = this.parent;
+    if (source.readyState === 4) {
+      sound.isLoaded = true;
+      const instance = sound.autoPlayStart();
+      if (callback) {
+        setTimeout(() => {
+          callback(null, sound, instance);
+        }, 0);
+      }
+      return;
+    }
+    if (!sound.url) {
+      callback(new Error("sound.url or sound.source must be set"));
+      return;
+    }
+    source.src = sound.url;
+    const onLoad = () => {
+      removeListeners();
+      sound.isLoaded = true;
+      const instance = sound.autoPlayStart();
+      if (callback) {
+        callback(null, sound, instance);
+      }
+    };
+    const onAbort = () => {
+      removeListeners();
+      if (callback) {
+        callback(new Error("Sound loading has been aborted"));
+      }
+    };
+    const onError = () => {
+      removeListeners();
+      const message = `Failed to load audio element (code: ${source.error.code})`;
+      if (callback) {
+        callback(new Error(message));
+      } else {
+        console.error(message);
+      }
+    };
+    const removeListeners = () => {
+      source.removeEventListener("canplaythrough", onLoad);
+      source.removeEventListener("load", onLoad);
+      source.removeEventListener("abort", onAbort);
+      source.removeEventListener("error", onError);
+    };
+    source.addEventListener("canplaythrough", onLoad, false);
+    source.addEventListener("load", onLoad, false);
+    source.addEventListener("abort", onAbort, false);
+    source.addEventListener("error", onError, false);
+    source.load();
+  }
+}
+
+exports.HTMLAudioMedia = HTMLAudioMedia;
+
+
+},{"./HTMLAudioInstance.js":356,"@pixi/core":151}],358:[function(require,module,exports){
+'use strict';
+
+var HTMLAudioMedia = require('./HTMLAudioMedia.js');
+var HTMLAudioInstance = require('./HTMLAudioInstance.js');
+var HTMLAudioContext = require('./HTMLAudioContext.js');
+
+
+
+exports.HTMLAudioMedia = HTMLAudioMedia.HTMLAudioMedia;
+exports.HTMLAudioInstance = HTMLAudioInstance.HTMLAudioInstance;
+exports.HTMLAudioContext = HTMLAudioContext.HTMLAudioContext;
+
+
+},{"./HTMLAudioContext.js":355,"./HTMLAudioInstance.js":356,"./HTMLAudioMedia.js":357}],359:[function(require,module,exports){
+'use strict';
+
+var instance = require('./instance.js');
+var SoundLibrary = require('./SoundLibrary.js');
+var index = require('./htmlaudio/index.js');
+var index$1 = require('./filters/index.js');
+var index$2 = require('./webaudio/index.js');
+var index$3 = require('./utils/index.js');
+var Sound = require('./Sound.js');
+var soundAsset = require('./soundAsset.js');
+var Filterable = require('./Filterable.js');
+var Filter = require('./filters/Filter.js');
+var SoundSprite = require('./SoundSprite.js');
+
+const sound = instance.setInstance(new SoundLibrary.SoundLibrary());
+
+exports.SoundLibrary = SoundLibrary.SoundLibrary;
+exports.htmlaudio = index;
+exports.filters = index$1;
+exports.webaudio = index$2;
+exports.utils = index$3;
+exports.Sound = Sound.Sound;
+exports.soundAsset = soundAsset.soundAsset;
+exports.Filterable = Filterable.Filterable;
+exports.Filter = Filter.Filter;
+exports.SoundSprite = SoundSprite.SoundSprite;
+exports.sound = sound;
+
+
+},{"./Filterable.js":342,"./Sound.js":343,"./SoundLibrary.js":344,"./SoundSprite.js":345,"./filters/Filter.js":348,"./filters/index.js":354,"./htmlaudio/index.js":358,"./instance.js":360,"./soundAsset.js":361,"./utils/index.js":362,"./webaudio/index.js":372}],360:[function(require,module,exports){
+'use strict';
+
+exports.instance = void 0;
+function setInstance(sound) {
+  exports.instance = sound;
+  return sound;
+}
+function getInstance() {
+  return exports.instance;
+}
+
+exports.getInstance = getInstance;
+exports.setInstance = setInstance;
+
+
+},{}],361:[function(require,module,exports){
+'use strict';
+
+var core = require('@pixi/core');
+var assets = require('@pixi/assets');
+var supported = require('./utils/supported.js');
+var Sound = require('./Sound.js');
+var instance = require('./instance.js');
+
+const getAlias = (asset) => {
+  const url = asset.src;
+  return asset?.alias?.[0] ?? core.utils.path.basename(url, core.utils.path.extname(url));
+};
+const soundAsset = {
+  extension: core.ExtensionType.Asset,
+  detection: {
+    test: async () => true,
+    add: async (formats) => [...formats, ...supported.extensions.filter((ext) => supported.supported[ext])],
+    remove: async (formats) => formats.filter((ext) => formats.includes(ext))
+  },
+  loader: {
+    extension: {
+      type: [core.ExtensionType.LoadParser],
+      priority: assets.LoaderParserPriority.High
+    },
+    /** Should we attempt to load this file? */
+    test(url) {
+      const ext = core.utils.path.extname(url).slice(1);
+      return !!supported.supported[ext] || supported.mimes.some((mime) => url.startsWith(`data:${mime}`));
+    },
+    /** Load the sound file, this is mostly handled by Sound.from() */
+    async load(url, asset) {
+      const sound = await new Promise((resolve, reject) => Sound.Sound.from({
+        ...asset.data,
+        url,
+        preload: true,
+        loaded(err, sound2) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(sound2);
+          }
+          asset.data?.loaded?.(err, sound2);
+        }
+      }));
+      instance.getInstance().add(getAlias(asset), sound);
+      return sound;
+    },
+    /** Remove the sound from the library */
+    async unload(_sound, asset) {
+      instance.getInstance().remove(getAlias(asset));
+    }
+  }
+};
+core.extensions.add(soundAsset);
+
+exports.soundAsset = soundAsset;
+
+
+},{"./Sound.js":343,"./instance.js":360,"./utils/supported.js":366,"@pixi/assets":64,"@pixi/core":151}],362:[function(require,module,exports){
+'use strict';
+
+var playOnce = require('./playOnce.js');
+var render = require('./render.js');
+var sineTone = require('./sineTone.js');
+var supported = require('./supported.js');
+
+
+
+Object.defineProperty(exports, 'PLAY_ID', {
+	enumerable: true,
+	get: function () { return playOnce.PLAY_ID; }
+});
+exports.playOnce = playOnce.playOnce;
+exports.render = render.render;
+exports.sineTone = sineTone.sineTone;
+exports.extensions = supported.extensions;
+exports.mimes = supported.mimes;
+exports.supported = supported.supported;
+exports.validateFormats = supported.validateFormats;
+
+
+},{"./playOnce.js":363,"./render.js":364,"./sineTone.js":365,"./supported.js":366}],363:[function(require,module,exports){
+'use strict';
+
+var instance = require('../instance.js');
+
+exports.PLAY_ID = 0;
+function playOnce(url, callback) {
+  const alias = `alias${exports.PLAY_ID++}`;
+  instance.getInstance().add(alias, {
+    url,
+    preload: true,
+    autoPlay: true,
+    loaded: (err) => {
+      if (err) {
+        console.error(err);
+        instance.getInstance().remove(alias);
+        if (callback) {
+          callback(err);
+        }
+      }
+    },
+    complete: () => {
+      instance.getInstance().remove(alias);
+      if (callback) {
+        callback(null);
+      }
+    }
+  });
+  return alias;
+}
+
+exports.playOnce = playOnce;
+
+
+},{"../instance.js":360}],364:[function(require,module,exports){
+'use strict';
+
+var core = require('@pixi/core');
+var WebAudioMedia = require('../webaudio/WebAudioMedia.js');
+
+function render(sound, options) {
+  const canvas = document.createElement("canvas");
+  options = {
+    width: 512,
+    height: 128,
+    fill: "black",
+    ...options || {}
+  };
+  canvas.width = options.width;
+  canvas.height = options.height;
+  const baseTexture = core.BaseTexture.from(canvas);
+  if (!(sound.media instanceof WebAudioMedia.WebAudioMedia)) {
+    return baseTexture;
+  }
+  const media = sound.media;
+  console.assert(!!media.buffer, "No buffer found, load first");
+  const context = canvas.getContext("2d");
+  context.fillStyle = options.fill;
+  const data = media.buffer.getChannelData(0);
+  const step = Math.ceil(data.length / options.width);
+  const amp = options.height / 2;
+  for (let i = 0; i < options.width; i++) {
+    let min = 1;
+    let max = -1;
+    for (let j = 0; j < step; j++) {
+      const datum = data[i * step + j];
+      if (datum < min) {
+        min = datum;
+      }
+      if (datum > max) {
+        max = datum;
+      }
+    }
+    context.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+  }
+  return baseTexture;
+}
+
+exports.render = render;
+
+
+},{"../webaudio/WebAudioMedia.js":369,"@pixi/core":151}],365:[function(require,module,exports){
+'use strict';
+
+var Sound = require('../Sound.js');
+var WebAudioMedia = require('../webaudio/WebAudioMedia.js');
+
+function sineTone(hertz = 200, seconds = 1) {
+  const sound = Sound.Sound.from({
+    singleInstance: true
+  });
+  if (!(sound.media instanceof WebAudioMedia.WebAudioMedia)) {
+    return sound;
+  }
+  const media = sound.media;
+  const context = sound.context;
+  const nChannels = 1;
+  const sampleRate = 48e3;
+  const amplitude = 2;
+  const buffer = context.audioContext.createBuffer(
+    nChannels,
+    seconds * sampleRate,
+    sampleRate
+  );
+  const fArray = buffer.getChannelData(0);
+  for (let i = 0; i < fArray.length; i++) {
+    const time = i / buffer.sampleRate;
+    const angle = hertz * time * 2 * Math.PI;
+    fArray[i] = Math.sin(angle) * amplitude;
+  }
+  media.buffer = buffer;
+  sound.isLoaded = true;
+  return sound;
+}
+
+exports.sineTone = sineTone;
+
+
+},{"../Sound.js":343,"../webaudio/WebAudioMedia.js":369}],366:[function(require,module,exports){
+'use strict';
+
+const extensions = [
+  "ogg",
+  "oga",
+  "opus",
+  "m4a",
+  "mp3",
+  "mpeg",
+  "wav",
+  "aiff",
+  "wma",
+  "mid",
+  "caf"
+];
+const mimes = [
+  "audio/mpeg",
+  "audio/ogg"
+];
+const supported = {};
+function validateFormats(typeOverrides) {
+  const overrides = {
+    m4a: "audio/mp4",
+    oga: "audio/ogg",
+    opus: 'audio/ogg; codecs="opus"',
+    caf: 'audio/x-caf; codecs="opus"',
+    ...typeOverrides || {}
+  };
+  const audio = document.createElement("audio");
+  const formats = {};
+  const no = /^no$/;
+  extensions.forEach((ext) => {
+    const canByExt = audio.canPlayType(`audio/${ext}`).replace(no, "");
+    const canByType = overrides[ext] ? audio.canPlayType(overrides[ext]).replace(no, "") : "";
+    formats[ext] = !!canByExt || !!canByType;
+  });
+  Object.assign(supported, formats);
+}
+validateFormats();
+
+exports.extensions = extensions;
+exports.mimes = mimes;
+exports.supported = supported;
+exports.validateFormats = validateFormats;
+
+
+},{}],367:[function(require,module,exports){
+'use strict';
+
+var core = require('@pixi/core');
+var Filterable = require('../Filterable.js');
+
+class WebAudioContext extends Filterable.Filterable {
+  constructor() {
+    const win = window;
+    const ctx = new WebAudioContext.AudioContext();
+    const compressor = ctx.createDynamicsCompressor();
+    const analyser = ctx.createAnalyser();
+    analyser.connect(compressor);
+    compressor.connect(ctx.destination);
+    super(analyser, compressor);
+    /** Set to false ignore suspending when window is blurred */
+    this.autoPause = true;
+    this._ctx = ctx;
+    this._offlineCtx = new WebAudioContext.OfflineAudioContext(
+      1,
+      2,
+      win.OfflineAudioContext ? Math.max(8e3, Math.min(96e3, ctx.sampleRate)) : 44100
+    );
+    this.compressor = compressor;
+    this.analyser = analyser;
+    this.events = new core.utils.EventEmitter();
+    this.volume = 1;
+    this.speed = 1;
+    this.muted = false;
+    this.paused = false;
+    this._locked = ctx.state === "suspended" && ("ontouchstart" in globalThis || "onclick" in globalThis);
+    if (this._locked) {
+      this._unlock();
+      this._unlock = this._unlock.bind(this);
+      document.addEventListener("mousedown", this._unlock, true);
+      document.addEventListener("touchstart", this._unlock, true);
+      document.addEventListener("touchend", this._unlock, true);
+    }
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    globalThis.addEventListener("focus", this.onFocus);
+    globalThis.addEventListener("blur", this.onBlur);
+  }
+  /** Handle mobile WebAudio context resume */
+  onFocus() {
+    if (!this.autoPause) {
+      return;
+    }
+    const state = this._ctx.state;
+    if (state === "suspended" || state === "interrupted" || !this._locked) {
+      this.paused = this._pausedOnBlur;
+      this.refreshPaused();
+    }
+  }
+  /** Handle mobile WebAudio context suspend */
+  onBlur() {
+    if (!this.autoPause) {
+      return;
+    }
+    if (!this._locked) {
+      this._pausedOnBlur = this._paused;
+      this.paused = true;
+      this.refreshPaused();
+    }
+  }
+  /**
+   * Try to unlock audio on iOS. This is triggered from either WebAudio plugin setup (which will work if inside of
+   * a `mousedown` or `touchend` event stack), or the first document touchend/mousedown event. If it fails (touchend
+   * will fail if the user presses for too long, indicating a scroll event instead of a click event.
+   *
+   * Note that earlier versions of iOS supported `touchstart` for this, but iOS9 removed this functionality. Adding
+   * a `touchstart` event to support older platforms may preclude a `mousedown` even from getting fired on iOS9, so we
+   * stick with `mousedown` and `touchend`.
+   */
+  _unlock() {
+    if (!this._locked) {
+      return;
+    }
+    this.playEmptySound();
+    if (this._ctx.state === "running") {
+      document.removeEventListener("mousedown", this._unlock, true);
+      document.removeEventListener("touchend", this._unlock, true);
+      document.removeEventListener("touchstart", this._unlock, true);
+      this._locked = false;
+    }
+  }
+  /**
+   * Plays an empty sound in the web audio context.  This is used to enable web audio on iOS devices, as they
+   * require the first sound to be played inside of a user initiated event (touch/click).
+   */
+  playEmptySound() {
+    const source = this._ctx.createBufferSource();
+    source.buffer = this._ctx.createBuffer(1, 1, 22050);
+    source.connect(this._ctx.destination);
+    source.start(0, 0, 0);
+    if (source.context.state === "suspended") {
+      source.context.resume();
+    }
+  }
+  /**
+   * Get AudioContext class, if not supported returns `null`
+   * @type {AudioContext}
+   * @readonly
+   */
+  static get AudioContext() {
+    const win = window;
+    return win.AudioContext || win.webkitAudioContext || null;
+  }
+  /**
+   * Get OfflineAudioContext class, if not supported returns `null`
+   * @type {OfflineAudioContext}
+   * @readonly
+   */
+  static get OfflineAudioContext() {
+    const win = window;
+    return win.OfflineAudioContext || win.webkitOfflineAudioContext || null;
+  }
+  /** Destroy this context. */
+  destroy() {
+    super.destroy();
+    const ctx = this._ctx;
+    if (typeof ctx.close !== "undefined") {
+      ctx.close();
+    }
+    globalThis.removeEventListener("focus", this.onFocus);
+    globalThis.removeEventListener("blur", this.onBlur);
+    this.events.removeAllListeners();
+    this.analyser.disconnect();
+    this.compressor.disconnect();
+    this.analyser = null;
+    this.compressor = null;
+    this.events = null;
+    this._offlineCtx = null;
+    this._ctx = null;
+  }
+  /**
+   * The WebAudio API AudioContext object.
+   * @readonly
+   * @type {AudioContext}
+   */
+  get audioContext() {
+    return this._ctx;
+  }
+  /**
+   * The WebAudio API OfflineAudioContext object.
+   * @readonly
+   * @type {OfflineAudioContext}
+   */
+  get offlineContext() {
+    return this._offlineCtx;
+  }
+  /**
+   * Pauses all sounds, even though we handle this at the instance
+   * level, we'll also pause the audioContext so that the
+   * time used to compute progress isn't messed up.
+   * @default false
+   */
+  set paused(paused) {
+    if (paused && this._ctx.state === "running") {
+      this._ctx.suspend();
+    } else if (!paused && this._ctx.state === "suspended") {
+      this._ctx.resume();
+    }
+    this._paused = paused;
+  }
+  get paused() {
+    return this._paused;
+  }
+  /** Emit event when muted, volume or speed changes */
+  refresh() {
+    this.events.emit("refresh");
+  }
+  /** Emit event when muted, volume or speed changes */
+  refreshPaused() {
+    this.events.emit("refreshPaused");
+  }
+  /**
+   * Toggles the muted state.
+   * @return The current muted state.
+   */
+  toggleMute() {
+    this.muted = !this.muted;
+    this.refresh();
+    return this.muted;
+  }
+  /**
+   * Toggles the paused state.
+   * @return The current muted state.
+   */
+  togglePause() {
+    this.paused = !this.paused;
+    this.refreshPaused();
+    return this._paused;
+  }
+  /**
+   * Decode the audio data
+   * @param arrayBuffer - Buffer from loader
+   * @param callback - When completed, error and audioBuffer are parameters.
+   */
+  decode(arrayBuffer, callback) {
+    const handleError = (err) => {
+      callback(new Error(err?.message || "Unable to decode file"));
+    };
+    const result = this._offlineCtx.decodeAudioData(
+      arrayBuffer,
+      (buffer) => {
+        callback(null, buffer);
+      },
+      handleError
+    );
+    if (result) {
+      result.catch(handleError);
+    }
+  }
+}
+
+exports.WebAudioContext = WebAudioContext;
+
+
+},{"../Filterable.js":342,"@pixi/core":151}],368:[function(require,module,exports){
+'use strict';
+
+var core = require('@pixi/core');
+var WebAudioUtils = require('./WebAudioUtils.js');
+
+let id = 0;
+class WebAudioInstance extends core.utils.EventEmitter {
+  constructor(media) {
+    super();
+    this.id = id++;
+    this._media = null;
+    this._paused = false;
+    this._muted = false;
+    this._elapsed = 0;
+    this.init(media);
+  }
+  /**
+   * Set a property by name, this makes it easy to chain values
+   * @param name - Name of the property to set.
+   * @param value - Value to set property to.
+   */
+  set(name, value) {
+    if (this[name] === void 0) {
+      throw new Error(`Property with name ${name} does not exist.`);
+    } else {
+      switch (name) {
+        case "speed":
+          this.speed = value;
+          break;
+        case "volume":
+          this.volume = value;
+          break;
+        case "muted":
+          this.muted = value;
+          break;
+        case "loop":
+          this.loop = value;
+          break;
+        case "paused":
+          this.paused = value;
+          break;
+      }
+    }
+    return this;
+  }
+  /** Stops the instance, don't use after this. */
+  stop() {
+    if (this._source) {
+      this._internalStop();
+      this.emit("stop");
+    }
+  }
+  /** Set the instance speed from 0 to 1 */
+  get speed() {
+    return this._speed;
+  }
+  set speed(speed) {
+    this._speed = speed;
+    this.refresh();
+    this._update(true);
+  }
+  /** Get the set the volume for this instance from 0 to 1 */
+  get volume() {
+    return this._volume;
+  }
+  set volume(volume) {
+    this._volume = volume;
+    this.refresh();
+  }
+  /** `true` if the sound is muted */
+  get muted() {
+    return this._muted;
+  }
+  set muted(muted) {
+    this._muted = muted;
+    this.refresh();
+  }
+  /** If the sound instance should loop playback */
+  get loop() {
+    return this._loop;
+  }
+  set loop(loop) {
+    this._loop = loop;
+    this.refresh();
+  }
+  /** The collection of filters. */
+  get filters() {
+    return this._filters;
+  }
+  set filters(filters) {
+    if (this._filters) {
+      this._filters?.filter((filter) => filter).forEach((filter) => filter.disconnect());
+      this._filters = null;
+      this._source.connect(this._gain);
+    }
+    this._filters = filters?.length ? filters.slice(0) : null;
+    this.refresh();
+  }
+  /** Refresh loop, volume and speed based on changes to parent */
+  refresh() {
+    if (!this._source) {
+      return;
+    }
+    const global = this._media.context;
+    const sound = this._media.parent;
+    this._source.loop = this._loop || sound.loop;
+    const globalVolume = global.volume * (global.muted ? 0 : 1);
+    const soundVolume = sound.volume * (sound.muted ? 0 : 1);
+    const instanceVolume = this._volume * (this._muted ? 0 : 1);
+    WebAudioUtils.WebAudioUtils.setParamValue(this._gain.gain, instanceVolume * soundVolume * globalVolume);
+    WebAudioUtils.WebAudioUtils.setParamValue(this._source.playbackRate, this._speed * sound.speed * global.speed);
+    this.applyFilters();
+  }
+  /** Connect filters nodes to audio context */
+  applyFilters() {
+    if (this._filters?.length) {
+      this._source.disconnect();
+      let source = this._source;
+      this._filters.forEach((filter) => {
+        source.connect(filter.destination);
+        source = filter;
+      });
+      source.connect(this._gain);
+    }
+  }
+  /** Handle changes in paused state, either globally or sound or instance */
+  refreshPaused() {
+    const global = this._media.context;
+    const sound = this._media.parent;
+    const pausedReal = this._paused || sound.paused || global.paused;
+    if (pausedReal !== this._pausedReal) {
+      this._pausedReal = pausedReal;
+      if (pausedReal) {
+        this._internalStop();
+        this.emit("paused");
+      } else {
+        this.emit("resumed");
+        this.play({
+          start: this._elapsed % this._duration,
+          end: this._end,
+          speed: this._speed,
+          loop: this._loop,
+          volume: this._volume
+        });
+      }
+      this.emit("pause", pausedReal);
+    }
+  }
+  /**
+   * Plays the sound.
+   * @param options - Play options.
+   */
+  play(options) {
+    const { start, end, speed, loop, volume, muted, filters } = options;
+    if (end) {
+      console.assert(end > start, "End time is before start time");
+    }
+    this._paused = false;
+    const { source, gain } = this._media.nodes.cloneBufferSource();
+    this._source = source;
+    this._gain = gain;
+    this._speed = speed;
+    this._volume = volume;
+    this._loop = !!loop;
+    this._muted = muted;
+    this._filters = filters;
+    this.refresh();
+    const duration = this._source.buffer.duration;
+    this._duration = duration;
+    this._end = end;
+    this._lastUpdate = this._now();
+    this._elapsed = start;
+    this._source.onended = this._onComplete.bind(this);
+    if (this._loop) {
+      this._source.loopEnd = end;
+      this._source.loopStart = start;
+      this._source.start(0, start);
+    } else if (end) {
+      this._source.start(0, start, end - start);
+    } else {
+      this._source.start(0, start);
+    }
+    this.emit("start");
+    this._update(true);
+    this.enableTicker(true);
+  }
+  /** Start the update progress. */
+  enableTicker(enabled) {
+    core.Ticker.shared.remove(this._updateListener, this);
+    if (enabled) {
+      core.Ticker.shared.add(this._updateListener, this);
+    }
+  }
+  /** The current playback progress from 0 to 1. */
+  get progress() {
+    return this._progress;
+  }
+  /** Pauses the sound. */
+  get paused() {
+    return this._paused;
+  }
+  set paused(paused) {
+    this._paused = paused;
+    this.refreshPaused();
+  }
+  /** Don't use after this. */
+  destroy() {
+    this.removeAllListeners();
+    this._internalStop();
+    if (this._gain) {
+      this._gain.disconnect();
+      this._gain = null;
+    }
+    if (this._media) {
+      this._media.context.events.off("refresh", this.refresh, this);
+      this._media.context.events.off("refreshPaused", this.refreshPaused, this);
+      this._media = null;
+    }
+    this._filters?.forEach((filter) => filter.disconnect());
+    this._filters = null;
+    this._end = null;
+    this._speed = 1;
+    this._volume = 1;
+    this._loop = false;
+    this._elapsed = 0;
+    this._duration = 0;
+    this._paused = false;
+    this._muted = false;
+    this._pausedReal = false;
+  }
+  /**
+   * To string method for instance.
+   * @return The string representation of instance.
+   */
+  toString() {
+    return `[WebAudioInstance id=${this.id}]`;
+  }
+  /**
+   * Get the current time in seconds.
+   * @return Seconds since start of context
+   */
+  _now() {
+    return this._media.context.audioContext.currentTime;
+  }
+  /** Callback for update listener */
+  _updateListener() {
+    this._update();
+  }
+  /** Internal update the progress. */
+  _update(force = false) {
+    if (this._source) {
+      const now = this._now();
+      const delta = now - this._lastUpdate;
+      if (delta > 0 || force) {
+        const speed = this._source.playbackRate.value;
+        this._elapsed += delta * speed;
+        this._lastUpdate = now;
+        const duration = this._duration;
+        let progress;
+        if (this._source.loopStart) {
+          const soundLength = this._source.loopEnd - this._source.loopStart;
+          progress = (this._source.loopStart + this._elapsed % soundLength) / duration;
+        } else {
+          progress = this._elapsed % duration / duration;
+        }
+        this._progress = progress;
+        this.emit("progress", this._progress, duration);
+      }
+    }
+  }
+  /** Initializes the instance. */
+  init(media) {
+    this._media = media;
+    media.context.events.on("refresh", this.refresh, this);
+    media.context.events.on("refreshPaused", this.refreshPaused, this);
+  }
+  /** Stops the instance. */
+  _internalStop() {
+    if (this._source) {
+      this.enableTicker(false);
+      this._source.onended = null;
+      this._source.stop(0);
+      this._source.disconnect();
+      try {
+        this._source.buffer = null;
+      } catch (err) {
+        console.warn("Failed to set AudioBufferSourceNode.buffer to null:", err);
+      }
+      this._source = null;
+    }
+  }
+  /** Callback when completed. */
+  _onComplete() {
+    if (this._source) {
+      this.enableTicker(false);
+      this._source.onended = null;
+      this._source.disconnect();
+      try {
+        this._source.buffer = null;
+      } catch (err) {
+        console.warn("Failed to set AudioBufferSourceNode.buffer to null:", err);
+      }
+    }
+    this._source = null;
+    this._progress = 1;
+    this.emit("progress", 1, this._duration);
+    this.emit("end", this);
+  }
+}
+
+exports.WebAudioInstance = WebAudioInstance;
+
+
+},{"./WebAudioUtils.js":371,"@pixi/core":151}],369:[function(require,module,exports){
+'use strict';
+
+var core = require('@pixi/core');
+var WebAudioInstance = require('./WebAudioInstance.js');
+var WebAudioNodes = require('./WebAudioNodes.js');
+
+class WebAudioMedia {
+  /**
+   * Re-initialize without constructing.
+   * @param parent - - Instance of parent Sound container
+   */
+  init(parent) {
+    this.parent = parent;
+    this._nodes = new WebAudioNodes.WebAudioNodes(this.context);
+    this._source = this._nodes.bufferSource;
+    this.source = parent.options.source;
+  }
+  /** Destructor, safer to use `SoundLibrary.remove(alias)` to remove this sound. */
+  destroy() {
+    this.parent = null;
+    this._nodes.destroy();
+    this._nodes = null;
+    try {
+      this._source.buffer = null;
+    } catch (err) {
+      console.warn("Failed to set AudioBufferSourceNode.buffer to null:", err);
+    }
+    this._source = null;
+    this.source = null;
+  }
+  // Implement create
+  create() {
+    return new WebAudioInstance.WebAudioInstance(this);
+  }
+  // Implement context
+  get context() {
+    return this.parent.context;
+  }
+  // Implement isPlayable
+  get isPlayable() {
+    return !!this._source && !!this._source.buffer;
+  }
+  // Implement filters
+  get filters() {
+    return this._nodes.filters;
+  }
+  set filters(filters) {
+    this._nodes.filters = filters;
+  }
+  // Implements duration
+  get duration() {
+    console.assert(this.isPlayable, "Sound not yet playable, no duration");
+    return this._source.buffer.duration;
+  }
+  /** Gets and sets the buffer. */
+  get buffer() {
+    return this._source.buffer;
+  }
+  set buffer(buffer) {
+    this._source.buffer = buffer;
+  }
+  /** Get the current chained nodes object */
+  get nodes() {
+    return this._nodes;
+  }
+  // Implements load
+  load(callback) {
+    if (this.source) {
+      this._decode(this.source, callback);
+    } else if (this.parent.url) {
+      this._loadUrl(callback);
+    } else if (callback) {
+      callback(new Error("sound.url or sound.source must be set"));
+    } else {
+      console.error("sound.url or sound.source must be set");
+    }
+  }
+  /** Loads a sound using XHMLHttpRequest object. */
+  async _loadUrl(callback) {
+    const url = this.parent.url;
+    const response = await core.settings.ADAPTER.fetch(url);
+    this._decode(await response.arrayBuffer(), callback);
+  }
+  /**
+   * Decodes the array buffer.
+   * @param arrayBuffer - From load.
+   * @param {Function} callback - Callback optional
+   */
+  _decode(arrayBuffer, callback) {
+    const audioBufferReadyFn = (err, buffer) => {
+      if (err) {
+        if (callback) {
+          callback(err);
+        }
+      } else {
+        this.parent.isLoaded = true;
+        this.buffer = buffer;
+        const instance = this.parent.autoPlayStart();
+        if (callback) {
+          callback(null, this.parent, instance);
+        }
+      }
+    };
+    if (arrayBuffer instanceof AudioBuffer) {
+      audioBufferReadyFn(null, arrayBuffer);
+    } else {
+      const context = this.parent.context;
+      context.decode(arrayBuffer, audioBufferReadyFn);
+    }
+  }
+}
+
+exports.WebAudioMedia = WebAudioMedia;
+
+
+},{"./WebAudioInstance.js":368,"./WebAudioNodes.js":370,"@pixi/core":151}],370:[function(require,module,exports){
+'use strict';
+
+var Filterable = require('../Filterable.js');
+var WebAudioUtils = require('./WebAudioUtils.js');
+
+const _WebAudioNodes = class extends Filterable.Filterable {
+  /**
+   * @param context - The audio context.
+   */
+  constructor(context) {
+    const audioContext = context.audioContext;
+    const bufferSource = audioContext.createBufferSource();
+    const gain = audioContext.createGain();
+    const analyser = audioContext.createAnalyser();
+    bufferSource.connect(analyser);
+    analyser.connect(gain);
+    gain.connect(context.destination);
+    super(analyser, gain);
+    this.context = context;
+    this.bufferSource = bufferSource;
+    this.gain = gain;
+    this.analyser = analyser;
+  }
+  /**
+   * Get the script processor node.
+   * @readonly
+   */
+  get script() {
+    if (!this._script) {
+      this._script = this.context.audioContext.createScriptProcessor(_WebAudioNodes.BUFFER_SIZE);
+      this._script.connect(this.context.destination);
+    }
+    return this._script;
+  }
+  /** Cleans up. */
+  destroy() {
+    super.destroy();
+    this.bufferSource.disconnect();
+    if (this._script) {
+      this._script.disconnect();
+    }
+    this.gain.disconnect();
+    this.analyser.disconnect();
+    this.bufferSource = null;
+    this._script = null;
+    this.gain = null;
+    this.analyser = null;
+    this.context = null;
+  }
+  /**
+   * Clones the bufferSource. Used just before playing a sound.
+   * @returns {SourceClone} The clone AudioBufferSourceNode.
+   */
+  cloneBufferSource() {
+    const orig = this.bufferSource;
+    const source = this.context.audioContext.createBufferSource();
+    source.buffer = orig.buffer;
+    WebAudioUtils.WebAudioUtils.setParamValue(source.playbackRate, orig.playbackRate.value);
+    source.loop = orig.loop;
+    const gain = this.context.audioContext.createGain();
+    source.connect(gain);
+    gain.connect(this.destination);
+    return { source, gain };
+  }
+  /**
+   * Get buffer size of `ScriptProcessorNode`.
+   * @readonly
+   */
+  get bufferSize() {
+    return this.script.bufferSize;
+  }
+};
+let WebAudioNodes = _WebAudioNodes;
+/**
+ * The buffer size for script processor, default is `0` which auto-detects. If you plan to use
+ * script node on iOS, you'll need to provide a non-zero amount.
+ * @default 0
+ */
+WebAudioNodes.BUFFER_SIZE = 0;
+
+exports.WebAudioNodes = WebAudioNodes;
+
+
+},{"../Filterable.js":342,"./WebAudioUtils.js":371}],371:[function(require,module,exports){
+'use strict';
+
+var instance = require('../instance.js');
+
+class WebAudioUtils {
+  /**
+   * Dezippering is removed in the future Web Audio API, instead
+   * we use the `setValueAtTime` method, however, this is not available
+   * in all environments (e.g., Android webview), so we fallback to the `value` setter.
+   * @param param - AudioNode parameter object
+   * @param value - Value to set
+   * @return The value set
+   */
+  static setParamValue(param, value) {
+    if (param.setValueAtTime) {
+      const context = instance.getInstance().context;
+      param.setValueAtTime(value, context.audioContext.currentTime);
+    } else {
+      param.value = value;
+    }
+    return value;
+  }
+}
+
+exports.WebAudioUtils = WebAudioUtils;
+
+
+},{"../instance.js":360}],372:[function(require,module,exports){
+'use strict';
+
+var WebAudioMedia = require('./WebAudioMedia.js');
+var WebAudioInstance = require('./WebAudioInstance.js');
+var WebAudioNodes = require('./WebAudioNodes.js');
+var WebAudioContext = require('./WebAudioContext.js');
+var WebAudioUtils = require('./WebAudioUtils.js');
+
+
+
+exports.WebAudioMedia = WebAudioMedia.WebAudioMedia;
+exports.WebAudioInstance = WebAudioInstance.WebAudioInstance;
+exports.WebAudioNodes = WebAudioNodes.WebAudioNodes;
+exports.WebAudioContext = WebAudioContext.WebAudioContext;
+exports.WebAudioUtils = WebAudioUtils.WebAudioUtils;
+
+
+},{"./WebAudioContext.js":367,"./WebAudioInstance.js":368,"./WebAudioMedia.js":369,"./WebAudioNodes.js":370,"./WebAudioUtils.js":371}],373:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite");
 class AnimatedSprite extends sprite.Sprite {
@@ -28333,13 +31428,13 @@ class AnimatedSprite extends sprite.Sprite {
 exports.AnimatedSprite = AnimatedSprite;
 
 
-},{"@pixi/core":151,"@pixi/sprite":353}],343:[function(require,module,exports){
+},{"@pixi/core":151,"@pixi/sprite":384}],374:[function(require,module,exports){
 "use strict";
 var AnimatedSprite = require("./AnimatedSprite.js");
 exports.AnimatedSprite = AnimatedSprite.AnimatedSprite;
 
 
-},{"./AnimatedSprite.js":342}],344:[function(require,module,exports){
+},{"./AnimatedSprite.js":373}],375:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite");
 const tempPoint = new core.Point();
@@ -28470,7 +31565,7 @@ class TilingSprite extends sprite.Sprite {
 exports.TilingSprite = TilingSprite;
 
 
-},{"@pixi/core":151,"@pixi/sprite":353}],345:[function(require,module,exports){
+},{"@pixi/core":151,"@pixi/sprite":384}],376:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), spriteTiling$1 = require("./sprite-tiling.frag.js"), spriteTiling = require("./sprite-tiling.vert.js"), spriteTilingFallback$1 = require("./sprite-tiling-fallback.frag.js"), spriteTilingFallback = require("./sprite-tiling-fallback.vert.js"), spriteTilingSimple = require("./sprite-tiling-simple.frag.js");
 const tempMat = new core.Matrix();
@@ -28518,14 +31613,14 @@ core.extensions.add(TilingSpriteRenderer);
 exports.TilingSpriteRenderer = TilingSpriteRenderer;
 
 
-},{"./sprite-tiling-fallback.frag.js":347,"./sprite-tiling-fallback.vert.js":348,"./sprite-tiling-simple.frag.js":349,"./sprite-tiling.frag.js":350,"./sprite-tiling.vert.js":351,"@pixi/core":151}],346:[function(require,module,exports){
+},{"./sprite-tiling-fallback.frag.js":378,"./sprite-tiling-fallback.vert.js":379,"./sprite-tiling-simple.frag.js":380,"./sprite-tiling.frag.js":381,"./sprite-tiling.vert.js":382,"@pixi/core":151}],377:[function(require,module,exports){
 "use strict";
 var TilingSprite = require("./TilingSprite.js"), TilingSpriteRenderer = require("./TilingSpriteRenderer.js");
 exports.TilingSprite = TilingSprite.TilingSprite;
 exports.TilingSpriteRenderer = TilingSpriteRenderer.TilingSpriteRenderer;
 
 
-},{"./TilingSprite.js":344,"./TilingSpriteRenderer.js":345}],347:[function(require,module,exports){
+},{"./TilingSprite.js":375,"./TilingSpriteRenderer.js":376}],378:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var gl1FragmentSrc = `#version 100
@@ -28565,7 +31660,7 @@ void main(void)
 exports.default = gl1FragmentSrc;
 
 
-},{}],348:[function(require,module,exports){
+},{}],379:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var gl1VertexSrc = `#version 100
@@ -28592,7 +31687,7 @@ void main(void)
 exports.default = gl1VertexSrc;
 
 
-},{}],349:[function(require,module,exports){
+},{}],380:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var fragmentSimpleSrc = `#version 100
@@ -28614,7 +31709,7 @@ void main(void)
 exports.default = fragmentSimpleSrc;
 
 
-},{}],350:[function(require,module,exports){
+},{}],381:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var gl2FragmentSrc = `#version 300 es
@@ -28647,7 +31742,7 @@ void main(void)
 exports.default = gl2FragmentSrc;
 
 
-},{}],351:[function(require,module,exports){
+},{}],382:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var gl2VertexSrc = `#version 300 es
@@ -28674,7 +31769,7 @@ void main(void)
 exports.default = gl2VertexSrc;
 
 
-},{}],352:[function(require,module,exports){
+},{}],383:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display");
 const tempPoint = new core.Point(), indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
@@ -28873,13 +31968,13 @@ class Sprite extends display.Container {
 exports.Sprite = Sprite;
 
 
-},{"@pixi/core":151,"@pixi/display":229}],353:[function(require,module,exports){
+},{"@pixi/core":151,"@pixi/display":229}],384:[function(require,module,exports){
 "use strict";
 var Sprite = require("./Sprite.js");
 exports.Sprite = Sprite.Sprite;
 
 
-},{"./Sprite.js":352}],354:[function(require,module,exports){
+},{"./Sprite.js":383}],385:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const _Spritesheet = class _Spritesheet2 {
@@ -28995,14 +32090,14 @@ let Spritesheet = _Spritesheet;
 exports.Spritesheet = Spritesheet;
 
 
-},{"@pixi/core":151}],355:[function(require,module,exports){
+},{"@pixi/core":151}],386:[function(require,module,exports){
 "use strict";
 var Spritesheet = require("./Spritesheet.js"), spritesheetAsset = require("./spritesheetAsset.js");
 exports.Spritesheet = Spritesheet.Spritesheet;
 exports.spritesheetAsset = spritesheetAsset.spritesheetAsset;
 
 
-},{"./Spritesheet.js":354,"./spritesheetAsset.js":356}],356:[function(require,module,exports){
+},{"./Spritesheet.js":385,"./spritesheetAsset.js":387}],387:[function(require,module,exports){
 "use strict";
 var assets = require("@pixi/assets"), core = require("@pixi/core"), Spritesheet = require("./Spritesheet.js");
 const validImages = [
@@ -29131,7 +32226,7 @@ core.extensions.add(spritesheetAsset);
 exports.spritesheetAsset = spritesheetAsset;
 
 
-},{"./Spritesheet.js":354,"@pixi/assets":64,"@pixi/core":151}],357:[function(require,module,exports){
+},{"./Spritesheet.js":385,"@pixi/assets":64,"@pixi/core":151}],388:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), text = require("@pixi/text"), BitmapFontData = require("./BitmapFontData.js"), index = require("./formats/index.js");
 require("./utils/index.js");
@@ -29360,7 +32455,7 @@ let BitmapFont = _BitmapFont;
 exports.BitmapFont = BitmapFont;
 
 
-},{"./BitmapFontData.js":358,"./formats/index.js":364,"./utils/drawGlyph.js":369,"./utils/extractCharCode.js":370,"./utils/index.js":372,"./utils/resolveCharacters.js":373,"@pixi/core":151,"@pixi/text":382}],358:[function(require,module,exports){
+},{"./BitmapFontData.js":389,"./formats/index.js":395,"./utils/drawGlyph.js":400,"./utils/extractCharCode.js":401,"./utils/index.js":403,"./utils/resolveCharacters.js":404,"@pixi/core":151,"@pixi/text":413}],389:[function(require,module,exports){
 "use strict";
 class BitmapFontData {
   constructor() {
@@ -29370,7 +32465,7 @@ class BitmapFontData {
 exports.BitmapFontData = BitmapFontData;
 
 
-},{}],359:[function(require,module,exports){
+},{}],390:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), display = require("@pixi/display"), mesh = require("@pixi/mesh"), BitmapFont = require("./BitmapFont.js"), msdf$1 = require("./shader/msdf.frag.js"), msdf = require("./shader/msdf.vert.js");
 require("./utils/index.js");
@@ -29689,11 +32784,11 @@ let BitmapText = _BitmapText;
 exports.BitmapText = BitmapText;
 
 
-},{"./BitmapFont.js":357,"./shader/msdf.frag.js":367,"./shader/msdf.vert.js":368,"./utils/extractCharCode.js":370,"./utils/index.js":372,"./utils/splitTextToCharacters.js":374,"@pixi/core":151,"@pixi/display":229,"@pixi/mesh":316}],360:[function(require,module,exports){
+},{"./BitmapFont.js":388,"./shader/msdf.frag.js":398,"./shader/msdf.vert.js":399,"./utils/extractCharCode.js":401,"./utils/index.js":403,"./utils/splitTextToCharacters.js":405,"@pixi/core":151,"@pixi/display":229,"@pixi/mesh":316}],391:[function(require,module,exports){
 "use strict";
 
 
-},{}],361:[function(require,module,exports){
+},{}],392:[function(require,module,exports){
 "use strict";
 var BitmapFontData = require("../BitmapFontData.js");
 class TextFormat {
@@ -29761,7 +32856,7 @@ class TextFormat {
 exports.TextFormat = TextFormat;
 
 
-},{"../BitmapFontData.js":358}],362:[function(require,module,exports){
+},{"../BitmapFontData.js":389}],393:[function(require,module,exports){
 "use strict";
 var BitmapFontData = require("../BitmapFontData.js");
 class XMLFormat {
@@ -29826,7 +32921,7 @@ class XMLFormat {
 exports.XMLFormat = XMLFormat;
 
 
-},{"../BitmapFontData.js":358}],363:[function(require,module,exports){
+},{"../BitmapFontData.js":389}],394:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), XMLFormat = require("./XMLFormat.js");
 class XMLStringFormat {
@@ -29850,7 +32945,7 @@ class XMLStringFormat {
 exports.XMLStringFormat = XMLStringFormat;
 
 
-},{"./XMLFormat.js":362,"@pixi/core":151}],364:[function(require,module,exports){
+},{"./XMLFormat.js":393,"@pixi/core":151}],395:[function(require,module,exports){
 "use strict";
 var TextFormat = require("./TextFormat.js"), XMLFormat = require("./XMLFormat.js"), XMLStringFormat = require("./XMLStringFormat.js");
 const formats = [
@@ -29870,7 +32965,7 @@ exports.XMLStringFormat = XMLStringFormat.XMLStringFormat;
 exports.autoDetectFormat = autoDetectFormat;
 
 
-},{"./TextFormat.js":361,"./XMLFormat.js":362,"./XMLStringFormat.js":363}],365:[function(require,module,exports){
+},{"./TextFormat.js":392,"./XMLFormat.js":393,"./XMLStringFormat.js":394}],396:[function(require,module,exports){
 "use strict";
 var BitmapFont = require("./BitmapFont.js"), BitmapFontData = require("./BitmapFontData.js"), BitmapText = require("./BitmapText.js");
 require("./BitmapTextStyle.js");
@@ -29885,7 +32980,7 @@ exports.XMLFormat = XMLFormat.XMLFormat;
 exports.XMLStringFormat = XMLStringFormat.XMLStringFormat;
 
 
-},{"./BitmapFont.js":357,"./BitmapFontData.js":358,"./BitmapText.js":359,"./BitmapTextStyle.js":360,"./formats/TextFormat.js":361,"./formats/XMLFormat.js":362,"./formats/XMLStringFormat.js":363,"./formats/index.js":364,"./loadBitmapFont.js":366}],366:[function(require,module,exports){
+},{"./BitmapFont.js":388,"./BitmapFontData.js":389,"./BitmapText.js":390,"./BitmapTextStyle.js":391,"./formats/TextFormat.js":392,"./formats/XMLFormat.js":393,"./formats/XMLStringFormat.js":394,"./formats/index.js":395,"./loadBitmapFont.js":397}],397:[function(require,module,exports){
 "use strict";
 var assets = require("@pixi/assets"), core = require("@pixi/core"), BitmapFont = require("./BitmapFont.js");
 require("./formats/index.js");
@@ -29923,7 +33018,7 @@ core.extensions.add(loadBitmapFont);
 exports.loadBitmapFont = loadBitmapFont;
 
 
-},{"./BitmapFont.js":357,"./formats/TextFormat.js":361,"./formats/XMLStringFormat.js":363,"./formats/index.js":364,"@pixi/assets":64,"@pixi/core":151}],367:[function(require,module,exports){
+},{"./BitmapFont.js":388,"./formats/TextFormat.js":392,"./formats/XMLStringFormat.js":394,"./formats/index.js":395,"@pixi/assets":64,"@pixi/core":151}],398:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var msdfFrag = `// Pixi texture info\r
@@ -29968,7 +33063,7 @@ void main(void) {\r
 exports.default = msdfFrag;
 
 
-},{}],368:[function(require,module,exports){
+},{}],399:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 });
 var msdfVert = `// Mesh material default fragment\r
@@ -29991,7 +33086,7 @@ void main(void)\r
 exports.default = msdfVert;
 
 
-},{}],369:[function(require,module,exports){
+},{}],400:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), generateFillStyle = require("./generateFillStyle.js");
 function drawGlyph(canvas, context, metrics, x, y, resolution, style) {
@@ -30008,7 +33103,7 @@ function drawGlyph(canvas, context, metrics, x, y, resolution, style) {
 exports.drawGlyph = drawGlyph;
 
 
-},{"./generateFillStyle.js":371,"@pixi/core":151}],370:[function(require,module,exports){
+},{"./generateFillStyle.js":402,"@pixi/core":151}],401:[function(require,module,exports){
 "use strict";
 function extractCharCode(str) {
   return str.codePointAt ? str.codePointAt(0) : str.charCodeAt(0);
@@ -30016,7 +33111,7 @@ function extractCharCode(str) {
 exports.extractCharCode = extractCharCode;
 
 
-},{}],371:[function(require,module,exports){
+},{}],402:[function(require,module,exports){
 "use strict";
 var text = require("@pixi/text");
 function generateFillStyle(canvas, context, style, resolution, lines, metrics) {
@@ -30061,7 +33156,7 @@ function generateFillStyle(canvas, context, style, resolution, lines, metrics) {
 exports.generateFillStyle = generateFillStyle;
 
 
-},{"@pixi/text":382}],372:[function(require,module,exports){
+},{"@pixi/text":413}],403:[function(require,module,exports){
 "use strict";
 var drawGlyph = require("./drawGlyph.js"), extractCharCode = require("./extractCharCode.js"), generateFillStyle = require("./generateFillStyle.js"), resolveCharacters = require("./resolveCharacters.js"), splitTextToCharacters = require("./splitTextToCharacters.js");
 exports.drawGlyph = drawGlyph.drawGlyph;
@@ -30071,7 +33166,7 @@ exports.resolveCharacters = resolveCharacters.resolveCharacters;
 exports.splitTextToCharacters = splitTextToCharacters.splitTextToCharacters;
 
 
-},{"./drawGlyph.js":369,"./extractCharCode.js":370,"./generateFillStyle.js":371,"./resolveCharacters.js":373,"./splitTextToCharacters.js":374}],373:[function(require,module,exports){
+},{"./drawGlyph.js":400,"./extractCharCode.js":401,"./generateFillStyle.js":402,"./resolveCharacters.js":404,"./splitTextToCharacters.js":405}],404:[function(require,module,exports){
 "use strict";
 var splitTextToCharacters = require("./splitTextToCharacters.js");
 function resolveCharacters(chars) {
@@ -30097,7 +33192,7 @@ function resolveCharacters(chars) {
 exports.resolveCharacters = resolveCharacters;
 
 
-},{"./splitTextToCharacters.js":374}],374:[function(require,module,exports){
+},{"./splitTextToCharacters.js":405}],405:[function(require,module,exports){
 "use strict";
 function splitTextToCharacters(text) {
   return Array.from ? Array.from(text) : text.split("");
@@ -30105,7 +33200,7 @@ function splitTextToCharacters(text) {
 exports.splitTextToCharacters = splitTextToCharacters;
 
 
-},{}],375:[function(require,module,exports){
+},{}],406:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite"), text = require("@pixi/text"), HTMLTextStyle = require("./HTMLTextStyle.js");
 const _HTMLText = class _HTMLText2 extends sprite.Sprite {
@@ -30313,7 +33408,7 @@ let HTMLText = _HTMLText;
 exports.HTMLText = HTMLText;
 
 
-},{"./HTMLTextStyle.js":376,"@pixi/core":151,"@pixi/sprite":353,"@pixi/text":382}],376:[function(require,module,exports){
+},{"./HTMLTextStyle.js":407,"@pixi/core":151,"@pixi/sprite":384,"@pixi/text":413}],407:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), text = require("@pixi/text");
 const _HTMLTextStyle = class _HTMLTextStyle2 extends text.TextStyle {
@@ -30589,14 +33684,14 @@ let HTMLTextStyle = _HTMLTextStyle;
 exports.HTMLTextStyle = HTMLTextStyle;
 
 
-},{"@pixi/core":151,"@pixi/text":382}],377:[function(require,module,exports){
+},{"@pixi/core":151,"@pixi/text":413}],408:[function(require,module,exports){
 "use strict";
 var HTMLText = require("./HTMLText.js"), HTMLTextStyle = require("./HTMLTextStyle.js");
 exports.HTMLText = HTMLText.HTMLText;
 exports.HTMLTextStyle = HTMLTextStyle.HTMLTextStyle;
 
 
-},{"./HTMLText.js":375,"./HTMLTextStyle.js":376}],378:[function(require,module,exports){
+},{"./HTMLText.js":406,"./HTMLTextStyle.js":407}],409:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), sprite = require("@pixi/sprite"), _const = require("./const.js"), TextMetrics = require("./TextMetrics.js"), TextStyle = require("./TextStyle.js");
 const defaultDestroyOptions = {
@@ -30859,7 +33954,7 @@ let Text = _Text;
 exports.Text = Text;
 
 
-},{"./TextMetrics.js":379,"./TextStyle.js":380,"./const.js":381,"@pixi/core":151,"@pixi/sprite":353}],379:[function(require,module,exports){
+},{"./TextMetrics.js":410,"./TextStyle.js":411,"./const.js":412,"@pixi/core":151,"@pixi/sprite":384}],410:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core");
 const contextSettings = {
@@ -31281,7 +34376,7 @@ let TextMetrics = _TextMetrics;
 exports.TextMetrics = TextMetrics;
 
 
-},{"@pixi/core":151}],380:[function(require,module,exports){
+},{"@pixi/core":151}],411:[function(require,module,exports){
 "use strict";
 var _const = require("./const.js"), core = require("@pixi/core");
 const genericFontFamilies = [
@@ -31735,13 +34830,13 @@ function deepCopyProperties(target, source, propertyObj) {
 exports.TextStyle = TextStyle;
 
 
-},{"./const.js":381,"@pixi/core":151}],381:[function(require,module,exports){
+},{"./const.js":412,"@pixi/core":151}],412:[function(require,module,exports){
 "use strict";
 var TEXT_GRADIENT = /* @__PURE__ */ ((TEXT_GRADIENT2) => (TEXT_GRADIENT2[TEXT_GRADIENT2.LINEAR_VERTICAL = 0] = "LINEAR_VERTICAL", TEXT_GRADIENT2[TEXT_GRADIENT2.LINEAR_HORIZONTAL = 1] = "LINEAR_HORIZONTAL", TEXT_GRADIENT2))(TEXT_GRADIENT || {});
 exports.TEXT_GRADIENT = TEXT_GRADIENT;
 
 
-},{}],382:[function(require,module,exports){
+},{}],413:[function(require,module,exports){
 "use strict";
 var _const = require("./const.js"), Text = require("./Text.js"), TextMetrics = require("./TextMetrics.js"), TextStyle = require("./TextStyle.js");
 exports.TEXT_GRADIENT = _const.TEXT_GRADIENT;
@@ -31750,7 +34845,7 @@ exports.TextMetrics = TextMetrics.TextMetrics;
 exports.TextStyle = TextStyle.TextStyle;
 
 
-},{"./Text.js":378,"./TextMetrics.js":379,"./TextStyle.js":380,"./const.js":381}],383:[function(require,module,exports){
+},{"./Text.js":409,"./TextMetrics.js":410,"./TextStyle.js":411,"./const.js":412}],414:[function(require,module,exports){
 "use strict";
 var _const = require("./const.js"), TickerListener = require("./TickerListener.js");
 const _Ticker = class _Ticker2 {
@@ -32028,7 +35123,7 @@ let Ticker = _Ticker;
 exports.Ticker = Ticker;
 
 
-},{"./TickerListener.js":384,"./const.js":386}],384:[function(require,module,exports){
+},{"./TickerListener.js":415,"./const.js":417}],415:[function(require,module,exports){
 "use strict";
 class TickerListener {
   /**
@@ -32087,7 +35182,7 @@ class TickerListener {
 exports.TickerListener = TickerListener;
 
 
-},{}],385:[function(require,module,exports){
+},{}],416:[function(require,module,exports){
 "use strict";
 var extensions = require("@pixi/extensions"), _const = require("./const.js"), Ticker = require("./Ticker.js");
 class TickerPlugin {
@@ -32135,13 +35230,13 @@ extensions.extensions.add(TickerPlugin);
 exports.TickerPlugin = TickerPlugin;
 
 
-},{"./Ticker.js":383,"./const.js":386,"@pixi/extensions":241}],386:[function(require,module,exports){
+},{"./Ticker.js":414,"./const.js":417,"@pixi/extensions":241}],417:[function(require,module,exports){
 "use strict";
 var UPDATE_PRIORITY = /* @__PURE__ */ ((UPDATE_PRIORITY2) => (UPDATE_PRIORITY2[UPDATE_PRIORITY2.INTERACTION = 50] = "INTERACTION", UPDATE_PRIORITY2[UPDATE_PRIORITY2.HIGH = 25] = "HIGH", UPDATE_PRIORITY2[UPDATE_PRIORITY2.NORMAL = 0] = "NORMAL", UPDATE_PRIORITY2[UPDATE_PRIORITY2.LOW = -25] = "LOW", UPDATE_PRIORITY2[UPDATE_PRIORITY2.UTILITY = -50] = "UTILITY", UPDATE_PRIORITY2))(UPDATE_PRIORITY || {});
 exports.UPDATE_PRIORITY = UPDATE_PRIORITY;
 
 
-},{}],387:[function(require,module,exports){
+},{}],418:[function(require,module,exports){
 "use strict";
 require("./settings.js");
 var _const = require("./const.js"), Ticker = require("./Ticker.js"), TickerPlugin = require("./TickerPlugin.js");
@@ -32150,7 +35245,7 @@ exports.Ticker = Ticker.Ticker;
 exports.TickerPlugin = TickerPlugin.TickerPlugin;
 
 
-},{"./Ticker.js":383,"./TickerPlugin.js":385,"./const.js":386,"./settings.js":388}],388:[function(require,module,exports){
+},{"./Ticker.js":414,"./TickerPlugin.js":416,"./const.js":417,"./settings.js":419}],419:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings"), utils = require("@pixi/utils"), Ticker = require("./Ticker.js");
 Object.defineProperties(settings.settings, {
@@ -32180,7 +35275,7 @@ Object.defineProperty(exports, "settings", {
 });
 
 
-},{"./Ticker.js":383,"@pixi/settings":339,"@pixi/utils":402}],389:[function(require,module,exports){
+},{"./Ticker.js":414,"@pixi/settings":339,"@pixi/utils":433}],420:[function(require,module,exports){
 "use strict";
 var constants = require("@pixi/constants");
 let promise;
@@ -32212,7 +35307,7 @@ async function detectVideoAlphaMode() {
 exports.detectVideoAlphaMode = detectVideoAlphaMode;
 
 
-},{"@pixi/constants":110}],390:[function(require,module,exports){
+},{"@pixi/constants":110}],421:[function(require,module,exports){
 "use strict";
 var deprecation = require("../logging/deprecation.js");
 function skipHello() {
@@ -32225,7 +35320,7 @@ exports.sayHello = sayHello;
 exports.skipHello = skipHello;
 
 
-},{"../logging/deprecation.js":403}],391:[function(require,module,exports){
+},{"../logging/deprecation.js":434}],422:[function(require,module,exports){
 "use strict";
 require("../settings.js");
 var settings = require("@pixi/settings");
@@ -32255,7 +35350,7 @@ function isWebGLSupported() {
 exports.isWebGLSupported = isWebGLSupported;
 
 
-},{"../settings.js":413,"@pixi/settings":339}],392:[function(require,module,exports){
+},{"../settings.js":444,"@pixi/settings":339}],423:[function(require,module,exports){
 "use strict";
 var color = require("@pixi/color"), deprecation = require("../logging/deprecation.js");
 function hex2rgb(hex, out = []) {
@@ -32276,7 +35371,7 @@ exports.rgb2hex = rgb2hex;
 exports.string2hex = string2hex;
 
 
-},{"../logging/deprecation.js":403,"@pixi/color":93}],393:[function(require,module,exports){
+},{"../logging/deprecation.js":434,"@pixi/color":93}],424:[function(require,module,exports){
 "use strict";
 var color = require("@pixi/color"), constants = require("@pixi/constants"), deprecation = require("../logging/deprecation.js");
 function mapPremultipliedBlendModes() {
@@ -32307,13 +35402,13 @@ exports.premultiplyTint = premultiplyTint;
 exports.premultiplyTintToRgba = premultiplyTintToRgba;
 
 
-},{"../logging/deprecation.js":403,"@pixi/color":93,"@pixi/constants":110}],394:[function(require,module,exports){
+},{"../logging/deprecation.js":434,"@pixi/color":93,"@pixi/constants":110}],425:[function(require,module,exports){
 "use strict";
 const DATA_URI = /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(base64))?,(.*)/i;
 exports.DATA_URI = DATA_URI;
 
 
-},{}],395:[function(require,module,exports){
+},{}],426:[function(require,module,exports){
 "use strict";
 function createIndicesForQuads(size, outBuffer = null) {
   const totalIndices = size * 6;
@@ -32326,7 +35421,7 @@ function createIndicesForQuads(size, outBuffer = null) {
 exports.createIndicesForQuads = createIndicesForQuads;
 
 
-},{}],396:[function(require,module,exports){
+},{}],427:[function(require,module,exports){
 "use strict";
 function getBufferType(array) {
   if (array.BYTES_PER_ELEMENT === 4)
@@ -32341,7 +35436,7 @@ function getBufferType(array) {
 exports.getBufferType = getBufferType;
 
 
-},{}],397:[function(require,module,exports){
+},{}],428:[function(require,module,exports){
 "use strict";
 var getBufferType = require("./getBufferType.js");
 const map = { Float32Array, Uint32Array, Int32Array, Uint8Array };
@@ -32366,7 +35461,7 @@ function interleaveTypedArrays(arrays, sizes) {
 exports.interleaveTypedArrays = interleaveTypedArrays;
 
 
-},{"./getBufferType.js":396}],398:[function(require,module,exports){
+},{"./getBufferType.js":427}],429:[function(require,module,exports){
 "use strict";
 function nextPow2(v) {
   return v += v === 0 ? 1 : 0, --v, v |= v >>> 1, v |= v >>> 2, v |= v >>> 4, v |= v >>> 8, v |= v >>> 16, v + 1;
@@ -32385,7 +35480,7 @@ exports.log2 = log2;
 exports.nextPow2 = nextPow2;
 
 
-},{}],399:[function(require,module,exports){
+},{}],430:[function(require,module,exports){
 "use strict";
 function removeItems(arr, startIdx, removeCount) {
   const length = arr.length;
@@ -32401,7 +35496,7 @@ function removeItems(arr, startIdx, removeCount) {
 exports.removeItems = removeItems;
 
 
-},{}],400:[function(require,module,exports){
+},{}],431:[function(require,module,exports){
 "use strict";
 function sign(n) {
   return n === 0 ? 0 : n < 0 ? -1 : 1;
@@ -32409,7 +35504,7 @@ function sign(n) {
 exports.sign = sign;
 
 
-},{}],401:[function(require,module,exports){
+},{}],432:[function(require,module,exports){
 "use strict";
 let nextUid = 0;
 function uid() {
@@ -32418,7 +35513,7 @@ function uid() {
 exports.uid = uid;
 
 
-},{}],402:[function(require,module,exports){
+},{}],433:[function(require,module,exports){
 "use strict";
 require("./settings.js");
 var settings = require("@pixi/settings"), eventemitter3 = require("eventemitter3"), earcut = require("earcut"), url = require("./url.js"), path = require("./path.js"), detectVideoAlphaMode = require("./browser/detectVideoAlphaMode.js"), hello = require("./browser/hello.js"), isWebGLSupported = require("./browser/isWebGLSupported.js"), hex = require("./color/hex.js"), premultiply = require("./color/premultiply.js"), _const = require("./const.js"), createIndicesForQuads = require("./data/createIndicesForQuads.js"), getBufferType = require("./data/getBufferType.js"), interleaveTypedArrays = require("./data/interleaveTypedArrays.js"), pow2 = require("./data/pow2.js"), removeItems = require("./data/removeItems.js"), sign = require("./data/sign.js"), uid = require("./data/uid.js"), deprecation = require("./logging/deprecation.js"), BoundingBox = require("./media/BoundingBox.js"), caches = require("./media/caches.js"), CanvasRenderTarget = require("./media/CanvasRenderTarget.js"), getCanvasBoundingBox = require("./media/getCanvasBoundingBox.js"), trimCanvas = require("./media/trimCanvas.js"), decomposeDataUri = require("./network/decomposeDataUri.js"), determineCrossOrigin = require("./network/determineCrossOrigin.js"), getResolutionOfUrl = require("./network/getResolutionOfUrl.js");
@@ -32471,7 +35566,7 @@ exports.determineCrossOrigin = determineCrossOrigin.determineCrossOrigin;
 exports.getResolutionOfUrl = getResolutionOfUrl.getResolutionOfUrl;
 
 
-},{"./browser/detectVideoAlphaMode.js":389,"./browser/hello.js":390,"./browser/isWebGLSupported.js":391,"./color/hex.js":392,"./color/premultiply.js":393,"./const.js":394,"./data/createIndicesForQuads.js":395,"./data/getBufferType.js":396,"./data/interleaveTypedArrays.js":397,"./data/pow2.js":398,"./data/removeItems.js":399,"./data/sign.js":400,"./data/uid.js":401,"./logging/deprecation.js":403,"./media/BoundingBox.js":404,"./media/CanvasRenderTarget.js":405,"./media/caches.js":406,"./media/getCanvasBoundingBox.js":407,"./media/trimCanvas.js":408,"./network/decomposeDataUri.js":409,"./network/determineCrossOrigin.js":410,"./network/getResolutionOfUrl.js":411,"./path.js":412,"./settings.js":413,"./types/index.js":414,"./url.js":415,"@pixi/settings":339,"earcut":424,"eventemitter3":434}],403:[function(require,module,exports){
+},{"./browser/detectVideoAlphaMode.js":420,"./browser/hello.js":421,"./browser/isWebGLSupported.js":422,"./color/hex.js":423,"./color/premultiply.js":424,"./const.js":425,"./data/createIndicesForQuads.js":426,"./data/getBufferType.js":427,"./data/interleaveTypedArrays.js":428,"./data/pow2.js":429,"./data/removeItems.js":430,"./data/sign.js":431,"./data/uid.js":432,"./logging/deprecation.js":434,"./media/BoundingBox.js":435,"./media/CanvasRenderTarget.js":436,"./media/caches.js":437,"./media/getCanvasBoundingBox.js":438,"./media/trimCanvas.js":439,"./network/decomposeDataUri.js":440,"./network/determineCrossOrigin.js":441,"./network/getResolutionOfUrl.js":442,"./path.js":443,"./settings.js":444,"./types/index.js":445,"./url.js":446,"@pixi/settings":339,"earcut":455,"eventemitter3":465}],434:[function(require,module,exports){
 "use strict";
 const warnings = {};
 function deprecation(version, message, ignoreDepth = 3) {
@@ -32493,7 +35588,7 @@ Deprecated since v${version}`), console.warn(stack))), warnings[message] = !0;
 exports.deprecation = deprecation;
 
 
-},{}],404:[function(require,module,exports){
+},{}],435:[function(require,module,exports){
 "use strict";
 const _BoundingBox = class {
   /**
@@ -32523,7 +35618,7 @@ let BoundingBox = _BoundingBox;
 exports.BoundingBox = BoundingBox;
 
 
-},{}],405:[function(require,module,exports){
+},{}],436:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings");
 class CanvasRenderTarget {
@@ -32590,7 +35685,7 @@ class CanvasRenderTarget {
 exports.CanvasRenderTarget = CanvasRenderTarget;
 
 
-},{"@pixi/settings":339}],406:[function(require,module,exports){
+},{"@pixi/settings":339}],437:[function(require,module,exports){
 "use strict";
 const ProgramCache = {}, TextureCache = /* @__PURE__ */ Object.create(null), BaseTextureCache = /* @__PURE__ */ Object.create(null);
 function destroyTextureCache() {
@@ -32614,7 +35709,7 @@ exports.clearTextureCache = clearTextureCache;
 exports.destroyTextureCache = destroyTextureCache;
 
 
-},{}],407:[function(require,module,exports){
+},{}],438:[function(require,module,exports){
 "use strict";
 var BoundingBox = require("./BoundingBox.js");
 function checkRow(data, width, y) {
@@ -32653,7 +35748,7 @@ function getCanvasBoundingBox(canvas) {
 exports.getCanvasBoundingBox = getCanvasBoundingBox;
 
 
-},{"./BoundingBox.js":404}],408:[function(require,module,exports){
+},{"./BoundingBox.js":435}],439:[function(require,module,exports){
 "use strict";
 var getCanvasBoundingBox = require("./getCanvasBoundingBox.js");
 function trimCanvas(canvas) {
@@ -32675,7 +35770,7 @@ function trimCanvas(canvas) {
 exports.trimCanvas = trimCanvas;
 
 
-},{"./getCanvasBoundingBox.js":407}],409:[function(require,module,exports){
+},{"./getCanvasBoundingBox.js":438}],440:[function(require,module,exports){
 "use strict";
 var _const = require("../const.js");
 function decomposeDataUri(dataUri) {
@@ -32692,7 +35787,7 @@ function decomposeDataUri(dataUri) {
 exports.decomposeDataUri = decomposeDataUri;
 
 
-},{"../const.js":394}],410:[function(require,module,exports){
+},{"../const.js":425}],441:[function(require,module,exports){
 "use strict";
 function determineCrossOrigin(url, loc = globalThis.location) {
   if (url.startsWith("data:"))
@@ -32704,7 +35799,7 @@ function determineCrossOrigin(url, loc = globalThis.location) {
 exports.determineCrossOrigin = determineCrossOrigin;
 
 
-},{}],411:[function(require,module,exports){
+},{}],442:[function(require,module,exports){
 "use strict";
 require("../settings.js");
 var settings = require("@pixi/settings");
@@ -32715,7 +35810,7 @@ function getResolutionOfUrl(url, defaultValue = 1) {
 exports.getResolutionOfUrl = getResolutionOfUrl;
 
 
-},{"../settings.js":413,"@pixi/settings":339}],412:[function(require,module,exports){
+},{"../settings.js":444,"@pixi/settings":339}],443:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings");
 function assertPath(path2) {
@@ -33001,7 +36096,7 @@ const path = {
 exports.path = path;
 
 
-},{"@pixi/settings":339}],413:[function(require,module,exports){
+},{"@pixi/settings":339}],444:[function(require,module,exports){
 "use strict";
 var settings = require("@pixi/settings");
 settings.settings.RETINA_PREFIX = /@([0-9\.]+)x/;
@@ -33014,11 +36109,11 @@ Object.defineProperty(exports, "settings", {
 });
 
 
-},{"@pixi/settings":339}],414:[function(require,module,exports){
+},{"@pixi/settings":339}],445:[function(require,module,exports){
 "use strict";
 
 
-},{}],415:[function(require,module,exports){
+},{}],446:[function(require,module,exports){
 "use strict";
 var url$1 = require("url"), deprecation = require("./logging/deprecation.js");
 const url = {
@@ -33044,9 +36139,9 @@ const url = {
 exports.url = url;
 
 
-},{"./logging/deprecation.js":403,"url":469}],416:[function(require,module,exports){
+},{"./logging/deprecation.js":434,"url":500}],447:[function(require,module,exports){
 
-},{}],417:[function(require,module,exports){
+},{}],448:[function(require,module,exports){
 'use strict';
 
 var bind = require('function-bind');
@@ -33058,19 +36153,19 @@ var $reflectApply = require('./reflectApply');
 /** @type {import('./actualApply')} */
 module.exports = $reflectApply || bind.call($call, $apply);
 
-},{"./functionApply":418,"./functionCall":419,"./reflectApply":421,"function-bind":436}],418:[function(require,module,exports){
+},{"./functionApply":449,"./functionCall":450,"./reflectApply":452,"function-bind":467}],449:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./functionApply')} */
 module.exports = Function.prototype.apply;
 
-},{}],419:[function(require,module,exports){
+},{}],450:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./functionCall')} */
 module.exports = Function.prototype.call;
 
-},{}],420:[function(require,module,exports){
+},{}],451:[function(require,module,exports){
 'use strict';
 
 var bind = require('function-bind');
@@ -33087,13 +36182,13 @@ module.exports = function callBindBasic(args) {
 	return $actualApply(bind, $call, args);
 };
 
-},{"./actualApply":417,"./functionCall":419,"es-errors/type":431,"function-bind":436}],421:[function(require,module,exports){
+},{"./actualApply":448,"./functionCall":450,"es-errors/type":462,"function-bind":467}],452:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./reflectApply')} */
 module.exports = typeof Reflect !== 'undefined' && Reflect && Reflect.apply;
 
-},{}],422:[function(require,module,exports){
+},{}],453:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -33114,7 +36209,7 @@ module.exports = function callBoundIntrinsic(name, allowMissing) {
 	return intrinsic;
 };
 
-},{"call-bind-apply-helpers":420,"get-intrinsic":437}],423:[function(require,module,exports){
+},{"call-bind-apply-helpers":451,"get-intrinsic":468}],454:[function(require,module,exports){
 'use strict';
 
 var callBind = require('call-bind-apply-helpers');
@@ -33146,7 +36241,7 @@ module.exports = desc && typeof desc.get === 'function'
 		}
 		: false;
 
-},{"call-bind-apply-helpers":420,"gopd":442}],424:[function(require,module,exports){
+},{"call-bind-apply-helpers":451,"gopd":473}],455:[function(require,module,exports){
 'use strict';
 
 module.exports = earcut;
@@ -33829,7 +36924,7 @@ earcut.flatten = function (data) {
     return result;
 };
 
-},{}],425:[function(require,module,exports){
+},{}],456:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
@@ -33845,55 +36940,55 @@ if ($defineProperty) {
 
 module.exports = $defineProperty;
 
-},{}],426:[function(require,module,exports){
+},{}],457:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./eval')} */
 module.exports = EvalError;
 
-},{}],427:[function(require,module,exports){
+},{}],458:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
 module.exports = Error;
 
-},{}],428:[function(require,module,exports){
+},{}],459:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./range')} */
 module.exports = RangeError;
 
-},{}],429:[function(require,module,exports){
+},{}],460:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./ref')} */
 module.exports = ReferenceError;
 
-},{}],430:[function(require,module,exports){
+},{}],461:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./syntax')} */
 module.exports = SyntaxError;
 
-},{}],431:[function(require,module,exports){
+},{}],462:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./type')} */
 module.exports = TypeError;
 
-},{}],432:[function(require,module,exports){
+},{}],463:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./uri')} */
 module.exports = URIError;
 
-},{}],433:[function(require,module,exports){
+},{}],464:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
 module.exports = Object;
 
-},{}],434:[function(require,module,exports){
+},{}],465:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty
@@ -34231,7 +37326,7 @@ if ('undefined' !== typeof module) {
   module.exports = EventEmitter;
 }
 
-},{}],435:[function(require,module,exports){
+},{}],466:[function(require,module,exports){
 'use strict';
 
 /* eslint no-invalid-this: 1 */
@@ -34317,14 +37412,14 @@ module.exports = function bind(that) {
     return bound;
 };
 
-},{}],436:[function(require,module,exports){
+},{}],467:[function(require,module,exports){
 'use strict';
 
 var implementation = require('./implementation');
 
 module.exports = Function.prototype.bind || implementation;
 
-},{"./implementation":435}],437:[function(require,module,exports){
+},{"./implementation":466}],468:[function(require,module,exports){
 'use strict';
 
 var undefined;
@@ -34704,7 +37799,7 @@ module.exports = function GetIntrinsic(name, allowMissing) {
 	return value;
 };
 
-},{"call-bind-apply-helpers/functionApply":418,"call-bind-apply-helpers/functionCall":419,"es-define-property":425,"es-errors":427,"es-errors/eval":426,"es-errors/range":428,"es-errors/ref":429,"es-errors/syntax":430,"es-errors/type":431,"es-errors/uri":432,"es-object-atoms":433,"function-bind":436,"get-proto":440,"get-proto/Object.getPrototypeOf":438,"get-proto/Reflect.getPrototypeOf":439,"gopd":442,"has-symbols":443,"hasown":445,"math-intrinsics/abs":448,"math-intrinsics/floor":449,"math-intrinsics/max":451,"math-intrinsics/min":452,"math-intrinsics/pow":453,"math-intrinsics/round":454,"math-intrinsics/sign":455}],438:[function(require,module,exports){
+},{"call-bind-apply-helpers/functionApply":449,"call-bind-apply-helpers/functionCall":450,"es-define-property":456,"es-errors":458,"es-errors/eval":457,"es-errors/range":459,"es-errors/ref":460,"es-errors/syntax":461,"es-errors/type":462,"es-errors/uri":463,"es-object-atoms":464,"function-bind":467,"get-proto":471,"get-proto/Object.getPrototypeOf":469,"get-proto/Reflect.getPrototypeOf":470,"gopd":473,"has-symbols":474,"hasown":476,"math-intrinsics/abs":479,"math-intrinsics/floor":480,"math-intrinsics/max":482,"math-intrinsics/min":483,"math-intrinsics/pow":484,"math-intrinsics/round":485,"math-intrinsics/sign":486}],469:[function(require,module,exports){
 'use strict';
 
 var $Object = require('es-object-atoms');
@@ -34712,13 +37807,13 @@ var $Object = require('es-object-atoms');
 /** @type {import('./Object.getPrototypeOf')} */
 module.exports = $Object.getPrototypeOf || null;
 
-},{"es-object-atoms":433}],439:[function(require,module,exports){
+},{"es-object-atoms":464}],470:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./Reflect.getPrototypeOf')} */
 module.exports = (typeof Reflect !== 'undefined' && Reflect.getPrototypeOf) || null;
 
-},{}],440:[function(require,module,exports){
+},{}],471:[function(require,module,exports){
 'use strict';
 
 var reflectGetProto = require('./Reflect.getPrototypeOf');
@@ -34747,13 +37842,13 @@ module.exports = reflectGetProto
 			}
 			: null;
 
-},{"./Object.getPrototypeOf":438,"./Reflect.getPrototypeOf":439,"dunder-proto/get":423}],441:[function(require,module,exports){
+},{"./Object.getPrototypeOf":469,"./Reflect.getPrototypeOf":470,"dunder-proto/get":454}],472:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./gOPD')} */
 module.exports = Object.getOwnPropertyDescriptor;
 
-},{}],442:[function(require,module,exports){
+},{}],473:[function(require,module,exports){
 'use strict';
 
 /** @type {import('.')} */
@@ -34770,7 +37865,7 @@ if ($gOPD) {
 
 module.exports = $gOPD;
 
-},{"./gOPD":441}],443:[function(require,module,exports){
+},{"./gOPD":472}],474:[function(require,module,exports){
 'use strict';
 
 var origSymbol = typeof Symbol !== 'undefined' && Symbol;
@@ -34786,7 +37881,7 @@ module.exports = function hasNativeSymbols() {
 	return hasSymbolSham();
 };
 
-},{"./shams":444}],444:[function(require,module,exports){
+},{"./shams":475}],475:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./shams')} */
@@ -34833,7 +37928,7 @@ module.exports = function hasSymbols() {
 	return true;
 };
 
-},{}],445:[function(require,module,exports){
+},{}],476:[function(require,module,exports){
 'use strict';
 
 var call = Function.prototype.call;
@@ -34843,7 +37938,7 @@ var bind = require('function-bind');
 /** @type {import('.')} */
 module.exports = bind.call(call, $hasOwn);
 
-},{"function-bind":436}],446:[function(require,module,exports){
+},{"function-bind":467}],477:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -34853,7 +37948,7 @@ __export(require("./isMobile"));
 var isMobile_1 = require("./isMobile");
 exports["default"] = isMobile_1["default"];
 
-},{"./isMobile":447}],447:[function(require,module,exports){
+},{"./isMobile":478}],478:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 var appleIphone = /iPhone/i;
@@ -34982,19 +38077,19 @@ function isMobile(param) {
 }
 exports["default"] = isMobile;
 
-},{}],448:[function(require,module,exports){
+},{}],479:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./abs')} */
 module.exports = Math.abs;
 
-},{}],449:[function(require,module,exports){
+},{}],480:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./floor')} */
 module.exports = Math.floor;
 
-},{}],450:[function(require,module,exports){
+},{}],481:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./isNaN')} */
@@ -35002,31 +38097,31 @@ module.exports = Number.isNaN || function isNaN(a) {
 	return a !== a;
 };
 
-},{}],451:[function(require,module,exports){
+},{}],482:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./max')} */
 module.exports = Math.max;
 
-},{}],452:[function(require,module,exports){
+},{}],483:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./min')} */
 module.exports = Math.min;
 
-},{}],453:[function(require,module,exports){
+},{}],484:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./pow')} */
 module.exports = Math.pow;
 
-},{}],454:[function(require,module,exports){
+},{}],485:[function(require,module,exports){
 'use strict';
 
 /** @type {import('./round')} */
 module.exports = Math.round;
 
-},{}],455:[function(require,module,exports){
+},{}],486:[function(require,module,exports){
 'use strict';
 
 var $isNaN = require('./isNaN');
@@ -35039,7 +38134,7 @@ module.exports = function sign(number) {
 	return number < 0 ? -1 : +1;
 };
 
-},{"./isNaN":450}],456:[function(require,module,exports){
+},{"./isNaN":481}],487:[function(require,module,exports){
 (function (global){(function (){
 var hasMap = typeof Map === 'function' && Map.prototype;
 var mapSizeDescriptor = Object.getOwnPropertyDescriptor && hasMap ? Object.getOwnPropertyDescriptor(Map.prototype, 'size') : null;
@@ -35587,7 +38682,7 @@ function arrObjKeys(obj, inspect) {
 }
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./util.inspect":416}],457:[function(require,module,exports){
+},{"./util.inspect":447}],488:[function(require,module,exports){
 "use strict";
 var core = require("@pixi/core"), filterAlpha = require("@pixi/filter-alpha"), filterBlur = require("@pixi/filter-blur"), filterColorMatrix = require("@pixi/filter-color-matrix"), filterDisplacement = require("@pixi/filter-displacement"), filterFxaa = require("@pixi/filter-fxaa"), filterNoise = require("@pixi/filter-noise");
 const filters = {
@@ -35651,7 +38746,7 @@ Object.entries(filters).forEach(([key, FilterClass]) => {
 exports.filters = filters;
 
 
-},{"@pixi/core":151,"@pixi/filter-alpha":246,"@pixi/filter-blur":251,"@pixi/filter-color-matrix":254,"@pixi/filter-displacement":258,"@pixi/filter-fxaa":262,"@pixi/filter-noise":264}],458:[function(require,module,exports){
+},{"@pixi/core":151,"@pixi/filter-alpha":246,"@pixi/filter-blur":251,"@pixi/filter-color-matrix":254,"@pixi/filter-displacement":258,"@pixi/filter-fxaa":262,"@pixi/filter-noise":264}],489:[function(require,module,exports){
 "use strict";
 require("@pixi/mixin-cache-as-bitmap");
 require("@pixi/mixin-get-child-by-name");
@@ -35868,7 +38963,7 @@ Object.keys(textHtml).forEach(function(k) {
 });
 
 
-},{"./filters.js":457,"@pixi/accessibility":40,"@pixi/app":43,"@pixi/assets":64,"@pixi/compressed-textures":97,"@pixi/core":151,"@pixi/display":229,"@pixi/events":240,"@pixi/extract":243,"@pixi/filter-alpha":246,"@pixi/filter-blur":251,"@pixi/filter-color-matrix":254,"@pixi/filter-displacement":258,"@pixi/filter-fxaa":262,"@pixi/filter-noise":264,"@pixi/graphics":278,"@pixi/mesh":316,"@pixi/mesh-extras":311,"@pixi/mixin-cache-as-bitmap":319,"@pixi/mixin-get-child-by-name":320,"@pixi/mixin-get-global-position":321,"@pixi/particle-container":325,"@pixi/prepare":332,"@pixi/sprite":353,"@pixi/sprite-animated":343,"@pixi/sprite-tiling":346,"@pixi/spritesheet":355,"@pixi/text":382,"@pixi/text-bitmap":365,"@pixi/text-html":377}],459:[function(require,module,exports){
+},{"./filters.js":488,"@pixi/accessibility":40,"@pixi/app":43,"@pixi/assets":64,"@pixi/compressed-textures":97,"@pixi/core":151,"@pixi/display":229,"@pixi/events":240,"@pixi/extract":243,"@pixi/filter-alpha":246,"@pixi/filter-blur":251,"@pixi/filter-color-matrix":254,"@pixi/filter-displacement":258,"@pixi/filter-fxaa":262,"@pixi/filter-noise":264,"@pixi/graphics":278,"@pixi/mesh":316,"@pixi/mesh-extras":311,"@pixi/mixin-cache-as-bitmap":319,"@pixi/mixin-get-child-by-name":320,"@pixi/mixin-get-global-position":321,"@pixi/particle-container":325,"@pixi/prepare":332,"@pixi/sprite":384,"@pixi/sprite-animated":374,"@pixi/sprite-tiling":377,"@pixi/spritesheet":386,"@pixi/text":413,"@pixi/text-bitmap":396,"@pixi/text-html":408}],490:[function(require,module,exports){
 (function (global){(function (){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -36405,7 +39500,7 @@ Object.keys(textHtml).forEach(function(k) {
 }(this));
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],460:[function(require,module,exports){
+},{}],491:[function(require,module,exports){
 'use strict';
 
 var replace = String.prototype.replace;
@@ -36430,7 +39525,7 @@ module.exports = {
     RFC3986: Format.RFC3986
 };
 
-},{}],461:[function(require,module,exports){
+},{}],492:[function(require,module,exports){
 'use strict';
 
 var stringify = require('./stringify');
@@ -36443,7 +39538,7 @@ module.exports = {
     stringify: stringify
 };
 
-},{"./formats":460,"./parse":462,"./stringify":463}],462:[function(require,module,exports){
+},{"./formats":491,"./parse":493,"./stringify":494}],493:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -36773,7 +39868,7 @@ module.exports = function (str, opts) {
     return utils.compact(obj);
 };
 
-},{"./utils":464}],463:[function(require,module,exports){
+},{"./utils":495}],494:[function(require,module,exports){
 'use strict';
 
 var getSideChannel = require('side-channel');
@@ -37131,7 +40226,7 @@ module.exports = function (object, opts) {
     return joined.length > 0 ? prefix + joined : '';
 };
 
-},{"./formats":460,"./utils":464,"side-channel":468}],464:[function(require,module,exports){
+},{"./formats":491,"./utils":495,"side-channel":499}],495:[function(require,module,exports){
 'use strict';
 
 var formats = require('./formats');
@@ -37401,7 +40496,7 @@ module.exports = {
     merge: merge
 };
 
-},{"./formats":460}],465:[function(require,module,exports){
+},{"./formats":491}],496:[function(require,module,exports){
 'use strict';
 
 var inspect = require('object-inspect');
@@ -37516,7 +40611,7 @@ module.exports = function getSideChannelList() {
 	return channel;
 };
 
-},{"es-errors/type":431,"object-inspect":456}],466:[function(require,module,exports){
+},{"es-errors/type":462,"object-inspect":487}],497:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -37586,7 +40681,7 @@ module.exports = !!$Map && /** @type {Exclude<import('.'), false>} */ function g
 	return channel;
 };
 
-},{"call-bound":422,"es-errors/type":431,"get-intrinsic":437,"object-inspect":456}],467:[function(require,module,exports){
+},{"call-bound":453,"es-errors/type":462,"get-intrinsic":468,"object-inspect":487}],498:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -37672,7 +40767,7 @@ module.exports = $WeakMap
 	}
 	: getSideChannelMap;
 
-},{"call-bound":422,"es-errors/type":431,"get-intrinsic":437,"object-inspect":456,"side-channel-map":466}],468:[function(require,module,exports){
+},{"call-bound":453,"es-errors/type":462,"get-intrinsic":468,"object-inspect":487,"side-channel-map":497}],499:[function(require,module,exports){
 'use strict';
 
 var $TypeError = require('es-errors/type');
@@ -37717,7 +40812,7 @@ module.exports = function getSideChannel() {
 	return channel;
 };
 
-},{"es-errors/type":431,"object-inspect":456,"side-channel-list":465,"side-channel-map":466,"side-channel-weakmap":467}],469:[function(require,module,exports){
+},{"es-errors/type":462,"object-inspect":487,"side-channel-list":496,"side-channel-map":497,"side-channel-weakmap":498}],500:[function(require,module,exports){
 /*
  * Copyright Joyent, Inc. and other Node contributors.
  *
@@ -38495,4 +41590,4 @@ exports.format = urlFormat;
 
 exports.Url = Url;
 
-},{"punycode/":459,"qs":461}]},{},[29]);
+},{"punycode/":490,"qs":492}]},{},[29]);

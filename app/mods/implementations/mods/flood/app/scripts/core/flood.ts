@@ -105,7 +105,7 @@ class Flood extends Mod{
         this.gc.emitter.on("advance-level",()=>{
             const entities = this.wavesManager.entitiesManager.entitiesDef.map(e=>e.entity)
             entities.forEach(e=>{
-                e.display = false
+                e.display = false 
             })
         })
         this.gc.emitter.on("pacman-death", ()=>{

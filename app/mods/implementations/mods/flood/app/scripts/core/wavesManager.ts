@@ -1,4 +1,4 @@
-import { Container, Graphics } from "pixi.js"
+import { Assets, Container, Graphics } from "pixi.js"
 import Animator from "../animations/animator.ts"
 import { States } from "../states/state.ts"
 import Breath from "./breath.ts"
@@ -14,6 +14,7 @@ import { ObjectsGroup } from "../types/types.ts"
 import EntitiesManager from "./entitiesManager.ts"
 import Sonic from "../entities/sonic.ts"
 import { Mode } from "../../../../../../../scripts/characters/types.ts"
+import { sound } from "@pixi/sound"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -192,7 +193,8 @@ class WavesManager {
             const hitArea = enlarge(pacman.hitArea.clone(),2)
             bubbles.forEach((b)=>{
                 if (b.getBounds().contains(hitArea.x, hitArea.y)) {
-                    this.emitter.emit("bubble-swallow") 
+                    sound.play("sonic_bubbles")                    
+                    this.emitter.emit("bubble-swallow")                     
                     container.removeChild(b)
                     //@ts-ignore
                     pacman[breathNamespace].breathing = pacman[breathNamespace].maxBreathing

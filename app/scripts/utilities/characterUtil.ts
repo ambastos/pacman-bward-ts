@@ -198,12 +198,13 @@ class CharacterUtil {
 
   /**
    * Calculates the css position when snapping the character to the x-y grid
-   * @param {({x: number, y: number})} position - The character's position during the current frame
+   * @param {({x: number, y: number})} gridPosition - The character's grid position during the current frame
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @param {ObservablePoint x:number,y:number} anchor - The anchor of the sprite (center 0.5,0,5 or top-left 0,0)
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({top: number, left: number})}
    */
-  snapToGrid(position:ObservablePoint, direction:string, scaledTileSize:number, 
+  snapToGrid(gridPosition:ObservablePoint, direction:string, scaledTileSize:number, 
     anchor:ObservablePoint, scale:number 
    ):ObservablePoint {
     let ax = 0, ay = 0
@@ -213,7 +214,7 @@ class CharacterUtil {
       ay = axis.y
     }
 
-    const newPosition = copyPosition(this, position );
+    const newGridPosition = copyPosition(this, gridPosition );
     const roundingFunction = this.determineRoundingFunction(
       direction,
     );
@@ -221,16 +222,16 @@ class CharacterUtil {
     switch (direction) {
       case this.directions.up:   
       case this.directions.down:
-        newPosition.y = roundingFunction(newPosition.y);
+        newGridPosition.y = roundingFunction(newGridPosition.y);
         break;
       default:
-        newPosition.x = roundingFunction(newPosition.x);
+        newGridPosition.x = roundingFunction(newGridPosition.x);
         break;
     }
     return createObservablePoint(
       this,
-      ((newPosition.x - 0.5) * scaledTileSize) + ax,
-      ((newPosition.y - 0.5) * scaledTileSize) + ay
+      ((newGridPosition.x - 0.5) * scaledTileSize) + ax,
+      ((newGridPosition.y - 0.5) * scaledTileSize) + ay
     )
   }
 

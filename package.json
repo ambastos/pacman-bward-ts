@@ -24,6 +24,7 @@
   "dependencies": {
     "@pixi/devtools": "^2.0.1",
     "@pixi/graphics-extras": "^7.4.3",
+    "@pixi/sound": "^5.2.3",
     "async": "^2.6.3",
     "basic-auth": "^1.1.0",
     "colors": "^1.4.0",
