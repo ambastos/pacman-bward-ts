@@ -36,7 +36,8 @@ class Flood extends Mod{
         this.container = new Container()
         this.nextWaveTime = null
         this.am = new AssetsManager(this)
-        this.gp = new Graphics()      
+        this.gp = new Graphics()  
+        this.gp.zIndex = 3    
         console.log("Flood mod is active!")
     }
     async initialize() {

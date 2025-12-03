@@ -172,11 +172,11 @@ class Maze {
      * @param x 
      * @param y 
      */
-    getGridPosition(x:number, y:number) {
-        return { 
-            x:(x / this.tileSize) + 0.5,
-            y:(y / this.tileSize) + 0.5
-        }
+    getGridPosition(x:number, y:number):ObservablePoint {
+        return createObservablePoint(this, 
+            (x / this.tileSize) + 0.5,
+            (y / this.tileSize) + 0.5
+        )
     }
     /**
      * Gets the pixel position from GridPosition

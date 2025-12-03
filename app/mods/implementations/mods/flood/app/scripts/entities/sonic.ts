@@ -101,19 +101,22 @@ class Sonic extends Ghost {
             this.allowCollision = false
             this.msBetweenSprites = 100
             this.spriteFrames = 5;  
-            this.frameY = 1;
+            this.frameY = 1;                 
             if (this.frame >= this.spriteFrames)
                 this.frame = 1;
             //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
             this.position.set(curPos.x, curPos.y)
-            if (calculateDistancePos(this.position, destPos) < 1) {
-                this.position.set(destPos.x, destPos.y)
-                const pos = this.characterUtil.snapToGrid(this.getGridPosition(),direction,this.scaledTileSize,
+            console.log("change pos", this.position)
+            if (calculateDistancePos(this.position, destPos) < 2) {
+                //this.position.set(destPos.x, destPos.y)
+                const gridPos = this.flood.gc.maze?.getGridPosition(destPos.x, destPos.y)!
+                const pos = this.characterUtil.snapToGrid(gridPos,direction,this.scaledTileSize,
                     this.anchor,this.gameCoordinator.scale
                 )
                 this.direction = direction
                 this.position.set(pos.x, pos.y)
+                console.log("change pos", this.position)
                 an?.stop()
             }
         }).onStart(()=>{
@@ -124,6 +127,7 @@ class Sonic extends Ghost {
              const rx = pixelBounds.right[1]!.x
              //console.log("On start sonic enter")  
              const pos = this.position
+             const destPos = {x:pos.x, y:pos.y}
              const distTopLeft = calculateDistance(pos.x, pos.y, lx, ty)
              const distBottomLeft = calculateDistance(pos.x, pos.y, lx, by)
              const distTopRight = calculateDistance(pos.x, pos.y, rx, ty)
@@ -141,10 +145,11 @@ class Sonic extends Ghost {
              an?.args.push({ 
                  direction: distancePos.direction,
                  sourcePos: {x:distancePos.x, y:distancePos.y} as ObservablePoint,
-                 destPos: {x:pos.x, y:pos.y}
+                 destPos: destPos
             })
             this.direction = distancePos.direction
             this.position.set(distancePos.x, distancePos.y)
+            console.log("change pos", this.position)
         }).onEnd(()=>{
             this.moving = true
             this.allowCollision = true

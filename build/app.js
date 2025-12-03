@@ -628,6 +628,7 @@ var EntitiesManager = /*#__PURE__*/function () {
         //const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
         sonic.reset();
         sonic.position.set(position.x, position.y);
+        console.log("sonic position", sonic.position);
         var defs = {
           entity: sonic,
           startAppearsInMs: 5000 //Change to random in ms
@@ -800,6 +801,7 @@ var Flood = /*#__PURE__*/function (_Mod) {
     _this2.nextWaveTime = null;
     _this2.am = new _assetsManager["default"](_this2);
     _this2.gp = new _pixi.Graphics();
+    _this2.gp.zIndex = 3;
     console.log("Flood mod is active!");
     return _this2;
   }
@@ -1784,11 +1786,15 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
         _this2.frame++;
         _this2.position.set(curPos.x, curPos.y);
-        if ((0, _utils.calculateDistancePos)(_this2.position, destPos) < 1) {
-          _this2.position.set(destPos.x, destPos.y);
-          var pos = _this2.characterUtil.snapToGrid(_this2.getGridPosition(), direction, _this2.scaledTileSize, _this2.anchor, _this2.gameCoordinator.scale);
+        console.log("change pos", _this2.position);
+        if ((0, _utils.calculateDistancePos)(_this2.position, destPos) < 2) {
+          var _this2$flood$gc$maze;
+          //this.position.set(destPos.x, destPos.y)
+          var gridPos = (_this2$flood$gc$maze = _this2.flood.gc.maze) === null || _this2$flood$gc$maze === void 0 ? void 0 : _this2$flood$gc$maze.getGridPosition(destPos.x, destPos.y);
+          var pos = _this2.characterUtil.snapToGrid(gridPos, direction, _this2.scaledTileSize, _this2.anchor, _this2.gameCoordinator.scale);
           _this2.direction = direction;
           _this2.position.set(pos.x, pos.y);
+          console.log("change pos", _this2.position);
           an === null || an === void 0 || an.stop();
         }
       }).onStart(function () {
@@ -1799,6 +1805,10 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
         var rx = pixelBounds.right[1].x;
         //console.log("On start sonic enter")  
         var pos = _this2.position;
+        var destPos = {
+          x: pos.x,
+          y: pos.y
+        };
         var distTopLeft = (0, _utils.calculateDistance)(pos.x, pos.y, lx, ty);
         var distBottomLeft = (0, _utils.calculateDistance)(pos.x, pos.y, lx, by);
         var distTopRight = (0, _utils.calculateDistance)(pos.x, pos.y, rx, ty);
@@ -1828,13 +1838,11 @@ var Sonic = /*#__PURE__*/function (_Ghost) {
             x: distancePos.x,
             y: distancePos.y
           },
-          destPos: {
-            x: pos.x,
-            y: pos.y
-          }
+          destPos: destPos
         });
         _this2.direction = distancePos.direction;
         _this2.position.set(distancePos.x, distancePos.y);
+        console.log("change pos", _this2.position);
       }).onEnd(function () {
         _this2.moving = true;
         _this2.allowCollision = true;
@@ -6546,10 +6554,7 @@ var Maze = /*#__PURE__*/function () {
   }, {
     key: "getGridPosition",
     value: function getGridPosition(x, y) {
-      return {
-        x: x / this.tileSize + 0.5,
-        y: y / this.tileSize + 0.5
-      };
+      return (0, _utils.createObservablePoint)(this, x / this.tileSize + 0.5, y / this.tileSize + 0.5);
     }
     /**
      * Gets the pixel position from GridPosition

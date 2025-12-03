@@ -52,6 +52,7 @@ class EntitiesManager {
             //const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
             sonic.reset()
             sonic.position.set(position.x, position.y)
+            console.log("sonic position", sonic.position)
             const defs = { 
                 entity: sonic,
                 startAppearsInMs: 5000//Change to random in ms
