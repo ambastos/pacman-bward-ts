@@ -19,6 +19,8 @@ import Timer from "../utilities/timer.ts";
 import Mod from "../../mods/mod.ts";
 import EmptyMod from "../../mods/empty-mod.ts";
 import MovableEntity from "../characters/movableEntity.ts";
+import { Mode } from "../characters/types.ts";
+import { sound } from "@pixi/sound";
 //global.window.Assets = Assets
 //import path from 'path'
 const options = {
@@ -94,6 +96,7 @@ class GameCoordinator {
   topRender!: RendererTop
   bottomRender!: RendererBottom
   view!: any
+  debug:boolean = true
   constructor() {
     //super(options)
     this.mod = new EmptyMod(this)
@@ -122,7 +125,7 @@ class GameCoordinator {
     //this.scaledTileSize = this.tileSize * this.scale;
     this.scaledTileSize = this.tileSize * 1;
     this.height = this.scaledTileSize * 31
-    this.width = this.scaledTileSize * 28
+    this.width = this.scaledTileSize * 28 
     this.maze!.setDimensions(this.width, this.height)
 
     //This contains all the objects of the game
@@ -253,7 +256,11 @@ class GameCoordinator {
    */
   soundButtonClick() {
     const newVolume = this.soundManager.masterVolume === 1 ? 0 : 1;
-    this.soundManager.setMasterVolume(newVolume);
+    this.soundManager.setMasterVolume(newVolume); 
+    if (newVolume > 0)
+      sound.volumeAll = 0.5
+    else 
+      sound.volumeAll = 0
     localStorage.setItem('volumePreference', newVolume.toString());
     this.setSoundButtonIcon(newVolume);
   }
@@ -348,14 +355,16 @@ class GameCoordinator {
 
     this.stage.addChild(
       this.pacman,
-      // this.blinky,
+      this.blinky,
       // this.pinky,
       // this.inky, 
       // this.clyde,
       this.fruit,
     )
   
-    this.ghosts = [this.blinky, this.pinky, this.inky, this.clyde];
+    this.ghosts = [this.blinky, 
+     // this.pinky, this.inky, this.clyde
+    ];
 
     this.scaredGhosts = [];
     this.eyeGhosts = 0;
@@ -530,9 +539,6 @@ class GameCoordinator {
 
     new Timer(() => {
 
-      //for mods. start the mod 
-      this.mod.start()
-
       this.allowPause = true;
       this.cutscene = false;
       this.soundManager.setCutscene(this.cutscene);
@@ -546,10 +552,12 @@ class GameCoordinator {
         ghostRef.moving = true;
       });
 
-      this.ghostCycle('scatter');
+      this.ghostCycle(Mode.scatter);
 
       this.idleGhosts = [this.pinky, this.inky, this.clyde];
       this.releaseGhost();
+      //for mods. start the mod 
+      this.mod.start()
       this.emitter.emit("post-start")
     }, duration);
   }
@@ -613,9 +621,9 @@ class GameCoordinator {
    * Cycles the ghosts between 'chase' and 'scatter' mode
    * @param {('chase'|'scatter')} mode
    */
-  ghostCycle(mode: string) {
-    const delay = mode === 'scatter' ? 7000 : 20000;
-    const nextMode = mode === 'scatter' ? 'chase' : 'scatter';
+  ghostCycle(mode: Mode) {
+    const delay = mode === Mode.scatter ? 7000 : 20000;
+    const nextMode:Mode = mode === Mode.scatter ? Mode.chase : Mode.scatter;
 
     this.ghostCycleTimer = new Timer(() => {
       this.ghosts.forEach((ghost) => {
@@ -645,8 +653,11 @@ class GameCoordinator {
    */
   registerEventListeners() {
     //events: 
-    //  load, start, post-start, pacman-death, post-death, ghost-eaten-<ghostName>, item-taken (item as argument),
-    //  advance-level, game-over, speed-up-blinky, create-fruit
+    //  load, start, post-start, pacman-death, post-death, 
+    // ghost-eaten-<ghostName>, eat-ghost
+    // item-taken (item as argument),
+    // advance-level, post-advance-level, game-over, 
+    // speed-up-blinky, create-fruit
     this.emitter = new EventEmitter()
     this.entityList.forEach((e) => {
       e.emitter = this.emitter
@@ -657,6 +668,7 @@ class GameCoordinator {
     this.emitter.on("speed-up-blinky", this.speedUpBlinky.bind(this))
     this.emitter.on("create-fruit", this.createFruit.bind(this))
     this.emitter.on("game-over", this.gameOver.bind(this))
+    
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     //@ts-ignore
     window.addEventListener('awardPoints', this.awardPoints.bind(this));
@@ -665,7 +677,7 @@ class GameCoordinator {
     window.addEventListener('dotEaten', this.dotEaten.bind(this));
     window.addEventListener('powerUp', this.powerUp.bind(this));
     //@ts-ignore
-    window.addEventListener('eatGhost', this.eatGhost.bind(this));
+    //window.addEventListener('eatGhost', this.eatGhost.bind(this));
     window.addEventListener('restoreGhost', this.restoreGhost.bind(this));
     //@ts-ignore
     window.addEventListener('addTimer', this.addTimer.bind(this));
@@ -837,7 +849,7 @@ class GameCoordinator {
             let shouldRestart = (event?.detail?.restart) === undefined ? true : (event.detail.restart)
 
             if (shouldRestart)
-              this.emitter.emit("start")
+              this.emitter.emit("start") 
           }, 500);
         }, 2250);
       } else {
@@ -1009,6 +1021,7 @@ class GameCoordinator {
                         this.remainingDots += 1;
                       }
                     });
+                    this.emitter.emit("post-advance-level")
                     this.startGameplay();
                   }, 500);
                 }, 250);
@@ -1083,11 +1096,11 @@ class GameCoordinator {
 
   /**
    * Upon eating a ghost, award points and temporarily pause movement
-   * @param {CustomEvent} e - Contains a target ghost object
+   * @param {detail} detail - Contains a target ghost object
    */
-  eatGhost(e: CustomEvent) {
+  eatGhost(detail:any) {
     const pauseDuration = 1000;
-    const { position, measurement } = e.detail.ghost;
+    const { position, measurement } = detail.ghost;
 
     this.pauseTimer({ detail: { timer: this.ghostFlashTimer } } as CustomEvent);
     this.pauseTimer({ detail: { timer: this.ghostCycleTimer } } as CustomEvent);
@@ -1095,7 +1108,7 @@ class GameCoordinator {
     this.soundManager.play('eat_ghost');
 
     this.scaredGhosts = this.scaredGhosts.filter(
-      ghost => ghost.name !== e.detail.ghost.name,
+      ghost => ghost.name !== detail.ghost.name,
     );
     this.eyeGhosts += 1;
 
@@ -1113,8 +1126,8 @@ class GameCoordinator {
     this.allowPacmanMovement = false;
     this.pacman.display = false;
     this.pacman.moving = false;
-    e.detail.ghost.display = false;
-    e.detail.ghost.moving = false;
+    detail.ghost.display = false;
+    detail.ghost.moving = false;
 
     this.ghosts.forEach((ghost) => {
       const ghostRef = ghost;
@@ -1122,7 +1135,7 @@ class GameCoordinator {
       ghostRef.pause(true);
       ghostRef.allowCollision = false;
     });
-
+    this.emitter.emit("eat-ghost")
     new Timer(() => {
       this.soundManager.setAmbience('eyes');
 
@@ -1132,8 +1145,8 @@ class GameCoordinator {
       this.allowPacmanMovement = true;
       this.pacman.display = true;
       this.pacman.moving = true;
-      e.detail.ghost.display = true;
-      e.detail.ghost.moving = true;
+      detail.ghost.display = true;
+      detail.ghost.moving = true;
       this.ghosts.forEach((ghost) => {
         const ghostRef = ghost;
         ghostRef.animate = true;

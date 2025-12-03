@@ -1,4 +1,4 @@
-import { ObservablePoint, Rectangle } from "pixi.js"
+import { BaseImageResource, CanvasResource, ICanvas, ObservablePoint, Rectangle, Texture } from "pixi.js"
 import GameCoordinator from "../core/gameCoordinator.ts"
 import MovableEntity from "../characters/movableEntity.ts"
 
@@ -114,7 +114,9 @@ class Debugger {
         let newPositions
         for (let i = 0; i < units; i++) {
             newPositions = this.gc.pacman.characterUtil.determineNewPositions(position, 
-                direction, velocityPerMs, elapsedMs, this.gc.pacman.scaledTileSize)
+                direction, velocityPerMs, elapsedMs, this.gc.pacman.scaledTileSize,
+                this.gc.pacman.anchor, this.gc.scale
+            )
             position = newPositions.newPosition
         }
         this.gc.pacman.position = position
@@ -125,7 +127,7 @@ class Debugger {
             if (this.shouldPrintGrid) {
                 this.printGrid()
             }else if(this.enableBoundsAndHitBoxes) {
-                this.drawBoundsAndHitBoxes(true)
+                this.drawBoundsAndHitBoxes(false)
             }
             requestAnimationFrame(an)
         }
@@ -218,7 +220,8 @@ class Debugger {
                         db.gc.pacman.characterUtil.determineGridPosition(
                             {x: db.gc.pacman.position.x,
                              y: db.gc.pacman.position.y} as ObservablePoint, 
-                             db.tileSize)
+                             db.tileSize,db.gc.pacman.anchor,
+                            db.gc.scale)
 
                     const pacX = formater.format(gridPosition.x)
                     const pacY = formater.format(gridPosition.y)
@@ -329,6 +332,30 @@ class Debugger {
         //ctx.stroke()
         ctx.restore()       
     }    
+
+    getImageData(texture:Texture) {
+        const resource =  (texture.baseTexture.resource as CanvasResource)        
+        const canvas = resource.source as ICanvas
+        const context = canvas.getContext("2d") 
+        const w = canvas.width, h = canvas.height;        
+        const threshold = 255
+
+        let imageData = context!.getImageData(0, 0, w, h);
+        //create array
+        let hitmap = new Uint32Array(Math.ceil(w * h / 32));
+        //fill array
+        for (let i = 0; i < w * h; i++) {
+            //lower resolution to make it faster
+            let ind1 = i % 32;
+            let ind2 = i / 32 | 0;        
+            //check every 4th value of image data (alpha number; opacity of the pixel)
+            //if it's visible add to the array
+            if (imageData.data[i * 4 + 3]! >= threshold) {
+                hitmap[ind2] = hitmap[ind2]! | (1 << ind1);
+                    console.log(`hitmap[${ind2}]:`, hitmap[ind2]);
+            }
+        }
+    }
      //@ts-nocheck
     notifyPacmanMovement() {
         //@ts-ignore
@@ -350,9 +377,12 @@ class Debugger {
     _notify(functionName: any) {
         const pacman = this.gc.pacman
         const gridPosition  = pacman.characterUtil.determineGridPosition(
-            pacman.oldPosition,pacman.scaledTileSize)
+            pacman.oldPosition,pacman.scaledTileSize,
+            pacman.anchor, this.gc.scale
+        )
         const newGridPosition  = pacman.characterUtil.determineGridPosition(
-              pacman.position,pacman.scaledTileSize)    
+              pacman.position,pacman.scaledTileSize,
+            pacman.anchor, this.gc.scale)    
         if (pacman.characterUtil.changingGridPosition(
             gridPosition, newGridPosition)) {
                 const round = pacman.characterUtil.determineRoundingFunction(pacman.direction)

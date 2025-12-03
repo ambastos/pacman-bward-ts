@@ -3,7 +3,7 @@
 // const Pickup = require('../scripts/pickups/pickup');
 import assert from 'assert'
 import sinon from 'sinon'
-import Pickup from '../scripts/pickups/pickup.js';
+import Pickup from '../scripts/pickups/pickup.ts';
 
 let pickup;
 let pacman;

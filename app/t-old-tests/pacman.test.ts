@@ -4,8 +4,8 @@
 // const CharacterUtil = require('../scripts/utilities/characterUtil');
 import assert from 'assert'
 import sinon from 'sinon'
-import Pacman from '../scripts/characters/pacman.js';
-import CharacterUtil from '../scripts/utilities/characterUtil.js';
+import Pacman from '../scripts/characters/pacman.ts';
+import CharacterUtil from '../scripts/utilities/characterUtil.ts';
 
 const scaledTileSize = 8;
 

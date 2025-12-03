@@ -1,8 +1,8 @@
 import sinon from 'sinon'
-import AssetsManager from '../scripts/core/assetsManager.js'
+import AssetsManager from '../scripts/core/assetsManager.ts'
 import { fail, ok } from 'assert'
 import assert from 'assert'
-import GameCoordinator from '../scripts/core/gameCoordinator.js'
+import GameCoordinator from '../scripts/core/gameCoordinator.ts'
 //import {beforeEach} from 'mocha'
 
 let assetsManager

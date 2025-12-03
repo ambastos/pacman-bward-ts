@@ -1,6 +1,6 @@
 import { ObservablePoint } from "pixi.js";
 import StaticEntity from "../characters/staticEntity.ts";
-import { copyPosition, createObservablePoint, getGridPosition } from "./utils.ts";
+import { copyPosition, createObservablePoint, getAnchorAxis, getGridPosition } from "./utils.ts";
 import MovableEntity from "../characters/movableEntity.ts";
 
 class CharacterUtil { 
@@ -21,7 +21,7 @@ class CharacterUtil {
    * @param {({top: number, left: number})} oldPosition - Position during the previous frame
    * @returns {('hidden'|'visible')} - The new 'visibility' css property value for the character.
    */
-  checkForStutter(position:ObservablePoint, oldPosition:ObservablePoint):string {
+  checkForStutter(position?:ObservablePoint, oldPosition?:ObservablePoint):string {
     let stutter = false;
     const threshold = 5; 
 
@@ -40,7 +40,7 @@ class CharacterUtil {
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
    * @returns {('top'|'left')}
    */
-  getPropertyToChange(direction: string):"x" | "y" {
+  getPropertyToChange(direction?: string):"x" | "y" {
     switch (direction) {
       case this.directions.up:
       case this.directions.down:
@@ -85,8 +85,10 @@ class CharacterUtil {
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({x: number, y: number})}
    */
-  determineGridPosition(position:ObservablePoint, scaledTileSize:number):ObservablePoint {
-    return getGridPosition(this,position, scaledTileSize)
+  determineGridPosition(position:ObservablePoint, scaledTileSize:number,
+    anchor:ObservablePoint, scale:number
+  ):ObservablePoint {
+    return getGridPosition(this,position, scaledTileSize, anchor, scale)
   }
 
   /**
@@ -152,7 +154,7 @@ class CharacterUtil {
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
    * @returns {boolean}
    */
-  checkForWallCollision(desiredNewGridPosition:ObservablePoint, mazeArray:[], direction:string):boolean {
+  checkForWallCollision(desiredNewGridPosition:ObservablePoint, mazeArray:string[][], direction:string):boolean {
     const roundingFunction = this.determineRoundingFunction(
       direction,
     );
@@ -179,13 +181,13 @@ class CharacterUtil {
    */
   determineNewPositions(
     position:ObservablePoint, direction:string, velocityPerMs:number, elapsedMs:number, 
-      scaledTileSize:number,
+      scaledTileSize:number, anchor: ObservablePoint, scale:number
   ):any {
     const newPosition = copyPosition(this, position)
     newPosition[this.getPropertyToChange(direction)]
       += this.getVelocity(direction, velocityPerMs) * elapsedMs;
     const newGridPosition = this.determineGridPosition(
-      newPosition, scaledTileSize,
+      newPosition, scaledTileSize, anchor, scale
     );
 
     return {
@@ -196,13 +198,23 @@ class CharacterUtil {
 
   /**
    * Calculates the css position when snapping the character to the x-y grid
-   * @param {({x: number, y: number})} position - The character's position during the current frame
+   * @param {({x: number, y: number})} gridPosition - The character's grid position during the current frame
    * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @param {ObservablePoint x:number,y:number} anchor - The anchor of the sprite (center 0.5,0,5 or top-left 0,0)
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({top: number, left: number})}
    */
-  snapToGrid(position:ObservablePoint, direction:string, scaledTileSize:number):ObservablePoint {
-    const newPosition = copyPosition(this, position );
+  snapToGrid(gridPosition:ObservablePoint, direction:string, scaledTileSize:number, 
+    anchor:ObservablePoint, scale:number 
+   ):ObservablePoint {
+    let ax = 0, ay = 0
+    if (anchor) {
+      const axis = getAnchorAxis(this,anchor, scaledTileSize, scale!)
+      ax = axis.x
+      ay = axis.y
+    }
+
+    const newGridPosition = copyPosition(this, gridPosition );
     const roundingFunction = this.determineRoundingFunction(
       direction,
     );
@@ -210,33 +222,48 @@ class CharacterUtil {
     switch (direction) {
       case this.directions.up:   
       case this.directions.down:
-        newPosition.y = roundingFunction(newPosition.y);
+        newGridPosition.y = roundingFunction(newGridPosition.y);
         break;
       default:
-        newPosition.x = roundingFunction(newPosition.x);
+        newGridPosition.x = roundingFunction(newGridPosition.x);
         break;
     }
     return createObservablePoint(
       this,
-      (newPosition.x - 0.5) * scaledTileSize,
-      (newPosition.y - 0.5) * scaledTileSize
+      ((newGridPosition.x - 0.5) * scaledTileSize) + ax,
+      ((newGridPosition.y - 0.5) * scaledTileSize) + ay
     )
   }
 
   /**
+   * //TODO: includes anchor and scale to handleWarp
    * Returns a modified position if the character needs to warp
    * @param {({top: number, left: number})} position - css position during the current frame
    * @param {({x: number, y: number})} gridPosition - x-y position during the current frame
    * @param {number} scaledTileSize - The dimensions of a single tile
    * @returns {({top: number, left: number})}
    */
-  handleWarp(position:ObservablePoint, scaledTileSize:number, mazeArray:any):ObservablePoint{
+  handleWarp(direction:string, position:ObservablePoint, scaledTileSize:number, mazeArray:any,
+    anchor:ObservablePoint, scale:number
+  ):ObservablePoint{
     const newPosition = createObservablePoint(this, position.x, position.y);
-    const gridPosition = this.determineGridPosition(position, scaledTileSize);
-    if (gridPosition.x < -0.75) {
-      newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
-    } else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
-      newPosition.x = (scaledTileSize * -1.25);
+    const gridPosition = this.determineGridPosition(position, scaledTileSize,
+      anchor,scale
+    );
+    const axis = getAnchorAxis(this, anchor,scaledTileSize,scale)    
+    
+   // gridPosition.x < -0.75
+    //direction == "left" && gridPosition.x  <  -0.75-(-0.75 + anchor.x)
+    if (direction == "left" && gridPosition.x  < -0.75 + anchor.x) {
+      //newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
+      newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75)) + 
+        (anchor.x * scaledTileSize * 0.75) ;
+    //} else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
+    //(gridPosition.x  > mazeArray[0].length - 0.25-(-0.25 + anchor.x) )
+    } else if ( direction == "right" && 
+      (gridPosition.x  > mazeArray[0].length - 0.25-anchor.x )) {
+      newPosition.x = (scaledTileSize * -1.25) + (anchor.x * scaledTileSize * 1.25);
+      //newPosition.x = (scaledTileSize * -1.25);
     }
     return newPosition;
   }

@@ -11,6 +11,7 @@ import AssetsManager from "./assetsManager.ts"
 import Pacman from "../../../../../../../scripts/characters/pacman.ts"
 import Ghost from "../../../../../../../scripts/characters/ghost.ts"
 import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts"
+import Timer from "../../../../../../../scripts/utilities/timer.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -59,21 +60,61 @@ class Flood extends Mod{
     
     #registerListeners() {
        this.emitter = this.gc.emitter
-       this.#changePacmanDeathSequence() 
+       this.#pacmanDeathSequenceEvent() 
+       this.emitter.on("eat-ghost",(detail:any)=>{
+        const em = this.wavesManager?.entitiesManager
+         if (em) {
+            const pauseDuration = 1000
+            //Stop animating the entities
+            em.entitiesDef.forEach((def)=>{
+                const e = def.entity
+                e.animate = false;
+                e.moving = false
+                e.pause(false);
+                e.allowCollision = true;
+            })
+            //Restart animating the entities
+            new Timer(()=>{
+                em.entitiesDef.forEach((def)=>{
+                    const e = def.entity
+                    e.animate = true;
+                    e.moving = true
+                    e.pause(false);
+                    e.allowCollision = true;
+                })
+            }, pauseDuration)
+         }
+       })
        this.emitter.on("game-over",()=>{
         this.stop()
        })
        this.emitter.on("flood-start",()=>{
         this.wavesManager.restart()
        })
+       this.emitter.on("flood-end",()=>{
+        this.ghosts.forEach(g=>{
+            g.allowCollision = true
+            g.skew.set(0,0)
+            g.animate = true
+        })
+       })
     }  
-    #changePacmanDeathSequence() {
+    #pacmanDeathSequenceEvent() {
         this.gc.emitter.removeAllListeners("pacman-death")
         const _this = this 
+        this.gc.emitter.on("advance-level",()=>{
+            const entities = this.wavesManager.entitiesManager.entitiesDef.map(e=>e.entity)
+            entities.forEach(e=>{
+                e.display = false 
+            })
+        })
         this.gc.emitter.on("pacman-death", ()=>{
             const wave = _this.wavesManager.wave
             this.gc.pacman.moving = false
-            this.wavesManager.stop()
+            this.gc.pacman.allowCollision = false
+            this.gc.allowPacmanMovement = false
+            this.wavesManager.entitiesManager.stop()
+            //this.wavesManager.stop()
             if (wave && wave.started) {
                 const detail = {                    
                     restart:false,
@@ -87,12 +128,17 @@ class Flood extends Mod{
                 this.pacman.onDeath()
             }
         })
+        this.gc.emitter.on("post-death",()=>{
+            this.wavesManager.entitiesManager.hide()
+        })
     }  
     changeState(state:number) {
-        this.state.stop()
+        this.state.stop() 
         //@ts-ignore
         this.state = this.states[state]
         this.state.start()
+        
+        console.log(this.state.constructor.name)
     }
     start() {
         super.start() 
@@ -110,8 +156,8 @@ class Flood extends Mod{
     } 
     stop() { 
         super.stop()
-        this.gp.clear() 
-        this.wavesManager.stop()
+        this.gp.clear()         
+        this.emitter.emit("flood-end")
     }
     generateWave(timeToStartMS?: number) {
         this.changeState(States.IDLE_STATE)

@@ -6,6 +6,7 @@ class CancelState extends State {
     }  
     start() {
         super.start()
+        console.log("start cancel", Date.now())
         if (this.wavesManager.wave)
             this.wavesManager.wave.speedY*=3
     }  
@@ -24,9 +25,10 @@ class CancelState extends State {
         // this.flood.ghosts.forEach(g=>{
         //     g.moving = true
         // })
-        setTimeout(()=>{
+        console.log("end cancel", Date.now())
+        setTimeout(()=>{ 
             this.flood.emitter.emit("start")
-            this.flood.emitter.emit("flood-start")
+            //this.flood.emitter.emit("flood-start")
         }, 2250)
     }
     update(elapsedMs: number) {        

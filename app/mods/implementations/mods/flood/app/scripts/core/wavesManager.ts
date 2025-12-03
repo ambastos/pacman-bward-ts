@@ -1,17 +1,21 @@
-import { Container, Graphics } from "pixi.js"
+import { Assets, Container, Graphics } from "pixi.js"
 import Animator from "../animations/animator.ts"
 import { States } from "../states/state.ts"
 import Breath from "./breath.ts"
 import Flood from "./flood.ts"
 import Wave from "./wave.ts"
 import EventEmitter from "eventemitter3"
-import { enlarge } from "../utils/util.ts"
+
 import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts"
 import Pacman from "../../../../../../../scripts/characters/pacman.ts"
 import Ghost from "../../../../../../../scripts/characters/ghost.ts"
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
 import { ObjectsGroup } from "../types/types.ts"
 import EntitiesManager from "./entitiesManager.ts"
+import Sonic from "../entities/sonic.ts"
+import { Mode } from "../../../../../../../scripts/characters/types.ts"
+import { sound } from "@pixi/sound"
+import { enlarge } from "../../../../../../../scripts/utilities/utils.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -56,6 +60,9 @@ class WavesManager {
             const pacman = args.entity           
             //console.log("animation", args)
         })
+        this.emitter.on("flood-end",()=>{
+            this.stop()
+        })
     }    
     restart() {
         this.entitiesManager.restart()
@@ -86,6 +93,8 @@ class WavesManager {
         })
     }
     #tryDrownEntity(entity:any, elapsedMs:number) {
+         if (!entity.allowCollision) return 
+
         const breath = entity[breathNamespace]
         const wave = this?.wave
         if (!wave || !wave.started || breath.stopped) return
@@ -116,10 +125,14 @@ class WavesManager {
             }
         }
     }
-    killEntity(entity:any) {
-        const breath = entity[breathNamespace]
+    killEntity(entity:MovableEntity) {
+        if (!entity.allowCollision) return 
+        
+        //@ts-ignore
+        const breath = entity[breathNamespace] as Breath
         if (entity instanceof Pacman) {
            // window.dispatchEvent(new Event('deathSequence'));
+            sound.play("sonic_drown")
             this.emitter.emit("pacman-death")
             breath.stop()
             breath.reset() 
@@ -130,7 +143,7 @@ class WavesManager {
             //this.emitter.emit(`ghost-eaten-${entity.name}`,event)
             const pauseDuration = 1000
             const {position, measurement} = entity
-            entity.mode = 'eyes'            
+            entity.mode = Mode.eyes         
             this.gc.eyeGhosts += 1;
             this.gc.ghostCombo += 1;            
             const comboPoints = this.gc.determineComboPoints();
@@ -170,8 +183,7 @@ class WavesManager {
         this.wave = null
         this.waveTime = null    
         this.nextWaveTime = null
-        this.gc.ghostCombo = 0 
-        this.entitiesManager.stop()  
+        this.gc.ghostCombo = 0          
     }
     update(elapsedMs: number) {
         if (this.wave) {
@@ -183,7 +195,8 @@ class WavesManager {
             const hitArea = enlarge(pacman.hitArea.clone(),2)
             bubbles.forEach((b)=>{
                 if (b.getBounds().contains(hitArea.x, hitArea.y)) {
-                    this.emitter.emit("bubble-swallow") 
+                    sound.play("sonic_bubbles")                    
+                    this.emitter.emit("bubble-swallow")                     
                     container.removeChild(b)
                     //@ts-ignore
                     pacman[breathNamespace].breathing = pacman[breathNamespace].maxBreathing
@@ -192,6 +205,26 @@ class WavesManager {
                     //this.animator.play("breath", {entity: pacman})
                 }
             })           
+        }
+        if (this.gc.debug) {
+            this.entitiesManager.entitiesDef.forEach(def=>{
+                const e = def.entity
+                const s =  (e as Sonic)
+                if (s.target) {
+                    const target = s.target
+                    const gp = this.gp
+                    //this.gp.lineStyle({width:0})
+                    gp.lineStyle(2,0xffffff)
+                    gp.beginFill(0xff0000, 0.7)
+                    gp.moveTo(target.x - 4, target.y - 4)
+                    gp.lineTo(target.x + 4, target.y + 4)
+                    gp.moveTo(target.x + 4, target.y - 4)
+                    gp.lineTo(target.x - 4, target.y + 4)
+                    gp.closePath()
+                    //this.gp.beginFill(0x005522,0.4)
+                    //this.gp.drawCircle(target.x, target.y, 5)
+                }
+            })
         }
         this.entitiesManager.update(elapsedMs)        
     }

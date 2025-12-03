@@ -1,5 +1,6 @@
 import { Assets, BaseTexture, Cache, Container, Matrix, 
-  Rectangle, RenderTexture, SCALE_MODES, Sprite, Texture } from "pixi.js"
+  Rectangle, RenderTexture, SCALE_MODES, Sprite, Texture, 
+  TYPES} from "pixi.js"
 import GameCoordinator from "./gameCoordinator.ts";
 class AssetsManager {       
     gameCoordinator:GameCoordinator
@@ -308,8 +309,8 @@ class AssetsManager {
     sprite4.position.set(96, 0);
     sprite4.anchor.set(0, 0);
     container.addChild(sprite1, sprite2, sprite3, sprite4);
-
-    sprite1 = new Sprite(Texture.from("pacman_left"));
+        
+    sprite1 = new Sprite(Texture.from("pacman_left"));    
     sprite1.position.set(0, 32);
     sprite1.anchor.set(0, 0);
     sprite2 = new Sprite(Texture.from("pacman_right"));
@@ -330,7 +331,8 @@ class AssetsManager {
 
     let renderTexture = this.gameCoordinator.renderer.generateTexture(container)
     this.gameCoordinator.renderer.render(container,
-      {renderTexture}
+      {renderTexture
+      },
     );
 
     this.textures.set("pacman", renderTexture);

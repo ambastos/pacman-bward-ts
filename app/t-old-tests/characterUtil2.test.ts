@@ -1,7 +1,7 @@
 // const assert = require('assert');
 // const CharacterUtil = require('../scripts/utilities/characterUtil');
 import assert from 'assert'
-import CharacterUtil from '../scripts/utilities/characterUtil.js'
+import CharacterUtil from '../scripts/utilities/characterUtil.ts'
 let cu
 
 const scaledTileSize = 16
