@@ -2,9 +2,7 @@ import { Container, Sprite } from "pixi.js";
 import Wave from "./wave.ts";
 import Sonic from "../entities/sonic.ts";
 import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts";
-import { getMazeWays } from "../utils/util.ts";
-import { ObjectsGroup } from "../types/types.ts";
-import { createObservablePoint } from "../../../../../../../scripts/utilities/utils.ts";
+import { createObservablePoint} from "../../../../../../../scripts/utilities/utils.ts";
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
 import { Mode } from "../../../../../../../scripts/characters/types.ts";
 
@@ -32,7 +30,7 @@ class EntitiesManager {
     tryToGenerateEntities(wave:Wave | null) { 
         const random = Math.random()
         if (wave && random > 0) {
-            const ways =  getMazeWays(wave.maze)
+            const ways =  wave.maze.getWays()
             const cells = ways.map((f,index)=>{
                 const arr = [] as  {row:number, col:number}[]
                 f.cols.forEach(col=>{

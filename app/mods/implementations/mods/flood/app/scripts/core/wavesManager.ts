@@ -5,7 +5,7 @@ import Breath from "./breath.ts"
 import Flood from "./flood.ts"
 import Wave from "./wave.ts"
 import EventEmitter from "eventemitter3"
-import { enlarge } from "../utils/util.ts"
+
 import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts"
 import Pacman from "../../../../../../../scripts/characters/pacman.ts"
 import Ghost from "../../../../../../../scripts/characters/ghost.ts"
@@ -15,6 +15,7 @@ import EntitiesManager from "./entitiesManager.ts"
 import Sonic from "../entities/sonic.ts"
 import { Mode } from "../../../../../../../scripts/characters/types.ts"
 import { sound } from "@pixi/sound"
+import { enlarge } from "../../../../../../../scripts/utilities/utils.ts"
 
 /** name spacing used to create the needed properties*/ 
 const breathNamespace = "breath"
@@ -131,6 +132,7 @@ class WavesManager {
         const breath = entity[breathNamespace] as Breath
         if (entity instanceof Pacman) {
            // window.dispatchEvent(new Event('deathSequence'));
+            sound.play("sonic_drown")
             this.emitter.emit("pacman-death")
             breath.stop()
             breath.reset() 

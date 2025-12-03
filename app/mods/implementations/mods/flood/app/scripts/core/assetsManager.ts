@@ -14,7 +14,7 @@ class AssetsManager {
         const path = 'app/mods/implementations/mods/flood/app/sprites/'
         const pathSound = 'app/mods/implementations/mods/flood/app/sounds/'        
         Sound.from(`${pathSound}sonic_break_CB.wav`)
-
+        
         Assets.add({ alias: "bubbles", src: `${path}bubbles.png` })
         Assets.add({ alias: "sonic", src: `${path}sonic_sprites.png` })
         Assets.add({ alias: "sonic_break", src: `${pathSound}sonic_break_CB.wav` })

@@ -2,11 +2,7 @@ import { Container, DisplayObject, Graphics, Point, Polygon, Sprite, Texture } f
 import '@pixi/graphics-extras'
 import WavesManager from "./wavesManager.ts"
 import Maze from "../../../../../../../scripts/mazes/maze.ts"
-import EntitiesManager from "./entitiesManager.ts"
-import { getMazeWays } from "../utils/util.ts"
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
-import { ObjectsGroup } from "../types/types.ts"
-import { createObservablePoint, getGridPosition } from "../../../../../../../scripts/utilities/utils.ts"
 
 const gp2 = new Graphics()
 class Wave extends Sprite {
@@ -50,7 +46,7 @@ class Wave extends Sprite {
         this.gp.addChild(gp2)
     }
     queueElement(type:string, element:Exclude<Sprite, MovableEntity>) {
-        const id = Date.now()
+        const id = `${type}-${this.queuedList.length}`
         element.name = type
         Object.defineProperty(element,"id",{value:id})
         this.queuedList.push(element) 
@@ -82,8 +78,8 @@ class Wave extends Sprite {
         return this.elements.filter(f=>f.name == name)
     }
     private generateBubbles() { 
-        let numberOfBubles = Math.ceil(Math.random() * 3)
-        let wayCells = getMazeWays(this.maze)
+        let numberOfBubles = Math.ceil(Math.random() * 3)//between 1 and 3
+        let wayCells = this.maze.getWays()
         let rows = wayCells.map((m: { row:number })=>m.row)  
         const tileSize = this.maze.tileSize
         for (let i = 1; i <= numberOfBubles; i++) {
@@ -109,9 +105,9 @@ class Wave extends Sprite {
             const bubble = bubbles[i]
             const grid = this.maze.getGridPosition(bubble.x, bubble.y)
             const waveGrid = this.maze.getGridPosition(this.x, this.y)
-            if (grid.y == waveGrid.y) {  
+            if (grid.y >= waveGrid.y) {  
                 this.addElement(bubble)    
-                this.dequeueElement(bubble)
+                this.dequeueElement(bubble)                
             }
         }
     }

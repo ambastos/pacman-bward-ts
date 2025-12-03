@@ -1,4 +1,5 @@
-import { ObservablePoint } from "pixi.js";
+import { ObservablePoint, Rectangle } from "pixi.js";
+import Maze from "../mazes/maze.ts";
 
 export function copyPosition(classThis:any, position:ObservablePoint ):ObservablePoint {
     return new ObservablePoint(()=>{}, classThis, position.x, position.y) 
@@ -45,3 +46,16 @@ export function getAnchorAxis(classThis:any, anchor:ObservablePoint,tileSize:num
   export function vLerp(a:ObservablePoint, b:ObservablePoint, t:number) {
     return createObservablePoint({},lerp(a.x, b.x, t), lerp(a.y, b.y, t))
   }
+
+/**
+ * 
+ * @param {Rectangle} rectangle 
+ * @param {Number} times 
+ */
+export function enlarge(rectangle:Rectangle, times:number=1):Rectangle {
+    rectangle.x = rectangle.x * times
+    rectangle.y = rectangle.y * times
+    rectangle.width = rectangle.width * times
+    rectangle.height = rectangle.height * times
+    return rectangle 
+}

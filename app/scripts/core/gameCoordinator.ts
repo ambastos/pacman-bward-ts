@@ -20,6 +20,7 @@ import Mod from "../../mods/mod.ts";
 import EmptyMod from "../../mods/empty-mod.ts";
 import MovableEntity from "../characters/movableEntity.ts";
 import { Mode } from "../characters/types.ts";
+import { sound } from "@pixi/sound";
 //global.window.Assets = Assets
 //import path from 'path'
 const options = {
@@ -255,7 +256,11 @@ class GameCoordinator {
    */
   soundButtonClick() {
     const newVolume = this.soundManager.masterVolume === 1 ? 0 : 1;
-    this.soundManager.setMasterVolume(newVolume);
+    this.soundManager.setMasterVolume(newVolume); 
+    if (newVolume > 0)
+      sound.volumeAll = 0.5
+    else 
+      sound.volumeAll = 0
     localStorage.setItem('volumePreference', newVolume.toString());
     this.setSoundButtonIcon(newVolume);
   }

@@ -293,6 +293,7 @@ class Ghost extends MovableEntity{
    * @returns {Boolean}
    */
   isInGhostHouse(gridPosition:ObservablePoint | undefined):boolean {
+    //TODO: change to the maze ghost house
     return (
       (gridPosition!.x > 9 && gridPosition!.x < 18)
       && (gridPosition!.y > 11 && gridPosition!.y < 17)

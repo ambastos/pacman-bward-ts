@@ -11,7 +11,7 @@ class Maze {
     cols:number
     tileSize!: number
     /**Ghost houses boundaries in grid coordinates */
-    ghostHouses: any
+    ghostHouses: any[]
     pixelBounds: any
     constructor(mazePrp: any) {        
 
@@ -23,6 +23,25 @@ class Maze {
         this.cols = this.mazeArray[0]!.length        
         this.ghostHouses = mazePrp.ghostHouses
     }    
+    getWays() {
+        return this.mazeArray.map((f: string[],i: number, a: string[][])=>{ 
+            let rr = f.map((g: string,j: number)=>{   
+                const isInGhostHouse = this.ghostHouses
+                    .some(e=>(i >= e.y1 &&  i <= e.y2) && (j >=e.x1 && j<= e.x2))
+
+                if (isInGhostHouse)
+                    return -1
+                else if  (g == 'o' || g == ' ')  {
+                    return j
+                }else  {
+                    return -1
+                }
+            })  
+            return {"row": i, "cols":rr.filter((f: number)=>f>-1)}
+        }).filter((f: { cols: number[] },i: number)=>{  
+            return f.cols.length > 0
+        }) 
+    }
     #calculateBounds() {
         const bounds = {top:[], left: [], 
             right:[], bottom:[]}

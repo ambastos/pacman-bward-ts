@@ -1,6 +1,5 @@
 import { ObservablePoint, Point, Resource, Sprite, Texture } from "pixi.js";
 import Flood from "../core/flood.ts";
-import Wave from "../core/wave.ts";
 import Animator from "../animations/animator.ts";
 import Ghost from "../../../../../../../scripts/characters/ghost.ts";
 import CharacterUtil from "../../../../../../../scripts/utilities/characterUtil.ts";
@@ -8,9 +7,7 @@ import Pacman from "../../../../../../../scripts/characters/pacman.ts";
 import { calculateDistance, calculateDistancePos, createObservablePoint, vLerp } from "../../../../../../../scripts/utilities/utils.ts";
 import Timer from "../../../../../../../scripts/utilities/timer.ts";
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
-import { getMazeWays } from "../utils/util.ts";
 import { Mode } from "../../../../../../../scripts/characters/types.ts";
-import { Function } from "lodash";
 import { sound } from "@pixi/sound";
 
 class Sonic extends Ghost {
@@ -30,10 +27,7 @@ class Sonic extends Ghost {
         this.setTexture(this.name, this.direction, 1, null, 1, 32, 32) 
         this.animator = new Animator(this);
         this.createAnimations();
-        this.registerEventListeners()
-        this.position = new ObservablePoint(()=>{
-            console.log ("sonic", this.position)
-        },this.position)
+        this.registerEventListeners()        
     }    
     
     private createAnimations() {
@@ -178,7 +172,7 @@ class Sonic extends Ghost {
                         collides = bounds?.left.some((e:any)=>
                             e.x == Math.floor(gridPos.x) && e.y == Math.floor(gridPos.y))!
                         if (collides) {
-                            newGridPos.set(gridPos.x + 1, gridPos.y)
+                            newGridPos.set(gridPos.x, gridPos.y)
                             newDirection = ghost.characterUtil.getOppositeDirection("left")
                             //ghost.x = (gridPos.x+0.5) * this.scaledTileSize
                              
@@ -192,7 +186,7 @@ class Sonic extends Ghost {
                             e.x == Math.floor(gridPos.x) && e.y == Math.ceil(gridPos.y))!
                         if (collides) {
                             //ghost.x = (gridPos.x - 0.5) * this.scaledTileSize
-                            newGridPos.set(gridPos.x, gridPos.y)
+                            newGridPos.set(gridPos.x-0.5, gridPos.y)
                             newDirection = ghost.characterUtil.getOppositeDirection("right")                               
                         }else    
                             ghost.x += velocity     
@@ -202,7 +196,7 @@ class Sonic extends Ghost {
                         collides = bounds?.top.some((e:any)=>e.y == Math.floor(gridPos.y))!
                         if (collides) {
                             //ghost.y = (gridPos.y + 0.5) * this.scaledTileSize
-                            newGridPos.set(gridPos.x, gridPos.y+1)
+                            newGridPos.set(gridPos.x, gridPos.y)
                             newDirection = ghost.characterUtil.getOppositeDirection("up")  
                         }else    
                             ghost.y -= velocity     
@@ -386,7 +380,7 @@ class Sonic extends Ghost {
         if (this.targetDef.targetReached) return       
         //debug        
         if (this.targetDef.type == "point") {
-            const wayCells = getMazeWays(this.flood.gc.maze!)
+            const wayCells = this.flood.gc.maze!.getWays()
             const way = wayCells[ Math.floor(Math.random() * wayCells.length) ]
             const row = way?.row as number
             const col = way?.cols[ Math.floor(Math.random() * way.cols.length) ] as number
@@ -465,6 +459,7 @@ class Sonic extends Ghost {
         ghost.animate = false
         this.targetDef.targetReached = true  
         this.target = null    
+        sound.play("sonic_impact")
         this.animator.play("ghost-kick", {direction: this.direction, ghost:ghost})
     }
     update(elapsedMs:number) {
