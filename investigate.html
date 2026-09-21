@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacman | investigate flood</title>
+    <script src="build/libraries/jquery-3.7.1.slim.min.js.js"></script>
+    <script>
+      var hudOn = new URLSearchParams(location.search).get('hud') === '1';
+      var pre = null;
+      if (hudOn) {
+        pre = document.createElement('pre');
+        pre.id = 'analysis';
+        Object.assign(pre.style, {whiteSpace:'pre', position:'fixed', top:0, left:0, zIndex:99999, fontSize:'9px', backgroundColor:'rgba(0,0,0,0.8)', color:'#0f0', maxHeight:'24vh', overflow:'auto'});
+        document.body.appendChild(pre);
+      }
+      function out(label, v){ if (pre) pre.textContent += label + ': ' + JSON.stringify(v) + "\n"; console.log('[inv]', label, v); }
+      function pixelStats(gc) {
+        try {
+          var extract = gc.renderer && gc.renderer.extract;
+          if (!extract) return {extract:false};
+          var c = extract.canvas(gc.stage);
+          var F = document.createElement('canvas');
+          F.width = 224; F.height = 248;
+          F.getContext('2d').drawImage(c, 0, 0, 224, 248);
+          var img = F.getContext('2d').getImageData(0,0,224,248);
+          var d = img.data, n=224*248, teal=0, dark=0;
+          for (var i=0;i<n;i++){
+            var o=i*4, r=d[o], g=d[o+1], b=d[o+2];
+            if (Math.abs(r-0x2b)<18 && Math.abs(g-0x70)<18 && Math.abs(b-0x71)<22) teal++;
+            if (r<60&&g<60&&b<60) dark++;
+          }
+          return {tealRatio:+(teal/n).toFixed(3), darkRatio:+(dark/n).toFixed(3)};
+        } catch(e){ return {extractErr:String(e.message)}; }
+      }
+window.__ren2 = null;
+      window.__glProbe = function() {
+        try {
+          var gc = window.gc;
+          var st = gc.stage;
+          var r = gc.renderer;
+          var bw = r.width, bh = r.height, W = 224, H = 248;
+          if (!window.__ren2) {
+            var c = document.createElement('canvas');
+            c.width = bw; c.height = bh;
+            var ren2 = new PIXI.Renderer({view:c, width:bw, height:bh, backgroundColor:0x000000, antialias:false});
+            window.__ren2 = ren2; window.__ren2c = c;
+          }
+          window.__ren2.render(st);
+          var gl = window.__ren2.gl;
+          var buf = new Uint8Array(bw*bh*4);
+          gl.readPixels(0,0,bw,bh,gl.RGBA,gl.UNSIGNED_BYTE,buf);
+          var b = gc.mazeSprite.getBounds();
+          var sx = b.x/r.width*W, sy = b.y/r.height*H, sw = b.width/r.width*W, sh = b.height/r.height*H;
+          var oc = document.createElement('canvas'); oc.width=W; oc.height=H;
+          var octx = oc.getContext('2d');
+          octx.drawImage(window.__ren2c, Math.max(0,sx|0), Math.max(0,sy|0), Math.ceil(sw), Math.ceil(sh), 0,0,W,H);
+          var id2 = octx.getImageData(0,0,W,H).data;
+          var teal=0, dark=0, n=0;
+          for (var k=0;k<W*H;k++){ var o=k*4; var rr=id2[o], gg=id2[o+1], bb=id2[o+2]; n++;
+            if (Math.abs(rr-0x2b)<18 && Math.abs(gg-0x70)<18 && Math.abs(bb-0x71)<22) teal++;
+            else if (rr<60&&gg<60&&bb<60) dark++;
+          }
+          var flood = gc.mod && gc.mod.flood;
+          var wave = flood && flood.wavesManager && flood.wavesManager.wave;
+          return JSON.stringify({vr:bw+'x'+bh, glTeal:+(teal/n).toFixed(3), glDark:+(dark/n).toFixed(3),
+            waveH: wave ? +wave.height.toFixed(1) : null,
+            ms: gc.mazeSprite ? {v:gc.mazeSprite.visible, a:+gc.mazeSprite.alpha.toFixed(2)} : null,
+            dataURL: oc.toDataURL('image/png')});
+        } catch(e){ return JSON.stringify({err:String(e.message)+' '+(String(e.stack||'').split('\n')[0])}); }
+      };
+      window.addEventListener('error', e=>console.error('[inv] error', e.message));
+      window.addEventListener('unhandledrejection', e=>console.warn('[inv] rejection', String(e.reason)));
+      function waitFor(fn, timeout, cb, tries) {
+        tries = tries || 0;
+        if (fn()) return cb();
+        if (tries > timeout) return cb();
+        setTimeout(()=>waitFor(fn, timeout, cb, tries+10), 10);
+      }
+      waitFor(()=>window.gc && window.gc.am && window.gc.am.textures && window.gc.am.textures.size > 20, 30000, () => {
+        out('loaded', true);
+        var gc = window.gc;
+        var menu = document.getElementById('game-start');
+        if (menu) menu.click();
+        var params = new URLSearchParams(location.search);
+        var delay = params.get('waveDelay') ? Number(params.get('waveDelay')) : 6000;
+        out('baseStats', pixelStats(gc));
+        setTimeout(() => {
+          var flood = gc.mod && gc.mod.flood;
+          if (!flood) { out('NO_FLOOD_MOD', true); return; }
+          if (gc.pacman) gc.pacman.allowCollision = false;
+          out('triggering wave', true);
+          flood.generateWave(0);
+        }, delay);
+        window.__regen = 0;
+        setInterval(() => {
+          var f = window.gc && window.gc.mod && window.gc.mod.flood;
+          if (f && !f.wavesManager.wave && window.__regen < 4) {
+            window.__regen++;
+            try { f.generateWave(0); } catch(e){}
+          }
+        }, 9000);
+        setTimeout(()=>{
+          var flood = gc.mod && gc.mod.flood;
+          var w = flood && flood.wavesManager && flood.wavesManager.wave;
+          out('state', flood && flood.state && flood.state.constructor.name);
+          out('wave', w ? {height:+w.height.toFixed(1), top:+w.y.toFixed(1), visible:w.visible} : null);
+          out('mazeSprite', gc.mazeSprite ? {visible:gc.mazeSprite.visible, alpha:+gc.mazeSprite.alpha.toFixed(2)} : null);
+          out('afStats', pixelStats(gc));
+        }, params.get('analyzeAt') ? Number(params.get('analyzeAt')) : (delay + 10000));
+      });
+    </script>
+    <link rel='shortcut icon' type='image/x-icon' href='favicon.ico'>
+    <link href='https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <title>Pacman</title>
+  </head>
+  <body>
+    <div id='overflow-mask' class='overflow-mask'>
+      <img id='backdrop' class='backdrop' src='app/style/graphics/backdrop.png'>
+
+      <div id='fps-display' class='fps-display'></div>
+      <div id='preload-div' class='preload-div'></div>
+
+      <div id='main-menu-container' class='main-menu-container'>
+        <img id='logo' class='logo' src='app/style/graphics/pacman_logo.png'>
+        <button id='game-start' class='game-start'>
+          PLAY
+        </button>
+      </div>
+
+      <div class='header-buttons'>
+        <button><i id='pause-button' class='material-icons'>pause</i></button>
+        <button><i id='sound-button' class='material-icons'></i></button>
+      </div>
+
+      <div id='paused-text' class='paused-text'>PAUSED</div>
+
+      <div id='game-ui' class='game-ui'>
+        <div id='row-top' class='row top'></div>
+        <div id='maze' class='maze'>
+          <div id='maze-cover' class='maze-cover'></div>
+        </div>
+        <div id='bottom-row' class='row bottom'></div>
+      </div>
+
+      <div id='movement-buttons' class='movement-buttons'>
+        <div class='row'><button id='button-up' class='button-up'><i class='material-icons'>keyboard_arrow_up</i></button></div>
+        <div class='row'>
+          <button id='button-left' class='button-left'><i class='material-icons'>keyboard_arrow_left</i></button>
+          <button id='button-right' class='button-right'><i class='material-icons'>keyboard_arrow_right</i></button>
+        </div>
+        <div class='row'><button id='button-down' class='button-down'><i class='material-icons'>keyboard_arrow_down</i></button></div>
+      </div>
+
+      <div id='left-cover' class='loading-cover left'></div>
+      <div id='right-cover' class='loading-cover right'></div>
+      <div id='loading-container' class='loading-container'>
+        <div id='loading-pacman' class='loading-pacman'></div>
+        <div id='loading-dot-mask' class='loading-dot-mask'></div>
+      </div>
+
+      <div id='error-message' class='error-message'>
+        <div class='header'><div>OOPS!</div><div class='error-pacman'></div></div>
+        <div class='body'>
+          We were unable to load the images/sounds needed to play the game.<br><br>
+          This could be due to a poor connection, a strict network policy, or
+          by playing on an unsupported browser.
+        </div>
+      </div>
+    </div>
+
+    <script src='build/app.js'></script>
+  </body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!--script async src='https://www.googletagmanager.com/gtag/js?id=UA-142539004-1'></script-->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-142539004-1');
+    </script>
+
+    <!-- <script
+    src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script> -->
+    <script src="build/libraries/jquery-3.7.1.slim.min.js.js"></script>
+    <script src='build/app.js'></script>
+    
+    <link rel='shortcut icon' type='image/x-icon' href='favicon.ico'>
+    <link href='https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons'
+      rel='stylesheet'>
+    <title>Pacman</title>
+    <script>
+      window.__autotest = true
+    </script>
+  </head>
+  <body>
+    <div id='overflow-mask' class='overflow-mask'>
+      <img id='backdrop' class='backdrop' src='app/style/graphics/backdrop.png'>
+
+      <div id='fps-display' class='fps-display'></div>
+      <div id='preload-div' class='preload-div'></div>
+
+      <div id='main-menu-container' class='main-menu-container'>
+        <img id='logo' class='logo' src='app/style/graphics/pacman_logo.png'>
+        <button id='game-start' class='game-start'>
+          PLAY
+        </button>
+      </div>
+
+      <div class='header-buttons'>
+        <button>
+          <i id='pause-button' class='material-icons'>
+            pause
+          </i>
+        </button>
+        <button>
+          <i id='sound-button' class='material-icons'></i>
+        </button>
+      </div>
+
+      <div id='paused-text' class='paused-text'>
+        PAUSED
+      </div>
+
+      <div id='game-ui' class='game-ui'>
+        <div id='row-top' class='row top'></div>
+        <div id='maze' class='maze'>
+          <div id='maze-cover' class='maze-cover'></div>
+        </div> 
+
+        <div id='bottom-row' class='row bottom'></div>
+      </div>
+
+      <div id='movement-buttons' class='movement-buttons'>
+        <div class='row'>
+          <button id='button-up' class='button-up'>
+            <i class='material-icons'>keyboard_arrow_up</i>
+          </button>
+        </div>
+        <div class='row'>
+          <button id='button-left' class='button-left'>
+            <i class='material-icons'>keyboard_arrow_left</i>
+          </button>
+          <button id='button-right' class='button-right'>
+            <i class='material-icons'>keyboard_arrow_right</i>
+          </button>
+        </div>
+        <div class='row'>
+          <button id='button-down' class='button-down'>
+            <i class='material-icons'>keyboard_arrow_down</i>
+          </button>
+        </div>
+      </div>
+
+      <div id='left-cover' class='loading-cover left'></div>
+      <div id='right-cover' class='loading-cover right'></div>
+      <div id='loading-container' class='loading-container'>
+        <div id='loading-pacman' class='loading-pacman'></div>
+        <div id='loading-dot-mask' class='loading-dot-mask'></div>
+        <div class='loading-dot _5'></div>
+        <div class='loading-dot _10'></div>
+        <div class='loading-dot _15'></div>
+        <div class='loading-dot _20'></div>
+        <div class='loading-dot _25'></div>
+        <div class='loading-dot _30'></div>
+        <div class='loading-dot _35'></div>
+        <div class='loading-dot _40'></div>
+        <div class='loading-dot _45'></div>
+        <div class='loading-dot _50'></div>
+        <div class='loading-dot _55'></div>
+        <div class='loading-dot _60'></div>
+        <div class='loading-dot _65'></div>
+        <div class='loading-dot _70'></div>
+        <div class='loading-dot _75'></div>
+        <div class='loading-dot _80'></div>
+        <div class='loading-dot _85'></div>
+        <div class='loading-dot _90'></div>
+        <div class='loading-dot _95'></div>
+      </div>
+
+      <div id='error-message' class='error-message'>
+        <div class='header'>
+          <div>OOPS!</div>
+          <div class='error-pacman'></div>
+        </div>
+        <div class='body'>
+          We were unable to load the images/sounds needed to play the game.</br></br>
+
+          This could be due to a poor connection, a strict network policy, or
+          by playing on an unsupported browser.
+        </div>
+      </div>
+    </div>
+    <pre id="samples" style="position:absolute;left:0;top:0;z-index:9999;color:lime;background:rgba(0,0,0,0.8);font-size:10px;max-height:200px;overflow:auto;white-space:pre-wrap;"></pre>
+    <script>
+      (function(){
+        var started = false
+        var waveSent = false
+        var samples = []
+        window.__errs = []
+        window.addEventListener('error', function(e){ window.__errs.push(String(e.message) + '@' + String(e.filename).split('/').pop()); })
+        window.addEventListener('unhandledrejection', function(e){ window.__errs.push('rej:' + String(e.reason)); })
+        function log(msg){ samples.push(msg) }
+        function flush(){
+          var el = document.getElementById('samples')
+          if (el) el.textContent = (window.__errs.length ? ('[ERR] ' + window.__errs.join('\n[ERR] ') + '\n') : '') + samples.slice(Math.max(0, samples.length - 120)).join('\n')
+        }
+        var lastWave = null
+        function sampleCanvas(){
+          if (!window.gc || !window.gc.renderer) return
+          var w = window.gc.view.width, h = window.gc.view.height
+          var img;
+          try {
+            img = window.gc.renderer.extract.pixels(window.gc.stage)
+          } catch(e){ log('extract err ' + e); flush(); return }
+          var blue=0, cyan=0, black=0, total=0
+          for (var y=0;y<h;y+=2){
+            for (var x=0;x<w;x+=2){
+              var i=(y*w+x)*4
+              var r=img[i],g=img[i+1],b=img[i+2]
+              total++
+              if (b>100 && r<90 && g<90) blue++
+              if (r>60&&r<120&&g>180&&b>190) cyan++
+              if (r<30&&g<30&&b<30) black++
+            }
+          }
+          var wave = window.f && window.f.wavesManager && window.f.wavesManager.wave
+          var waveInfo = wave ? ('h=' + Math.round(wave.height) + ' y=' + Math.round(wave.y) + ' started=' + wave.started + ' vis=' + wave.visible) : 'none'
+          if (wave !== lastWave) {
+            lastWave = wave
+            log('wave present changed: ' + waveInfo)
+          }
+          log('t=' + Math.round(performance.now()) + ' blue=' + blue + ' cyan=' + cyan + ' black=' + black + ' flood.started=' + (window.f && window.f.started) + ' state=' + (window.f && window.f.state && window.f.state.constructor.name) + ' wave:' + waveInfo)
+          flush()
+        }
+        var iv = setInterval(function(){
+          var btn = document.getElementById('game-start')
+          if (!started && btn && !btn.disabled) {
+            started = true
+            btn.click()
+            log('AUTO: clicked start')
+          }
+          if (window.f && window.f.wavesManager && window.f.wavesManager.wave && !waveSent) {
+            waveSent = true
+            log('AUTO: wave exists, forcing start')
+            setTimeout(function(){ window.f.generateWave(0) }, 2000)
+          }
+          sampleCanvas()
+        }, 400)
+      })()
+    </script>
+  </body>
+</html>
