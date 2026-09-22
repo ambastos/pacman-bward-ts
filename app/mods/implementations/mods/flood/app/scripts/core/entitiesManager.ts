@@ -28,8 +28,9 @@ class EntitiesManager {
         }) 
     }
     tryToGenerateEntities(wave:Wave | null) { 
-        const random = Math.random()
-        if (wave && random > 0) {
+        //Always just one sonic per wave
+        if (this.queuedList.length > 0 || this.entitiesDef.length > 0) return
+        if (wave) {
             const ways =  wave.maze.getWays()
             const cells = ways.map((f,index)=>{
                 const arr = [] as  {row:number, col:number}[]
@@ -39,7 +40,6 @@ class EntitiesManager {
                 return arr 
             }).flat()
             const index =  Math.floor(Math.random() * (cells.length -1)) 
-            //TODO only for debuggin, Just adding one sonic
             if (this.gc.stage.children.filter(e=>e instanceof Sonic).length > 0)
                 return 
             const sonic = new Sonic(wave.wavesManager.flood)
@@ -49,10 +49,8 @@ class EntitiesManager {
                 sonic.characterUtil.directions.left, sonic.scaledTileSize,
                 sonic.anchor, this.gc.scale 
             )
-            //const coords =  this.wave.maze.getPixelCoordinates(cells[index]!.row,cells[index]!.col)
             sonic.reset()
             sonic.position.set(position.x, position.y)
-            console.log("sonic position", sonic.position)
             const defs = { 
                 entity: sonic,
                 startAppearsInMs: 5000//Change to random in ms
@@ -61,6 +59,20 @@ class EntitiesManager {
             this.queueEntity(defs)
             //wave.queueElement("entity", sonic)
         } 
+    }
+    makeSonicLeave() {
+        this.entitiesDef.forEach(def => {
+            const e = def.entity
+            if (e instanceof Sonic)
+                e.beginGoOut()
+        })
+    }
+    removeSonic(entity:Sonic) {
+        const idx = this.entitiesDef.findIndex(d => d.entity == entity)
+        if (idx > -1)
+            this.entitiesDef.splice(idx, 1)
+        if (entity.parent)
+            this.container.removeChild(entity)
     }
     dequeAllEntities() {
         const entities = this.dequeEntitiesBy()                       
@@ -95,17 +107,10 @@ class EntitiesManager {
     clearEntities() {        
         this.entitiesDef.forEach(def=>{
             const e = def.entity
-            if (e instanceof Sonic) {
-                //clear all timers related to sonic
-                const activeTimers =  (e as Sonic).activeTimers
-                activeTimers.forEach(t=>{
-                    window.clearTimeout(t.timerId)
-                })
-                activeTimers.length = 0 
-            }
             this.container.removeChild(e)
         })
         this.entitiesDef.length = 0
+        this.queuedList.length = 0
     }
     hide() {
         this.entitiesDef.forEach(def=>{

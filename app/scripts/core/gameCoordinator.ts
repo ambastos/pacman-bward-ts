@@ -1176,21 +1176,28 @@ class GameCoordinator {
    * @param {Number} duration - Milliseconds to display the points before disappearing
    * @param {Number} width - Image width in pixels
    * @param {Number} height - Image height in pixels
+   * @param {({ x: number, y: number })} offset - extra x/y offset applied after the position
    */
-  displayText(position: PIXI.ObservablePoint, amount: any, duration: number, width: number, height?: number) {
-    let textSp
+  displayText(position: PIXI.ObservablePoint, amount: any, duration: number, width: number, height?: number, offset?: { x?: number, y?: number }) {
+    let textSp: any
     const texture = this.am.getTexture(amount)
-    if (texture)
+    const offsetX = offset?.x || 0
+    const offsetY = offset?.y || 0
+    if (texture) {
       textSp = new Sprite(texture)
-    else
-      textSp = new Text(amount, {
+      textSp.width = width
+      textSp.height = height || width
+    } else {
+      textSp = new Text(String(amount), {
         fontFamily: "Press Start 2P",
-        fontSize: 3,
-        fill: 0xffffff
+        fontSize: Math.max(9, Math.round(width * 0.5)),
+        fill: 0xffffff,
+        align: "center",
       })
-    textSp.width = width
-    textSp.height = height || width
-    textSp.position.set(position.x, position.y)
+      textSp.anchor.set(0.5)
+      textSp.resolution = 2
+    }
+    textSp.position.set(position.x + offsetX, position.y + offsetY)
 
     this.stage.addChild(textSp)
 

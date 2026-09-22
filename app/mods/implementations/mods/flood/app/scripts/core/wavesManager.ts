@@ -1,4 +1,4 @@
-import { Container, Graphics } from "pixi.js"
+import { Container, Graphics, Text } from "pixi.js"
 import Animator from "../animations/animator.ts"
 import Breath from "./breath.ts"
 import Flood from "./flood.ts"
@@ -30,6 +30,7 @@ class WavesManager {
     pacman!: Pacman
     ghosts!: Ghost[]
     emitter!: EventEmitter
+    private breathIndicators: Map<any, Text> = new Map()
     constructor(flood: Flood) {
         this.flood = flood
         this.maxHeight = flood.maxHeight
@@ -91,19 +92,22 @@ class WavesManager {
         })
     }
     #tryDrownEntity(entity: any, elapsedMs: number) {
-        if (!entity.allowCollision) return
-
         const breath = entity[breathNamespace]
         const wave = this?.wave
-        if (!wave || !wave.started || breath.stopped) return
+        const waveActive = !!wave && wave.started
 
         let isInGhostHouse = false
         if (entity instanceof Ghost) {
             isInGhostHouse = entity.isInGhostHouse(entity.getGridPosition())
         }
-        const isInsideTheWave = wave.containsEntity(entity)
+        const isInsideTheWave = waveActive && entity.allowCollision && wave.containsEntity(entity)
+        const submerged = isInsideTheWave && !isInGhostHouse && !breath.stopped
 
-        if (entity.allowCollision && !isInGhostHouse && isInsideTheWave) {
+        this.updateBreathIndicator(entity, submerged, breath.breathing)
+
+        if (!waveActive || !entity.allowCollision || breath.stopped) return
+
+        if (submerged) {
             breath.elapsedTimeLastBreathMs += elapsedMs
             if (breath.elapsedTimeLastBreathMs >= 1000) {
                 breath.elapsedTimeLastBreathMs = 0
@@ -123,16 +127,51 @@ class WavesManager {
             }
         }
     }
+    private updateBreathIndicator(entity: any, show: boolean, breathing: number) {
+        let text = this.breathIndicators.get(entity)
+        if (!show) {
+            if (text)
+                text.visible = false
+            return
+        }
+        if (!text) {
+            text = new Text("", {
+                fontFamily: "Press Start 2P",
+                fontSize: 10,
+                fill: 0xffffff,
+                align: "center",
+            })
+            text.anchor.set(0.5)
+            text.resolution = 2
+            text.zIndex = 5
+            this.container.addChild(text)
+            this.breathIndicators.set(entity, text)
+        }
+        text.visible = true
+        text.text = String(Math.max(0, Math.floor(breathing)))
+        text.position.set(
+            entity.position.x,
+            entity.position.y - entity.height * 0.5 - 10
+        )
+    }
+    private clearBreathIndicators() {
+        this.breathIndicators.forEach((t) => {
+            if (t.parent)
+                this.container.removeChild(t)
+        })
+        this.breathIndicators.clear()
+    }
     killEntity(entity: MovableEntity) {
         if (!entity.allowCollision) return
 
         //@ts-ignore
         const breath = entity[breathNamespace] as Breath
         if (entity instanceof Pacman) {
-            sound.play("sonic_drown")
+            this.safePlaySound("sonic_drown")
             this.emitter.emit("pacman-death")
             breath.stop()
             breath.reset()
+            this.updateBreathIndicator(entity, false, 0)
         } else if (entity instanceof Ghost) {
             const pauseDuration = 1000
             const { position, measurement } = entity
@@ -143,10 +182,19 @@ class WavesManager {
             this.emitter.emit("award-points", { detail: { points: comboPoints } })
             this.gc.displayText(position, comboPoints, pauseDuration, measurement);
             breath.stop()
+            this.updateBreathIndicator(entity, false, 0)
             if (this.gc.ghostCombo > this.gc.ghosts.length) {
                 this.gc.eyeGhosts = 0;
                 this.gc.ghostCombo = 0;
             }
+        }
+    }
+    private safePlaySound(alias: string) {
+        try {
+            if (sound.exists(alias))
+                sound.play(alias)
+        } catch {
+            //ignore missing/unregistered sounds
         }
     }
     showBreathingStatus(entity: Pacman) {
@@ -155,7 +203,8 @@ class WavesManager {
         const text = `Breathing ${entity[breathNamespace].breathing}`
         this.gc.displayText(position,
             text,
-            5000, measurement)
+            4000, measurement, undefined,
+            { x: 0, y: -measurement * 0.75 })
     }
     private clearEntities() {
         this.entitiesManager.clearEntities()
@@ -164,11 +213,11 @@ class WavesManager {
         if (this.wave) {
             this.gp.clear()
             this.wave.clearElements()
-            //Commented for debugging
-            //this.clearEntities()
+            this.clearEntities()
             if (this.wave.parent)
                 this.wave.parent.removeChild(this.wave)
         }
+        this.clearBreathIndicators()
     }
     stop() {
         this.clear()
@@ -178,20 +227,24 @@ class WavesManager {
         this.gc.ghostCombo = 0
     }
     update(elapsedMs: number) {
-        if (this.wave?.started) {
+        const wave = this.wave
+        if (wave?.started) {
             this.animator.update()
-            const bubbles = this.wave.getElementsBy("bubble")
+            const bubbles = wave.getElementsBy("bubble")
             const pacman = this.gc.pacman
             bubbles.forEach((b) => {
                 if (b.getBounds().intersects(pacman.getBounds())) {
-                    sound.play("sonic_bubbles")
+                    this.safePlaySound("sonic_bubbles")
                     this.emitter.emit("bubble-swallow")
-                    this.wave!.removeElement(b)
+                    wave.removeElement(b)
                     //@ts-ignore
                     pacman[breathNamespace].breathing = pacman[breathNamespace].maxBreathing
                     this.showBreathingStatus(pacman)
                 }
             })
+            if (wave.isDescreasing && wave.height < wave.maze.height / 2) {
+                this.entitiesManager.makeSonicLeave()
+            }
         }
         this.entitiesManager.update(elapsedMs)
     }

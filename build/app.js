@@ -30299,6 +30299,7 @@ void main(void)\r
           this.container.removeChild(element);
       });
       this.elements.length = 0;
+      this.queuedList.length = 0;
       this.surface.clear();
       this.surface.closePath();
       if (this.surface.parent)
@@ -30469,7 +30470,7 @@ void main(void)\r
       this.wavesManager.wave = new wave_default(this.wavesManager, maze, width, 0);
       const wave = this.wavesManager.wave;
       this.flood.container.addChildAt(wave, 0);
-      const waveTimeMs = timeToStartMS != void 0 && timeToStartMS >= 0 ? timeToStartMS : Math.floor(Math.random() * 25) + 15;
+      const waveTimeMs = timeToStartMS != void 0 && timeToStartMS >= 0 ? timeToStartMS : Math.floor(Math.random() * 21) + 10;
       this.wavesManager.waveTime = waveTimeMs * 1e3;
       const durationMs = Math.floor(Math.random() * 12) + 8;
       wave.duration = durationMs * 1e3;
@@ -30541,6 +30542,7 @@ void main(void)\r
         wave.parent.removeChild(wave);
       this.flood.gp.clear();
       this.wavesManager.resetEntitiesBreathing();
+      this.wavesManager.entitiesManager.clearEntities();
       this.wavesManager.nextWaveTime = null;
       this.wavesManager.wave = null;
       this.flood.changeState(States.IDLE_STATE);
@@ -30603,6 +30605,9 @@ void main(void)\r
     }
   };
   var cancelState_default = CancelState;
+
+  // app/mods/implementations/mods/flood/app/scripts/core/wavesManager.ts
+  init_lib38();
 
   // app/mods/implementations/mods/flood/app/scripts/animations/animation.ts
   var Animation = class {
@@ -30871,9 +30876,6 @@ void main(void)\r
     return Math.sqrt(
       (position.x - targetPosition.x) ** 2 + (position.y - targetPosition.y) ** 2
     );
-  }
-  function calculateDistance(x1, y1, x2, y2) {
-    return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
   }
   function lerp(a2, b2, t2) {
     return a2 + (b2 - a2) * t2;
@@ -34823,6 +34825,9 @@ void main(void)\r
     frameY = 0;
     bad = false;
     seenTarget = false;
+    leaving = false;
+    leavingPending = false;
+    goOutTimer = null;
     targetDef;
     attackSpeed;
     activeTimers = [];
@@ -34894,8 +34899,9 @@ void main(void)\r
       this.animator.createAnimation("sonic-enter", 100, null, () => {
         if (!this.animate) return;
         const an = this.animator.animations.get("sonic-enter");
-        const direction = an?.args[0].direction;
-        const destPos = an?.args[0].destPos;
+        const direction = an?.args[0]?.direction;
+        const destPos = an?.args[0]?.destPos;
+        if (!destPos) return;
         const curPos = vLerp(this.position, destPos, 0.1);
         this.moving = false;
         this.allowCollision = false;
@@ -34906,9 +34912,13 @@ void main(void)\r
           this.frame = 1;
         this.frame++;
         this.position.set(curPos.x, curPos.y);
-        console.log("change pos", this.position);
         if (calculateDistancePos(this.position, destPos) < 2) {
-          const gridPos = this.flood.gc.maze?.getGridPosition(destPos.x, destPos.y);
+          const gridPos = this.characterUtil.determineGridPosition(
+            destPos,
+            this.scaledTileSize,
+            this.anchor,
+            this.gameCoordinator.scale
+          );
           const pos = this.characterUtil.snapToGrid(
             gridPos,
             direction,
@@ -34918,43 +34928,77 @@ void main(void)\r
           );
           this.direction = direction;
           this.position.set(pos.x, pos.y);
-          console.log("change pos", this.position);
           an?.stop();
         }
       }).onStart(() => {
-        const pixelBounds = this.flood.gc.maze.pixelBounds;
-        const by = pixelBounds.bottom[0].y;
-        const ty = pixelBounds.top[0].y;
-        const lx = pixelBounds.left[1].x;
-        const rx = pixelBounds.right[1].x;
-        const pos = this.position;
-        const destPos = { x: pos.x, y: pos.y };
-        const distTopLeft = calculateDistance(pos.x, pos.y, lx, ty);
-        const distBottomLeft = calculateDistance(pos.x, pos.y, lx, by);
-        const distTopRight = calculateDistance(pos.x, pos.y, rx, ty);
-        const distBottomRight = calculateDistance(pos.x, pos.y, rx, by);
-        let distancePos = { direction: "right", x: lx + this.scaledTileSize, y: ty + this.scaledTileSize };
-        if (distBottomLeft < distTopLeft)
-          distancePos = { direction: "right", x: lx + this.scaledTileSize, y: by * 0.5 };
-        else if (distTopRight < distBottomLeft)
-          distancePos = { direction: "left", x: rx, y: ty + this.scaledTileSize };
-        else if (distBottomRight < distTopRight)
-          distancePos = { direction: "left", x: rx, y: by * 0.5 };
+        const maze = this.flood.gc.maze;
+        const ways = maze.getWays();
+        const cells = [];
+        ways.forEach((f2) => f2.cols.forEach((col) => cells.push({ row: f2.row, col })));
+        const borderCells = cells.filter((c2) => c2.row <= 1 || c2.row >= maze.rows - 2 || c2.col <= 1 || c2.col >= maze.cols - 2);
+        const pool = borderCells.length > 0 ? borderCells : cells;
+        const entry = pool[Math.floor(Math.random() * pool.length)];
+        const entryPixel = this.characterUtil.snapToGrid(
+          createObservablePoint(this, entry.col, entry.row),
+          this.characterUtil.directions.right,
+          this.scaledTileSize,
+          this.anchor,
+          this.gameCoordinator.scale
+        );
+        let direction = this.characterUtil.directions.down;
+        const outside = { x: entryPixel.x, y: entryPixel.y };
+        if (entry.row <= 1) {
+          direction = this.characterUtil.directions.down;
+          outside.y = entryPixel.y - this.scaledTileSize;
+        } else if (entry.row >= maze.rows - 2) {
+          direction = this.characterUtil.directions.up;
+          outside.y = entryPixel.y + this.scaledTileSize;
+        } else if (entry.col <= 1) {
+          direction = this.characterUtil.directions.right;
+          outside.x = entryPixel.x - this.scaledTileSize;
+        } else {
+          direction = this.characterUtil.directions.left;
+          outside.x = entryPixel.x + this.scaledTileSize;
+        }
         const an = this.animator.animations.get("sonic-enter");
         an?.args.push({
-          direction: distancePos.direction,
-          sourcePos: { x: distancePos.x, y: distancePos.y },
-          destPos
+          direction,
+          destPos: { x: entryPixel.x, y: entryPixel.y }
         });
-        this.direction = distancePos.direction;
-        this.position.set(distancePos.x, distancePos.y);
-        console.log("change pos", this.position);
+        this.direction = direction;
+        this.moving = false;
+        this.position.set(outside.x, outside.y);
       }).onEnd(() => {
         this.moving = true;
         this.allowCollision = true;
         this.mode = "idle" /* idle */;
+        this.scheduleGoOut();
       });
-      this.animator.createAnimation("sonic-out", 80, null, (args) => {
+      this.animator.createAnimation("sonic-out", 100, null, () => {
+        if (!this.leaving) return;
+        const an = this.animator.animations.get("sonic-out");
+        const destPos = an?.args[0]?.destPos;
+        if (!destPos) return;
+        const curPos = vLerp(this.position, destPos, 0.15);
+        this.moving = false;
+        this.allowCollision = false;
+        this.msBetweenSprites = 80;
+        this.spriteFrames = 5;
+        this.frameY = 1;
+        if (this.frame >= this.spriteFrames)
+          this.frame = 1;
+        this.frame++;
+        this.position.set(curPos.x, curPos.y);
+        if (calculateDistancePos(this.position, destPos) < 2) {
+          an?.stop();
+        }
+      }).onStart(() => {
+        const exit = this.calculateExitPoint();
+        this.direction = exit.direction;
+        const an = this.animator.animations.get("sonic-out");
+        an?.args.push({ destPos: { x: exit.x, y: exit.y } });
+      }).onEnd(() => {
+        this.flood.wavesManager.entitiesManager.removeSonic(this);
       });
       this.animator.createAnimation(
         "ghost-kick",
@@ -35022,7 +35066,6 @@ void main(void)\r
             an?.pause();
             ghost.mode = "scared" /* scared */;
             ghost.scaredColor = "white";
-            console.log("ghost white");
             this.activeTimers.push(
               new timer_default(() => {
                 this.animator.play("walk");
@@ -35042,15 +35085,16 @@ void main(void)\r
           }
         }
       );
-      this.activeTimers.push(
-        new timer_default(() => {
-          this.animator.play("walk");
-        }, 500)
-      );
     }
     reset(fullGameReset) {
       super.reset();
       this.setTarget(null);
+      this.leaving = false;
+      this.leavingPending = false;
+      if (this.goOutTimer) {
+        window.clearTimeout(this.goOutTimer);
+        this.goOutTimer = null;
+      }
     }
     registerEventListeners() {
       super.registerEventListeners();
@@ -35100,7 +35144,6 @@ void main(void)\r
           targetDef.type = "ghost";
         }
       }
-      targetDef.type = "ghost";
       return targetDef;
     }
     setSpriteAnimationStats() {
@@ -35169,14 +35212,7 @@ void main(void)\r
         const way = wayCells[Math.floor(Math.random() * wayCells.length)];
         const row = way?.row;
         const col = way?.cols[Math.floor(Math.random() * way.cols.length)];
-        const point = createObservablePoint(this, col, row);
-        return this.characterUtil.snapToGrid(
-          point,
-          this.direction,
-          this.scaledTileSize,
-          this.anchor,
-          this.gameCoordinator.scale
-        );
+        return createObservablePoint(this, col, row);
       } else if (this.targetDef.type == "ghost") {
         const ghosts = this.flood.gc.ghosts;
         let bestDistance = Infinity;
@@ -35198,9 +35234,47 @@ void main(void)\r
       return void 0;
     }
     scheduleGoOut() {
+      if (this.goOutTimer) {
+        window.clearTimeout(this.goOutTimer);
+        this.goOutTimer = null;
+      }
+      const delay = 5e3 + Math.random() * 15e3;
+      this.goOutTimer = window.setTimeout(() => {
+        this.goOutTimer = null;
+        this.beginGoOut();
+      }, delay);
+    }
+    beginGoOut() {
+      if (this.leaving) return;
+      if (this.mode !== "idle" /* idle */) {
+        this.leavingPending = true;
+        return;
+      }
+      this.leaving = true;
+      this.moving = false;
+      this.allowCollision = false;
+    }
+    calculateExitPoint() {
+      const maze = this.flood.gc.maze;
+      const rightEdge = maze.cols * this.scaledTileSize;
+      const bottomEdge = maze.rows * this.scaledTileSize;
+      const pos = this.position;
+      switch (this.direction) {
+        case this.characterUtil.directions.left:
+          return { direction: "left", x: -this.scaledTileSize * 2, y: pos.y };
+        case this.characterUtil.directions.right:
+          return { direction: "right", x: rightEdge + this.scaledTileSize * 2, y: pos.y };
+        case this.characterUtil.directions.up:
+          return { direction: "up", x: pos.x, y: -this.scaledTileSize * 2 };
+        default:
+          return { direction: "down", x: pos.x, y: bottomEdge + this.scaledTileSize * 2 };
+      }
     }
     handleAnimations() {
-      if (!this.targetDef.targetReached) {
+      if (this.leaving) {
+        if (!this.animator.isPlaying("sonic-out"))
+          this.animator.play("sonic-out");
+      } else if (!this.targetDef.targetReached) {
         if (this.mode == "entering" /* entering */) {
           if (!this.animator.isPlaying("sonic-enter"))
             this.animator.play("sonic-enter");
@@ -35218,18 +35292,9 @@ void main(void)\r
             this.animator.play("target");
         }
       }
+      if (this.leavingPending && this.mode === "idle" /* idle */ && !this.leaving)
+        this.beginGoOut();
       this.animator.update();
-    }
-    handleMovement(elapsedMs) {
-      const point = super.handleMovement(elapsedMs);
-      if (this.target && !this.seenTarget && this.calculateDistance(
-        this.getGridPosition(),
-        this.target.getGridPosition()
-      ) < 6) {
-        this.mode = "target" /* target */;
-        this.seenTarget = true;
-      }
-      return point;
     }
     checkCollision(position, target) {
       if (!target || !target.allowCollision) return;
@@ -35286,8 +35351,8 @@ void main(void)\r
       });
     }
     tryToGenerateEntities(wave) {
-      const random = Math.random();
-      if (wave && random > 0) {
+      if (this.queuedList.length > 0 || this.entitiesDef.length > 0) return;
+      if (wave) {
         const ways = wave.maze.getWays();
         const cells = ways.map((f2, index2) => {
           const arr = [];
@@ -35310,7 +35375,6 @@ void main(void)\r
         );
         sonic.reset();
         sonic.position.set(position.x, position.y);
-        console.log("sonic position", sonic.position);
         const defs = {
           entity: sonic,
           startAppearsInMs: 5e3
@@ -35318,6 +35382,20 @@ void main(void)\r
         };
         this.queueEntity(defs);
       }
+    }
+    makeSonicLeave() {
+      this.entitiesDef.forEach((def) => {
+        const e2 = def.entity;
+        if (e2 instanceof sonic_default)
+          e2.beginGoOut();
+      });
+    }
+    removeSonic(entity) {
+      const idx = this.entitiesDef.findIndex((d2) => d2.entity == entity);
+      if (idx > -1)
+        this.entitiesDef.splice(idx, 1);
+      if (entity.parent)
+        this.container.removeChild(entity);
     }
     dequeAllEntities() {
       const entities = this.dequeEntitiesBy();
@@ -35348,16 +35426,10 @@ void main(void)\r
     clearEntities() {
       this.entitiesDef.forEach((def) => {
         const e2 = def.entity;
-        if (e2 instanceof sonic_default) {
-          const activeTimers = e2.activeTimers;
-          activeTimers.forEach((t2) => {
-            window.clearTimeout(t2.timerId);
-          });
-          activeTimers.length = 0;
-        }
         this.container.removeChild(e2);
       });
       this.entitiesDef.length = 0;
+      this.queuedList.length = 0;
     }
     hide() {
       this.entitiesDef.forEach((def) => {
@@ -35401,6 +35473,7 @@ void main(void)\r
     pacman;
     ghosts;
     emitter;
+    breathIndicators = /* @__PURE__ */ new Map();
     constructor(flood) {
       this.flood = flood;
       this.maxHeight = flood.maxHeight;
@@ -35461,16 +35534,18 @@ void main(void)\r
       });
     }
     #tryDrownEntity(entity, elapsedMs) {
-      if (!entity.allowCollision) return;
       const breath = entity[breathNamespace];
       const wave = this?.wave;
-      if (!wave || !wave.started || breath.stopped) return;
+      const waveActive = !!wave && wave.started;
       let isInGhostHouse = false;
       if (entity instanceof ghost_default) {
         isInGhostHouse = entity.isInGhostHouse(entity.getGridPosition());
       }
-      const isInsideTheWave = wave.containsEntity(entity);
-      if (entity.allowCollision && !isInGhostHouse && isInsideTheWave) {
+      const isInsideTheWave = waveActive && entity.allowCollision && wave.containsEntity(entity);
+      const submerged = isInsideTheWave && !isInGhostHouse && !breath.stopped;
+      this.updateBreathIndicator(entity, submerged, breath.breathing);
+      if (!waveActive || !entity.allowCollision || breath.stopped) return;
+      if (submerged) {
         breath.elapsedTimeLastBreathMs += elapsedMs;
         if (breath.elapsedTimeLastBreathMs >= 1e3) {
           breath.elapsedTimeLastBreathMs = 0;
@@ -35490,14 +35565,49 @@ void main(void)\r
         }
       }
     }
+    updateBreathIndicator(entity, show, breathing) {
+      let text = this.breathIndicators.get(entity);
+      if (!show) {
+        if (text)
+          text.visible = false;
+        return;
+      }
+      if (!text) {
+        text = new Text("", {
+          fontFamily: "Press Start 2P",
+          fontSize: 10,
+          fill: 16777215,
+          align: "center"
+        });
+        text.anchor.set(0.5);
+        text.resolution = 2;
+        text.zIndex = 5;
+        this.container.addChild(text);
+        this.breathIndicators.set(entity, text);
+      }
+      text.visible = true;
+      text.text = String(Math.max(0, Math.floor(breathing)));
+      text.position.set(
+        entity.position.x,
+        entity.position.y - entity.height * 0.5 - 10
+      );
+    }
+    clearBreathIndicators() {
+      this.breathIndicators.forEach((t2) => {
+        if (t2.parent)
+          this.container.removeChild(t2);
+      });
+      this.breathIndicators.clear();
+    }
     killEntity(entity) {
       if (!entity.allowCollision) return;
       const breath = entity[breathNamespace];
       if (entity instanceof pacman_default) {
-        sound.play("sonic_drown");
+        this.safePlaySound("sonic_drown");
         this.emitter.emit("pacman-death");
         breath.stop();
         breath.reset();
+        this.updateBreathIndicator(entity, false, 0);
       } else if (entity instanceof ghost_default) {
         const pauseDuration = 1e3;
         const { position, measurement } = entity;
@@ -35508,10 +35618,18 @@ void main(void)\r
         this.emitter.emit("award-points", { detail: { points: comboPoints } });
         this.gc.displayText(position, comboPoints, pauseDuration, measurement);
         breath.stop();
+        this.updateBreathIndicator(entity, false, 0);
         if (this.gc.ghostCombo > this.gc.ghosts.length) {
           this.gc.eyeGhosts = 0;
           this.gc.ghostCombo = 0;
         }
+      }
+    }
+    safePlaySound(alias) {
+      try {
+        if (sound.exists(alias))
+          sound.play(alias);
+      } catch {
       }
     }
     showBreathingStatus(entity) {
@@ -35520,8 +35638,10 @@ void main(void)\r
       this.gc.displayText(
         position,
         text,
-        5e3,
-        measurement
+        4e3,
+        measurement,
+        void 0,
+        { x: 0, y: -measurement * 0.75 }
       );
     }
     clearEntities() {
@@ -35531,9 +35651,11 @@ void main(void)\r
       if (this.wave) {
         this.gp.clear();
         this.wave.clearElements();
+        this.clearEntities();
         if (this.wave.parent)
           this.wave.parent.removeChild(this.wave);
       }
+      this.clearBreathIndicators();
     }
     stop() {
       this.clear();
@@ -35543,19 +35665,23 @@ void main(void)\r
       this.gc.ghostCombo = 0;
     }
     update(elapsedMs) {
-      if (this.wave?.started) {
+      const wave = this.wave;
+      if (wave?.started) {
         this.animator.update();
-        const bubbles = this.wave.getElementsBy("bubble");
+        const bubbles = wave.getElementsBy("bubble");
         const pacman = this.gc.pacman;
         bubbles.forEach((b2) => {
           if (b2.getBounds().intersects(pacman.getBounds())) {
-            sound.play("sonic_bubbles");
+            this.safePlaySound("sonic_bubbles");
             this.emitter.emit("bubble-swallow");
-            this.wave.removeElement(b2);
+            wave.removeElement(b2);
             pacman[breathNamespace].breathing = pacman[breathNamespace].maxBreathing;
             this.showBreathingStatus(pacman);
           }
         });
+        if (wave.isDescreasing && wave.height < wave.maze.height / 2) {
+          this.entitiesManager.makeSonicLeave();
+        }
       }
       this.entitiesManager.update(elapsedMs);
     }
@@ -35683,7 +35809,6 @@ void main(void)\r
       this.am = new assetsManager_default(this);
       this.gp = new Graphics();
       this.gp.zIndex = 3;
-      console.log("Flood mod is active!");
     }
     async initialize() {
       this.wavesManager = new wavesManager_default(this);
@@ -35753,8 +35878,10 @@ void main(void)\r
       this.gc.emitter.on("pacman-death", () => {
         const wave = _this.wavesManager.wave;
         this.gc.pacman.moving = false;
+        this.gc.pacman.pause(false);
         this.gc.pacman.allowCollision = false;
         this.gc.allowPacmanMovement = false;
+        this.gc.allowKeyPresses = false;
         this.wavesManager.entitiesManager.stop();
         if (wave && wave.started) {
           const detail = {
@@ -35785,6 +35912,8 @@ void main(void)\r
       this.gc.stage.addChild(this.container);
       this.container.removeChild(this.gp);
       this.container.addChild(this.gp);
+      if (this.state)
+        this.state.stop();
       this.state = this.states[States.IDLE_STATE];
       this.state.start();
       this.emitter.emit("flood-start");
@@ -38124,21 +38253,28 @@ void main(void)\r
      * @param {Number} duration - Milliseconds to display the points before disappearing
      * @param {Number} width - Image width in pixels
      * @param {Number} height - Image height in pixels
+     * @param {({ x: number, y: number })} offset - extra x/y offset applied after the position
      */
-    displayText(position, amount, duration, width, height) {
+    displayText(position, amount, duration, width, height, offset) {
       let textSp;
       const texture = this.am.getTexture(amount);
-      if (texture)
+      const offsetX = offset?.x || 0;
+      const offsetY = offset?.y || 0;
+      if (texture) {
         textSp = new Sprite(texture);
-      else
-        textSp = new Text(amount, {
+        textSp.width = width;
+        textSp.height = height || width;
+      } else {
+        textSp = new Text(String(amount), {
           fontFamily: "Press Start 2P",
-          fontSize: 3,
-          fill: 16777215
+          fontSize: Math.max(9, Math.round(width * 0.5)),
+          fill: 16777215,
+          align: "center"
         });
-      textSp.width = width;
-      textSp.height = height || width;
-      textSp.position.set(position.x, position.y);
+        textSp.anchor.set(0.5);
+        textSp.resolution = 2;
+      }
+      textSp.position.set(position.x + offsetX, position.y + offsetY);
       this.stage.addChild(textSp);
       new timer_default(() => {
         this.stage.removeChild(textSp);

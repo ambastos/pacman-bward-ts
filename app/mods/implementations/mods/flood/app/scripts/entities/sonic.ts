@@ -4,7 +4,7 @@ import Animator from "../animations/animator.ts";
 import Ghost from "../../../../../../../scripts/characters/ghost.ts";
 import CharacterUtil from "../../../../../../../scripts/utilities/characterUtil.ts";
 import Pacman from "../../../../../../../scripts/characters/pacman.ts";
-import { calculateDistance, calculateDistancePos, createObservablePoint, vLerp } from "../../../../../../../scripts/utilities/utils.ts";
+import { calculateDistancePos, createObservablePoint, vLerp } from "../../../../../../../scripts/utilities/utils.ts";
 import Timer from "../../../../../../../scripts/utilities/timer.ts";
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
 import { Mode } from "../../../../../../../scripts/characters/types.ts";
@@ -16,6 +16,9 @@ class Sonic extends Ghost {
     frameY:number = 0
     bad:boolean = false
     seenTarget = false
+    leaving = false
+    leavingPending = false
+    goOutTimer:number | null = null
     targetDef!:TargetDef
     attackSpeed!:number
     activeTimers:Timer[]=[]
@@ -92,10 +95,10 @@ class Sonic extends Ghost {
         this.animator.createAnimation("sonic-enter", 100, null, () => {
             if (!this.animate) return;
             const an = this.animator.animations.get("sonic-enter");
-            const direction = an?.args[0].direction            
-            const destPos = an?.args[0].destPos            
-            const curPos =  vLerp(this.position, destPos, 0.1)
-            //TODO create a curve to be more cool 
+            const direction = an?.args[0]?.direction
+            const destPos = an?.args[0]?.destPos
+            if (!destPos) return
+            const curPos = vLerp(this.position, destPos, 0.1)
 
             this.moving = false
             this.allowCollision = false
@@ -104,59 +107,95 @@ class Sonic extends Ghost {
             this.frameY = 1;                 
             if (this.frame >= this.spriteFrames)
                 this.frame = 1;
-            //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
             this.frame++;
             this.position.set(curPos.x, curPos.y)
-            console.log("change pos", this.position)
             if (calculateDistancePos(this.position, destPos) < 2) {
-                //this.position.set(destPos.x, destPos.y)
-                const gridPos = this.flood.gc.maze?.getGridPosition(destPos.x, destPos.y)!
-                const pos = this.characterUtil.snapToGrid(gridPos,direction,this.scaledTileSize,
-                    this.anchor,this.gameCoordinator.scale
+                //Round-trip using the same conversion the movement system uses so the
+                //sonic lands exactly on a snapped grid position
+                const gridPos = this.characterUtil.determineGridPosition(
+                    destPos, this.scaledTileSize, this.anchor, this.gameCoordinator.scale
+                )
+                const pos = this.characterUtil.snapToGrid(
+                    gridPos, direction, this.scaledTileSize,
+                    this.anchor, this.gameCoordinator.scale
                 )
                 this.direction = direction
                 this.position.set(pos.x, pos.y)
-                console.log("change pos", this.position)
                 an?.stop()
             }
         }).onStart(()=>{
-             const pixelBounds = this.flood.gc.maze!.pixelBounds
-             const by = pixelBounds.bottom[0]!.y
-             const ty = pixelBounds.top[0]!.y
-             const lx = pixelBounds.left[1]!.x
-             const rx = pixelBounds.right[1]!.x
-             //console.log("On start sonic enter")  
-             const pos = this.position
-             const destPos = {x:pos.x, y:pos.y}
-             const distTopLeft = calculateDistance(pos.x, pos.y, lx, ty)
-             const distBottomLeft = calculateDistance(pos.x, pos.y, lx, by)
-             const distTopRight = calculateDistance(pos.x, pos.y, rx, ty)
-             const distBottomRight = calculateDistance(pos.x, pos.y, rx, by)
-             let distancePos = {direction: 'right',  x:lx+this.scaledTileSize, y:ty+this.scaledTileSize}
-             
-             if (distBottomLeft < distTopLeft) 
-                distancePos = {direction: 'right', x:lx+this.scaledTileSize, y:by*0.5} 
-             else if (distTopRight < distBottomLeft) 
-                distancePos = {direction: 'left', x:rx, y:ty+this.scaledTileSize} 
-             else if (distBottomRight < distTopRight)
-                distancePos = {direction: 'left',x:rx, y:by*0.5}
+            //Anchors the entrance to a path cell on the maze border so the roll-in
+            //never crosses through walls
+            const maze = this.flood.gc.maze!
+            const ways = maze.getWays()
+            const cells: {row:number, col:number}[] = []
+            ways.forEach(f=>f.cols.forEach(col=>cells.push({row:f.row, col: col})))
+            const borderCells = cells.filter(c =>
+                c.row <= 1 || c.row >= maze.rows - 2
+                    || c.col <= 1 || c.col >= maze.cols - 2)
+            const pool = borderCells.length > 0 ? borderCells : cells
+            const entry = pool[Math.floor(Math.random() * pool.length)]!
+            const entryPixel = this.characterUtil.snapToGrid(
+                createObservablePoint(this, entry.col, entry.row),
+                this.characterUtil.directions.right, this.scaledTileSize,
+                this.anchor, this.gameCoordinator.scale
+            )
+            let direction = this.characterUtil.directions.down
+            const outside = { x: entryPixel.x, y: entryPixel.y }
+            if (entry.row <= 1) {
+                direction = this.characterUtil.directions.down
+                outside.y = entryPixel.y - this.scaledTileSize
+            } else if (entry.row >= maze.rows - 2) {
+                direction = this.characterUtil.directions.up
+                outside.y = entryPixel.y + this.scaledTileSize
+            } else if (entry.col <= 1) {
+                direction = this.characterUtil.directions.right
+                outside.x = entryPixel.x - this.scaledTileSize
+            } else {
+                direction = this.characterUtil.directions.left
+                outside.x = entryPixel.x + this.scaledTileSize
+            }
 
-             const an = this.animator.animations.get("sonic-enter")
-             an?.args.push({ 
-                 direction: distancePos.direction,
-                 sourcePos: {x:distancePos.x, y:distancePos.y} as ObservablePoint,
-                 destPos: destPos
+            const an = this.animator.animations.get("sonic-enter")
+            an?.args.push({
+                direction: direction,
+                destPos: {x: entryPixel.x, y: entryPixel.y}
             })
-            this.direction = distancePos.direction
-            this.position.set(distancePos.x, distancePos.y)
-            console.log("change pos", this.position)
+            this.direction = direction
+            this.moving = false
+            this.position.set(outside.x, outside.y)
         }).onEnd(()=>{
             this.moving = true
             this.allowCollision = true
             this.mode = Mode.idle
+            this.scheduleGoOut()
         })
-        this.animator.createAnimation("sonic-out", 80,null, (args)=>{
-
+        this.animator.createAnimation("sonic-out", 100,null, ()=>{
+            if (!this.leaving) return;
+            const an = this.animator.animations.get("sonic-out")
+            const destPos = an?.args[0]?.destPos
+            if (!destPos) return
+            const curPos =  vLerp(this.position, destPos, 0.15)
+            this.moving = false
+            this.allowCollision = false
+            this.msBetweenSprites = 80
+            this.spriteFrames = 5;
+            this.frameY = 1;
+            if (this.frame >= this.spriteFrames)
+                this.frame = 1;
+            //this.setTexture(this.name!, this.direction, this.frame, null, this.frameY, 32, 32);
+            this.frame++;
+            this.position.set(curPos.x, curPos.y)
+            if (calculateDistancePos(this.position, destPos) < 2) {
+                an?.stop()
+            }
+        }).onStart(()=>{
+            const exit = this.calculateExitPoint()
+            this.direction = exit.direction
+            const an = this.animator.animations.get("sonic-out")
+            an?.args.push({ destPos: {x: exit.x, y: exit.y} } as any)
+        }).onEnd(()=>{
+            this.flood.wavesManager.entitiesManager.removeSonic(this)
         })
         this.animator.createAnimation("ghost-kick", 40, null,
             (args) => {
@@ -227,13 +266,11 @@ class Sonic extends Ghost {
                         an?.pause()
                         ghost.mode = Mode.scared
                         ghost.scaredColor = "white" 
-                        console.log("ghost white") 
                         //make sonic walk again
                         this.activeTimers.push(
                             new Timer(()=>{
                                 this.animator.play("walk");
                                 this.scheduleGoOut()
-                                //programs to go out of the maze                            
                             }, 500) 
                         )
                         //make ghost came back again
@@ -250,15 +287,16 @@ class Sonic extends Ghost {
                     }
             }
         );
-        this.activeTimers.push(
-            new Timer(()=>{
-                this.animator.play("walk");
-            }, 500)
-        )
     }
     reset(fullGameReset?: boolean): void {
         super.reset()
         this.setTarget(null)
+        this.leaving = false
+        this.leavingPending = false
+        if (this.goOutTimer) {
+            window.clearTimeout(this.goOutTimer)
+            this.goOutTimer = null
+        }
     }
     registerEventListeners(): void {
         super.registerEventListeners()
@@ -317,8 +355,6 @@ class Sonic extends Ghost {
                 targetDef.type = "ghost";
             }
         }    
-        //for debug
-        targetDef.type = "ghost"
         return targetDef as TargetDef
     }
     setSpriteAnimationStats(): void {
@@ -389,9 +425,7 @@ class Sonic extends Ghost {
             const way = wayCells[ Math.floor(Math.random() * wayCells.length) ]
             const row = way?.row as number
             const col = way?.cols[ Math.floor(Math.random() * way.cols.length) ] as number
-            const point = createObservablePoint(this, col, row)
-            return this.characterUtil.snapToGrid(point,this.direction,
-                this.scaledTileSize, this.anchor, this.gameCoordinator.scale)
+            return createObservablePoint(this, col, row)
         }else if (this.targetDef.type == "ghost") {             
             const ghosts = this.flood.gc.ghosts
             let bestDistance = Infinity
@@ -414,11 +448,49 @@ class Sonic extends Ghost {
             
         return undefined    
     }  
-    private scheduleGoOut() {
-
-    }     
+    scheduleGoOut() {
+        if (this.goOutTimer) {
+            window.clearTimeout(this.goOutTimer)
+            this.goOutTimer = null
+        }
+        const delay = 5000 + Math.random() * 15000
+        this.goOutTimer = window.setTimeout(() => {
+            this.goOutTimer = null
+            this.beginGoOut()
+        }, delay)
+    }
+    beginGoOut() {
+        if (this.leaving) return
+        if (this.mode !== Mode.idle) {
+            this.leavingPending = true
+            return
+        }
+        this.leaving = true
+        this.moving = false
+        this.allowCollision = false
+    }
+    private calculateExitPoint(): {x:number, y:number, direction:string} {
+        //Sonic runs to the border that matches the direction he's currently heading
+        const maze = this.flood.gc.maze!
+        const rightEdge = maze.cols * this.scaledTileSize
+        const bottomEdge = maze.rows * this.scaledTileSize
+        const pos = this.position
+        switch (this.direction) {
+            case this.characterUtil.directions.left:
+                return { direction: 'left', x: -this.scaledTileSize * 2, y: pos.y }
+            case this.characterUtil.directions.right:
+                return { direction: 'right', x: rightEdge + this.scaledTileSize * 2, y: pos.y }
+            case this.characterUtil.directions.up:
+                return { direction: 'up', x: pos.x, y: -this.scaledTileSize * 2 }
+            default:
+                return { direction: 'down', x: pos.x, y: bottomEdge + this.scaledTileSize * 2 }
+        }
+    }
     private handleAnimations() {
-        if (!this.targetDef.targetReached) {
+        if (this.leaving) {
+            if (!this.animator.isPlaying("sonic-out"))
+                this.animator.play("sonic-out")
+        } else if (!this.targetDef.targetReached) {
             if (this.mode == Mode.entering) {
                 if (!this.animator.isPlaying("sonic-enter"))
                     this.animator.play("sonic-enter");
@@ -435,18 +507,10 @@ class Sonic extends Ghost {
                 if (!this.animator.isPlaying("target"))
                     this.animator.play("target");
             }
-        } 
-        this.animator.update();
-    }
-    handleMovement(elapsedMs: number): ObservablePoint{
-        const point = super.handleMovement(elapsedMs)
-        if (this.target && !this.seenTarget 
-            && this.calculateDistance(this.getGridPosition(), 
-            this.target.getGridPosition()) < 6) {
-            this.mode = Mode.target 
-            this.seenTarget = true           
         }
-        return point
+        if (this.leavingPending && this.mode === Mode.idle && !this.leaving)
+            this.beginGoOut()
+        this.animator.update();
     }
     checkCollision(position: ObservablePoint, target: MovableEntity): void {
         if (!target || !target.allowCollision) return

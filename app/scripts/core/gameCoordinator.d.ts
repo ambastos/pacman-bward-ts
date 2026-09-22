@@ -248,7 +248,7 @@ declare class GameCoordinator {
      * @param {Number} width - Image width in pixels
      * @param {Number} height - Image height in pixels
      */
-    displayText(position: PIXI.ObservablePoint, amount: any, duration: number, width: number, height?: number): void;
+    displayText(position: PIXI.ObservablePoint, amount: any, duration: number, width: number, height?: number, offset?: { x?: number, y?: number }): void;
     /**
      * Pushes a Timer to the activeTimers array
      * @param {({ detail: { timer: Object }})} e

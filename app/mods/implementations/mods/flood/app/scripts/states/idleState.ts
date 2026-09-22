@@ -13,10 +13,10 @@ class IdleState extends State {
         const wave = this.wavesManager.wave
         this.flood.container.addChildAt(wave, 0)
 
-        //between 15 and 40 seconds to generate a new wave
+        //between 10 and 30 seconds to generate a new wave
         const waveTimeMs = timeToStartMS != undefined && timeToStartMS >= 0
             ? timeToStartMS
-            : Math.floor(Math.random() * 25) + 15
+            : Math.floor(Math.random() * 21) + 10
         this.wavesManager.waveTime = waveTimeMs * 1000
 
         //the duration of the wave is between 8 and 20 seconds

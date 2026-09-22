@@ -34,7 +34,6 @@ class Flood extends Mod implements RegisterListeners {
         this.am = new AssetsManager(this)
         this.gp = new Graphics()
         this.gp.zIndex = 3
-        console.log("Flood mod is active!")
     }
     async initialize() {
         this.wavesManager = new WavesManager(this)
@@ -107,8 +106,10 @@ class Flood extends Mod implements RegisterListeners {
         this.gc.emitter.on("pacman-death", () => {
             const wave = _this.wavesManager.wave
             this.gc.pacman.moving = false
+            this.gc.pacman.pause(false)
             this.gc.pacman.allowCollision = false
             this.gc.allowPacmanMovement = false
+            this.gc.allowKeyPresses = false
             this.wavesManager.entitiesManager.stop()
             if (wave && wave.started) {
                 const detail = {
@@ -142,6 +143,8 @@ class Flood extends Mod implements RegisterListeners {
         //Gp is the graphics to draw
         this.container.removeChild(this.gp)
         this.container.addChild(this.gp)
+        if (this.state)
+            this.state.stop()
         //@ts-ignore
         this.state = this.states[States.IDLE_STATE]
         this.state.start()

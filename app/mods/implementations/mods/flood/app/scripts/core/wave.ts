@@ -72,6 +72,7 @@ class Wave extends Sprite {
                 this.container.removeChild(element)
         })
         this.elements.length = 0
+        this.queuedList.length = 0
         this.surface.clear()
         this.surface.closePath()
         if (this.surface.parent)
