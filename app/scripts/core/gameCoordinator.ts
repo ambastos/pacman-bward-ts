@@ -1185,7 +1185,7 @@ class GameCoordinator {
     else
       textSp = new Text(amount, {
         fontFamily: "Press Start 2P",
-        fontSize: 6,
+        fontSize: 3,
         fill: 0xffffff
       })
     textSp.width = width

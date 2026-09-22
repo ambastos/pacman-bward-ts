@@ -16,7 +16,6 @@ class EndState extends State {
         if (wave.parent)
             wave.parent.removeChild(wave)
         this.flood.gp.clear()
-        console.log("wave ends")
         this.wavesManager.resetEntitiesBreathing()
         this.wavesManager.nextWaveTime = null
         this.wavesManager.wave = null

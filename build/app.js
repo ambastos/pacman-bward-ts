@@ -30540,7 +30540,6 @@ void main(void)\r
       if (wave.parent)
         wave.parent.removeChild(wave);
       this.flood.gp.clear();
-      console.log("wave ends");
       this.wavesManager.resetEntitiesBreathing();
       this.wavesManager.nextWaveTime = null;
       this.wavesManager.wave = null;
@@ -35388,7 +35387,6 @@ void main(void)\r
 
   // app/mods/implementations/mods/flood/app/scripts/core/wavesManager.ts
   var breathNamespace = "breath";
-  var lastDrownLog = 0;
   var WavesManager = class {
     wave;
     waveTime = null;
@@ -35472,13 +35470,6 @@ void main(void)\r
         isInGhostHouse = entity.isInGhostHouse(entity.getGridPosition());
       }
       const isInsideTheWave = wave.containsEntity(entity);
-      if (entity instanceof pacman_default) {
-        const now = Date.now();
-        if (now - lastDrownLog >= 1500) {
-          lastDrownLog = now;
-          console.log("[drown] pacman allowCollision=" + entity.allowCollision + " started=" + wave.started + " stopped=" + breath.stopped + " inside=" + isInsideTheWave + " pos=(" + Math.round(entity.position.x) + "," + Math.round(entity.position.y) + ") bounds=" + wave.getBounds().toString() + " pBounds=" + entity.getBounds().toString() + " breathing=" + breath.breathing + " elapsedMs=" + Math.round(breath.elapsedTimeLastBreathMs));
-        }
-      }
       if (entity.allowCollision && !isInGhostHouse && isInsideTheWave) {
         breath.elapsedTimeLastBreathMs += elapsedMs;
         if (breath.elapsedTimeLastBreathMs >= 1e3) {
@@ -35565,9 +35556,6 @@ void main(void)\r
             this.showBreathingStatus(pacman);
           }
         });
-        if (this.gc.debug) {
-          window.debug?.consoleLog(`Wave: h=${Math.round(this.wave.height)} started=${this.wave.started}`);
-        }
       }
       this.entitiesManager.update(elapsedMs);
     }
@@ -38145,7 +38133,7 @@ void main(void)\r
       else
         textSp = new Text(amount, {
           fontFamily: "Press Start 2P",
-          fontSize: 6,
+          fontSize: 3,
           fill: 16777215
         });
       textSp.width = width;

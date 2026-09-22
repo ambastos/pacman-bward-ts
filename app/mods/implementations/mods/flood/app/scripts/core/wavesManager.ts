@@ -16,7 +16,6 @@ import Wave from "./wave.ts"
 
 /** name spacing used to create the needed properties*/
 const breathNamespace = "breath"
-let lastDrownLog = 0
 class WavesManager {
     wave!: Wave | null
     waveTime: any = null
@@ -103,21 +102,6 @@ class WavesManager {
             isInGhostHouse = entity.isInGhostHouse(entity.getGridPosition())
         }
         const isInsideTheWave = wave.containsEntity(entity)
-
-        if (entity instanceof Pacman) {
-            const now = Date.now()
-            if (now - lastDrownLog >= 1500) {
-                lastDrownLog = now
-                console.log("[drown] pacman allowCollision=" + entity.allowCollision +
-                    " started=" + wave.started + " stopped=" + breath.stopped +
-                    " inside=" + isInsideTheWave +
-                    " pos=(" + Math.round(entity.position.x) + "," + Math.round(entity.position.y) + ")" +
-                    " bounds=" + wave.getBounds().toString() +
-                    " pBounds=" + entity.getBounds().toString() +
-                    " breathing=" + breath.breathing +
-                    " elapsedMs=" + Math.round(breath.elapsedTimeLastBreathMs))
-            }
-        }
 
         if (entity.allowCollision && !isInGhostHouse && isInsideTheWave) {
             breath.elapsedTimeLastBreathMs += elapsedMs
@@ -208,9 +192,6 @@ class WavesManager {
                     this.showBreathingStatus(pacman)
                 }
             })
-            if (this.gc.debug) {
-                window.debug?.consoleLog(`Wave: h=${Math.round(this.wave.height)} started=${this.wave.started}`)
-            }
         }
         this.entitiesManager.update(elapsedMs)
     }
