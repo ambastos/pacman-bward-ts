@@ -12,10 +12,13 @@ class State {
     wavesManager:WavesManager
     started = false
     flood:Flood
+    className: string = ""
     constructor(wavesManager:WavesManager) {
         this.wavesManager = wavesManager
         this.started = false
         this.flood = wavesManager.flood
+        //@ts-ignore
+        this.className = this.__proto__.name        
     }
     start() {
         this.started = true

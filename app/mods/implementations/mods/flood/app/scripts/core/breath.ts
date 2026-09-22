@@ -9,7 +9,7 @@ class Breath {
             maxBreathing: 10,
             decreaseVelocityPerMs: 0.7,     
             invincible: false,
-            elapsedTimeLastBreathMs: null,       
+            elapsedTimeLastBreathMs: 0,       
         }
         for (let opt in options) 
             //@ts-ignore

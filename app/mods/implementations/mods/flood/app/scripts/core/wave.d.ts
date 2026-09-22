@@ -1,0 +1,43 @@
+import { Container, Graphics, Sprite } from "pixi.js";
+import '@pixi/graphics-extras';
+import WavesManager from "./wavesManager.ts";
+import Maze from "../../../../../../../scripts/mazes/maze.ts";
+import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
+import RegisterListeners from "./registerListeners.ts";
+declare class Wave extends Sprite implements RegisterListeners {
+    speedY: number;
+    startTime: number;
+    started: boolean;
+    decreasing: boolean;
+    lastTime: number;
+    maze: Maze;
+    wavesManager: WavesManager;
+    gp: Graphics;
+    container: Container;
+    startTopX: number;
+    duration: number;
+    elements: Sprite[];
+    queuedList: any[];
+    constructor(wavesManager: WavesManager, maze: Maze, width: number, height: number);
+    registerListeners(): void;
+    queueElement(type: string, element: Exclude<Sprite, MovableEntity>): void;
+    queuedElementsBy(type: string): any[];
+    protected dequeueElement(element: any): boolean;
+    addElement(element: Sprite): void;
+    removeElement(element: Sprite): void;
+    clearElements(): void;
+    getElementsBy(name?: string): Sprite[];
+    private generateBubbles;
+    private getGeneratedBubbles;
+    reset(): void;
+    increase(elapsedMs: number): void;
+    decrease(elapsedMs: number): void;
+    updatePosition(): void;
+    get isDescreasing(): boolean;
+    get isAtMax(): boolean;
+    cancel(): void;
+    show(): void;
+    draw(): void;
+}
+export default Wave;
+//# sourceMappingURL=wave.d.ts.map

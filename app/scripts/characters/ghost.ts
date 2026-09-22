@@ -235,9 +235,9 @@ class Ghost extends MovableEntity{
     }
 
     switch (emotion) {
-      case "_angry":
-        frameY += 4   
-        break;
+      // case "_angry":
+      //   frameY += 4   
+      //   break;
       case "_angry":
         frameY += 8   
         break;

@@ -1,321 +1,205 @@
-import { Container, DisplayObject, Graphics, Point, Polygon, Sprite, Texture } from "pixi.js"
-import '@pixi/graphics-extras'
+import { Container, Graphics, Sprite, Texture } from "pixi.js"
 import WavesManager from "./wavesManager.ts"
 import Maze from "../../../../../../../scripts/mazes/maze.ts"
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
 
-const gp2 = new Graphics()
 class Wave extends Sprite {
-    speedY = 15    
+    speedY = 15
     startTime = 0
     started = false
     decreasing = false
-    lastTime = 0
+    duration!: number
     maze: Maze
-    //entitiesManager: EntitiesManager
     wavesManager: WavesManager
-    gp: Graphics
     container: Container
-    startTopX: number
-    duration!:number
-    elements:Sprite[] = []
-    queuedList:any[] = []
-    constructor(wavesManager: WavesManager, maze: Maze, width: number, height: number) {        
-        super(Texture.WHITE)           
+    elements: Sprite[] = []
+    queuedList: any[] = []
+
+    private surface = new Graphics()
+    private surfacePhase = 0
+    private lastOscillation = 0
+
+    constructor(wavesManager: WavesManager, maze: Maze, width: number, height: number) {
+        super(Texture.WHITE)
         this.width = width
-        this.height = height 
-        this.visible = false   
-        this.alpha = 0  
-        this.zIndex = 2
-        //this.tint = "0x56DBE3"
-        this.maze = maze                             
-        this.wavesManager = wavesManager  
-        this.wavesManager.wave = this                       
-        this.gp = this.wavesManager.gp 
-         
-        this.gp.zIndex = this.zIndex
-        this.container = this.wavesManager.gc.stage 
-        //if (this.container.children.length > 0) 
-        this.container.addChild(this.gp)
+        this.visible = false
+        this.alpha = 0
+        this.zIndex = 1
 
-        this.startTopX = Math.PI * 2
-   
+        this.maze = maze
+        this.wavesManager = wavesManager
+        this.wavesManager.wave = this
+        this.wavesManager.flood.gp.clear()
+
+        this.container = this.wavesManager.container
+        this.surface.zIndex = 2
+        this.surface.visible = false
+        this.container.addChild(this.surface)
+
+        this.height = height
+        this.updatePosition()
+
         this.generateBubbles()
-        this.wavesManager.tryToGenerateEntities() 
-
-        this.gp.addChild(gp2)
+        this.wavesManager.tryToGenerateEntities()
     }
-    queueElement(type:string, element:Exclude<Sprite, MovableEntity>) {
+
+    queueElement(type: string, element: Exclude<Sprite, MovableEntity>) {
         const id = `${type}-${this.queuedList.length}`
         element.name = type
-        Object.defineProperty(element,"id",{value:id})
-        this.queuedList.push(element) 
+        Object.defineProperty(element, "id", { value: id })
+        this.queuedList.push(element)
     }
-    queuedElementsBy(type:string) {   
-        return this.queuedList.filter(f=>{return f.name == type})
+    queuedElementsBy(type: string): Sprite[] {
+        return this.queuedList.filter(f => f.name == type)
     }
-    protected dequeueElement(element:any):boolean {   
-        const contains =  this.queuedList.lastIndexOf(element) > -1
-        this.queuedList = this.queuedList.filter(f=>f.id != element.id)
-        return contains
+    protected dequeueElement(element: any): boolean {
+        const found = this.queuedList.indexOf(element) > -1
+        this.queuedList = this.queuedList.filter(f => f.id != element.id)
+        return found
     }
-    addElement(element:Sprite) { 
+    addElement(element: Sprite) {
         this.elements.push(element)
-        this.container.addChild(element)  
-    }    
-    removeElement(element:Sprite) {
+        this.container.addChild(element)
+    }
+    removeElement(element: Sprite) {
         this.elements.splice(this.elements.indexOf(element), 1)
-        this.container.removeChild(element)
+        if (element.parent)
+            this.container.removeChild(element)
     }
     clearElements() {
-        const objects =  this.elements
-        objects!.forEach((el:any)=>{            
-            this.container.removeChild(el)
+        this.elements.forEach(element => {
+            if (element.parent)
+                this.container.removeChild(element)
         })
-        objects!.length = 0        
+        this.elements.length = 0
+        this.surface.clear()
+        this.surface.closePath()
+        if (this.surface.parent)
+            this.container.removeChild(this.surface)
     }
-    getElementsBy(name?:string):Sprite[]  {        
-        return this.elements.filter(f=>f.name == name)
+    getElementsBy(name?: string): Sprite[] {
+        return this.elements.filter(f => f.name == name)
     }
-    private generateBubbles() { 
-        let numberOfBubles = Math.ceil(Math.random() * 3)//between 1 and 3
-        let wayCells = this.maze.getWays()
-        let rows = wayCells.map((m: { row:number })=>m.row)  
-        const tileSize = this.maze.tileSize
-        for (let i = 1; i <= numberOfBubles; i++) {
-            let indexRow = Math.floor(Math.random() * (rows.length - 1))
-            let row = rows[indexRow]
-            let cols = wayCells.find((f: { row: number} ) => f.row == row)!.cols
-            let indexCol = Math.floor(Math.random() * (cols.length - 1))
-            let col = cols[indexCol]
-            const pixelBounds = this.maze.getPixelCoordinates(col!, row!) 
-
+    private generateBubbles() {
+        const amount = 1 + Math.floor(Math.random() * 3)
+        const ways = this.maze.getWays()
+        const cells = ways.flatMap(row => {
+            return row.cols.map(col => ({ row: row.row, col }))
+        })
+        for (let i = 0; i < amount && cells.length > 0; i++) {
+            const cell = cells[Math.floor(Math.random() * cells.length)]
             const bubble = new Sprite(this.wavesManager.flood.am.getTexture("bubbles"))
-            //bubleSprite.tint = 0x002400
-            //bubleSprite.alpha = 0.6 
-            bubble.height = tileSize  
-            bubble.width = tileSize
-            bubble.position.set(pixelBounds.x, pixelBounds.y)
+            const pixel = this.maze.getPixelCoordinates(cell!.col, cell!.row)
+            bubble.width = this.maze.tileSize
+            bubble.height = this.maze.tileSize
+            bubble.position.set(pixel.x, pixel.y)
             this.queueElement("bubble", bubble)
         }
     }
     private getGeneratedBubbles() {
-        const bubbles =  this.queuedElementsBy("bubble")
-        for (let i = 0; i < bubbles.length; i++) {
-            const bubble = bubbles[i]
-            const grid = this.maze.getGridPosition(bubble.x, bubble.y)
-            const waveGrid = this.maze.getGridPosition(this.x, this.y)
-            if (grid.y >= waveGrid.y) {  
-                this.addElement(bubble)    
-                this.dequeueElement(bubble)                
+        const bubbles = this.queuedElementsBy("bubble")
+        bubbles.forEach(bubble => {
+            const worldGrid = this.maze.getGridPosition(bubble.x, bubble.y)
+            const waterGrid = this.maze.getGridPosition(this.x, this.y)
+            if (worldGrid.y >= waterGrid.y) {
+                this.addElement(bubble)
+                this.dequeueElement(bubble)
             }
-        }
+        })
     }
     increase(elapsedMs: number) {
-        if (this.visible) {
-            this.height+=this.speedY * (elapsedMs/1000)
-            this.decreasing = false
-            this.updatePosition()
-            this.getGeneratedBubbles()   
-            this.wavesManager.entitiesManager.dequeAllEntities()             
-        }
+        if (!this.visible) return
+        this.height += this.speedY * (elapsedMs / 1000)
+        this.decreasing = false
+        this.updatePosition()
+        this.getGeneratedBubbles()
+        this.wavesManager.entitiesManager.dequeAllEntities()
     }
     decrease(elapsedMs: number) {
-        if (this.visible) {            
-            this.height -=this.speedY * 1.3 * (elapsedMs/1000)
-            this.decreasing = true
-            this.updatePosition()            
-            //console.log("decrease wave: ", this.height, this.position)
-            const bubbles =  this.getElementsBy("bubble")
-            for (let i=0;i< bubbles.length; i++) {                
-                const bubble = bubbles[i] as Sprite
-                if (bubble.y <= this.y) {                                          
-                    this.removeElement(bubble)
-                }
-            } 
-        }
+        if (!this.visible) return
+        this.height -= this.speedY * 1.3 * (elapsedMs / 1000)
+        this.decreasing = true
+        this.updatePosition()
+        this.getElementsBy("bubble").forEach(bubble => {
+            if (bubble.y <= this.y)
+                this.removeElement(bubble)
+        })
     }
     updatePosition() {
-       this.y = this.maze.height - this.height
-       //this.y = 100
+        this.y = this.maze.height - this.height
     }
     get isDescreasing() {
         return this.decreasing
     }
+    get isAtMax() {
+        return this.height >= this.wavesManager.maxHeight
+    }
+    containsEntity(entity: any): boolean {
+        const waveArea = this.getBounds()
+        const entityArea = entity.getBounds()
+        return waveArea.intersects(entityArea)
+    }
     cancel() {
         this.started = false
+        this.visible = false
         this.clearElements()
-        // const bubles = this.container.children.filter((f: DisplayObject)=>f.name=='buble')
-        // for (let i = bubles.length -1; i >= 0; i--) {
-        //     this.container.removeChild(bubles[i] as DisplayObject)
-        // }
     }
     show() {
+        this.started = true
         this.visible = true
+        this.alpha = 0
     }
-    draw() { 
-        const gp = this.gp  
-        gp.clear() 
-        gp2.clear()
-        
-        const tileSize = this.maze.tileSize
-        let boundsChanges = this.maze.bounds.right.map((e:any ,i,arr:any[])=>{    
-            const next = i < arr.length - 1 ? arr[i+1]?.x !=e.x : true     
-            if (next )               
-                return {x:e.x, y:e.y}           
-        }).filter(e=>e!=undefined)
+    draw() {
+        if (!this.visible || !this.started || this.height <= 0) return
 
-        if (this.height < 4) 
-            return
-        let bounds = this.maze.getPixelBounds(this.x, this.y)
-        let firstPoint
-        if (bounds.left == null) {
-            bounds.left = [{x: this.x, y: this.y}]
-            bounds.right = [{x: this.width, y: this.y}] 
-        }
-        let x = bounds.left[0].x + tileSize/2
-        let y= bounds.left[0].y + (this.y - bounds.left[0].y)
-        const pointsData:Point[] = []        
-        let percent = 0.1
-    //This create the wave itself
-        let index = 0   
-        let coefX = 2, coefY = 1.2
-        gp.lineStyle(2,0xffffff)
-        
-        while(x <= bounds.right[0].x) {  
-            if (index == 0) {                
-                x-=this.startTopX;
-            } 
-            y = this.y            
-            for (let i=0; i < Math.PI; i+=Math.PI*percent) {
-                x +=coefX * Math.sin(i ) 
-                y +=coefY * Math.cos(i)                   
-                if (x > bounds.left[0].x + tileSize/2 && 
-                    x <= bounds.right[0].x + tileSize/2
-                ) {                    
-                    if (pointsData.length == 0)
-                        firstPoint = {x:x,y:y}
-                    pointsData.push(new Point(x,y) )
-                }          
-            }
-            index++
-        }
-    //end Wave
-        x = bounds.right[0].x + tileSize/2
+        const g = this.surface
+        g.visible = true
+        g.clear()
+        g.closePath()
 
-        pointsData.push(new Point(x,y) )
-        x = bounds.right[0].x + tileSize/2
+        const waveTop = this.y
+        const seaLevel = this.y + this.height
+        const waterHeight = Math.max(0, seaLevel - waveTop)
 
-    //Right BOUNDs
-        let y2, lastY = y, prevBounds        
-        for (let h=0; h < this.height; h+=tileSize) {
-            y2 = lastY +  h
-            prevBounds = bounds
-            bounds = this.maze.getPixelBounds(x, y2)
-            if (!bounds.right || bounds.right[0].y < this.y) 
-                continue
-            y = bounds.right[0].y 
-            if (prevBounds?.right && prevBounds.right[0].x != bounds.right[0].x) {
-                x = prevBounds.right[0].x + tileSize * 0.5
-                const find =  boundsChanges.map((e,i)=>{                    
-                if (e.y * tileSize+tileSize ==bounds.right[0].y)
-                        return i
-                }).find(e=>e!=undefined)
-                if (find! % 2 == 0 )
-                    y+=tileSize * 0.5  
-                else 
-                    y-=tileSize * 0.5                
-                pointsData.push(new Point(x,y) )
-            }
-            x = bounds.right[0].x + tileSize * 0.5
-            pointsData.push(new Point(x,y) )
-        }
-     //BOTTOM bound (RIGHT)
-        pointsData.push(new Point(x,y+tileSize * 0.5) )
-    //BOTTOM bound (LEFT)
-        bounds = this.maze.getPixelBounds(x, y)        
-        x -= bounds.right[0].x
-        pointsData.push(new Point(x,y+tileSize * 0.5) )
+        g.beginFill(0x56DBE3, 0.5)
+        g.drawRect(0, waveTop, this.width, waterHeight)
 
-    //Left Bounds
-        lastY = y 
-        let nextBounds
-        for (let h=0; h < this.height; h+=tileSize) {
-            y2 = lastY -  h
-            nextBounds = this.maze.getPixelBounds(x, y2-tileSize)
-            bounds = this.maze.getPixelBounds(x, y2)
-            if (!bounds.left || bounds.left[0].y < this.y) 
-                continue
-            y = bounds.left[0].y 
-            x = bounds.left[0].x + tileSize/2//+this.startTopY
-            const find =  boundsChanges.map((e,i)=>{                    
-            if (e.y * tileSize+tileSize ==bounds.left[0].y)
-                return i
-            }).find(e=>e!=undefined)                
-                if (find! % 2 == 0)
-                y += tileSize * 0.5
-            else 
-                y -=tileSize * 0.5
-            pointsData.push(new Point(x,y))
-            if (nextBounds?.left && nextBounds.left[0].x != bounds.left[0].x) {                
-                x = nextBounds.left[0].x + tileSize/2
-                pointsData.push(new Point(x,y))
-            }
-        }
-
-        // gp2.lineStyle({width:1,color:0xff0000}) 
-        // gp2.moveTo(points[0],points[1])
-        // for (let i =0; i < points.length; i++) {
-        //     gp2.lineTo(points[i],points[++i]) 
-        // }          
-        // gp2.lineTo(firstPoint?.x, firstPoint?.y)
-        // const pointsData:Point[] = []
-        // points.forEach((e,i,arr)=>{
-        //     if (i % 2 !=0) 
-        //         pointsData.push(new Point(arr[i-1],e))
-        // })
-        gp.beginFill(0x56DBE3,0.5)        
-        //gp.lineStyle({width:2, color:0x00ff00})
-        gp.drawRoundedShape!(pointsData, Math.PI)         
-        gp.endFill()
-
-        //  draw a Hole to not includes the ghost house
-        this.maze.ghostHouses.forEach((house:any)=>{
-            const top = this.maze.getPixelCoordinates(house.x1, house.y1)
-            const bottom = this.maze.getPixelCoordinates(house.x1, house.y2)
-            const right = this.maze.getPixelCoordinates(house.x2, house.y2)
-            if (bottom.y >= firstPoint!.y ) {                
-                gp.beginHole()
-                gp.lineStyle(2,0xff0000, 0.8)
-                gp.moveTo(bottom.x,bottom.y)
-                gp.lineTo(right.x, bottom.y)
-                if (top.y >= firstPoint!.y) {
-                    gp.lineTo(right.x, top.y)
-                    gp.lineTo(top.x, top.y)
-                    gp.lineTo(bottom.x, bottom.y)
-                }else { 
-                    gp.lineTo(right.x, firstPoint!.y)
-                    gp.lineTo(bottom.x, firstPoint!.y)
-                    gp.lineTo(bottom.x, bottom.y)
+        this.maze.ghostHouses.forEach((house: any) => {
+            const topLeft = this.maze.getPixelCoordinates(house.x1, house.y1)
+            const bottomLeft = this.maze.getPixelCoordinates(house.x1, house.y2)
+            const bottomRight = this.maze.getPixelCoordinates(house.x2, house.y2)
+            if (bottomLeft.y >= waveTop && topLeft.y <= seaLevel) {
+                g.beginHole()
+                g.moveTo(bottomLeft.x, bottomLeft.y)
+                g.lineTo(bottomRight.x, bottomRight.y)
+                if (topLeft.y >= waveTop) {
+                    g.lineTo(bottomRight.x, topLeft.y)
+                    g.lineTo(topLeft.x, topLeft.y)
+                    g.lineTo(bottomLeft.x, bottomLeft.y)
+                } else {
+                    g.lineTo(bottomRight.x, waveTop)
+                    g.lineTo(bottomLeft.x, waveTop)
+                    g.lineTo(bottomLeft.x, bottomLeft.y)
                 }
-                gp.endHole()
-            }  
-        })  
-
-        //for debug
-        // gp.lineStyle(2,0x00ff00)
-        // gp.drawRect(this.x, this.y, this.width, this.height)
-        //Interval to draw the waves in mileseconds
-        const shouldChange = Date.now() - this.lastTime >= 200
-        if (shouldChange) {
-            this.lastTime = Date.now()            
-            if(this.startTopX ==  Math.PI * 2) {
-               this.startTopX = Math.PI
-            }else if (this.startTopX == Math.PI) {  
-                this.startTopX = 0
-            }else {
-                this.startTopX = Math.PI * 2
+                g.endHole()
             }
+        })
+        g.endFill()
+
+        g.lineStyle(3, 0xB3E5FC, 0.8)
+        const segments = 40
+        const amplitude = 3
+        g.moveTo(0, waveTop)
+        for (let i = 1; i <= segments; i++) {
+            const x = (i / segments) * this.width
+            const y = waveTop + Math.sin((i / segments) * Math.PI * 2 + this.surfacePhase) * amplitude
+            g.lineTo(x, y)
+        }
+        g.lineStyle(0)
+
+        if (Date.now() - this.lastOscillation >= 80) {
+            this.lastOscillation = Date.now()
+            this.surfacePhase += 0.4
         }
     }
 }

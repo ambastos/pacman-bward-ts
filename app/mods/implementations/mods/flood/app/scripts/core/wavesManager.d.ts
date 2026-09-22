@@ -1,0 +1,44 @@
+import { Container, Graphics } from "pixi.js";
+import Animator from "../animations/animator.ts";
+import Flood from "./flood.ts";
+import EventEmitter from "eventemitter3";
+import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts";
+import Pacman from "../../../../../../../scripts/characters/pacman.ts";
+import Ghost from "../../../../../../../scripts/characters/ghost.ts";
+import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
+import EntitiesManager from "./entitiesManager.ts";
+import Wave from "./wave.ts";
+declare class WavesManager {
+    #private;
+    wave: Wave | null;
+    waveTime: any;
+    nextWaveTime: any;
+    maxHeight: number;
+    flood: Flood;
+    gc: GameCoordinator;
+    entitiesManager: EntitiesManager;
+    animator: Animator;
+    gp: Graphics;
+    container: Container;
+    pacman: Pacman;
+    ghosts: Ghost[];
+    emitter: EventEmitter;
+    constructor(flood: Flood);
+    initialize(): void;
+    restart(): void;
+    createBreath(entity: MovableEntity, options?: any): void;
+    resetEntitiesBreathing(): void;
+    private resetEntity;
+    tryToGenerateEntities(): void;
+    stopDrown(entity: any): void;
+    tryDrownEntities(elapsedMs: number): void;
+    killEntity(entity: MovableEntity): void;
+    showBreathingStatus(entity: Pacman): void;
+    private clearEntities;
+    clear(): void;
+    stop(): void;
+    update(elapsedMs: number): void;
+    draw(): void;
+}
+export default WavesManager;
+//# sourceMappingURL=wavesManager.d.ts.map

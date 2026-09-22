@@ -31,7 +31,7 @@ class CharacterUtil {
         stutter = true;
       }
     }
-    console.log("a") 
+    
     return stutter ? 'hidden' : 'visible';
   }
 

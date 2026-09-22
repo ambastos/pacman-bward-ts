@@ -6,7 +6,9 @@
     "coverage": "NODE_OPTIONS=--no-experimental-require-module nyc report --reporter=text-lcov | node ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint .",
     "build": "tsc",
-    "serve": "nodemon --watch build --watch index.html --exec npx http-server"
+    "serve": "nodemon --watch build --watch index.html --exec npx http-server",
+    "gulp": "NODE_NO_WARNINGS=1 gulp",
+    "watch": "NODE_NO_WARNINGS=1 gulp watch"
   },
   "browserify": {
     "transform": [

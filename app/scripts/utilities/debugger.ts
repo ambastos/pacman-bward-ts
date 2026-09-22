@@ -18,6 +18,10 @@ class Debugger {
     shouldPrintGrid!: boolean
     enableBoundsAndHitBoxes: boolean = false
     printing: any
+    showConsole: boolean = false
+    consoleBuffer: string[] = []
+    fps: number = 0
+    lastFrameTime: number = 0
     constructor(gameCoordinator: GameCoordinator) {
         this.gc = gameCoordinator
         this.overflowMask = $("#overflow-mask")
@@ -63,6 +67,8 @@ class Debugger {
                 dbg.startWave()
             else if( event.key.toLowerCase() == 'h') {
                 dbg.enableBoundsAndHitBoxes = !dbg.enableBoundsAndHitBoxes
+            } else if (event.key.toLowerCase() == 'c') {
+                dbg.toggleConsole()
             }            
         } )
     }
@@ -123,12 +129,14 @@ class Debugger {
     }
     animate() {
         const an = () =>{
+            this.updateFps()
             this.clearGrid()
             if (this.shouldPrintGrid) {
                 this.printGrid()
             }else if(this.enableBoundsAndHitBoxes) {
                 this.drawBoundsAndHitBoxes(false)
             }
+            this.printConsole()
             requestAnimationFrame(an)
         }
         an()
@@ -332,6 +340,86 @@ class Debugger {
         //ctx.stroke()
         ctx.restore()       
     }    
+
+    toggleConsole() {
+        this.showConsole = !this.showConsole
+    }
+    consoleLog(message: string) {
+        this.consoleBuffer.push(message)
+        if (this.consoleBuffer.length > 20)
+            this.consoleBuffer.splice(0, this.consoleBuffer.length - 20)
+    }
+    clearConsole() {
+        this.consoleBuffer = []
+    }
+    private updateFps() {
+        const now = performance.now()
+        const delta = now - this.lastFrameTime
+        this.lastFrameTime = now
+        if (delta > 0)
+            this.fps = Math.round(1000 / delta)
+    }
+    private getConsoleData(): string[] {
+        const lines: string[] = []
+        lines.push("=== CONSOLE ===")
+        lines.push(`FPS: ${this.fps}`)
+        if (this.gc.pacman) {
+            const p = this.gc.pacman
+            lines.push(`Pacman: x=${Math.round(p.position.x)} y=${Math.round(p.position.y)} dir=${p.direction}`)
+        }
+        if (this.gc.ghosts) {
+            this.gc.ghosts.forEach((g: any)=>{
+                lines.push(`${g.name || 'Ghost'}: x=${Math.round(g.position.x)} y=${Math.round(g.position.y)} dir=${g.direction}`)
+            })
+        }
+        //@ts-ignore
+        const flood = this.gc.mod?.flood
+        if (flood?.wavesManager?.wave) {
+            const wave = flood.wavesManager.wave
+            lines.push(`Wave: h=${Math.round(wave.height)} y=${Math.round(wave.y)} started=${wave.started}`)
+        }
+        lines.push(...this.consoleBuffer)
+        return lines
+    }
+    private wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+        const words = text.split(" ")
+        const wrapped: string[] = []
+        let line = ""
+        for (const word of words) {
+            const test = line ? `${line} ${word}` : word
+            if (ctx.measureText(test).width > maxWidth && line) {
+                wrapped.push(line)
+                line = word
+            } else {
+                line = test
+            }
+        }
+        if (line)
+            wrapped.push(line)
+        return wrapped
+    }
+    printConsole() {
+        if (!this.showConsole) return
+        const ctx = this.ctx as CanvasRenderingContext2D
+        const mazeOffset = this.mazeDiv.offset()
+        const panelWidth = 340
+        const lineHeight = 16
+        const x = this.canvas.width - panelWidth - 10
+        const y = mazeOffset.top + 10
+        const rows = this.getConsoleData().flatMap(m=>this.wrapText(ctx, m, panelWidth - 16))
+        const panelHeight = rows.length * lineHeight + 12
+        ctx.save()
+        ctx.fillStyle = "rgba(0, 0, 0, 0.75)"
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.35)"
+        ctx.fillRect(x, y, panelWidth, panelHeight)
+        ctx.strokeRect(x + 0.5, y + 0.5, panelWidth - 1, panelHeight - 1)
+        ctx.font = "12px monospace"
+        ctx.fillStyle = "white"
+        rows.forEach((row, index)=>{
+            ctx.fillText(row, x + 8, y + 18 + index * lineHeight)
+        })
+        ctx.restore()
+    }
 
     getImageData(texture:Texture) {
         const resource =  (texture.baseTexture.resource as CanvasResource)        
