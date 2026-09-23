@@ -1,5 +1,5 @@
-import WavesManager from "../core/wavesManager.ts"
-import Flood from "../core/flood.ts"
+import type WavesManager from "../core/wavesManager.ts"
+import type Flood from "../core/flood.ts"
 
 const States = {
     IDLE_STATE:0, 

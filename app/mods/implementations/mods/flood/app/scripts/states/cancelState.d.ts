@@ -1,4 +1,4 @@
-import WavesManager from "../core/wavesManager.ts";
+import type WavesManager from "../core/wavesManager.ts";
 import { State } from "./state.ts";
 declare class CancelState extends State {
     constructor(wavesManager: WavesManager);

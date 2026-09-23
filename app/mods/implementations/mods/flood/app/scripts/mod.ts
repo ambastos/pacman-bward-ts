@@ -4,7 +4,8 @@ import GameCoordinator from "../../../../../../scripts/core/gameCoordinator.ts"
 /**
  * Module class to pacmam-bward game
  */
-class Mod {
+abstract class Mod {
+    protected abstract name: string 
     emitter!:EventEmitter 
     gc:GameCoordinator
     started = false

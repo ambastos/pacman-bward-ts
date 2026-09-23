@@ -7,8 +7,12 @@ const config: Config.InitialOptions = {
   rootDir: "app/tests",
   testEnvironment: "node",
   moduleDirectories: [...defaults.moduleDirectories, 'bower-components'],
+  moduleNameMapper: {
+    '^(\\.\\./(scripts|mods|@types|style)/.*)\\.js$': '$1.ts',
+  },
   transform: {
-    ...tsJestTransformCfg
+    ...tsJestTransformCfg,
+    '^.+\\.tsx?$': ['ts-jest', { tsconfig: { module: 'commonjs' } }],
   }
 }
 export default config

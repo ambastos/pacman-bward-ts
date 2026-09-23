@@ -14,6 +14,7 @@ import Timer from "../../../../../../../scripts/utilities/timer.ts"
 import RegisterListeners from "./registerListeners.ts"
 
 class Flood extends Mod implements RegisterListeners {
+    name = "flood"
     width: number
     maxHeight: number
     tileSize: number

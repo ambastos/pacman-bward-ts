@@ -30192,6 +30192,7 @@ void main(void)\r
 
   // app/mods/mod.ts
   var Mod = class {
+    name = "";
     emitter;
     started = false;
     paused = false;
@@ -30569,8 +30570,9 @@ void main(void)\r
     }
     start() {
       super.start();
-      if (this.wavesManager.wave)
-        this.wavesManager.wave.speedY *= 3;
+      const wave = this.wavesManager.wave;
+      if (wave && wave.started)
+        wave.speedY *= 3;
     }
     endFlood() {
       const wave = this.wavesManager.wave;
@@ -30587,15 +30589,17 @@ void main(void)\r
       this.wavesManager.wave = null;
       this.flood.stop();
       setTimeout(() => {
-        if (this.flood.gc.lives > 0)
-          this.flood.emitter.emit("start");
+        this.flood.emitter.emit("start");
       }, 2250);
     }
     update(elapsedMs) {
       if (!this.started) return;
       super.update(elapsedMs);
       const wave = this.wavesManager.wave;
-      if (!wave) return;
+      if (!wave || !wave.started) {
+        this.endFlood();
+        return;
+      }
       wave.decrease(elapsedMs);
       if (wave.isDescreasing && wave.height < 5)
         this.endFlood();
@@ -35789,6 +35793,7 @@ void main(void)\r
 
   // app/mods/implementations/mods/flood/app/scripts/core/flood.ts
   var Flood = class extends mod_default2 {
+    name = "flood";
     width;
     maxHeight;
     tileSize;
@@ -37271,7 +37276,8 @@ void main(void)\r
   var gameEngine_default = GameEngine;
 
   // app/mods/empty-mod.ts
-  var EmptyMod = class extends mod_default {
+  var EmptyMod = class extends mod_default2 {
+    name = "none";
     constructor(gameCoordinator) {
       super(gameCoordinator);
     }

@@ -5,6 +5,7 @@ import GameCoordinator from "../scripts/core/gameCoordinator.ts"
  * Module class to pacmam-bward game
  */
 class Mod {    
+    name:string = ""
     emitter:EventEmitter 
     started:boolean = false
     paused:boolean = false
