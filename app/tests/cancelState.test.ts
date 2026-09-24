@@ -1,4 +1,4 @@
-import CancelState from '../mods/implementations/mods/flood/app/scripts/states/cancelState.ts'
+import CancelState from '../mods/implementations/flood/app/scripts/states/cancelState.ts'
 
 interface FakeWave {
     started: boolean

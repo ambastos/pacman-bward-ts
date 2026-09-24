@@ -62,7 +62,7 @@ describe('timer', () => {
       assert(comp.callback.called);
       assert(window.dispatchEvent.calledWith(new CustomEvent('removeTimer', {
         detail: {
-          id: comp.timerId,
+          timer: comp,
         },
       })));
     });

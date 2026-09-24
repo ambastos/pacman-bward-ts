@@ -1,7 +1,7 @@
 import { Container, Graphics, Sprite, Texture } from "pixi.js"
 import WavesManager from "./wavesManager.ts"
-import Maze from "../../../../../../../scripts/mazes/maze.ts"
-import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts"
+import Maze from "../../../../../../scripts/mazes/maze.ts"
+import MovableEntity from "../../../../../../scripts/characters/movableEntity.ts"
 
 class Wave extends Sprite {
     speedY = 15

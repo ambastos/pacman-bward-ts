@@ -21,7 +21,14 @@ beforeEach(() => {
     callback(1000);
   };
 
-  gameEngine = new GameEngine(maxFps);
+  const gameCoordinator = {
+    render: () => { },
+    mod: {
+      draw: () => { },
+      update: () => { },
+    },
+  };
+  gameEngine = new GameEngine(gameCoordinator, maxFps, []);
 });
 
 describe('gameEngine', () => {

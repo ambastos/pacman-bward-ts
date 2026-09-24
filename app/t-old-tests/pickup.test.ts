@@ -1,91 +1,78 @@
-// const assert = require('assert');
-// const sinon = require('sinon');
-// const Pickup = require('../scripts/pickups/pickup');
 import assert from 'assert'
 import sinon from 'sinon'
 import Pickup from '../scripts/pickups/pickup.ts';
 
 let pickup;
 let pacman;
-let mazeDiv;
+let gameCoordinator;
+
+function makeTexture() {
+  return {
+    baseTexture: { valid: true },
+    orig: { width: 16, height: 16 },
+    on() { },
+    off() { },
+    once() { },
+  };
+}
 
 beforeEach(() => {
-  global.document = {
-    createElement: () => ({
-      classList: {
-        add: () => { },
-      },
-      style: {},
-    }),
-  };
-
   pacman = {
-    position: {
-      top: 10,
-      left: 10,
-    },
+    position: { x: 10, y: 10 },
     measurement: 16,
+    hitArea: { intersects: () => false },
   };
 
-  mazeDiv = {
-    appendChild: () => { },
+  gameCoordinator = {
+    pacman,
+    mazeDiv: { appendChild: () => { } },
+    scaledTileSize: 8,
+    scale: 1,
+    emitter: {
+      emit: sinon.fake(),
+      on: sinon.fake(),
+      off: sinon.fake(),
+    },
+    am: {
+      getTexture: sinon.fake(() => makeTexture()),
+    },
   };
 
-  pickup = new Pickup('pacdot', 8, 1, 1, pacman, mazeDiv);
+  pickup = new Pickup('pacdot', 1, 1, 1, gameCoordinator as any);
 });
 
 describe('pickup', () => {
   describe('reset', () => {
     it('sets visibility according to type', () => {
-      pickup.animationTarget.style.visibility = 'blah';
+      pickup.visible = false;
 
       pickup.type = 'pacdot';
       pickup.reset();
-      assert.strictEqual(pickup.animationTarget.style.visibility, 'visible');
+      assert.strictEqual(pickup.visible, true);
 
       pickup.type = 'fruit';
       pickup.reset();
-      assert.strictEqual(pickup.animationTarget.style.visibility, 'hidden');
+      assert.strictEqual(pickup.visible, false);
     });
   });
 
   describe('setStyleMeasurements', () => {
     it('sets measurements for pacdots', () => {
-      pickup.setStyleMeasurements('pacdot', 8, 1, 1);
+      pickup.setStyleMeasurements('pacdot', 8, 1, 1, 1);
 
       assert.strictEqual(pickup.size, 2);
-      assert.strictEqual(pickup.x, 11);
-      assert.strictEqual(pickup.y, 11);
-      assert.deepEqual(pickup.animationTarget.style, {
-        backgroundImage: 'url(app/style/graphics/spriteSheets/pickups/'
-          + 'pacdot.svg)',
-        backgroundSize: '2px',
-        height: '2px',
-        left: '11px',
-        position: 'absolute',
-        top: '11px',
-        visibility: 'visible',
-        width: '2px',
-      });
+      assert.strictEqual(pickup.x, 12);
+      assert.strictEqual(pickup.y, 12);
+      assert.strictEqual(pickup.visible, true);
     });
 
     it('sets measurements for powerPellets', () => {
-      pickup.setStyleMeasurements('powerPellet', 8, 1, 1);
+      pickup.setStyleMeasurements('powerPellet', 8, 1, 1, 1);
 
       assert.strictEqual(pickup.size, 8);
-      assert.strictEqual(pickup.x, 8);
-      assert.strictEqual(pickup.y, 8);
-      assert.deepEqual(pickup.animationTarget.style, {
-        backgroundImage: 'url(app/style/graphics/spriteSheets/pickups/'
-         + 'powerPellet.svg)',
-        backgroundSize: '8px',
-        height: '8px',
-        left: '8px',
-        position: 'absolute',
-        top: '8px',
-        visibility: 'visible',
-        width: '8px',
-      });
+      assert.strictEqual(pickup.x, 10);
+      assert.strictEqual(pickup.y, 10);
+      assert.strictEqual(pickup.visible, true);
     });
 
     it('sets measurements for fruits', () => {
@@ -93,166 +80,107 @@ describe('pickup', () => {
       pickup.setStyleMeasurements('fruit', 8, 1, 1, 100);
 
       assert.strictEqual(pickup.size, 16);
-      assert.strictEqual(pickup.x, 4);
-      assert.strictEqual(pickup.y, 4);
-      assert.deepEqual(pickup.animationTarget.style, {
-        backgroundImage: 'url(app/style/graphics/spriteSheets/pickups/'
-         + 'cherry.svg)',
-        backgroundSize: '16px',
-        height: '16px',
-        left: '4px',
-        position: 'absolute',
-        top: '4px',
-        width: '16px',
-        visibility: 'hidden',
-      });
+      assert.strictEqual(pickup.x, 8);
+      assert.strictEqual(pickup.y, 8);
+      assert.strictEqual(pickup.visible, false);
     });
   });
 
-  describe('determineImage', () => {
-    let baseUrl;
-
-    beforeEach(() => {
-      baseUrl = 'url(app/style/graphics/spriteSheets/pickups/';
+  describe('getFruitName', () => {
+    it('returns the right fruit for each point value', () => {
+      assert.strictEqual(pickup.getFruitName(100), 'cherry');
+      assert.strictEqual(pickup.getFruitName(300), 'strawberry');
+      assert.strictEqual(pickup.getFruitName(500), 'orange');
+      assert.strictEqual(pickup.getFruitName(700), 'apple');
+      assert.strictEqual(pickup.getFruitName(1000), 'melon');
+      assert.strictEqual(pickup.getFruitName(2000), 'galaxian');
+      assert.strictEqual(pickup.getFruitName(3000), 'bell');
+      assert.strictEqual(pickup.getFruitName(5000), 'key');
     });
 
-    it('returns correct images for fruits', () => {
-      assert.strictEqual(
-        pickup.determineImage('fruit', 100),
-        `${baseUrl}cherry.svg)`,
-      );
-
-      assert.strictEqual(
-        pickup.determineImage('fruit', 300),
-        `${baseUrl}strawberry.svg)`,
-      );
-
-      assert.strictEqual(
-        pickup.determineImage('fruit', 500),
-        `${baseUrl}orange.svg)`,
-      );
-
-      assert.strictEqual(
-        pickup.determineImage('fruit', 700),
-        `${baseUrl}apple.svg)`,
-      );
-
-      assert.strictEqual(
-        pickup.determineImage('fruit', 1000),
-        `${baseUrl}melon.svg)`,
-      );
-
-      assert.strictEqual(
-        pickup.determineImage('fruit', 2000),
-        `${baseUrl}galaxian.svg)`,
-      );
-
-      assert.strictEqual(
-        pickup.determineImage('fruit', 3000),
-        `${baseUrl}bell.svg)`,
-      );
-
-      assert.strictEqual(
-        pickup.determineImage('fruit', 5000),
-        `${baseUrl}key.svg)`,
-      );
-    });
-
-    it('returns cherry by default for unrecognized fruit', () => {
-      const unknown = pickup.determineImage('fruit', undefined);
-      assert.strictEqual(unknown, `${baseUrl}cherry.svg)`);
-    });
-
-    it('returns correct images for other pickups', () => {
-      const pacdot = pickup.determineImage('pacdot', undefined);
-      assert.strictEqual(pacdot, `${baseUrl}pacdot.svg)`);
-
-      const powerPellet = pickup.determineImage('powerPellet', undefined);
-      assert.strictEqual(powerPellet, `${baseUrl}powerPellet.svg)`);
+    it('returns undefined for an unrecognized point value', () => {
+      assert.strictEqual(pickup.getFruitName(9999), undefined);
     });
   });
 
   describe('showFruit', () => {
     it('sets the point value, image, and visibility', () => {
       pickup.points = 0;
-      pickup.animationTarget.style.backgroundImage = '';
-      pickup.animationTarget.style.visibility = '';
-      pickup.determineImage = sinon.fake.returns('svg');
+      pickup.visible = false;
 
       pickup.showFruit(100);
       assert.strictEqual(pickup.points, 100);
-      assert.strictEqual(pickup.animationTarget.style.backgroundImage, 'svg');
-      assert.strictEqual(pickup.animationTarget.style.visibility, 'visible');
+      assert.strictEqual(pickup.visible, true);
+      assert(gameCoordinator.am.getTexture.calledWith('cherry'));
     });
   });
 
   describe('hideFruit', () => {
     it('sets the visibility to HIDDEN', () => {
-      pickup.animationTarget.style.visibility = 'visible';
+      pickup.visible = true;
 
       pickup.hideFruit();
-      assert.strictEqual(pickup.animationTarget.style.visibility, 'hidden');
+      assert.strictEqual(pickup.visible, false);
     });
   });
 
   describe('checkForCollision', () => {
     it('returns TRUE if the Pickup is colliding', () => {
-      assert(pickup.checkForCollision(
-        { x: 7.4, y: 7.4, size: 5 },
-        { x: 0, y: 0, size: 10 },
-      ));
+      pickup.hitArea = { intersects: () => true } as any;
+
+      assert(pickup.checkForCollision(pickup, pickup.pacman));
     });
 
     it('returns FALSE if it is not', () => {
-      assert(!pickup.checkForCollision(
-        { x: 7.5, y: 7.5, size: 5 },
-        { x: 0, y: 0, size: 10 },
-      ));
+      pickup.hitArea = { intersects: () => false } as any;
+
+      assert(!pickup.checkForCollision(pickup, pickup.pacman));
     });
   });
 
   describe('checkPacmanProximity', () => {
     beforeEach(() => {
       pickup.center = { x: 0, y: 0 };
+      pickup.visible = true;
     });
 
     it('returns TRUE if the pickup is close to Pacman', () => {
-      pickup.checkPacmanProximity(5, { x: 3, y: 4 });
+      pickup.checkPacmanProximity(5, { x: 3, y: 4 } as any);
       assert(pickup.nearPacman);
     });
 
     it('returns FALSE otherwise', () => {
-      pickup.checkPacmanProximity(4.9, { x: 3, y: 4 });
+      pickup.checkPacmanProximity(4.9, { x: 3, y: 4 } as any);
       assert(!pickup.nearPacman);
     });
 
-    it('sets background color when debugging', () => {
-      pickup.checkPacmanProximity(5, { x: 3, y: 4 }, true);
-      assert.strictEqual(pickup.animationTarget.style.background, 'lime');
+    it('changes the tint when debugging', () => {
+      pickup.checkPacmanProximity(5, { x: 3, y: 4 } as any, true);
+      assert.strictEqual(pickup.tint, '0x00ff00');
 
-      pickup.checkPacmanProximity(4.9, { x: 3, y: 4 }, true);
-      assert.strictEqual(pickup.animationTarget.style.background, 'red');
+      pickup.checkPacmanProximity(4.9, { x: 3, y: 4 } as any, true);
+      assert.strictEqual(pickup.tint, '0xff0000');
     });
 
     it('skips execution if the pickup is hidden', () => {
-      pickup.animationTarget.style.visibility = 'hidden';
+      pickup.visible = false;
       pickup.nearPacman = false;
 
-      pickup.checkPacmanProximity(5, { x: 3, y: 4 });
+      pickup.checkPacmanProximity(5, { x: 3, y: 4 } as any);
       assert(!pickup.nearPacman);
     });
   });
 
   describe('shouldCheckForCollision', () => {
     it('only returns TRUE when the Pickup is near Pacman and visible', () => {
-      pickup.animationTarget.style.visibility = 'visible';
+      pickup.visible = true;
       pickup.nearPacman = true;
       assert(pickup.shouldCheckForCollision());
 
       pickup.nearPacman = false;
       assert(!pickup.shouldCheckForCollision());
 
-      pickup.animationTarget.style.visibility = 'hidden';
+      pickup.visible = false;
       assert(!pickup.shouldCheckForCollision());
 
       pickup.nearPacman = true;
@@ -262,25 +190,23 @@ describe('pickup', () => {
 
   describe('update', () => {
     beforeEach(() => {
-      global.window = {
-        dispatchEvent: sinon.fake(),
-      };
+      global.window.dispatchEvent = sinon.fake();
     });
 
     it('turns the Pickup\'s visibility to HIDDEN after collision', () => {
       pickup.shouldCheckForCollision = sinon.fake.returns(true);
       pickup.checkForCollision = sinon.fake.returns(true);
 
-      pickup.update();
-      assert.strictEqual(pickup.animationTarget.style.visibility, 'hidden');
+      pickup.update(16);
+      assert.strictEqual(pickup.visible, false);
     });
 
     it('leaves the Pickup\'s visibility until collision', () => {
       pickup.shouldCheckForCollision = sinon.fake.returns(true);
       pickup.checkForCollision = sinon.fake.returns(false);
 
-      pickup.update();
-      assert.notStrictEqual(pickup.animationTarget.style.visibility, 'hidden');
+      pickup.update(16);
+      assert.notStrictEqual(pickup.visible, false);
     });
 
     it('emits the awardPoints event after a collision', () => {
@@ -288,11 +214,12 @@ describe('pickup', () => {
       pickup.shouldCheckForCollision = sinon.fake.returns(true);
       pickup.checkForCollision = sinon.fake.returns(true);
 
-      pickup.update();
+      pickup.update(16);
       assert(global.window.dispatchEvent.calledWith(
         new CustomEvent('awardPoints', {
           detail: {
-            points: pickup.points,
+            points: 100,
+            type: 'pacdot',
           },
         }),
       ));
@@ -303,7 +230,7 @@ describe('pickup', () => {
       pickup.shouldCheckForCollision = sinon.fake.returns(true);
       pickup.checkForCollision = sinon.fake.returns(true);
 
-      pickup.update();
+      pickup.update(16);
       assert(global.window.dispatchEvent.calledWith(new Event('dotEaten')));
     });
 
@@ -312,24 +239,26 @@ describe('pickup', () => {
       pickup.shouldCheckForCollision = sinon.fake.returns(true);
       pickup.checkForCollision = sinon.fake.returns(true);
 
-      pickup.update();
+      pickup.update(16);
       assert(global.window.dispatchEvent.calledWith(new Event('dotEaten')));
       assert(global.window.dispatchEvent.calledWith(new Event('powerUp')));
     });
 
-    it('emits no events if an unrecognized item collides with Pacman', () => {
+    it('does not emit dot events for an unrecognized item', () => {
       pickup.type = 'blah';
       pickup.shouldCheckForCollision = sinon.fake.returns(true);
       pickup.checkForCollision = sinon.fake.returns(true);
 
-      pickup.update();
+      pickup.update(16);
+      assert(global.window.dispatchEvent.neverCalledWith(new Event('dotEaten')));
+      assert(global.window.dispatchEvent.neverCalledWith(new Event('powerUp')));
     });
 
     it('does nothing if shouldCheckForCollision returns FALSE', () => {
       pickup.shouldCheckForCollision = sinon.fake.returns(false);
       pickup.checkForCollision = sinon.fake();
 
-      pickup.update();
+      pickup.update(16);
       assert(!pickup.checkForCollision.called);
     });
   });

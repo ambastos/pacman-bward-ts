@@ -1,10 +1,11 @@
 import { Container, Sprite } from "pixi.js";
 import Wave from "./wave.ts";
 import Sonic from "../entities/sonic.ts";
-import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts";
-import { createObservablePoint} from "../../../../../../../scripts/utilities/utils.ts";
-import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
-import { Mode } from "../../../../../../../scripts/characters/types.ts";
+import GameCoordinator from "../../../../../../scripts/core/gameCoordinator.ts";
+import MovableEntity from "../../../../../../scripts/characters/movableEntity.ts";
+import { Mode } from "../../../../../../scripts/characters/types.ts";
+import { createObservablePoint } from "../../../../../../scripts/utilities/utils.ts";
+
 
 class EntitiesManager {
     gc!:GameCoordinator

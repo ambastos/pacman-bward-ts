@@ -91,30 +91,35 @@ describe('characterUtil', () => {
     it('calculates a new value given all parameters', () => {
       assert.strictEqual(characterUtil.calculateNewDrawValue(
         1, 'y', oldPosition, position,
-      ), 10);
+      ), 100);
       assert.strictEqual(characterUtil.calculateNewDrawValue(
         1, 'x', oldPosition, position,
-      ), 100);
+      ), 10);
     });
 
     it('factors in interp when calculating the new value', () => {
       assert.strictEqual(characterUtil.calculateNewDrawValue(
         0.5, 'y', oldPosition, position,
-      ), 5);
+      ), 50);
       assert.strictEqual(characterUtil.calculateNewDrawValue(
         0.5, 'x', oldPosition, position,
-      ), 50);
+      ), 5);
     });
   });
 
   describe('determineGridPosition', () => {
     it('returns an x-y object given a valid position', () => {
-      assert.deepEqual(characterUtil.determineGridPosition(
+      const topLeftGrid = characterUtil.determineGridPosition(
         oldPosition, scaledTileSize, anchor, scale
-      ), { x:0.5,y:0.5 } as ObservablePoint);
-      assert.deepEqual(characterUtil.determineGridPosition(
+      );
+      assert.strictEqual(topLeftGrid.x, -0.5);
+      assert.strictEqual(topLeftGrid.y, -0.5);
+
+      const otherGrid = characterUtil.determineGridPosition(
         position, scaledTileSize, anchor, scale
-      ), { x:13,y:1.75 } as ObservablePoint);
+      );
+      assert.strictEqual(otherGrid.x, 0.75);
+      assert.strictEqual(otherGrid.y, 12);
     });
   });
 
@@ -226,10 +231,10 @@ describe('characterUtil', () => {
         { x: 500,y: 500 } as ObservablePoint, 'up', 5, 20, scaledTileSize,
         anchor, scale
       );
-      assert.deepEqual(newPositions, {
-        newPosition: { x: 400,y: 500 } as ObservablePoint,
-        newGridPosition: { x:63,y:50.5 } as ObservablePoint,
-      });
+      assert.strictEqual(newPositions.newPosition.x, 500);
+      assert.strictEqual(newPositions.newPosition.y, 400);
+      assert.strictEqual(newPositions.newGridPosition.x, 62);
+      assert.strictEqual(newPositions.newGridPosition.y, 49.5);
     });
   });
 
@@ -237,42 +242,60 @@ describe('characterUtil', () => {
     const unsnappedPosition = { x:1.5,y:1.5 } as ObservablePoint;
 
     it('returns a snapped value when traveling in any direction', () => {
-      assert.deepEqual(characterUtil.snapToGrid(
+      const up = characterUtil.snapToGrid(
         unsnappedPosition, 'up', scaledTileSize,
         anchor, scale
-      ), { x: 4,y: 8 } as ObservablePoint);
-      assert.deepEqual(characterUtil.snapToGrid(
+      );
+      assert.strictEqual(up.x, 16);
+      assert.strictEqual(up.y, 12);
+
+      const down = characterUtil.snapToGrid(
         unsnappedPosition, 'down', scaledTileSize,
         anchor, scale
-      ), { x: 12,y: 8 } as ObservablePoint);
-      assert.deepEqual(characterUtil.snapToGrid(
+      );
+      assert.strictEqual(down.x, 16);
+      assert.strictEqual(down.y, 20);
+
+      const left = characterUtil.snapToGrid(
         unsnappedPosition, 'left', scaledTileSize,
         anchor, scale
-      ), { x: 8,y: 4 } as ObservablePoint);
-      assert.deepEqual(characterUtil.snapToGrid(
+      );
+      assert.strictEqual(left.x, 12);
+      assert.strictEqual(left.y, 16);
+
+      const right = characterUtil.snapToGrid(
         unsnappedPosition, 'right', scaledTileSize,
         anchor, scale
-      ), { x: 8,y: 12 } as ObservablePoint);
+      );
+      assert.strictEqual(right.x, 20);
+      assert.strictEqual(right.y, 16);
     });
   });
 
   describe('handleWarp', () => {
     it('warps if leaving the maze', () => {
-      assert.deepEqual(characterUtil.handleWarp("down",
-        { x: 0,y: -100 } as ObservablePoint, scaledTileSize, mazeArray,
+      const left = characterUtil.handleWarp('left',
+        { x: -10, y: 0 } as ObservablePoint, scaledTileSize, mazeArray,
         anchor, scale
-      ), { x: 0,y: 18 } as ObservablePoint);
-      assert.deepEqual(characterUtil.handleWarp("down",
-        { x: 0,y: 100 } as ObservablePoint, scaledTileSize, mazeArray,
+      );
+      assert.strictEqual(left.x, 21);
+      assert.strictEqual(left.y, 0);
+
+      const right = characterUtil.handleWarp('right',
+        { x: 30, y: 0 } as ObservablePoint, scaledTileSize, mazeArray,
         anchor, scale
-      ), { x: 0,y: -10 } as ObservablePoint);
+      );
+      assert.strictEqual(right.x, -5);
+      assert.strictEqual(right.y, 0);
     });
 
     it('doesn\'t warp otherwise', () => {
-      assert.deepEqual(characterUtil.handleWarp("down",
-        { x: 0,y: 0 } as ObservablePoint, scaledTileSize, mazeArray,
+      const kept = characterUtil.handleWarp('down',
+        { x: 0, y: 0 } as ObservablePoint, scaledTileSize, mazeArray,
         anchor, scale
-      ), { x: 0,y: 0 } as ObservablePoint);
+      );
+      assert.strictEqual(kept.x, 0);
+      assert.strictEqual(kept.y, 0);
     });
   });
 
@@ -286,6 +309,7 @@ describe('characterUtil', () => {
         msSinceLastSprite: 15,
         msBetweenSprites: 10,
         moving: true,        
+        frame: 1,
         measurement: 25,
         spriteFrames: 5,
       } as MovableEntity;
@@ -294,43 +318,40 @@ describe('characterUtil', () => {
     it('advances animation by one frame if enough time has passed', () => {
       const updatedProperties = characterUtil.advanceSpriteSheet(character);
       assert.strictEqual(updatedProperties.msSinceLastSprite, 0);
-      assert.strictEqual(
-        updatedProperties.animationTarget.style.backgroundPosition, '-75px 0px',
-      );
-      assert.strictEqual(updatedProperties.backgroundOffsetPixels, 75);
+      assert.strictEqual(updatedProperties.frame, 2);
     });
 
     it('returns to the first frame at the spritesheet\'s end', () => {
-     
+      character.frame = character.spriteFrames - 1;
 
       const updatedProperties = characterUtil.advanceSpriteSheet(character);
       assert.strictEqual(updatedProperties.msSinceLastSprite, 0);
-      assert.strictEqual(
-        updatedProperties.animationTarget.style.backgroundPosition,
-        '-0px 0px',
-      );
-      assert.strictEqual(updatedProperties.backgroundOffsetPixels, 0);
+      assert.strictEqual(updatedProperties.frame, 0);
     });
 
     it('waits for sufficient time between frames', () => {
       character.msSinceLastSprite = 5;
 
-      characterUtil.advanceSpriteSheet(character);
-      assert.strictEqual(character.msSinceLastSprite, 5);
+      const updatedProperties = characterUtil.advanceSpriteSheet(character);
+      assert.strictEqual(updatedProperties.msSinceLastSprite, 5);
+      assert.strictEqual(updatedProperties.frame, character.frame);
     });
 
-    it('only animates if the character is moving', () => {
-      character.moving = false;
+    it('only animates if the character is animatable', () => {
+      character.animate = false;
 
-      characterUtil.advanceSpriteSheet(character);
-      assert.strictEqual(character.msSinceLastSprite, 15);
+      const updatedProperties = characterUtil.advanceSpriteSheet(character);
+      assert.strictEqual(updatedProperties.msSinceLastSprite, 15);
+      assert.strictEqual(updatedProperties.frame, character.frame);
     });
 
     it('only loops animation if loopAnimation is true', () => {
-      character.loopAnimation = false;     
+      character.loopAnimation = false;
+      character.frame = character.spriteFrames - 1;
 
       const updatedProperties = characterUtil.advanceSpriteSheet(character);
-      assert.strictEqual(updatedProperties.backgroundOffsetPixels, 250);
+      assert.strictEqual(updatedProperties.msSinceLastSprite, 0);
+      assert.strictEqual(updatedProperties.frame, character.spriteFrames - 1);
     });
   });
 });

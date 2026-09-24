@@ -1,13 +1,13 @@
 import { ObservablePoint, Point, Resource, Sprite, Texture } from "pixi.js";
 import Flood from "../core/flood.ts";
 import Animator from "../animations/animator.ts";
-import Ghost from "../../../../../../../scripts/characters/ghost.ts";
-import CharacterUtil from "../../../../../../../scripts/utilities/characterUtil.ts";
-import Pacman from "../../../../../../../scripts/characters/pacman.ts";
-import { calculateDistancePos, createObservablePoint, vLerp } from "../../../../../../../scripts/utilities/utils.ts";
-import Timer from "../../../../../../../scripts/utilities/timer.ts";
-import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
-import { Mode } from "../../../../../../../scripts/characters/types.ts";
+import Ghost from "../../../../../../scripts/characters/ghost.ts";
+import CharacterUtil from "../../../../../../scripts/utilities/characterUtil.ts";
+import Pacman from "../../../../../../scripts/characters/pacman.ts";
+import { calculateDistancePos, createObservablePoint, vLerp } from "../../../../../../scripts/utilities/utils.ts";
+import Timer from "../../../../../../scripts/utilities/timer.ts";
+import MovableEntity from "../../../../../../scripts/characters/movableEntity.ts";
+import { Mode } from "../../../../../../scripts/characters/types.ts";
 import { sound } from "@pixi/sound";
 
 class Sonic extends Ghost {
