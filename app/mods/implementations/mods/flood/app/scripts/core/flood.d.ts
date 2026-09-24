@@ -9,6 +9,7 @@ import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.t
 import RegisterListeners from "./registerListeners.ts";
 declare class Flood extends Mod implements RegisterListeners {
     #private;
+    name: string;
     width: number;
     maxHeight: number;
     tileSize: number;
@@ -20,6 +21,10 @@ declare class Flood extends Mod implements RegisterListeners {
     ghosts: Ghost[];
     states: State[];
     state: State;
+    waveIntervalMin: number;
+    waveIntervalMax: number;
+    pacmanMaxBreathing: number;
+    ghostsMaxBreathing: number;
     constructor(gameCoordinator: GameCoordinator);
     initialize(): Promise<void>;
     registerListeners(): void;

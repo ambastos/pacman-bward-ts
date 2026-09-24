@@ -48,11 +48,14 @@ class WavesManager {
         this.emitter = this.gc.emitter
         this.createBreath(this.pacman, {
             breathing: 5,
-            maxBreathing: 10,
+            maxBreathing: this.flood.pacmanMaxBreathing || 10,
             decreaseVelocityPerMs: 0.8,
         })
         this.ghosts.forEach(g => {
-            this.createBreath(g)
+            this.createBreath(g, {
+                breathing: 5,
+                maxBreathing: this.flood.ghostsMaxBreathing || 10,
+            })
         })
         this.animator.createAnimation("breath", 200, null, (args: any) => {
             const pacman = args.entity
@@ -67,6 +70,19 @@ class WavesManager {
     createBreath(entity: MovableEntity, options?: any) {
         //@ts-ignore
         entity[breathNamespace] = new Breath(options)
+    }
+    setPacmanMaxBreathing(value: number) {
+        this.#setBreathMax(this.pacman, value)
+    }
+    setGhostsMaxBreathing(value: number) {
+        this.ghosts?.forEach(ghost => this.#setBreathMax(ghost, value))
+    }
+    #setBreathMax(entity: any, value: number) {
+        const breath = entity?.[breathNamespace]
+        if (!breath) return
+        breath.maxBreathing = value
+        if (breath.breathing > value)
+            breath.breathing = value
     }
     resetEntitiesBreathing() {
         this.resetEntity(this.pacman)

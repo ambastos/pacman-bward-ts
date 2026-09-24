@@ -78,6 +78,11 @@ declare class GameCoordinator {
     bottomRender: RendererBottom;
     view: any;
     debug: boolean;
+    settingsStore: {
+        lives?: number;
+        level?: number;
+        onEmitterReady?: (emitter: EventEmitter) => void;
+    } | undefined;
     constructor();
     /**
      * Included to accpet a new mod to the game
@@ -247,8 +252,12 @@ declare class GameCoordinator {
      * @param {Number} duration - Milliseconds to display the points before disappearing
      * @param {Number} width - Image width in pixels
      * @param {Number} height - Image height in pixels
+     * @param {({ x: number, y: number })} offset - extra x/y offset applied after the position
      */
-    displayText(position: PIXI.ObservablePoint, amount: any, duration: number, width: number, height?: number, offset?: { x?: number, y?: number }): void;
+    displayText(position: PIXI.ObservablePoint, amount: any, duration: number, width: number, height?: number, offset?: {
+        x?: number;
+        y?: number;
+    }): void;
     /**
      * Pushes a Timer to the activeTimers array
      * @param {({ detail: { timer: Object }})} e

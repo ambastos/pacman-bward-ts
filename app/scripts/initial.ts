@@ -1,16 +1,11 @@
-// import GameCoordinator from "./core/gameCoordinator.ts";
-// import Debugger from "./utilities/debugger.ts";
-// import FloodModImp from "../mods/implementations/flood-mod-imp.ts";
-
-import FloodModImp from "../mods/implementations/flood-mod-imp.ts"
+import SettingsManager from "./utilities/settingsManager.ts"
 import GameCoordinator from "./core/gameCoordinator.ts"
-import Debugger from "./utilities/debugger.ts"
 
-  window.onload = () =>{
-    window.gc = new GameCoordinator() 
-    const mod = new FloodModImp(window.gc) 
-    window.gc.setMod(mod)    
-    window.f = mod.flood
-    window.debug = new Debugger(window.gc) 
-    
-}
+  window.onload = async () => {
+    window.gc = new GameCoordinator()
+    window.settings = new SettingsManager(window.gc)
+    await window.settings.load()
+    window.settings.apply()
+    window.settings.initUi()
+    window.f = (window.gc.mod as any)?.flood ?? null
+  }

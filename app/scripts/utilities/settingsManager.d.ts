@@ -1,0 +1,45 @@
+import GameCoordinator from "../core/gameCoordinator.ts";
+declare class SettingsManager {
+    gc: GameCoordinator;
+    config: Record<string, any>;
+    subscribed: boolean;
+    private keyOrder;
+    private defaults;
+    constructor(gameCoordinator: GameCoordinator);
+    parse(text: string): Record<string, any>;
+    serialize(): string;
+    load(): Promise<void>;
+    save(): Promise<boolean>;
+    get(key: string): any;
+    getNum(key: string): number;
+    getBool(key: string): boolean;
+    getStr(key: string): string;
+    getList(key: string): string[];
+    set(key: string, value: any): void;
+    apply(): void;
+    applyMod(): void;
+    applyDebug(): void;
+    toggleDebug(enabled: boolean): void;
+    applyGame(): void;
+    private syncStore;
+    applyPacman(): void;
+    applyGhosts(): void;
+    applyFlood(): void;
+    applyDebuggerFlags(): void;
+    subscribe(emitter?: any): void;
+    private clampLives;
+    private clampLevel;
+    private refreshExtraLives;
+    private updateGhostsSelection;
+    private updateFlood;
+    initUi(): void;
+    refreshSettingsPanel(): void;
+    refreshModDots(): void;
+    refreshDebugPanel(): void;
+    refreshFloodPanel(): void;
+    private show;
+    private hide;
+    private notify;
+}
+export default SettingsManager;
+//# sourceMappingURL=settingsManager.d.ts.map

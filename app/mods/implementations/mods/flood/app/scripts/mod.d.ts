@@ -3,7 +3,8 @@ import GameCoordinator from "../../../../../../scripts/core/gameCoordinator.ts";
 /**
  * Module class to pacmam-bward game
  */
-declare class Mod {
+declare abstract class Mod {
+    protected abstract name: string;
     emitter: EventEmitter;
     gc: GameCoordinator;
     started: boolean;

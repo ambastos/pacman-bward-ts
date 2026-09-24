@@ -12,6 +12,9 @@ declare class Sonic extends Ghost {
     frameY: number;
     bad: boolean;
     seenTarget: boolean;
+    leaving: boolean;
+    leavingPending: boolean;
+    goOutTimer: number | null;
     targetDef: TargetDef;
     attackSpeed: number;
     activeTimers: Timer[];
@@ -30,9 +33,10 @@ declare class Sonic extends Ghost {
     getTexture(name: string, direction: string, frameX: number, emotion: string): Texture<Resource> | undefined;
     determineVelocity(position: ObservablePoint, mode: Mode): any;
     getTarget(name: string, gridPosition: ObservablePoint, pacmanGridPosition: ObservablePoint, mode: string): ObservablePoint<Point> | undefined;
-    private scheduleGoOut;
+    scheduleGoOut(): void;
+    beginGoOut(): void;
+    private calculateExitPoint;
     private handleAnimations;
-    handleMovement(elapsedMs: number): ObservablePoint;
     checkCollision(position: ObservablePoint, target: MovableEntity): void;
     private onGhostKick;
     update(elapsedMs: number): void;

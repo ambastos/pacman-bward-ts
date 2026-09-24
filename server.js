@@ -1,38 +1,45 @@
-// const http = require('http')
-// const fs = require('fs/promises')
-// let indexFile 
-// const port = 8080
-// const host = 'localhost'
+import express from 'express'
+import fs from 'fs/promises'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-// const requestListener = function (req, res) {
-//     res.setHeader("Content-Type", "text/html");
-//     res.writeHead(200);
-//     res.end(indexFile);
-// };
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const configPath = path.join(__dirname, 'app', 'configs', 'game.config')
+const port = process.env.PORT || process.env.port || 8080
 
-// const server = http.createServer(requestListener)
-// fs.readFile(__dirname + "/index.html")
-//     .then(contents => {
-//         indexFile = contents;
-//         server.listen(port, host, () => {
-//             console.log(`Server is running on http://${host}:${port}`);
-//         });
-//     })
-//     .catch(err => {
-//         console.error(`Could not read index.html file: ${err}`);
-//         process.exit(1);
-//     });
-    
-const express = require('express');
-const app = express();
-const path = require('path');
-const router = express.Router();
- 
-router.get('/',function(req,res){
-  res.sendFile(path.join(__dirname+'/index.html'));
-  //__dirname : It will resolve to your project folder.
-});
- 
-//add the router
-app.use('/', router);
-app.listen(process.env.port || 8080);
+const app = express()
+app.use(express.json())
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'))
+})
+
+app.get('/api/config', async function (req, res) {
+  try {
+    const content = await fs.readFile(configPath, 'utf8')
+    res.type('txt').send(content)
+  } catch (err) {
+    res.status(404).json({ error: 'config file not found' })
+  }
+})
+
+app.post('/api/config', async function (req, res) {
+  const content = req.body?.config
+  if (typeof content !== 'string') {
+    res.status(400).json({ error: 'missing "config" field' })
+    return
+  }
+  try {
+    await fs.mkdir(path.dirname(configPath), { recursive: true })
+    await fs.writeFile(configPath, content, 'utf8')
+    res.json({ ok: true })
+  } catch (err) {
+    res.status(500).json({ error: 'failed to write config file' })
+  }
+})
+
+app.use(express.static(__dirname))
+
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`)
+})

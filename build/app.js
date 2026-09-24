@@ -1719,9 +1719,8 @@
             }
           },
           "delete": function(key) {
-            var root = $o && $o.next;
             var deletedNode = listDelete($o, key);
-            if (deletedNode && root && root === deletedNode) {
+            if (deletedNode && $o && !$o.next) {
               $o = void 0;
             }
             return !!deletedNode;
@@ -2713,7 +2712,8 @@
         var channel = {
           assert: function(key) {
             if (!channel.has(key)) {
-              throw new $TypeError("Side channel does not contain " + inspect(key));
+              var keyDesc = key && Object(key) === key ? "the given object key" : inspect(key);
+              throw new $TypeError("Side channel does not contain " + keyDesc);
             }
           },
           "delete": function(key) {
@@ -2768,12 +2768,28 @@
     "node_modules/qs/lib/utils.js"(exports, module) {
       "use strict";
       var formats2 = require_formats();
+      var getSideChannel = require_side_channel();
+      var defineProperty = require_es_define_property();
       var has = Object.prototype.hasOwnProperty;
       var isArray = Array.isArray;
+      var overflowChannel = getSideChannel();
+      var markOverflow = function markOverflow2(obj, maxIndex) {
+        overflowChannel.set(obj, maxIndex);
+        return obj;
+      };
+      var isOverflow = function isOverflow2(obj) {
+        return overflowChannel.has(obj);
+      };
+      var getMaxIndex = function getMaxIndex2(obj) {
+        return overflowChannel.get(obj);
+      };
+      var setMaxIndex = function setMaxIndex2(obj, maxIndex) {
+        overflowChannel.set(obj, maxIndex);
+      };
       var hexTable = (function() {
         var array = [];
         for (var i3 = 0; i3 < 256; ++i3) {
-          array.push("%" + ((i3 < 16 ? "0" : "") + i3.toString(16)).toUpperCase());
+          array[array.length] = "%" + ((i3 < 16 ? "0" : "") + i3.toString(16)).toUpperCase();
         }
         return array;
       })();
@@ -2785,7 +2801,7 @@
             var compacted = [];
             for (var j2 = 0; j2 < obj.length; ++j2) {
               if (typeof obj[j2] !== "undefined") {
-                compacted.push(obj[j2]);
+                compacted[compacted.length] = obj[j2];
               }
             }
             item.obj[item.prop] = compacted;
@@ -2801,15 +2817,40 @@
         }
         return obj;
       };
+      var setProperty = function setProperty2(obj, key, value) {
+        if (key === "__proto__" && defineProperty) {
+          defineProperty(obj, key, {
+            configurable: true,
+            enumerable: true,
+            value,
+            writable: true
+          });
+        } else {
+          obj[key] = value;
+        }
+      };
       var merge = function merge2(target, source, options2) {
         if (!source) {
           return target;
         }
         if (typeof source !== "object" && typeof source !== "function") {
           if (isArray(target)) {
-            target.push(source);
+            var nextIndex = target.length;
+            if (options2 && typeof options2.arrayLimit === "number" && nextIndex >= options2.arrayLimit) {
+              if (options2.throwOnLimitExceeded) {
+                throw new RangeError("Array limit exceeded. Only " + options2.arrayLimit + " element" + (options2.arrayLimit === 1 ? "" : "s") + " allowed in an array.");
+              }
+              return markOverflow(arrayToObject(target.concat(source), options2), nextIndex);
+            }
+            target[nextIndex] = source;
           } else if (target && typeof target === "object") {
-            if (options2 && (options2.plainObjects || options2.allowPrototypes) || !has.call(Object.prototype, source)) {
+            if (isOverflow(target)) {
+              var newIndex = getMaxIndex(target) + 1;
+              target[newIndex] = source;
+              setMaxIndex(target, newIndex);
+            } else if (options2 && options2.strictMerge) {
+              return [target, source];
+            } else if (options2 && (options2.plainObjects || options2.allowPrototypes) || !has.call(Object.prototype, source)) {
               target[source] = true;
             }
           } else {
@@ -2818,7 +2859,23 @@
           return target;
         }
         if (!target || typeof target !== "object") {
-          return [target].concat(source);
+          if (isOverflow(source)) {
+            var sourceKeys = Object.keys(source);
+            var result = options2 && options2.plainObjects ? { __proto__: null, 0: target } : { 0: target };
+            for (var m2 = 0; m2 < sourceKeys.length; m2++) {
+              var oldKey = parseInt(sourceKeys[m2], 10);
+              result[oldKey + 1] = source[sourceKeys[m2]];
+            }
+            return markOverflow(result, getMaxIndex(source) + 1);
+          }
+          var combined = [target].concat(source);
+          if (options2 && typeof options2.arrayLimit === "number" && combined.length > options2.arrayLimit) {
+            if (options2.throwOnLimitExceeded) {
+              throw new RangeError("Array limit exceeded. Only " + options2.arrayLimit + " element" + (options2.arrayLimit === 1 ? "" : "s") + " allowed in an array.");
+            }
+            return markOverflow(arrayToObject(combined, options2), combined.length - 1);
+          }
+          return combined;
         }
         var mergeTarget = target;
         if (isArray(target) && !isArray(source)) {
@@ -2831,27 +2888,42 @@
               if (targetItem && typeof targetItem === "object" && item && typeof item === "object") {
                 target[i3] = merge2(targetItem, item, options2);
               } else {
-                target.push(item);
+                target[target.length] = item;
               }
             } else {
               target[i3] = item;
             }
           });
+          if (options2 && typeof options2.arrayLimit === "number" && target.length > options2.arrayLimit) {
+            if (options2.throwOnLimitExceeded) {
+              throw new RangeError("Array limit exceeded. Only " + options2.arrayLimit + " element" + (options2.arrayLimit === 1 ? "" : "s") + " allowed in an array.");
+            }
+            return markOverflow(arrayToObject(target, options2), target.length - 1);
+          }
           return target;
         }
         return Object.keys(source).reduce(function(acc, key) {
           var value = source[key];
           if (has.call(acc, key)) {
-            acc[key] = merge2(acc[key], value, options2);
+            setProperty(acc, key, merge2(acc[key], value, options2));
           } else {
-            acc[key] = value;
+            setProperty(acc, key, value);
+          }
+          if (isOverflow(source) && !isOverflow(acc)) {
+            markOverflow(acc, getMaxIndex(source));
+          }
+          if (isOverflow(acc)) {
+            var keyNum = parseInt(key, 10);
+            if (String(keyNum) === key && keyNum >= 0 && keyNum > getMaxIndex(acc)) {
+              setMaxIndex(acc, keyNum);
+            }
           }
           return acc;
         }, mergeTarget);
       };
       var assign = function assignSingleSource(target, source) {
         return Object.keys(source).reduce(function(acc, key) {
-          acc[key] = source[key];
+          setProperty(acc, key, source[key]);
           return acc;
         }, target);
       };
@@ -2885,6 +2957,13 @@
         var out = "";
         for (var j2 = 0; j2 < string.length; j2 += limit) {
           var segment = string.length >= limit ? string.slice(j2, j2 + limit) : string;
+          if (j2 + limit < string.length) {
+            var last = segment.charCodeAt(segment.length - 1);
+            if (last >= 55296 && last <= 56319) {
+              segment = segment.slice(0, -1);
+              j2 -= 1;
+            }
+          }
           var arr = [];
           for (var i3 = 0; i3 < segment.length; ++i3) {
             var c2 = segment.charCodeAt(i3);
@@ -2914,7 +2993,7 @@
       };
       var compact = function compact2(value) {
         var queue = [{ obj: { o: value }, prop: "o" }];
-        var refs = [];
+        var refs = getSideChannel();
         for (var i3 = 0; i3 < queue.length; ++i3) {
           var item = queue[i3];
           var obj = item.obj[item.prop];
@@ -2922,9 +3001,9 @@
           for (var j2 = 0; j2 < keys.length; ++j2) {
             var key = keys[j2];
             var val = obj[key];
-            if (typeof val === "object" && val !== null && refs.indexOf(val) === -1) {
-              queue.push({ obj, prop: key });
-              refs.push(val);
+            if (typeof val === "object" && val !== null && !refs.has(val)) {
+              queue[queue.length] = { obj, prop: key };
+              refs.set(val, true);
             }
           }
         }
@@ -2938,16 +3017,36 @@
         if (!obj || typeof obj !== "object") {
           return false;
         }
-        return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
+        return !!(obj.constructor && typeof obj.constructor.isBuffer === "function" && obj.constructor.isBuffer(obj));
       };
-      var combine = function combine2(a2, b2) {
-        return [].concat(a2, b2);
+      var combine = function combine2(a2, b2, arrayLimit, plainObjects, throwOnLimitExceeded) {
+        if (isOverflow(a2)) {
+          if (throwOnLimitExceeded) {
+            throw new RangeError("Array limit exceeded. Only " + arrayLimit + " element" + (arrayLimit === 1 ? "" : "s") + " allowed in an array.");
+          }
+          var bValues = isArray(b2) ? b2 : [b2];
+          var newIndex = getMaxIndex(a2);
+          for (var i3 = 0; i3 < bValues.length; ++i3) {
+            newIndex += 1;
+            a2[newIndex] = bValues[i3];
+          }
+          setMaxIndex(a2, newIndex);
+          return a2;
+        }
+        var result = [].concat(a2, b2);
+        if (result.length > arrayLimit) {
+          if (throwOnLimitExceeded) {
+            throw new RangeError("Array limit exceeded. Only " + arrayLimit + " element" + (arrayLimit === 1 ? "" : "s") + " allowed in an array.");
+          }
+          return markOverflow(arrayToObject(result, { plainObjects }), result.length - 1);
+        }
+        return result;
       };
       var maybeMap = function maybeMap2(val, fn) {
         if (isArray(val)) {
           var mapped = [];
           for (var i3 = 0; i3 < val.length; i3 += 1) {
-            mapped.push(fn(val[i3]));
+            mapped[mapped.length] = fn(val[i3]);
           }
           return mapped;
         }
@@ -2961,7 +3060,9 @@
         decode,
         encode,
         isBuffer,
+        isOverflow,
         isRegExp,
+        markOverflow,
         maybeMap,
         merge
       };
@@ -3004,6 +3105,7 @@
         charsetSentinel: false,
         commaRoundTrip: false,
         delimiter: "&",
+        depth: Infinity,
         encode: true,
         encodeDotInKeys: false,
         encoder: utils.encode,
@@ -3023,8 +3125,11 @@
         return typeof v2 === "string" || typeof v2 === "number" || typeof v2 === "boolean" || typeof v2 === "symbol" || typeof v2 === "bigint";
       };
       var sentinel = {};
-      var stringify = function stringify2(object, prefix, generateArrayPrefix, commaRoundTrip, allowEmptyArrays, strictNullHandling, skipNulls, encodeDotInKeys, encoder, filter, sort, allowDots, serializeDate, format2, formatter, encodeValuesOnly, charset, sideChannel) {
+      var stringify = function stringify2(object, prefix, generateArrayPrefix, commaRoundTrip, allowEmptyArrays, strictNullHandling, skipNulls, encodeDotInKeys, encoder, filter, sort, allowDots, serializeDate, format2, formatter, encodeValuesOnly, charset, sideChannel, depth, currentDepth) {
         var obj = object;
+        if (currentDepth > depth) {
+          throw new RangeError("Input depth exceeded depth option of " + depth);
+        }
         var tmpSc = sideChannel;
         var step = 0;
         var findFlag = false;
@@ -3042,9 +3147,8 @@
             step = 0;
           }
         }
-        if (typeof filter === "function") {
-          obj = filter(prefix, obj);
-        } else if (obj instanceof Date) {
+        obj = typeof filter === "function" ? filter(prefix, obj) : obj;
+        if (obj instanceof Date) {
           obj = serializeDate(obj);
         } else if (generateArrayPrefix === "comma" && isArray(obj)) {
           obj = utils.maybeMap(obj, function(value2) {
@@ -3056,7 +3160,7 @@
         }
         if (obj === null) {
           if (strictNullHandling) {
-            return encoder && !encodeValuesOnly ? encoder(prefix, defaults.encoder, charset, "key", format2) : prefix;
+            return formatter(encoder && !encodeValuesOnly ? encoder(prefix, defaults.encoder, charset, "key", format2) : prefix);
           }
           obj = "";
         }
@@ -3074,7 +3178,9 @@
         var objKeys;
         if (generateArrayPrefix === "comma" && isArray(obj)) {
           if (encodeValuesOnly && encoder) {
-            obj = utils.maybeMap(obj, encoder);
+            obj = utils.maybeMap(obj, function(v2) {
+              return v2 == null ? v2 : encoder(v2);
+            });
           }
           objKeys = [{ value: obj.length > 0 ? obj.join(",") || null : void 0 }];
         } else if (isArray(filter)) {
@@ -3085,7 +3191,7 @@
         }
         var encodedPrefix = encodeDotInKeys ? String(prefix).replace(/\./g, "%2E") : String(prefix);
         var adjustedPrefix = commaRoundTrip && isArray(obj) && obj.length === 1 ? encodedPrefix + "[]" : encodedPrefix;
-        if (allowEmptyArrays && isArray(obj) && obj.length === 0) {
+        if (allowEmptyArrays && isArray(obj) && obj.length === 0 && Object.keys(obj).length === 0) {
           return adjustedPrefix + "[]";
         }
         for (var j2 = 0; j2 < objKeys.length; ++j2) {
@@ -3117,7 +3223,9 @@
             formatter,
             encodeValuesOnly,
             charset,
-            valueSideChannel
+            valueSideChannel,
+            depth,
+            currentDepth + 1
           ));
         }
         return values;
@@ -3172,6 +3280,7 @@
           charsetSentinel: typeof opts.charsetSentinel === "boolean" ? opts.charsetSentinel : defaults.charsetSentinel,
           commaRoundTrip: !!opts.commaRoundTrip,
           delimiter: typeof opts.delimiter === "undefined" ? defaults.delimiter : opts.delimiter,
+          depth: typeof opts.depth === "number" ? opts.depth : defaults.depth,
           encode: typeof opts.encode === "boolean" ? opts.encode : defaults.encode,
           encodeDotInKeys: typeof opts.encodeDotInKeys === "boolean" ? opts.encodeDotInKeys : defaults.encodeDotInKeys,
           encoder: typeof opts.encoder === "function" ? opts.encoder : defaults.encoder,
@@ -3212,13 +3321,17 @@
         var sideChannel = getSideChannel();
         for (var i3 = 0; i3 < objKeys.length; ++i3) {
           var key = objKeys[i3];
+          if (typeof key === "undefined" || key === null) {
+            continue;
+          }
           var value = obj[key];
           if (options2.skipNulls && value === null) {
             continue;
           }
+          var encodedKey = options2.encodeDotInKeys ? String(key).replace(/\./g, "%2E") : String(key);
           pushToArray(keys, stringify(
             value,
-            key,
+            encodedKey,
             generateArrayPrefix,
             commaRoundTrip,
             options2.allowEmptyArrays,
@@ -3234,16 +3347,18 @@
             options2.formatter,
             options2.encodeValuesOnly,
             options2.charset,
-            sideChannel
+            sideChannel,
+            options2.depth,
+            0
           ));
         }
         var joined = keys.join(options2.delimiter);
         var prefix = options2.addQueryPrefix === true ? "?" : "";
         if (options2.charsetSentinel) {
           if (options2.charset === "iso-8859-1") {
-            prefix += "utf8=%26%2310003%3B&";
+            prefix += "utf8=%26%2310003%3B" + options2.delimiter;
           } else {
-            prefix += "utf8=%E2%9C%93&";
+            prefix += "utf8=%E2%9C%93" + options2.delimiter;
           }
         }
         return joined.length > 0 ? prefix + joined : "";
@@ -3278,6 +3393,7 @@
         parseArrays: true,
         plainObjects: false,
         strictDepth: false,
+        strictMerge: true,
         strictNullHandling: false,
         throwOnLimitExceeded: false
       };
@@ -3288,6 +3404,17 @@
       };
       var parseArrayValue = function(val, options2, currentArrayLength) {
         if (val && typeof val === "string" && options2.comma && val.indexOf(",") > -1) {
+          if (options2.throwOnLimitExceeded) {
+            var commaCount = 0;
+            var commaIndex = val.indexOf(",");
+            while (commaIndex > -1) {
+              commaCount += 1;
+              if (commaCount >= options2.arrayLimit) {
+                throw new RangeError("Array limit exceeded. Only " + options2.arrayLimit + " element" + (options2.arrayLimit === 1 ? "" : "s") + " allowed in an array.");
+              }
+              commaIndex = val.indexOf(",", commaIndex + 1);
+            }
+          }
           return val.split(",");
         }
         if (options2.throwOnLimitExceeded && currentArrayLength >= options2.arrayLimit) {
@@ -3304,9 +3431,9 @@
         var limit = options2.parameterLimit === Infinity ? void 0 : options2.parameterLimit;
         var parts = cleanStr.split(
           options2.delimiter,
-          options2.throwOnLimitExceeded ? limit + 1 : limit
+          options2.throwOnLimitExceeded && typeof limit !== "undefined" ? limit + 1 : limit
         );
-        if (options2.throwOnLimitExceeded && parts.length > limit) {
+        if (options2.throwOnLimitExceeded && typeof limit !== "undefined" && parts.length > limit) {
           throw new RangeError("Parameter limit exceeded. Only " + limit + " parameter" + (limit === 1 ? "" : "s") + " allowed.");
         }
         var skipIndex = -1;
@@ -3339,16 +3466,18 @@
             val = options2.strictNullHandling ? null : "";
           } else {
             key = options2.decoder(part.slice(0, pos), defaults.decoder, charset, "key");
-            val = utils.maybeMap(
-              parseArrayValue(
-                part.slice(pos + 1),
-                options2,
-                isArray(obj[key]) ? obj[key].length : 0
-              ),
-              function(encodedVal) {
-                return options2.decoder(encodedVal, defaults.decoder, charset, "value");
-              }
-            );
+            if (key !== null) {
+              val = utils.maybeMap(
+                parseArrayValue(
+                  part.slice(pos + 1),
+                  options2,
+                  isArray(obj[key]) ? obj[key].length : 0
+                ),
+                function(encodedVal) {
+                  return options2.decoder(encodedVal, defaults.decoder, charset, "value");
+                }
+              );
+            }
           }
           if (val && options2.interpretNumericEntities && charset === "iso-8859-1") {
             val = interpretNumericEntities(String(val));
@@ -3356,11 +3485,22 @@
           if (part.indexOf("[]=") > -1) {
             val = isArray(val) ? [val] : val;
           }
-          var existing = has.call(obj, key);
-          if (existing && options2.duplicates === "combine") {
-            obj[key] = utils.combine(obj[key], val);
-          } else if (!existing || options2.duplicates === "last") {
-            obj[key] = val;
+          if (options2.comma && isArray(val) && val.length > options2.arrayLimit) {
+            val = utils.combine([], val, options2.arrayLimit, options2.plainObjects, options2.throwOnLimitExceeded);
+          }
+          if (key !== null) {
+            var existing = has.call(obj, key);
+            if (existing && (options2.duplicates === "combine" || part.indexOf("[]=") > -1)) {
+              obj[key] = utils.combine(
+                obj[key],
+                val,
+                options2.arrayLimit,
+                options2.plainObjects,
+                options2.throwOnLimitExceeded
+              );
+            } else if (!existing || options2.duplicates === "last") {
+              obj[key] = val;
+            }
           }
         }
         return obj;
@@ -3376,17 +3516,33 @@
           var obj;
           var root = chain[i3];
           if (root === "[]" && options2.parseArrays) {
-            obj = options2.allowEmptyArrays && (leaf === "" || options2.strictNullHandling && leaf === null) ? [] : utils.combine([], leaf);
+            if (utils.isOverflow(leaf)) {
+              obj = leaf;
+            } else {
+              obj = options2.allowEmptyArrays && (leaf === "" || options2.strictNullHandling && leaf === null) ? [] : utils.combine(
+                [],
+                leaf,
+                options2.arrayLimit,
+                options2.plainObjects,
+                options2.throwOnLimitExceeded
+              );
+            }
           } else {
             obj = options2.plainObjects ? { __proto__: null } : {};
             var cleanRoot = root.charAt(0) === "[" && root.charAt(root.length - 1) === "]" ? root.slice(1, -1) : root;
             var decodedRoot = options2.decodeDotInKeys ? cleanRoot.replace(/%2E/g, ".") : cleanRoot;
             var index = parseInt(decodedRoot, 10);
+            var isValidArrayIndex = !isNaN(index) && root !== decodedRoot && String(index) === decodedRoot && index >= 0 && options2.parseArrays;
             if (!options2.parseArrays && decodedRoot === "") {
               obj = { 0: leaf };
-            } else if (!isNaN(index) && root !== decodedRoot && String(index) === decodedRoot && index >= 0 && (options2.parseArrays && index <= options2.arrayLimit)) {
+            } else if (isValidArrayIndex && index < options2.arrayLimit) {
               obj = [];
               obj[index] = leaf;
+            } else if (isValidArrayIndex && options2.throwOnLimitExceeded) {
+              throw new RangeError("Array limit exceeded. Only " + options2.arrayLimit + " element" + (options2.arrayLimit === 1 ? "" : "s") + " allowed in an array.");
+            } else if (isValidArrayIndex) {
+              obj[index] = leaf;
+              utils.markOverflow(obj, index);
             } else if (decodedRoot !== "__proto__") {
               obj[decodedRoot] = leaf;
             }
@@ -3395,39 +3551,74 @@
         }
         return leaf;
       };
-      var parseKeys = function parseQueryStringKeys(givenKey, val, options2, valuesParsed) {
-        if (!givenKey) {
-          return;
+      var splitKeyIntoSegments = function splitKeyIntoSegments2(originalKey, options2) {
+        var key = options2.allowDots ? originalKey.replace(/\.([^.[]+)/g, "[$1]") : originalKey;
+        if (options2.depth <= 0) {
+          if (!options2.plainObjects && has.call(Object.prototype, key)) {
+            if (!options2.allowPrototypes) {
+              return;
+            }
+          }
+          return [key];
         }
-        var key = options2.allowDots ? givenKey.replace(/\.([^.[]+)/g, "[$1]") : givenKey;
-        var brackets = /(\[[^[\]]*])/;
-        var child = /(\[[^[\]]*])/g;
-        var segment = options2.depth > 0 && brackets.exec(key);
-        var parent = segment ? key.slice(0, segment.index) : key;
-        var keys = [];
+        var segments = [];
+        var first = key.indexOf("[");
+        var parent = first >= 0 ? key.slice(0, first) : key;
         if (parent) {
           if (!options2.plainObjects && has.call(Object.prototype, parent)) {
             if (!options2.allowPrototypes) {
               return;
             }
           }
-          keys.push(parent);
+          segments[segments.length] = parent;
         }
-        var i3 = 0;
-        while (options2.depth > 0 && (segment = child.exec(key)) !== null && i3 < options2.depth) {
-          i3 += 1;
-          if (!options2.plainObjects && has.call(Object.prototype, segment[1].slice(1, -1))) {
-            if (!options2.allowPrototypes) {
-              return;
+        var n2 = key.length;
+        var open = first;
+        var collected = 0;
+        while (open >= 0 && collected < options2.depth) {
+          var level = 1;
+          var i3 = open + 1;
+          var close = -1;
+          while (i3 < n2 && close < 0) {
+            var cu = key.charCodeAt(i3);
+            if (cu === 91) {
+              level += 1;
+            } else if (cu === 93) {
+              level -= 1;
+              if (level === 0) {
+                close = i3;
+              }
             }
+            i3 += 1;
           }
-          keys.push(segment[1]);
+          if (close < 0) {
+            segments[segments.length] = "[" + key.slice(open) + "]";
+            return segments;
+          }
+          var seg = key.slice(open, close + 1);
+          var content = seg.slice(1, -1);
+          if (!options2.plainObjects && has.call(Object.prototype, content) && !options2.allowPrototypes) {
+            return;
+          }
+          segments[segments.length] = seg;
+          collected += 1;
+          open = key.indexOf("[", close + 1);
         }
-        if (segment) {
+        if (open >= 0) {
           if (options2.strictDepth === true) {
             throw new RangeError("Input depth exceeded depth option of " + options2.depth + " and strictDepth is true");
           }
-          keys.push("[" + key.slice(segment.index) + "]");
+          segments[segments.length] = "[" + key.slice(open) + "]";
+        }
+        return segments;
+      };
+      var parseKeys = function parseQueryStringKeys(givenKey, val, options2, valuesParsed) {
+        if (!givenKey) {
+          return;
+        }
+        var keys = splitKeyIntoSegments(givenKey, options2);
+        if (!keys) {
+          return;
         }
         return parseObject(keys, val, options2, valuesParsed);
       };
@@ -3477,6 +3668,7 @@
           parseArrays: opts.parseArrays !== false,
           plainObjects: typeof opts.plainObjects === "boolean" ? opts.plainObjects : defaults.plainObjects,
           strictDepth: typeof opts.strictDepth === "boolean" ? !!opts.strictDepth : defaults.strictDepth,
+          strictMerge: typeof opts.strictMerge === "boolean" ? !!opts.strictMerge : defaults.strictMerge,
           strictNullHandling: typeof opts.strictNullHandling === "boolean" ? opts.strictNullHandling : defaults.strictNullHandling,
           throwOnLimitExceeded: typeof opts.throwOnLimitExceeded === "boolean" ? opts.throwOnLimitExceeded : false
         };
@@ -30190,6 +30382,635 @@ void main(void)\r
     }
   });
 
+  // app/scripts/utilities/utils.ts
+  init_lib38();
+  function copyPosition(classThis, position) {
+    return new ObservablePoint(() => {
+    }, classThis, position.x, position.y);
+  }
+  function createObservablePoint(classThis, x2, y2) {
+    return new ObservablePoint(() => {
+    }, classThis, x2, y2);
+  }
+  function getGridPosition(classThis, position, scaledTileSize, anchor, scale) {
+    let ax = 0, ay = 0;
+    if (anchor) {
+      ax = anchor.x * scale;
+      ay = anchor.y * scale;
+    }
+    const x2 = position.x / scaledTileSize + 0.5 - ax;
+    const y2 = position.y / scaledTileSize + 0.5 - ay;
+    return createObservablePoint(
+      classThis,
+      x2,
+      y2
+    );
+  }
+  function getAnchorAxis(classThis, anchor, tileSize, scale) {
+    const ax = anchor.x * tileSize * scale;
+    const ay = anchor.y * tileSize * scale;
+    return createObservablePoint(classThis, ax, ay);
+  }
+  function calculateDistancePos(position, targetPosition) {
+    if (!targetPosition)
+      return 0;
+    return Math.sqrt(
+      (position.x - targetPosition.x) ** 2 + (position.y - targetPosition.y) ** 2
+    );
+  }
+  function lerp(a2, b2, t2) {
+    return a2 + (b2 - a2) * t2;
+  }
+  function vLerp(a2, b2, t2) {
+    return createObservablePoint({}, lerp(a2.x, b2.x, t2), lerp(a2.y, b2.y, t2));
+  }
+
+  // app/scripts/characters/staticEntity.ts
+  init_lib38();
+  var StaticEntity = class extends Sprite {
+    allowCollision = true;
+    emitter;
+    gameCoordinator;
+    scaledTileSize;
+    hitArea;
+    msSinceLastSprite = 0;
+    msBetweenSprites = 0;
+    frame = 0;
+    spriteFrames = 0;
+    animate = false;
+    measurement = 0;
+    loopAnimation = false;
+    mazeArray;
+    display;
+    constructor(gameCoordinator, name) {
+      super();
+      this.gameCoordinator = gameCoordinator;
+      this.name = name;
+      this.scaledTileSize = gameCoordinator.scaledTileSize;
+      this.emitter = gameCoordinator.emitter;
+      this.anchor.set(0.5);
+    }
+    registerEventListeners() {
+    }
+    onReset() {
+    }
+    onDeath() {
+    }
+    reset() {
+      this.createHitArea();
+    }
+    get axis() {
+      return getAnchorAxis(this, this.anchor, this.scaledTileSize, this.gameCoordinator.scale);
+    }
+    update(elapsedMs) {
+      this.createHitArea();
+    }
+    createHitArea() {
+      const ax = this.anchor.x * this.width;
+      const ay = this.anchor.y * this.height;
+      const half = this.scaledTileSize * 0.5;
+      const x2 = this.x + this.width * 0.5 - half - ax;
+      const y2 = this.y + this.height * 0.5 - half - ay;
+      this.hitArea = new Rectangle(x2, y2, this.scaledTileSize, this.scaledTileSize);
+    }
+    draw(interp) {
+    }
+  };
+  var staticEntity_default = StaticEntity;
+
+  // app/scripts/characters/movableEntity.ts
+  var MovableEntity = class extends staticEntity_default {
+    characterUtil;
+    defaultPosition = createObservablePoint(this, 0, 0);
+    oldPosition = createObservablePoint(this, 0, 0);
+    moving;
+    paused = false;
+    level;
+    direction;
+    constructor(gameCoordinator, name, characterUtil) {
+      super(gameCoordinator, name);
+      this.characterUtil = characterUtil;
+    }
+    /**
+    * Sets a flag to indicate when the ghost should pause its movement
+    * @param {Boolean} newValue
+    */
+    pause(newValue) {
+      this.paused = newValue;
+    }
+    getGridPosition() {
+      return this.characterUtil?.determineGridPosition(
+        this.position,
+        this.scaledTileSize,
+        this.anchor,
+        this.gameCoordinator.scale
+      );
+    }
+  };
+  var movableEntity_default = MovableEntity;
+
+  // app/scripts/utilities/debugger.ts
+  var Debugger = class {
+    gc;
+    settings;
+    overflowMask;
+    mazeDiv;
+    mazeArray;
+    tileSize;
+    scale;
+    pacmanImmortal;
+    printMazeGrid;
+    infoPanel;
+    canvas;
+    ctx;
+    shouldPrintGrid;
+    enableBoundsAndHitBoxes = false;
+    printing;
+    showConsole = false;
+    consoleBuffer = [];
+    fps = 0;
+    lastFrameTime = 0;
+    rafId = 0;
+    destroyed = false;
+    keyHandler = () => {
+    };
+    constructor(gameCoordinator, settings2) {
+      this.gc = gameCoordinator;
+      this.settings = settings2;
+      this.overflowMask = $("#overflow-mask");
+      this.mazeDiv = $(this.gc.mazeDiv);
+      this.mazeArray = this.gc.mazeArray;
+      this.scale = this.gc.scale;
+      this.tileSize = this.gc.scaledTileSize;
+      this.pacmanImmortal = false;
+      this.printMazeGrid = false;
+      if (settings2) {
+        this.shouldPrintGrid = settings2.getBool("game.debugGrid");
+        this.enableBoundsAndHitBoxes = settings2.getBool("game.debugBounds");
+      }
+      this.createCanvas();
+      this.handleInput();
+      this.configInfoPanel();
+      window.debug = this;
+      this.animate();
+    }
+    handleInput() {
+      const dbg = this;
+      this.keyHandler = (event) => {
+        if (event.key == "3")
+          dbg.makePacmanImortal(true);
+        else if (event.key == "4")
+          dbg.makePacmanImortal(false);
+        else if (event.key == "1")
+          dbg.shouldPrintGrid = true;
+        else if (event.key == "2")
+          dbg.shouldPrintGrid = false;
+        else if (event.key == "5")
+          dbg.infoPanel.log();
+        else if (event.key == "7")
+          dbg.drawEntities(false);
+        else if (event.key == "8")
+          dbg.drawEntities(true);
+        else if (event.key == ",")
+          dbg.moveInUnits("left", 1);
+        else if (event.key == ".")
+          dbg.moveInUnits("right", 1);
+        else if (event.key == " ")
+          dbg.moveEntities();
+        else if (event.key == "u")
+          dbg.notifyPacmanMovement();
+        else if (event.key.toLowerCase() == "f")
+          dbg.startWave();
+        else if (event.key.toLowerCase() == "h") {
+          dbg.enableBoundsAndHitBoxes = !dbg.enableBoundsAndHitBoxes;
+        } else if (event.key.toLowerCase() == "c") {
+          dbg.toggleConsole();
+        }
+      };
+      window.addEventListener("keydown", this.keyHandler);
+    }
+    destroy() {
+      this.destroyed = true;
+      cancelAnimationFrame(this.rafId);
+      window.removeEventListener("keydown", this.keyHandler);
+      if (this.canvas && this.canvas.parentNode)
+        this.canvas.parentNode.removeChild(this.canvas);
+      if (window.debug === this)
+        window.debug = null;
+    }
+    createCanvas() {
+      this.canvas = document.createElement("canvas");
+      this.canvas.id = "canvasD";
+      document.body.append(this.canvas);
+      const canvas = $(this.canvas);
+      const mazeDiv = $(this.gc.mazeDiv);
+      canvas.css("position", "absolute");
+      canvas.css("left", 0);
+      canvas.css("top", 0);
+      canvas.width(this.overflowMask.width());
+      canvas.height(this.overflowMask.height());
+      this.canvas.width = this.overflowMask.width();
+      this.canvas.height = this.overflowMask.height();
+      this.ctx = this.canvas.getContext("2d");
+    }
+    // renderObject(pixiObject) {
+    //     this.container1.addChild(pixiObject)        
+    // }
+    // render() {
+    //     this.renderer.render(this.mainContainer)
+    // }
+    moveInUnits(direction, units) {
+      const elapsedMs = this.gc.gameEngine.elapsedMs;
+      let position = this.gc.pacman.position;
+      const velocityPerMs = this.gc.pacman.velocityPerMs;
+      let newPositions;
+      for (let i3 = 0; i3 < units; i3++) {
+        newPositions = this.gc.pacman.characterUtil.determineNewPositions(
+          position,
+          direction,
+          velocityPerMs,
+          elapsedMs,
+          this.gc.pacman.scaledTileSize,
+          this.gc.pacman.anchor,
+          this.gc.scale
+        );
+        position = newPositions.newPosition;
+      }
+      this.gc.pacman.position = position;
+    }
+    animate() {
+      const an = () => {
+        if (this.destroyed) return;
+        this.updateFps();
+        this.clearGrid();
+        if (this.shouldPrintGrid) {
+          this.printGrid();
+        } else if (this.enableBoundsAndHitBoxes) {
+          this.drawBoundsAndHitBoxes(false);
+        }
+        this.printConsole();
+        this.rafId = requestAnimationFrame(an);
+      };
+      an();
+    }
+    printGrid() {
+      const mazeX = this.mazeDiv.position().left;
+      const mazeY = this.mazeDiv.position().top;
+      const width = this.mazeDiv.width() / this.scale;
+      const height = this.mazeDiv.height() / this.scale;
+      let ctx = this.canvas.getContext("2d");
+      ctx?.save();
+      ctx?.translate(mazeX, mazeY);
+      ctx?.scale(2, 2);
+      ctx.strokeStyle = "green";
+      ctx.lineWidth = 1;
+      let x2 = 0, y2 = 0;
+      const tileSize = this.tileSize;
+      ctx.clearRect(0, 0, width, height);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      this.mazeArray.forEach((row, rowIndex) => {
+        if (rowIndex > 0) {
+          x2 = 0;
+          y2 += tileSize;
+        }
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(width, y2);
+        row.forEach((col, colIndex) => {
+          ctx.moveTo(x2, y2);
+          ctx.lineTo(x2, y2 + tileSize);
+          x2 += this.tileSize;
+          if (colIndex == this.mazeArray[rowIndex].length - 1) {
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2, y2 + tileSize);
+          }
+        });
+        if (rowIndex == this.mazeArray.length - 1) {
+          y2 += tileSize;
+          ctx.moveTo(0, y2);
+          ctx.lineTo(width, y2);
+        }
+      });
+      ctx.stroke();
+      ctx.strokeStyle = "yellow";
+      const pacX = this.gc.pacman.position.x;
+      const pacY = this.gc.pacman.position.y;
+      ctx.strokeRect(pacX, pacY, tileSize * 2, tileSize * 2);
+      ctx.strokeStyle = "red";
+      ctx.strokeRect(pacX, pacY, tileSize, tileSize);
+      ctx.stroke();
+      ctx?.restore();
+    }
+    clearGrid() {
+      const mazeX = this.mazeDiv.offset().left;
+      const mazeY = this.mazeDiv.offset().top;
+      const width = this.mazeDiv.width();
+      const height = this.mazeDiv.height();
+      let ctx = this.ctx;
+      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    configInfoPanel() {
+      const db = this;
+      this.infoPanel = {
+        positions: {},
+        getCanvas: function() {
+          return db.canvas;
+        },
+        x: 0,
+        y: 0,
+        line: 0,
+        col: 0,
+        messages: [],
+        interval: null,
+        info: {},
+        update: function() {
+          this.x = db.mazeDiv.offset().left + db.mazeDiv.width() + 20;
+          this.y = db.mazeDiv.offset().top + db.mazeDiv.height() / 2 - 100;
+        },
+        log: function() {
+          const _this = this;
+          window.clearInterval(this.interval);
+          this.interval = window.setInterval(() => {
+            const formater = new Intl.NumberFormat("en-US", { maximumFractionDigits: 3 });
+            const gridPosition = db.gc.pacman.characterUtil.determineGridPosition(
+              {
+                x: db.gc.pacman.position.x,
+                y: db.gc.pacman.position.y
+              },
+              db.tileSize,
+              db.gc.pacman.anchor,
+              db.gc.scale
+            );
+            const pacX = formater.format(gridPosition.x);
+            const pacY = formater.format(gridPosition.y);
+            _this.messages = ["Pacman position:", "l:" + pacY + ",c:" + pacX];
+            _this.printMessage(0, 0);
+            const direction = db.gc.pacman.direction;
+            let items = _this.positions[direction];
+            let hasItem = false;
+            if (!items)
+              items = [];
+            for (let pos in _this.positions) {
+              if (pos != direction) {
+                delete _this.positions[pos];
+                continue;
+              }
+              hasItem = _this.positions[pos].filter((element) => {
+                return element.x == pacX && element.y == pacY;
+              }).length > 0;
+            }
+            if (!hasItem)
+              items.push({ x: pacX, y: pacY });
+            _this.positions[direction] = items;
+            localStorage.setItem(direction, JSON.stringify(items));
+          }, 33);
+        },
+        printMessage: function(line, col) {
+          this.line = line;
+          this.col = col;
+          this.update();
+          const ctx = this.getCanvas().getContext("2d");
+          ctx.clearRect(this.x, this.y, 300, 500);
+          ctx.fillStyle = "white";
+          ctx.font = db.tileSize + "px 'Press Start 2P', sans-serif";
+          this.messages.forEach((message, index) => {
+            ctx.fillText(message, this.x, this.y + +(index * db.tileSize));
+          });
+        },
+        clearMessages: function() {
+          this.messages = [];
+        }
+      };
+    }
+    makePacmanImortal(isImmortal) {
+      if (this.gc.allowPacmanMovement) {
+        this.gc.pacman.immortal = isImmortal;
+        this.pacmanImmortal = isImmortal;
+        this.gc.pacman.allowCollision = !isImmortal;
+        if (isImmortal)
+          console.info("Pacman is immortal!");
+        else
+          console.info("Pacman is mortal again.");
+      }
+    }
+    drawEntities(isDraw) {
+      this.gc.ghosts.forEach((ghost) => {
+        ghost.display = isDraw;
+      });
+    }
+    moveEntities() {
+      this.gc.pacman.moving = !this.gc.pacman.moving;
+      this.gc.ghosts.forEach((ghost) => {
+        ghost.moving = !ghost.moving;
+      });
+    }
+    startWave() {
+      console.log("Key f pressed");
+      if (this.gc.mod.flood) {
+        this.gc.mod.flood.generateWave(0);
+      }
+    }
+    drawBoundsAndHitBoxes(onlyMovableEntities) {
+      if (!this.enableBoundsAndHitBoxes)
+        return;
+      const ctx = this.canvas.getContext("2d");
+      const mazePos = this.mazeDiv.position();
+      ctx.save();
+      ctx.translate(mazePos.left, mazePos.top);
+      ctx.clearRect(0, 0, this.mazeDiv.width(), this.mazeDiv.height());
+      let list = this.gc.entityList;
+      if (onlyMovableEntities)
+        list = list.filter((e2) => e2 instanceof movableEntity_default);
+      list.forEach((e2) => {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "yellow";
+        const b2 = e2.getBounds();
+        ctx.strokeRect(b2.x, b2.y, b2.width, b2.height);
+        const h2 = e2.hitArea;
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "red";
+        ctx.strokeRect(
+          h2.x * this.scale,
+          h2.y * this.scale,
+          h2.width * this.scale,
+          h2.height * this.scale
+        );
+      });
+      ctx.restore();
+    }
+    toggleConsole() {
+      this.showConsole = !this.showConsole;
+    }
+    consoleLog(message) {
+      this.consoleBuffer.push(message);
+      if (this.consoleBuffer.length > 20)
+        this.consoleBuffer.splice(0, this.consoleBuffer.length - 20);
+    }
+    clearConsole() {
+      this.consoleBuffer = [];
+    }
+    updateFps() {
+      const now = performance.now();
+      const delta = now - this.lastFrameTime;
+      this.lastFrameTime = now;
+      if (delta > 0)
+        this.fps = Math.round(1e3 / delta);
+    }
+    getConsoleData() {
+      const lines = [];
+      lines.push("=== CONSOLE ===");
+      lines.push(`FPS: ${this.fps}`);
+      if (this.gc.pacman) {
+        const p2 = this.gc.pacman;
+        lines.push(`Pacman: x=${Math.round(p2.position.x)} y=${Math.round(p2.position.y)} dir=${p2.direction}`);
+      }
+      if (this.gc.ghosts) {
+        this.gc.ghosts.forEach((g2) => {
+          lines.push(`${g2.name || "Ghost"}: x=${Math.round(g2.position.x)} y=${Math.round(g2.position.y)} dir=${g2.direction}`);
+        });
+      }
+      const flood = this.gc.mod?.flood;
+      if (flood?.wavesManager?.wave) {
+        const wave = flood.wavesManager.wave;
+        lines.push(`Wave: h=${Math.round(wave.height)} y=${Math.round(wave.y)} started=${wave.started}`);
+      }
+      lines.push(...this.consoleBuffer);
+      return lines;
+    }
+    wrapText(ctx, text, maxWidth) {
+      const words = text.split(" ");
+      const wrapped = [];
+      let line = "";
+      for (const word of words) {
+        const test = line ? `${line} ${word}` : word;
+        if (ctx.measureText(test).width > maxWidth && line) {
+          wrapped.push(line);
+          line = word;
+        } else {
+          line = test;
+        }
+      }
+      if (line)
+        wrapped.push(line);
+      return wrapped;
+    }
+    printConsole() {
+      if (!this.showConsole) return;
+      const ctx = this.ctx;
+      const mazeOffset = this.mazeDiv.offset();
+      const panelWidth = 340;
+      const lineHeight = 16;
+      const x2 = this.canvas.width - panelWidth - 10;
+      const y2 = mazeOffset.top + 10;
+      const rows = this.getConsoleData().flatMap((m2) => this.wrapText(ctx, m2, panelWidth - 16));
+      const panelHeight = rows.length * lineHeight + 12;
+      ctx.save();
+      ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+      ctx.fillRect(x2, y2, panelWidth, panelHeight);
+      ctx.strokeRect(x2 + 0.5, y2 + 0.5, panelWidth - 1, panelHeight - 1);
+      ctx.font = "12px monospace";
+      ctx.fillStyle = "white";
+      rows.forEach((row, index) => {
+        ctx.fillText(row, x2 + 8, y2 + 18 + index * lineHeight);
+      });
+      ctx.restore();
+    }
+    getImageData(texture) {
+      const resource = texture.baseTexture.resource;
+      const canvas = resource.source;
+      const context2 = canvas.getContext("2d");
+      const w2 = canvas.width, h2 = canvas.height;
+      const threshold = 255;
+      let imageData = context2.getImageData(0, 0, w2, h2);
+      let hitmap = new Uint32Array(Math.ceil(w2 * h2 / 32));
+      for (let i3 = 0; i3 < w2 * h2; i3++) {
+        let ind1 = i3 % 32;
+        let ind2 = i3 / 32 | 0;
+        if (imageData.data[i3 * 4 + 3] >= threshold) {
+          hitmap[ind2] = hitmap[ind2] | 1 << ind1;
+          console.log(`hitmap[${ind2}]:`, hitmap[ind2]);
+        }
+      }
+    }
+    //@ts-nocheck
+    notifyPacmanMovement() {
+      if (!this.gc.pacman["update"]["changed"]) {
+        this.gc.pacman["update2"] = this.gc.pacman["update"];
+        const _this = this;
+        this.gc.pacman["update"] = function(elapsedMs) {
+          this["update2"](elapsedMs);
+          _this._notify2("update");
+        };
+        this.gc.pacman["update"]["changed"] = true;
+      }
+    }
+    _notify(functionName) {
+      const pacman = this.gc.pacman;
+      const gridPosition = pacman.characterUtil.determineGridPosition(
+        pacman.oldPosition,
+        pacman.scaledTileSize,
+        pacman.anchor,
+        this.gc.scale
+      );
+      const newGridPosition = pacman.characterUtil.determineGridPosition(
+        pacman.position,
+        pacman.scaledTileSize,
+        pacman.anchor,
+        this.gc.scale
+      );
+      if (pacman.characterUtil.changingGridPosition(
+        gridPosition,
+        newGridPosition
+      )) {
+        const round2 = pacman.characterUtil.determineRoundingFunction(pacman.direction);
+        this.infoPanel.messages = [
+          "Pacman changed to tile (x,y:):",
+          round2(newGridPosition.x) + ", " + round2(newGridPosition.y)
+        ];
+        this.infoPanel.printMessage(0, 0);
+        pacman.moving = false;
+      }
+    }
+    _notify2(functionName) {
+      const pacman = this.gc.pacman;
+      const infoPanel = this.infoPanel;
+      const handleUnsnappedMovement = pacman.handleUnsnappedMovement;
+      const handleSnappedMovement = pacman.handleSnappedMovement;
+      if (!pacman["handleSnappedMovement"]["changed"]) {
+        pacman["handleSnappedMovement2"] = handleSnappedMovement;
+        pacman["handleSnappedMovement"] = function(elapsedMs) {
+          infoPanel.messages.push('Pacman "handleSnappedMovement" called');
+          return this["handleSnappedMovement2"](elapsedMs);
+        };
+        pacman["handleSnappedMovement"]["changed"] = true;
+      }
+      if (!pacman["handleUnsnappedMovement"]["changed"]) {
+        pacman["handleUnsnappedMovement2"] = handleUnsnappedMovement;
+        pacman["handleUnsnappedMovement"] = function(gridPosition, elapsedMs) {
+          infoPanel.messages.push('Pacman "handleUnsnappedMovement" called');
+          return this["handleUnsnappedMovement2"](gridPosition, elapsedMs);
+        };
+        pacman["handleUnsnappedMovement"]["changed"] = true;
+      }
+      if (pacman.moving != infoPanel.info.moving) {
+        if (!pacman.moving)
+          infoPanel.messages.push("Pacman stopped");
+      }
+      if (pacman.direction != infoPanel.info.direction) {
+        infoPanel.messages.push("Pacman change its direction");
+        infoPanel.messages.forEach((message) => {
+          console.log(message);
+        });
+        infoPanel.clearMessages();
+      }
+      infoPanel.info.moving = pacman.moving;
+      infoPanel.info.desiredDirection = pacman.desiredDirection;
+      infoPanel.info.direction = pacman.direction;
+    }
+  };
+  var debugger_default = Debugger;
+
   // app/mods/mod.ts
   var Mod = class {
     name = "";
@@ -30471,11 +31292,18 @@ void main(void)\r
       this.wavesManager.wave = new wave_default(this.wavesManager, maze, width, 0);
       const wave = this.wavesManager.wave;
       this.flood.container.addChildAt(wave, 0);
-      const waveTimeMs = timeToStartMS != void 0 && timeToStartMS >= 0 ? timeToStartMS : Math.floor(Math.random() * 21) + 10;
+      const waveTimeMs = timeToStartMS != void 0 && timeToStartMS >= 0 ? timeToStartMS : this.randomWaveTimeMs();
       this.wavesManager.waveTime = waveTimeMs * 1e3;
       const durationMs = Math.floor(Math.random() * 12) + 8;
       wave.duration = durationMs * 1e3;
       this.wavesManager.nextWaveTime = Date.now() + this.wavesManager.waveTime;
+    }
+    randomWaveTimeMs() {
+      const flood = this.wavesManager.flood;
+      const min = flood?.waveIntervalMin || 10;
+      const max = Math.max(min, flood?.waveIntervalMax || 30);
+      const range = max - min;
+      return Math.floor(Math.random() * (range + 1)) + min;
     }
     start() {
       if (this.wavesManager)
@@ -30844,135 +31672,6 @@ void main(void)\r
 
   // app/scripts/characters/pacman.ts
   init_lib38();
-
-  // app/scripts/utilities/utils.ts
-  init_lib38();
-  function copyPosition(classThis, position) {
-    return new ObservablePoint(() => {
-    }, classThis, position.x, position.y);
-  }
-  function createObservablePoint(classThis, x2, y2) {
-    return new ObservablePoint(() => {
-    }, classThis, x2, y2);
-  }
-  function getGridPosition(classThis, position, scaledTileSize, anchor, scale) {
-    let ax = 0, ay = 0;
-    if (anchor) {
-      ax = anchor.x * scale;
-      ay = anchor.y * scale;
-    }
-    const x2 = position.x / scaledTileSize + 0.5 - ax;
-    const y2 = position.y / scaledTileSize + 0.5 - ay;
-    return createObservablePoint(
-      classThis,
-      x2,
-      y2
-    );
-  }
-  function getAnchorAxis(classThis, anchor, tileSize, scale) {
-    const ax = anchor.x * tileSize * scale;
-    const ay = anchor.y * tileSize * scale;
-    return createObservablePoint(classThis, ax, ay);
-  }
-  function calculateDistancePos(position, targetPosition) {
-    if (!targetPosition)
-      return 0;
-    return Math.sqrt(
-      (position.x - targetPosition.x) ** 2 + (position.y - targetPosition.y) ** 2
-    );
-  }
-  function lerp(a2, b2, t2) {
-    return a2 + (b2 - a2) * t2;
-  }
-  function vLerp(a2, b2, t2) {
-    return createObservablePoint({}, lerp(a2.x, b2.x, t2), lerp(a2.y, b2.y, t2));
-  }
-
-  // app/scripts/characters/staticEntity.ts
-  init_lib38();
-  var StaticEntity = class extends Sprite {
-    allowCollision = true;
-    emitter;
-    gameCoordinator;
-    scaledTileSize;
-    hitArea;
-    msSinceLastSprite = 0;
-    msBetweenSprites = 0;
-    frame = 0;
-    spriteFrames = 0;
-    animate = false;
-    measurement = 0;
-    loopAnimation = false;
-    mazeArray;
-    display;
-    constructor(gameCoordinator, name) {
-      super();
-      this.gameCoordinator = gameCoordinator;
-      this.name = name;
-      this.scaledTileSize = gameCoordinator.scaledTileSize;
-      this.emitter = gameCoordinator.emitter;
-      this.anchor.set(0.5);
-    }
-    registerEventListeners() {
-    }
-    onReset() {
-    }
-    onDeath() {
-    }
-    reset() {
-      this.createHitArea();
-    }
-    get axis() {
-      return getAnchorAxis(this, this.anchor, this.scaledTileSize, this.gameCoordinator.scale);
-    }
-    update(elapsedMs) {
-      this.createHitArea();
-    }
-    createHitArea() {
-      const ax = this.anchor.x * this.width;
-      const ay = this.anchor.y * this.height;
-      const half = this.scaledTileSize * 0.5;
-      const x2 = this.x + this.width * 0.5 - half - ax;
-      const y2 = this.y + this.height * 0.5 - half - ay;
-      this.hitArea = new Rectangle(x2, y2, this.scaledTileSize, this.scaledTileSize);
-    }
-    draw(interp) {
-    }
-  };
-  var staticEntity_default = StaticEntity;
-
-  // app/scripts/characters/movableEntity.ts
-  var MovableEntity = class extends staticEntity_default {
-    characterUtil;
-    defaultPosition = createObservablePoint(this, 0, 0);
-    oldPosition = createObservablePoint(this, 0, 0);
-    moving;
-    paused = false;
-    level;
-    direction;
-    constructor(gameCoordinator, name, characterUtil) {
-      super(gameCoordinator, name);
-      this.characterUtil = characterUtil;
-    }
-    /**
-    * Sets a flag to indicate when the ghost should pause its movement
-    * @param {Boolean} newValue
-    */
-    pause(newValue) {
-      this.paused = newValue;
-    }
-    getGridPosition() {
-      return this.characterUtil?.determineGridPosition(
-        this.position,
-        this.scaledTileSize,
-        this.anchor,
-        this.gameCoordinator.scale
-      );
-    }
-  };
-  var movableEntity_default = MovableEntity;
-
-  // app/scripts/characters/pacman.ts
   var Pacman = class extends movableEntity_default {
     velocityPerMs;
     pacmanArrow;
@@ -35495,11 +36194,14 @@ void main(void)\r
       this.emitter = this.gc.emitter;
       this.createBreath(this.pacman, {
         breathing: 5,
-        maxBreathing: 10,
+        maxBreathing: this.flood.pacmanMaxBreathing || 10,
         decreaseVelocityPerMs: 0.8
       });
       this.ghosts.forEach((g2) => {
-        this.createBreath(g2);
+        this.createBreath(g2, {
+          breathing: 5,
+          maxBreathing: this.flood.ghostsMaxBreathing || 10
+        });
       });
       this.animator.createAnimation("breath", 200, null, (args) => {
         const pacman = args.entity;
@@ -35513,6 +36215,19 @@ void main(void)\r
     }
     createBreath(entity, options2) {
       entity[breathNamespace] = new breath_default(options2);
+    }
+    setPacmanMaxBreathing(value) {
+      this.#setBreathMax(this.pacman, value);
+    }
+    setGhostsMaxBreathing(value) {
+      this.ghosts?.forEach((ghost) => this.#setBreathMax(ghost, value));
+    }
+    #setBreathMax(entity, value) {
+      const breath = entity?.[breathNamespace];
+      if (!breath) return;
+      breath.maxBreathing = value;
+      if (breath.breathing > value)
+        breath.breathing = value;
     }
     resetEntitiesBreathing() {
       this.resetEntity(this.pacman);
@@ -35793,7 +36508,7 @@ void main(void)\r
 
   // app/mods/implementations/mods/flood/app/scripts/core/flood.ts
   var Flood = class extends mod_default2 {
-    name = "flood";
+    name = "Flood";
     width;
     maxHeight;
     tileSize;
@@ -35805,6 +36520,10 @@ void main(void)\r
     ghosts;
     states;
     state;
+    waveIntervalMin = 10;
+    waveIntervalMax = 30;
+    pacmanMaxBreathing = 10;
+    ghostsMaxBreathing = 10;
     constructor(gameCoordinator) {
       super(gameCoordinator);
       this.width = gameCoordinator.width;
@@ -35926,6 +36645,8 @@ void main(void)\r
     stop() {
       super.stop();
       this.gp.clear();
+      if (this.container.parent)
+        this.gc.stage.removeChild(this.container);
       this.emitter.emit("flood-end");
     }
     generateWave(timeToStartMS) {
@@ -35951,6 +36672,7 @@ void main(void)\r
 
   // app/mods/implementations/flood-mod-imp.ts
   var FloodModImp = class extends mod_default {
+    name = "flood";
     flood;
     constructor(gameCoodinator) {
       super(gameCoodinator);
@@ -35987,6 +36709,408 @@ void main(void)\r
     }
   };
   var flood_mod_imp_default = FloodModImp;
+
+  // app/mods/empty-mod.ts
+  var EmptyMod = class extends mod_default2 {
+    name = "none";
+    constructor(gameCoordinator) {
+      super(gameCoordinator);
+    }
+  };
+  var empty_mod_default = EmptyMod;
+
+  // app/scripts/utilities/settingsManager.ts
+  var GHOST_NAMES = ["blinky", "pinky", "inky", "clyde"];
+  var MODS = {
+    flood: flood_mod_imp_default,
+    none: empty_mod_default
+  };
+  function parseValue(raw) {
+    if (raw.startsWith("[") && raw.endsWith("]")) {
+      const inner = raw.slice(1, -1).trim();
+      if (!inner) return [];
+      return inner.split(",").map((s2) => parseValue(s2.trim()));
+    }
+    if (raw === "true") return true;
+    if (raw === "false") return false;
+    const quote = raw[0] ?? "";
+    if (quote === '"' || quote === "'") {
+      return raw.slice(1, raw.lastIndexOf(raw[0]));
+    }
+    const num = Number(raw);
+    if (raw !== "" && !Number.isNaN(num)) return num;
+    return raw;
+  }
+  var SettingsManager = class {
+    gc;
+    config = {};
+    subscribed = false;
+    keyOrder = [
+      "game.pacman.lives",
+      "game.pacman.immortality",
+      "game.ghosts.disabled",
+      "game.level",
+      "game.mod",
+      "game.debug",
+      "game.debugBounds",
+      "game.debugGrid",
+      "flood.waveIntervalMin",
+      "flood.waveIntervalMax",
+      "flood.pacmanBreathing",
+      "flood.ghostsBreathing"
+    ];
+    defaults = {
+      "game.pacman.lives": 2,
+      "game.pacman.immortality": false,
+      "game.ghosts.disabled": [],
+      "game.level": 1,
+      "game.mod": "flood",
+      "game.debug": true,
+      "game.debugBounds": false,
+      "game.debugGrid": false,
+      "flood.waveIntervalMin": 10,
+      "flood.waveIntervalMax": 30,
+      "flood.pacmanBreathing": 10,
+      "flood.ghostsBreathing": 10
+    };
+    constructor(gameCoordinator) {
+      this.gc = gameCoordinator;
+      this.config = { ...this.defaults };
+    }
+    parse(text) {
+      const out = {};
+      text.split(/\r?\n/).forEach((line) => {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith("#")) return;
+        const eq = trimmed.indexOf("=");
+        if (eq <= 0) return;
+        const key = trimmed.substring(0, eq).trim();
+        const raw = trimmed.substring(eq + 1).trim();
+        out[key] = parseValue(raw);
+      });
+      return out;
+    }
+    serialize() {
+      const lines = [
+        "# pacman-bward configuration",
+        "# Each line follows the format key=value",
+        "# Lines starting with # are ignored.",
+        ""
+      ];
+      this.keyOrder.forEach((key) => {
+        const value = this.config[key];
+        if (Array.isArray(value)) {
+          lines.push(`${key}=[${value.map((v2) => typeof v2 === "string" ? `'${v2}'` : v2).join(",")}]`);
+        } else if (typeof value === "string") {
+          lines.push(`${key}="${value}"`);
+        } else {
+          lines.push(`${key}=${value}`);
+        }
+      });
+      return lines.join("\n");
+    }
+    async load() {
+      let text = null;
+      try {
+        const res = await fetch("/api/config");
+        if (res.ok) text = await res.text();
+      } catch {
+      }
+      if (text == null) {
+        try {
+          const res = await fetch("app/configs/game.config");
+          if (res.ok) text = await res.text();
+        } catch {
+        }
+      }
+      const parsed = text != null ? this.parse(text) : {};
+      this.config = { ...this.defaults, ...parsed };
+    }
+    async save() {
+      try {
+        const res = await fetch("/api/config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ config: this.serialize() })
+        });
+        if (res.ok) {
+          this.notify("Saved!");
+          return true;
+        }
+      } catch {
+      }
+      try {
+        localStorage.setItem("pacman-config", this.serialize());
+        this.notify("Saved (local)");
+        return true;
+      } catch {
+        this.notify("Save failed");
+        return false;
+      }
+    }
+    get(key) {
+      return this.config[key];
+    }
+    getNum(key) {
+      const value = this.config[key];
+      const num = typeof value === "number" ? value : Number(value);
+      return Number.isNaN(num) ? 0 : num;
+    }
+    getBool(key) {
+      return !!this.config[key];
+    }
+    getStr(key) {
+      const value = this.config[key];
+      return value == null ? "" : String(value);
+    }
+    getList(key) {
+      const value = this.config[key];
+      return Array.isArray(value) ? value.map(String) : [];
+    }
+    set(key, value) {
+      this.config[key] = value;
+    }
+    apply() {
+      this.applyMod();
+      this.applyDebug();
+      this.applyGame();
+      this.applyGhosts();
+      this.applyFlood();
+      this.applyDebuggerFlags();
+    }
+    applyMod() {
+      const name = this.getStr("game.mod") || "flood";
+      const Ctor = MODS[name] || empty_mod_default;
+      if (this.gc.mod && this.gc.mod.name === name) return;
+      this.gc.mod?.stop?.();
+      this.gc.setMod(new Ctor(this.gc));
+      if (this.gc.gameEngine?.started) {
+        this.gc.mod.initialize();
+        this.gc.mod.start();
+      }
+    }
+    applyDebug() {
+      const enabled = this.getBool("game.debug");
+      this.gc.debug = enabled;
+      if (enabled && !window.debug) {
+        window.debug = new debugger_default(this.gc, this);
+      } else if (!enabled && window.debug) {
+        window.debug.destroy();
+        window.debug = null;
+      }
+    }
+    toggleDebug(enabled) {
+      this.set("game.debug", enabled);
+      this.applyDebug();
+      this.save();
+    }
+    applyGame() {
+      const lives = this.getNum("game.pacman.lives");
+      const level = this.getNum("game.level");
+      this.gc.lives = lives;
+      this.gc.level = level;
+      this.syncStore();
+      this.applyPacman();
+    }
+    syncStore() {
+      const store = this.gc.settingsStore || {};
+      store.lives = this.getNum("game.pacman.lives");
+      store.level = this.getNum("game.level");
+      store.onEmitterReady = store.onEmitterReady || ((emitter) => this.subscribe(emitter));
+      this.gc.settingsStore = store;
+    }
+    applyPacman() {
+      const pacman = this.gc.pacman;
+      if (!pacman) return;
+      const immortal = this.getBool("game.pacman.immortality");
+      pacman.immortal = immortal;
+      pacman.allowCollision = !immortal;
+    }
+    applyGhosts() {
+      const ghosts = this.gc.ghosts;
+      if (!Array.isArray(ghosts)) return;
+      const disabled = this.getList("game.ghosts.disabled").map((s2) => s2.toLowerCase());
+      ghosts.forEach((ghost) => {
+        const name = String(ghost.name ?? "").toLowerCase();
+        const hide = disabled.includes(name);
+        ghost.display = !hide;
+        if (hide) {
+          ghost.moving = false;
+          ghost.allowCollision = false;
+        } else {
+          ghost.allowCollision = true;
+        }
+      });
+    }
+    applyFlood() {
+      const flood = this.gc.mod?.flood;
+      if (!flood) return;
+      flood.waveIntervalMin = this.getNum("flood.waveIntervalMin") || 10;
+      flood.waveIntervalMax = this.getNum("flood.waveIntervalMax") || 30;
+      flood.pacmanMaxBreathing = this.getNum("flood.pacmanBreathing") || 10;
+      flood.ghostsMaxBreathing = this.getNum("flood.ghostsBreathing") || 10;
+      if (flood.wavesManager) {
+        flood.wavesManager.setPacmanMaxBreathing(flood.pacmanMaxBreathing);
+        flood.wavesManager.setGhostsMaxBreathing(flood.ghostsMaxBreathing);
+      }
+    }
+    applyDebuggerFlags() {
+      if (!window.debug) return;
+      window.debug.shouldPrintGrid = this.getBool("game.debugGrid");
+      window.debug.enableBoundsAndHitBoxes = this.getBool("game.debugBounds");
+    }
+    subscribe(emitter) {
+      const em = emitter || this.gc.emitter;
+      if (this.subscribed || !em) return;
+      this.subscribed = true;
+      const handler = () => {
+        this.applyGhosts();
+        this.applyPacman();
+        this.applyDebuggerFlags();
+      };
+      em.on("post-start", handler);
+      em.on("post-death", handler);
+      em.on("post-advance-level", handler);
+    }
+    clampLives(n2) {
+      return Math.max(0, Math.floor(n2));
+    }
+    clampLevel(n2) {
+      return Math.max(1, Math.floor(n2));
+    }
+    refreshExtraLives() {
+      try {
+        this.gc.updateExtraLivesDisplay();
+      } catch {
+      }
+    }
+    updateGhostsSelection() {
+      const disabled = GHOST_NAMES.filter((name) => !$(`#dbg-ghost-${name}`).is(":checked"));
+      this.set("game.ghosts.disabled", disabled);
+      this.applyGhosts();
+      this.save();
+    }
+    updateFlood() {
+      this.set("flood.waveIntervalMin", this.clampLives(Number($("#flood-wave-min").val()) || 0));
+      this.set("flood.waveIntervalMax", this.clampLives(Number($("#flood-wave-max").val()) || 0));
+      this.set("flood.pacmanBreathing", this.clampLives(Number($("#flood-pac-breath").val()) || 0));
+      this.set("flood.ghostsBreathing", this.clampLives(Number($("#flood-ghosts-breath").val()) || 0));
+      this.applyFlood();
+      this.save();
+    }
+    initUi() {
+      const openSettings = () => {
+        this.refreshSettingsPanel();
+        this.show("settings-modal");
+      };
+      $("#config-btn-menu").on("click", openSettings);
+      $("#config-btn-game").on("click", openSettings);
+      $("#settings-close").on("click", () => this.hide("settings-modal"));
+      $("#debug-close").on("click", () => this.hide("debug-modal"));
+      $("#flood-close").on("click", () => this.hide("flood-modal"));
+      $("#cfg-debug").on("change", (e2) => {
+        this.toggleDebug(!!$(e2.target).is(":checked"));
+        this.refreshModDots();
+      });
+      $("#cfg-mod").on("change", (e2) => {
+        this.set("game.mod", $(e2.target).val());
+        this.applyMod();
+        this.save();
+        this.refreshModDots();
+        if (this.gc.gameEngine?.started) {
+          this.notify("Mod v\xE1lido no pr\xF3ximo in\xEDcio");
+        }
+      });
+      $("#cfg-debug-dots").on("click", () => {
+        this.refreshDebugPanel();
+        this.show("debug-modal");
+      });
+      $("#cfg-mod-dots").on("click", () => {
+        this.refreshFloodPanel();
+        this.show("flood-modal");
+      });
+      $("#dbg-lives").on("change", (e2) => {
+        const n2 = this.clampLives(Number($(e2.target).val()));
+        this.set("game.pacman.lives", n2);
+        this.applyGame();
+        this.refreshExtraLives();
+        this.save();
+      });
+      $("#dbg-level").on("change", (e2) => {
+        const n2 = this.clampLevel(Number($(e2.target).val()));
+        this.set("game.level", n2);
+        this.applyGame();
+        this.save();
+      });
+      $("#dbg-immortality").on("change", (e2) => {
+        const checked = !!$(e2.target).is(":checked");
+        this.set("game.pacman.immortality", checked);
+        this.applyPacman();
+        this.save();
+      });
+      $("#dbg-bounds").on("change", (e2) => {
+        const checked = !!$(e2.target).is(":checked");
+        this.set("game.debugBounds", checked);
+        if (window.debug) window.debug.enableBoundsAndHitBoxes = checked;
+        this.save();
+      });
+      $("#dbg-grid").on("change", (e2) => {
+        const checked = !!$(e2.target).is(":checked");
+        this.set("game.debugGrid", checked);
+        if (window.debug) window.debug.shouldPrintGrid = checked;
+        this.save();
+      });
+      GHOST_NAMES.forEach((name) => {
+        $(`#dbg-ghost-${name}`).on("change", () => this.updateGhostsSelection());
+      });
+      $("#flood-wave-min").on("change", () => this.updateFlood());
+      $("#flood-wave-max").on("change", () => this.updateFlood());
+      $("#flood-pac-breath").on("change", () => this.updateFlood());
+      $("#flood-ghosts-breath").on("change", () => this.updateFlood());
+    }
+    refreshSettingsPanel() {
+      $("#cfg-debug").prop("checked", this.getBool("game.debug"));
+      $("#cfg-mod").val(this.getStr("game.mod") || "flood");
+      this.refreshModDots();
+    }
+    refreshModDots() {
+      $("#cfg-debug-dots").prop("disabled", !this.getBool("game.debug"));
+      $("#cfg-mod-dots").prop("disabled", this.getStr("game.mod") !== "flood");
+    }
+    refreshDebugPanel() {
+      $("#dbg-lives").val(this.getNum("game.pacman.lives"));
+      $("#dbg-level").val(this.getNum("game.level"));
+      $("#dbg-immortality").prop("checked", this.getBool("game.pacman.immortality"));
+      $("#dbg-bounds").prop("checked", this.getBool("game.debugBounds"));
+      $("#dbg-grid").prop("checked", this.getBool("game.debugGrid"));
+      const disabled = this.getList("game.ghosts.disabled").map((s2) => s2.toLowerCase());
+      GHOST_NAMES.forEach((name) => {
+        $(`#dbg-ghost-${name}`).prop("checked", !disabled.includes(name));
+      });
+    }
+    refreshFloodPanel() {
+      $("#flood-wave-min").val(this.getNum("flood.waveIntervalMin"));
+      $("#flood-wave-max").val(this.getNum("flood.waveIntervalMax"));
+      $("#flood-pac-breath").val(this.getNum("flood.pacmanBreathing"));
+      $("#flood-ghosts-breath").val(this.getNum("flood.ghostsBreathing"));
+    }
+    show(id3) {
+      $(`#${id3}`).addClass("open");
+    }
+    hide(id3) {
+      $(`#${id3}`).removeClass("open");
+    }
+    notify(msg) {
+      const tip = document.getElementById("settings-tip");
+      if (!tip) return;
+      tip.textContent = msg;
+      tip.style.opacity = "1";
+      window.setTimeout(() => {
+        tip.style.opacity = "0";
+      }, 2e3);
+    }
+  };
+  var settingsManager_default = SettingsManager;
 
   // app/scripts/core/gameCoordinator.ts
   init_lib38();
@@ -37275,15 +38399,6 @@ void main(void)\r
   };
   var gameEngine_default = GameEngine;
 
-  // app/mods/empty-mod.ts
-  var EmptyMod = class extends mod_default2 {
-    name = "none";
-    constructor(gameCoordinator) {
-      super(gameCoordinator);
-    }
-  };
-  var empty_mod_default = EmptyMod;
-
   // app/scripts/core/gameCoordinator.ts
   var options = {
     transparent: false,
@@ -37358,6 +38473,7 @@ void main(void)\r
     bottomRender;
     view;
     debug = true;
+    settingsStore;
     constructor() {
       this.mod = new empty_mod_default(this);
       this.gameUi = document.getElementById("game-ui");
@@ -37525,8 +38641,8 @@ void main(void)\r
     reset() {
       this.activeTimers = [];
       this.points = 0;
-      this.level = 1;
-      this.lives = 2;
+      this.level = this.settingsStore?.level ?? 1;
+      this.lives = this.settingsStore?.lives ?? 2;
       this.extraLifeGiven = false;
       this.remainingDots = 0;
       this.allowKeyPresses = true;
@@ -37578,14 +38694,16 @@ void main(void)\r
       this.stage.addChild(
         this.pacman,
         this.blinky,
-        // this.pinky,
-        // this.inky, 
-        // this.clyde,
+        this.pinky,
+        this.inky,
+        this.clyde,
         this.fruit
       );
       this.ghosts = [
-        this.blinky
-        // this.pinky, this.inky, this.clyde
+        this.blinky,
+        this.pinky,
+        this.inky,
+        this.clyde
       ];
       this.scaredGhosts = [];
       this.eyeGhosts = 0;
@@ -37619,6 +38737,7 @@ void main(void)\r
      */
     init() {
       this.registerEventListeners();
+      this.settingsStore?.onEmitterReady?.(this.emitter);
       this.mod.initialize();
       this.gameEngine = new gameEngine_default(this, this.maxFps, this.entityList);
       this.gameEngine.start();
@@ -38407,494 +39526,14 @@ void main(void)\r
     }
   };
 
-  // app/scripts/utilities/debugger.ts
-  var Debugger = class {
-    gc;
-    overflowMask;
-    mazeDiv;
-    mazeArray;
-    tileSize;
-    scale;
-    pacmanImmortal;
-    printMazeGrid;
-    infoPanel;
-    canvas;
-    ctx;
-    shouldPrintGrid;
-    enableBoundsAndHitBoxes = false;
-    printing;
-    showConsole = false;
-    consoleBuffer = [];
-    fps = 0;
-    lastFrameTime = 0;
-    constructor(gameCoordinator) {
-      this.gc = gameCoordinator;
-      this.overflowMask = $("#overflow-mask");
-      this.mazeDiv = $(this.gc.mazeDiv);
-      this.mazeArray = this.gc.mazeArray;
-      this.scale = this.gc.scale;
-      this.tileSize = this.gc.scaledTileSize;
-      this.pacmanImmortal = false;
-      this.printMazeGrid = false;
-      this.createCanvas();
-      this.handleInput();
-      this.configInfoPanel();
-      window.debug = this;
-      this.animate();
-    }
-    handleInput() {
-      const dbg = this;
-      window.addEventListener("keydown", (event) => {
-        if (event.key == "3")
-          dbg.makePacmanImortal(true);
-        else if (event.key == "4")
-          dbg.makePacmanImortal(false);
-        else if (event.key == "1")
-          dbg.shouldPrintGrid = true;
-        else if (event.key == "2")
-          dbg.shouldPrintGrid = false;
-        else if (event.key == "5")
-          dbg.infoPanel.log();
-        else if (event.key == "7")
-          dbg.drawEntities(false);
-        else if (event.key == "8")
-          dbg.drawEntities(true);
-        else if (event.key == ",")
-          dbg.moveInUnits("left", 1);
-        else if (event.key == ".")
-          dbg.moveInUnits("right", 1);
-        else if (event.key == " ")
-          dbg.moveEntities();
-        else if (event.key == "u")
-          dbg.notifyPacmanMovement();
-        else if (event.key.toLowerCase() == "f")
-          dbg.startWave();
-        else if (event.key.toLowerCase() == "h") {
-          dbg.enableBoundsAndHitBoxes = !dbg.enableBoundsAndHitBoxes;
-        } else if (event.key.toLowerCase() == "c") {
-          dbg.toggleConsole();
-        }
-      });
-    }
-    createCanvas() {
-      this.canvas = document.createElement("canvas");
-      this.canvas.id = "canvasD";
-      document.body.append(this.canvas);
-      const canvas = $(this.canvas);
-      const mazeDiv = $(this.gc.mazeDiv);
-      canvas.css("position", "absolute");
-      canvas.css("left", 0);
-      canvas.css("top", 0);
-      canvas.width(this.overflowMask.width());
-      canvas.height(this.overflowMask.height());
-      this.canvas.width = this.overflowMask.width();
-      this.canvas.height = this.overflowMask.height();
-      this.ctx = this.canvas.getContext("2d");
-    }
-    // renderObject(pixiObject) {
-    //     this.container1.addChild(pixiObject)        
-    // }
-    // render() {
-    //     this.renderer.render(this.mainContainer)
-    // }
-    moveInUnits(direction, units) {
-      const elapsedMs = this.gc.gameEngine.elapsedMs;
-      let position = this.gc.pacman.position;
-      const velocityPerMs = this.gc.pacman.velocityPerMs;
-      let newPositions;
-      for (let i3 = 0; i3 < units; i3++) {
-        newPositions = this.gc.pacman.characterUtil.determineNewPositions(
-          position,
-          direction,
-          velocityPerMs,
-          elapsedMs,
-          this.gc.pacman.scaledTileSize,
-          this.gc.pacman.anchor,
-          this.gc.scale
-        );
-        position = newPositions.newPosition;
-      }
-      this.gc.pacman.position = position;
-    }
-    animate() {
-      const an = () => {
-        this.updateFps();
-        this.clearGrid();
-        if (this.shouldPrintGrid) {
-          this.printGrid();
-        } else if (this.enableBoundsAndHitBoxes) {
-          this.drawBoundsAndHitBoxes(false);
-        }
-        this.printConsole();
-        requestAnimationFrame(an);
-      };
-      an();
-    }
-    printGrid() {
-      const mazeX = this.mazeDiv.position().left;
-      const mazeY = this.mazeDiv.position().top;
-      const width = this.mazeDiv.width() / this.scale;
-      const height = this.mazeDiv.height() / this.scale;
-      let ctx = this.canvas.getContext("2d");
-      ctx?.save();
-      ctx?.translate(mazeX, mazeY);
-      ctx?.scale(2, 2);
-      ctx.strokeStyle = "green";
-      ctx.lineWidth = 1;
-      let x2 = 0, y2 = 0;
-      const tileSize = this.tileSize;
-      ctx.clearRect(0, 0, width, height);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      this.mazeArray.forEach((row, rowIndex) => {
-        if (rowIndex > 0) {
-          x2 = 0;
-          y2 += tileSize;
-        }
-        ctx.moveTo(x2, y2);
-        ctx.lineTo(width, y2);
-        row.forEach((col, colIndex) => {
-          ctx.moveTo(x2, y2);
-          ctx.lineTo(x2, y2 + tileSize);
-          x2 += this.tileSize;
-          if (colIndex == this.mazeArray[rowIndex].length - 1) {
-            ctx.moveTo(x2, y2);
-            ctx.lineTo(x2, y2 + tileSize);
-          }
-        });
-        if (rowIndex == this.mazeArray.length - 1) {
-          y2 += tileSize;
-          ctx.moveTo(0, y2);
-          ctx.lineTo(width, y2);
-        }
-      });
-      ctx.stroke();
-      ctx.strokeStyle = "yellow";
-      const pacX = this.gc.pacman.position.x;
-      const pacY = this.gc.pacman.position.y;
-      ctx.strokeRect(pacX, pacY, tileSize * 2, tileSize * 2);
-      ctx.strokeStyle = "red";
-      ctx.strokeRect(pacX, pacY, tileSize, tileSize);
-      ctx.stroke();
-      ctx?.restore();
-    }
-    clearGrid() {
-      const mazeX = this.mazeDiv.offset().left;
-      const mazeY = this.mazeDiv.offset().top;
-      const width = this.mazeDiv.width();
-      const height = this.mazeDiv.height();
-      let ctx = this.ctx;
-      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-    configInfoPanel() {
-      const db = this;
-      this.infoPanel = {
-        positions: {},
-        getCanvas: function() {
-          return db.canvas;
-        },
-        x: 0,
-        y: 0,
-        line: 0,
-        col: 0,
-        messages: [],
-        interval: null,
-        info: {},
-        update: function() {
-          this.x = db.mazeDiv.offset().left + db.mazeDiv.width() + 20;
-          this.y = db.mazeDiv.offset().top + db.mazeDiv.height() / 2 - 100;
-        },
-        log: function() {
-          const _this = this;
-          window.clearInterval(this.interval);
-          this.interval = window.setInterval(() => {
-            const formater = new Intl.NumberFormat("en-US", { maximumFractionDigits: 3 });
-            const gridPosition = db.gc.pacman.characterUtil.determineGridPosition(
-              {
-                x: db.gc.pacman.position.x,
-                y: db.gc.pacman.position.y
-              },
-              db.tileSize,
-              db.gc.pacman.anchor,
-              db.gc.scale
-            );
-            const pacX = formater.format(gridPosition.x);
-            const pacY = formater.format(gridPosition.y);
-            _this.messages = ["Pacman position:", "l:" + pacY + ",c:" + pacX];
-            _this.printMessage(0, 0);
-            const direction = db.gc.pacman.direction;
-            let items = _this.positions[direction];
-            let hasItem = false;
-            if (!items)
-              items = [];
-            for (let pos in _this.positions) {
-              if (pos != direction) {
-                delete _this.positions[pos];
-                continue;
-              }
-              hasItem = _this.positions[pos].filter((element) => {
-                return element.x == pacX && element.y == pacY;
-              }).length > 0;
-            }
-            if (!hasItem)
-              items.push({ x: pacX, y: pacY });
-            _this.positions[direction] = items;
-            localStorage.setItem(direction, JSON.stringify(items));
-          }, 33);
-        },
-        printMessage: function(line, col) {
-          this.line = line;
-          this.col = col;
-          this.update();
-          const ctx = this.getCanvas().getContext("2d");
-          ctx.clearRect(this.x, this.y, 300, 500);
-          ctx.fillStyle = "white";
-          ctx.font = db.tileSize + "px 'Press Start 2P', sans-serif";
-          this.messages.forEach((message, index) => {
-            ctx.fillText(message, this.x, this.y + +(index * db.tileSize));
-          });
-        },
-        clearMessages: function() {
-          this.messages = [];
-        }
-      };
-    }
-    makePacmanImortal(isImmortal) {
-      if (this.gc.allowPacmanMovement) {
-        this.gc.pacman.immortal = isImmortal;
-        this.pacmanImmortal = isImmortal;
-        this.gc.pacman.allowCollision = !isImmortal;
-        if (isImmortal)
-          console.info("Pacman is immortal!");
-        else
-          console.info("Pacman is mortal again.");
-      }
-    }
-    drawEntities(isDraw) {
-      this.gc.ghosts.forEach((ghost) => {
-        ghost.display = isDraw;
-      });
-    }
-    moveEntities() {
-      this.gc.pacman.moving = !this.gc.pacman.moving;
-      this.gc.ghosts.forEach((ghost) => {
-        ghost.moving = !ghost.moving;
-      });
-    }
-    startWave() {
-      console.log("Key f pressed");
-      if (this.gc.mod.flood) {
-        this.gc.mod.flood.generateWave(0);
-      }
-    }
-    drawBoundsAndHitBoxes(onlyMovableEntities) {
-      if (!this.enableBoundsAndHitBoxes)
-        return;
-      const ctx = this.canvas.getContext("2d");
-      const mazePos = this.mazeDiv.position();
-      ctx.save();
-      ctx.translate(mazePos.left, mazePos.top);
-      ctx.clearRect(0, 0, this.mazeDiv.width(), this.mazeDiv.height());
-      let list = this.gc.entityList;
-      if (onlyMovableEntities)
-        list = list.filter((e2) => e2 instanceof movableEntity_default);
-      list.forEach((e2) => {
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "yellow";
-        const b2 = e2.getBounds();
-        ctx.strokeRect(b2.x, b2.y, b2.width, b2.height);
-        const h2 = e2.hitArea;
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "red";
-        ctx.strokeRect(
-          h2.x * this.scale,
-          h2.y * this.scale,
-          h2.width * this.scale,
-          h2.height * this.scale
-        );
-      });
-      ctx.restore();
-    }
-    toggleConsole() {
-      this.showConsole = !this.showConsole;
-    }
-    consoleLog(message) {
-      this.consoleBuffer.push(message);
-      if (this.consoleBuffer.length > 20)
-        this.consoleBuffer.splice(0, this.consoleBuffer.length - 20);
-    }
-    clearConsole() {
-      this.consoleBuffer = [];
-    }
-    updateFps() {
-      const now = performance.now();
-      const delta = now - this.lastFrameTime;
-      this.lastFrameTime = now;
-      if (delta > 0)
-        this.fps = Math.round(1e3 / delta);
-    }
-    getConsoleData() {
-      const lines = [];
-      lines.push("=== CONSOLE ===");
-      lines.push(`FPS: ${this.fps}`);
-      if (this.gc.pacman) {
-        const p2 = this.gc.pacman;
-        lines.push(`Pacman: x=${Math.round(p2.position.x)} y=${Math.round(p2.position.y)} dir=${p2.direction}`);
-      }
-      if (this.gc.ghosts) {
-        this.gc.ghosts.forEach((g2) => {
-          lines.push(`${g2.name || "Ghost"}: x=${Math.round(g2.position.x)} y=${Math.round(g2.position.y)} dir=${g2.direction}`);
-        });
-      }
-      const flood = this.gc.mod?.flood;
-      if (flood?.wavesManager?.wave) {
-        const wave = flood.wavesManager.wave;
-        lines.push(`Wave: h=${Math.round(wave.height)} y=${Math.round(wave.y)} started=${wave.started}`);
-      }
-      lines.push(...this.consoleBuffer);
-      return lines;
-    }
-    wrapText(ctx, text, maxWidth) {
-      const words = text.split(" ");
-      const wrapped = [];
-      let line = "";
-      for (const word of words) {
-        const test = line ? `${line} ${word}` : word;
-        if (ctx.measureText(test).width > maxWidth && line) {
-          wrapped.push(line);
-          line = word;
-        } else {
-          line = test;
-        }
-      }
-      if (line)
-        wrapped.push(line);
-      return wrapped;
-    }
-    printConsole() {
-      if (!this.showConsole) return;
-      const ctx = this.ctx;
-      const mazeOffset = this.mazeDiv.offset();
-      const panelWidth = 340;
-      const lineHeight = 16;
-      const x2 = this.canvas.width - panelWidth - 10;
-      const y2 = mazeOffset.top + 10;
-      const rows = this.getConsoleData().flatMap((m2) => this.wrapText(ctx, m2, panelWidth - 16));
-      const panelHeight = rows.length * lineHeight + 12;
-      ctx.save();
-      ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
-      ctx.fillRect(x2, y2, panelWidth, panelHeight);
-      ctx.strokeRect(x2 + 0.5, y2 + 0.5, panelWidth - 1, panelHeight - 1);
-      ctx.font = "12px monospace";
-      ctx.fillStyle = "white";
-      rows.forEach((row, index) => {
-        ctx.fillText(row, x2 + 8, y2 + 18 + index * lineHeight);
-      });
-      ctx.restore();
-    }
-    getImageData(texture) {
-      const resource = texture.baseTexture.resource;
-      const canvas = resource.source;
-      const context2 = canvas.getContext("2d");
-      const w2 = canvas.width, h2 = canvas.height;
-      const threshold = 255;
-      let imageData = context2.getImageData(0, 0, w2, h2);
-      let hitmap = new Uint32Array(Math.ceil(w2 * h2 / 32));
-      for (let i3 = 0; i3 < w2 * h2; i3++) {
-        let ind1 = i3 % 32;
-        let ind2 = i3 / 32 | 0;
-        if (imageData.data[i3 * 4 + 3] >= threshold) {
-          hitmap[ind2] = hitmap[ind2] | 1 << ind1;
-          console.log(`hitmap[${ind2}]:`, hitmap[ind2]);
-        }
-      }
-    }
-    //@ts-nocheck
-    notifyPacmanMovement() {
-      if (!this.gc.pacman["update"]["changed"]) {
-        this.gc.pacman["update2"] = this.gc.pacman["update"];
-        const _this = this;
-        this.gc.pacman["update"] = function(elapsedMs) {
-          this["update2"](elapsedMs);
-          _this._notify2("update");
-        };
-        this.gc.pacman["update"]["changed"] = true;
-      }
-    }
-    _notify(functionName) {
-      const pacman = this.gc.pacman;
-      const gridPosition = pacman.characterUtil.determineGridPosition(
-        pacman.oldPosition,
-        pacman.scaledTileSize,
-        pacman.anchor,
-        this.gc.scale
-      );
-      const newGridPosition = pacman.characterUtil.determineGridPosition(
-        pacman.position,
-        pacman.scaledTileSize,
-        pacman.anchor,
-        this.gc.scale
-      );
-      if (pacman.characterUtil.changingGridPosition(
-        gridPosition,
-        newGridPosition
-      )) {
-        const round2 = pacman.characterUtil.determineRoundingFunction(pacman.direction);
-        this.infoPanel.messages = [
-          "Pacman changed to tile (x,y:):",
-          round2(newGridPosition.x) + ", " + round2(newGridPosition.y)
-        ];
-        this.infoPanel.printMessage(0, 0);
-        pacman.moving = false;
-      }
-    }
-    _notify2(functionName) {
-      const pacman = this.gc.pacman;
-      const infoPanel = this.infoPanel;
-      const handleUnsnappedMovement = pacman.handleUnsnappedMovement;
-      const handleSnappedMovement = pacman.handleSnappedMovement;
-      if (!pacman["handleSnappedMovement"]["changed"]) {
-        pacman["handleSnappedMovement2"] = handleSnappedMovement;
-        pacman["handleSnappedMovement"] = function(elapsedMs) {
-          infoPanel.messages.push('Pacman "handleSnappedMovement" called');
-          return this["handleSnappedMovement2"](elapsedMs);
-        };
-        pacman["handleSnappedMovement"]["changed"] = true;
-      }
-      if (!pacman["handleUnsnappedMovement"]["changed"]) {
-        pacman["handleUnsnappedMovement2"] = handleUnsnappedMovement;
-        pacman["handleUnsnappedMovement"] = function(gridPosition, elapsedMs) {
-          infoPanel.messages.push('Pacman "handleUnsnappedMovement" called');
-          return this["handleUnsnappedMovement2"](gridPosition, elapsedMs);
-        };
-        pacman["handleUnsnappedMovement"]["changed"] = true;
-      }
-      if (pacman.moving != infoPanel.info.moving) {
-        if (!pacman.moving)
-          infoPanel.messages.push("Pacman stopped");
-      }
-      if (pacman.direction != infoPanel.info.direction) {
-        infoPanel.messages.push("Pacman change its direction");
-        infoPanel.messages.forEach((message) => {
-          console.log(message);
-        });
-        infoPanel.clearMessages();
-      }
-      infoPanel.info.moving = pacman.moving;
-      infoPanel.info.desiredDirection = pacman.desiredDirection;
-      infoPanel.info.direction = pacman.direction;
-    }
-  };
-  var debugger_default = Debugger;
-
   // app/scripts/initial.ts
-  window.onload = () => {
+  window.onload = async () => {
     window.gc = new gameCoordinator_default();
-    const mod = new flood_mod_imp_default(window.gc);
-    window.gc.setMod(mod);
-    window.f = mod.flood;
-    window.debug = new debugger_default(window.gc);
+    window.settings = new settingsManager_default(window.gc);
+    await window.settings.load();
+    window.settings.apply();
+    window.settings.initUi();
+    window.f = window.gc.mod?.flood ?? null;
   };
 })();
 /*! Bundled license information:

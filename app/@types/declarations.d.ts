@@ -9,6 +9,7 @@ import GameCoordinator from "../scripts/core/gameCoordinator.ts";
       //For debug puporses
       gc: any
       debug:any
+      settings: any
       f:any
       PIXI: any
     }    

@@ -97,6 +97,7 @@ class GameCoordinator {
   bottomRender!: RendererBottom
   view!: any
   debug:boolean = true
+  settingsStore: { lives?: number; level?: number; onEmitterReady?: (emitter: EventEmitter) => void } | undefined
   constructor() {
     //super(options)
     this.mod = new EmptyMod(this)
@@ -299,8 +300,8 @@ class GameCoordinator {
   reset() {
     this.activeTimers = [];
     this.points = 0;
-    this.level = 1;
-    this.lives = 2;
+    this.level = this.settingsStore?.level ?? 1;
+    this.lives = this.settingsStore?.lives ?? 2;
     this.extraLifeGiven = false;
     this.remainingDots = 0;
     this.allowKeyPresses = true;
@@ -356,14 +357,14 @@ class GameCoordinator {
     this.stage.addChild(
       this.pacman,
       this.blinky,
-      // this.pinky,
-      // this.inky, 
-      // this.clyde,
+      this.pinky,
+      this.inky,
+      this.clyde,
       this.fruit,
     )
   
     this.ghosts = [this.blinky, 
-     // this.pinky, this.inky, this.clyde
+      this.pinky, this.inky, this.clyde
     ];
 
     this.scaredGhosts = [];
@@ -404,6 +405,7 @@ class GameCoordinator {
   init() {
     //initialize the current mod values    
     this.registerEventListeners();
+    this.settingsStore?.onEmitterReady?.(this.emitter)
     this.mod.initialize()
 
     this.gameEngine = new GameEngine(this, this.maxFps, this.entityList);

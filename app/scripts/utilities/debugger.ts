@@ -5,6 +5,7 @@ import MovableEntity from "../characters/movableEntity.ts"
 
 class Debugger {
     gc: GameCoordinator
+    settings: any
     overflowMask: any
     mazeDiv: any
     mazeArray: any
@@ -22,8 +23,12 @@ class Debugger {
     consoleBuffer: string[] = []
     fps: number = 0
     lastFrameTime: number = 0
-    constructor(gameCoordinator: GameCoordinator) {
+    private rafId: number = 0
+    private destroyed: boolean = false
+    private keyHandler: (event: KeyboardEvent) => void = () => {}
+    constructor(gameCoordinator: GameCoordinator, settings?: any) {
         this.gc = gameCoordinator
+        this.settings = settings
         this.overflowMask = $("#overflow-mask")
         this.mazeDiv = $(this.gc.mazeDiv)
         this.mazeArray = this.gc.mazeArray
@@ -31,6 +36,10 @@ class Debugger {
         this.tileSize = this.gc.scaledTileSize
         this.pacmanImmortal = false
         this.printMazeGrid = false
+        if (settings) {
+            this.shouldPrintGrid = settings.getBool('game.debugGrid')
+            this.enableBoundsAndHitBoxes = settings.getBool('game.debugBounds')
+        }
         this.createCanvas()
         this.handleInput()  
         this.configInfoPanel()
@@ -40,7 +49,7 @@ class Debugger {
 
     handleInput() {
         const dbg = this
-        window.addEventListener('keydown',(event)=>{
+        this.keyHandler = (event: KeyboardEvent) =>{
             if (event.key == '3')
                 dbg.makePacmanImortal(true)
             else if (event.key == '4')
@@ -70,7 +79,18 @@ class Debugger {
             } else if (event.key.toLowerCase() == 'c') {
                 dbg.toggleConsole()
             }            
-        } )
+        }
+        window.addEventListener('keydown', this.keyHandler)
+    }
+
+    destroy() {
+        this.destroyed = true
+        cancelAnimationFrame(this.rafId)
+        window.removeEventListener('keydown', this.keyHandler)
+        if (this.canvas && this.canvas.parentNode)
+            this.canvas.parentNode.removeChild(this.canvas)
+        if (window.debug === this)
+            window.debug = null
     }
  
     createCanvas() {
@@ -129,6 +149,7 @@ class Debugger {
     }
     animate() {
         const an = () =>{
+            if (this.destroyed) return
             this.updateFps()
             this.clearGrid()
             if (this.shouldPrintGrid) {
@@ -137,7 +158,7 @@ class Debugger {
                 this.drawBoundsAndHitBoxes(false)
             }
             this.printConsole()
-            requestAnimationFrame(an)
+            this.rafId = requestAnimationFrame(an)
         }
         an()
     }

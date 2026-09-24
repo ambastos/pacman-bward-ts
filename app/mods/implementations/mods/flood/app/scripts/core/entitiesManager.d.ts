@@ -1,5 +1,6 @@
 import { Container } from "pixi.js";
 import Wave from "./wave.ts";
+import Sonic from "../entities/sonic.ts";
 import GameCoordinator from "../../../../../../../scripts/core/gameCoordinator.ts";
 import MovableEntity from "../../../../../../../scripts/characters/movableEntity.ts";
 declare class EntitiesManager {
@@ -10,6 +11,8 @@ declare class EntitiesManager {
     constructor(gc: GameCoordinator);
     restart(): void;
     tryToGenerateEntities(wave: Wave | null): void;
+    makeSonicLeave(): void;
+    removeSonic(entity: Sonic): void;
     dequeAllEntities(): void;
     queueEntity(entity: EntityDefs): void;
     dequeEntitiesBy(name?: string): EntityDefs[];

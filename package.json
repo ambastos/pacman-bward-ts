@@ -6,7 +6,8 @@
     "coverage": "NODE_OPTIONS=--no-experimental-require-module nyc report --reporter=text-lcov | node ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint .",
     "build": "tsc",
-    "serve": "nodemon --watch build --watch index.html --exec npx http-server",
+    "serve":"node server.js",
+    "serve2": "nodemon --watch build --watch index.html --exec npx http-server",
     "gulp": "NODE_NO_WARNINGS=1 gulp",
     "watch": "NODE_NO_WARNINGS=1 gulp watch"
   },
@@ -34,6 +35,7 @@
     "ecstatic": "^4.1.4",
     "eventemitter3": "^4.0.6",
     "events": "^3.3.0",
+    "express": "^5.2.1",
     "follow-redirects": "^1.13.0",
     "he": "^1.2.0",
     "http-proxy": "^1.18.1",

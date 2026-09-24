@@ -14,7 +14,7 @@ import Timer from "../../../../../../../scripts/utilities/timer.ts"
 import RegisterListeners from "./registerListeners.ts"
 
 class Flood extends Mod implements RegisterListeners {
-    name = "flood"
+    name = "Flood"
     width: number
     maxHeight: number
     tileSize: number
@@ -26,6 +26,10 @@ class Flood extends Mod implements RegisterListeners {
     ghosts!: Ghost[]
     states!: State[]
     state!: State
+    waveIntervalMin: number = 10
+    waveIntervalMax: number = 30
+    pacmanMaxBreathing: number = 10
+    ghostsMaxBreathing: number = 10
     constructor(gameCoordinator: GameCoordinator) {
         super(gameCoordinator)
         this.width = gameCoordinator.width
@@ -154,6 +158,8 @@ class Flood extends Mod implements RegisterListeners {
     stop() {
         super.stop()
         this.gp.clear()
+        if (this.container.parent)
+            this.gc.stage.removeChild(this.container)
         this.emitter.emit("flood-end")
     }
     generateWave(timeToStartMS?: number) {

@@ -2,6 +2,7 @@ import { Texture } from "pixi.js";
 import GameCoordinator from "../core/gameCoordinator.ts";
 declare class Debugger {
     gc: GameCoordinator;
+    settings: any;
     overflowMask: any;
     mazeDiv: any;
     mazeArray: any;
@@ -19,8 +20,12 @@ declare class Debugger {
     consoleBuffer: string[];
     fps: number;
     lastFrameTime: number;
-    constructor(gameCoordinator: GameCoordinator);
+    private rafId;
+    private destroyed;
+    private keyHandler;
+    constructor(gameCoordinator: GameCoordinator, settings?: any);
     handleInput(): void;
+    destroy(): void;
     createCanvas(): void;
     moveInUnits(direction: string, units: number): void;
     animate(): void;

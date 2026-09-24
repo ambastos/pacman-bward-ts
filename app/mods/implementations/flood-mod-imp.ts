@@ -6,6 +6,7 @@ import Flood from './mods/flood/app/scripts/core/flood.ts'
 import GameCoordinator from '../../scripts/core/gameCoordinator.ts'
 
 class FloodModImp extends Mod{
+    name = "flood"
     flood
     constructor(gameCoodinator: GameCoordinator) { 
         super(gameCoodinator) 

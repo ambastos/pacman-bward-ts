@@ -13,10 +13,11 @@ class IdleState extends State {
         const wave = this.wavesManager.wave
         this.flood.container.addChildAt(wave, 0)
 
-        //between 10 and 30 seconds to generate a new wave
+        //between the configured interval (default 10 and 30 seconds)
+        //to generate a new wave
         const waveTimeMs = timeToStartMS != undefined && timeToStartMS >= 0
             ? timeToStartMS
-            : Math.floor(Math.random() * 21) + 10
+            : this.randomWaveTimeMs()
         this.wavesManager.waveTime = waveTimeMs * 1000
 
         //the duration of the wave is between 8 and 20 seconds
@@ -24,6 +25,13 @@ class IdleState extends State {
         wave.duration = durationMs * 1000
 
         this.wavesManager.nextWaveTime = Date.now() + this.wavesManager.waveTime
+    }
+    randomWaveTimeMs(): number {
+        const flood: any = this.wavesManager.flood
+        const min = flood?.waveIntervalMin || 10
+        const max = Math.max(min, flood?.waveIntervalMax || 30)
+        const range = max - min
+        return Math.floor(Math.random() * (range + 1)) + min
     }
     start() {
         if (this.wavesManager)

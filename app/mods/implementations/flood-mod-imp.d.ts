@@ -3,6 +3,7 @@ import Mod from '../mod.ts';
 import Flood from './mods/flood/app/scripts/core/flood.ts';
 import GameCoordinator from '../../scripts/core/gameCoordinator.ts';
 declare class FloodModImp extends Mod {
+    name: string;
     flood: Flood;
     constructor(gameCoodinator: GameCoordinator);
     initialize(): void;
