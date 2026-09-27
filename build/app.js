@@ -39581,7 +39581,6 @@ void main(void)\r
     await window.settings.load();
     window.settings.apply();
     window.settings.initUi();
-    window.f = window.gc.mod?.flood ?? null;
   };
 })();
 /*! Bundled license information:

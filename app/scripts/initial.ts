@@ -6,6 +6,5 @@ import GameCoordinator from "./core/gameCoordinator.ts"
     window.settings = new SettingsManager(window.gc)
     await window.settings.load()
     window.settings.apply()
-    window.settings.initUi()
-    window.f = (window.gc.mod as any)?.flood ?? null
+    window.settings.initUi()    
   }

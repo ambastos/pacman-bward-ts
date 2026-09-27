@@ -1,1 +1,0 @@
-{"version":3,"file":"cancelState.d.ts","sourceRoot":"","sources":["cancelState.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,YAAY,MAAM,yBAAyB,CAAA;AACvD,OAAO,EAAE,KAAK,EAAU,MAAM,YAAY,CAAA;AAC1C,cAAM,WAAY,SAAQ,KAAK;gBACf,YAAY,EAAE,YAAY;IAGtC,KAAK;IAQL,QAAQ;IAuBR,MAAM,CAAC,SAAS,EAAE,MAAM;IAiBxB,IAAI;CAGP;AACD,eAAe,WAAW,CAAA"}
