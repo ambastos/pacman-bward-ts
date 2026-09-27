@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src='https://www.googletagmanager.com/gtag/js?id=UA-142539004-1'></script>
+    <!--script async src='https://www.googletagmanager.com/gtag/js?id=UA-142539004-1'></script-->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -11,14 +14,19 @@
       gtag('config', 'UA-142539004-1');
     </script>
 
+    <!-- <script
+    src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script> -->
+    <script src="build/libraries/jquery-3.7.1.slim.min.js.js"></script>
     <script src='build/app.js'></script>
+    
     <link rel='shortcut icon' type='image/x-icon' href='favicon.ico'>
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/icon?family=Material+Icons'
       rel='stylesheet'>
     <title>Pacman</title>
   </head>
-
   <body>
     <div id='overflow-mask' class='overflow-mask'>
       <img id='backdrop' class='backdrop' src='app/style/graphics/backdrop.png'>
@@ -31,7 +39,14 @@
         <button id='game-start' class='game-start'>
           PLAY
         </button>
+        <button id='config-btn-menu' class='config-start-btn'>
+          Configurations...
+        </button>
       </div>
+
+      <button id='config-btn-game' class='config-btn-game'>
+        Configurations...
+      </button>
 
       <div class='header-buttons'>
         <button>
@@ -49,33 +64,12 @@
       </div>
 
       <div id='game-ui' class='game-ui'>
-        <div id='row-top' class='row top'>
-          <div class='column _25'>
-            <div class='one-up'>1UP</div>
-            <div id='points-display'></div>
-          </div>
-          <div class='column _50'>
-            <div>HIGH SCORE</div>
-            <div id='high-score-display'></div>
-          </div>
-        </div>
-
+        <div id='row-top' class='row top'></div>
         <div id='maze' class='maze'>
-          <img id='maze-img' class='maze-img' src='app/style//graphics/spriteSheets/maze/maze_blue.svg'>
           <div id='maze-cover' class='maze-cover'></div>
-          <div id='dot-container'></div>
-          <p id='pacman' class='pacman'></p>
-          <p id='pacman-arrow' class='pacman'></p>
-          <p id='clyde' class='ghost'></p>
-          <p id='inky' class='ghost'></p>
-          <p id='pinky' class='ghost'></p>
-          <p id='blinky' class='ghost'></p>
-        </div>
+        </div> 
 
-        <div id='bottom-row' class='row bottom'>
-          <div id='extra-lives' class='extra-lives'></div>
-          <div id='fruit-display' class='fruit-display'></div>
-        </div>
+        <div id='bottom-row' class='row bottom'></div>
       </div>
 
       <div id='movement-buttons' class='movement-buttons'>
@@ -96,6 +90,91 @@
           <button id='button-down' class='button-down'>
             <i class='material-icons'>keyboard_arrow_down</i>
           </button>
+        </div>
+      </div>
+
+      <div id='settings-modal' class='settings-backdrop'>
+        <div class='settings-panel'>
+          <button id='settings-close' class='settings-close'>&times;</button>
+          <h2 class='settings-title'>Configurations</h2>
+          <div class='settings-row'>
+            <span class='settings-label'>Enable Debug</span>
+            <input type='checkbox' id='cfg-debug' class='settings-check'>
+            <button id='cfg-debug-dots' class='settings-dots' title='Debug'>
+              <i class='material-icons'>more_vert</i>
+            </button>
+          </div>
+          <div class='settings-row'>
+            <span class='settings-label'>Mods</span>
+            <select id='cfg-mod' class='settings-select'>
+              <option value='flood'>Flood</option>
+              <option value='none'>None</option>
+            </select>
+            <button id='cfg-mod-dots' class='settings-dots' title='Configure Mod'>
+              <i class='material-icons'>more_vert</i>
+            </button>
+          </div>
+          <div id='settings-tip' class='settings-tip'></div>
+        </div>
+      </div>
+
+      <div id='debug-modal' class='settings-backdrop'>
+        <div class='settings-panel'>
+          <button id='debug-close' class='settings-close'>&times;</button>
+          <h2 class='settings-title'>Debug</h2>
+          <div class='settings-row'>
+            <label class='settings-label' for='dbg-lives'>Lives</label>
+            <input type='number' id='dbg-lives' class='settings-num' min='0' step='1'>
+          </div>
+          <div class='settings-row'>
+            <label class='settings-label' for='dbg-immortality'>Immortality</label>
+            <input type='checkbox' id='dbg-immortality' class='settings-check'>
+          </div>
+          <div class='settings-row settings-ghost-row'>
+            <span class='settings-label'>Enable ghosts</span>
+            <div class='ghost-checks'>
+              <label><input type='checkbox' id='dbg-ghost-blinky'>blinky</label>
+              <label><input type='checkbox' id='dbg-ghost-pinky'>pinky</label>
+              <label><input type='checkbox' id='dbg-ghost-inky'>inky</label>
+              <label><input type='checkbox' id='dbg-ghost-clyde'>clyde</label>
+            </div>
+          </div>
+          <div class='settings-row'>
+            <label class='settings-label' for='dbg-level'>Level</label>
+            <input type='number' id='dbg-level' class='settings-num' min='1' step='1'>
+          </div>
+          <div class='settings-row'>
+            <label class='settings-label' for='dbg-bounds'>Enable Bounds and Hit Box</label>
+            <input type='checkbox' id='dbg-bounds' class='settings-check'>
+          </div>
+          <div class='settings-row'>
+            <label class='settings-label' for='dbg-grid'>Show Grid</label>
+            <input type='checkbox' id='dbg-grid' class='settings-check'>
+          </div>
+        </div>
+      </div>
+
+      <div id='flood-modal' class='settings-backdrop'>
+        <div class='settings-panel'>
+          <button id='flood-close' class='settings-close'>&times;</button>
+          <h2 class='settings-title'>Flood</h2>
+          <div class='settings-row'>
+            <label class='settings-label' for='flood-wave-min'>Wave Interval</label>
+            <input type='number' id='flood-wave-min' class='settings-num' min='0' step='1'>
+            <span class='settings-hint'>to</span>
+            <input type='number' id='flood-wave-max' class='settings-num' min='0' step='1'>
+            <span class='settings-hint'>(seconds)</span>
+          </div>
+          <div class='settings-row'>
+            <label class='settings-label' for='flood-pac-breath'>Pacman Breathing</label>
+            <input type='number' id='flood-pac-breath' class='settings-num' min='1' step='1'>
+            <span class='settings-hint'>(seconds)</span>
+          </div>
+          <div class='settings-row'>
+            <label class='settings-label' for='flood-ghosts-breath'>Ghosts Breathing</label>
+            <input type='number' id='flood-ghosts-breath' class='settings-num' min='1' step='1'>
+            <span class='settings-hint'>(seconds)</span>
+          </div>
         </div>
       </div>
 
@@ -137,12 +216,6 @@
           by playing on an unsupported browser.
         </div>
       </div>
-
-      <script>
-        window.onload = () => {
-          let gameCoordinator = new GameCoordinator();
-        }
-      </script>
     </div>
   </body>
 </html>

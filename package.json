@@ -1,40 +1,106 @@
 {
-  "nyc": {
-    "include": [
-      "app/scripts/**/*.js"
-    ],
-    "all": true
-  },
+  "type": "module",
   "scripts": {
-    "test": "nyc --check-coverage --lines 100 --functions 100 --branches 100 mocha app/tests",
-    "coverage": "nyc report --reporter=text-lcov | node ./node_modules/coveralls/bin/coveralls.js",
-    "lint": "./node_modules/.bin/eslint .",
-    "serve": "node ./node_modules/http-server/bin/http-server"
+    "test": "jest",
+    "test:mocha": "NODE_OPTIONS=--no-experimental-require-module nyc --check-coverage --lines 100 --functions 100 --branches 100 mocha -r ts-node-register app/tests",
+    "coverage": "NODE_OPTIONS=--no-experimental-require-module nyc report --reporter=text-lcov | node ./node_modules/coveralls/bin/coveralls.js",
+    "lint": "eslint .",
+    "build": "tsc",
+    "serve": "node server.js",
+    "serve2": "nodemon --watch build --watch index.html --exec npx http-server",
+    "gulp": "NODE_NO_WARNINGS=1 gulp",
+    "watch": "NODE_NO_WARNINGS=1 gulp watch",
+    "build:text": "NODE_NO_WARNINGS=1 gulp --gulpfile gulpfile-text.js --gulpfile-text buildText",
+    "watch:text": "NODE_NO_WARNINGS=1 gulp --gulpfile gulpfile-text.js --gulpfile-text watchText"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm test"
-    }
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
   },
   "engines": {
     "node": ">=12.18.3",
     "npm": ">=6.14.6"
   },
+  "name": "pacman-bward",
+  "description": "[![Build Status](https://travis-ci.com/bward2/pacman-js.svg?branch=master)](https://travis-ci.com/bward2/pacman-js) [![Coverage Status](https://coveralls.io/repos/github/bward2/pacman-js/badge.svg?branch=master)](https://coveralls.io/github/bward2/pacman-js?branch=master) [![Code Style](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript)",
+  "version": "1.0.0",
+  "main": ".eslintrc.js",
+  "dependencies": {
+    "@pixi/devtools": "^2.0.1",
+    "@pixi/graphics-extras": "^7.4.3",
+    "@pixi/sound": "^5.2.3",
+    "async": "^2.6.3",
+    "basic-auth": "^1.1.0",
+    "colors": "^1.4.0",
+    "corser": "^2.0.1",
+    "ecstatic": "^4.1.4",
+    "eventemitter3": "^4.0.6",
+    "events": "^3.3.0",
+    "express": "^5.2.1",
+    "follow-redirects": "^1.13.0",
+    "he": "^1.2.0",
+    "http-proxy": "^1.18.1",
+    "mime": "^1.6.0",
+    "minimist": "^1.2.8",
+    "mkdirp": "^0.5.5",
+    "opener": "^1.5.1",
+    "pixi.js": "^7.4.3",
+    "portfinder": "^1.0.28",
+    "qs": "^6.5.2",
+    "requires-port": "^1.0.0",
+    "secure-compare": "^3.0.1",
+    "typescript": "^5.9.3",
+    "union": "^0.5.0",
+    "url-join": "^2.0.5"
+  },
   "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-commonjs": "^28.0.9",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@types/assert": "^1.5.11",
+    "@types/jest": "^30.0.0",
+    "@types/jquery": "^3.5.33",
+    "@types/lodash": "^4.17.20",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.10.1",
+    "@types/sinon": "^20.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^10.0.0",
+    "browserify": "^17.0.1",
     "coveralls": "^3.0.3",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.2",
-    "gulp": "^4.0.2",
+    "esbuild": "^0.25.11",
+    "fancy-log": "^2.0.0",
+    "gulp": "^5.0.1",
+    "gulp-cached": "^1.1.1",
+    "gulp-cli": "^3.1.0",
     "gulp-concat": "^2.6.1",
     "gulp-remove-code": "^3.0.4",
-    "gulp-sass": "^4.0.2",
-    "http-server": "^0.12.3",
+    "gulp-sass": "^5.1.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "gulp-util": "^1.0.0",
+    "gulplog": "^2.2.0",
     "husky": "^1.3.1",
-    "mocha": "^8.1.2",
-    "nyc": "^14.1.0",
-    "sass": "^1.26.10",
-    "sinon": "^7.3.2"
-  }
+    "jest": "^30.0.0",
+    "mocha": "^10.2.0",
+    "node-glob": "^1.2.0",
+    "nyc": "^17.1.0",
+    "playwright": "^1.63.0",
+    "rollup": "^2.79.1",
+    "sass": "^1.69.5",
+    "sinon": "^7.3.2",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "tsify": "^5.0.4",
+    "vinyl-source-buffer": "^1.1.1",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^4.0.0"
+  },
+  "author": "",
+  "license": "ISC"
 }

@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables' as *;
 
 * {
   font-family: 'Press Start 2P', sans-serif;
@@ -30,7 +30,7 @@ body {
   position: absolute;
   right: 10px;
   top: 10px;
-  visibility: hidden;
+  visibility: visible;
 }
 
 .preload-div {
@@ -96,6 +96,7 @@ body {
   }
 
   .top {
+    //display: none;
     ._25 {
       width: 25%;
     }
@@ -263,7 +264,7 @@ body {
 ._25 { left: 25%; }
 ._30 { left: 30%; }
 ._35 { left: 35%; }
-._40 { left: 40%; }
+._40 { left: 40%; } 
 ._45 { left: 45%; }
 ._50 { left: 50%; }
 ._55 { left: 55%; }

@@ -1,0 +1,300 @@
+import { ObservablePoint } from "pixi.js";
+import StaticEntity from "../characters/staticEntity.ts";
+import { copyPosition, createObservablePoint, getAnchorAxis, getGridPosition } from "./utils.ts";
+import MovableEntity from "../characters/movableEntity.ts";
+
+class CharacterUtil { 
+  directions  
+  constructor() {
+    this.directions = {
+      up: "up",
+      down: "down",
+      left: "left",
+      right: "right", 
+    }
+  }
+
+  /**
+   * Check if a given character has moved more than five in-game tiles during a frame.
+   * If so, we want to temporarily hide the object to avoid 'animation stutter'.
+   * @param {({top: number, left: number})} position - Position during the current frame
+   * @param {({top: number, left: number})} oldPosition - Position during the previous frame
+   * @returns {('hidden'|'visible')} - The new 'visibility' css property value for the character.
+   */
+  checkForStutter(position?:ObservablePoint, oldPosition?:ObservablePoint):string {
+    let stutter = false;
+    const threshold = 5; 
+
+    if (position && oldPosition) {
+      if (Math.abs(position.y - oldPosition.y) > threshold
+        || Math.abs(position.x - oldPosition.x) > threshold) {
+        stutter = true;
+      }
+    }
+    
+    return stutter ? 'hidden' : 'visible';
+  }
+
+  /**
+   * Check which CSS property needs to be changed given the character's current direction
+   * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @returns {('top'|'left')}
+   */
+  getPropertyToChange(direction?: string):"x" | "y" {
+    switch (direction) {
+      case this.directions.up:
+      case this.directions.down:
+        return "y";
+      default:
+        return "x";
+    }
+  }
+
+  /**
+   * Calculate the velocity for the character's next frame.
+   * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @param {number} velocityPerMs - The distance to travel in a single millisecond
+   * @returns {number} - Moving down or right is positive, while up or left is negative.
+   */
+  getVelocity(direction:string, velocityPerMs:number):number {
+    switch (direction) {
+      case this.directions.up:
+      case this.directions.left:
+        return velocityPerMs * -1;
+      default:
+        return velocityPerMs;
+    }
+  }
+
+  /**
+   * Determine the next value which will be used to draw the character's position on screen
+   * @param {number} interp - The percentage of the desired timestamp between frames
+   * @param {('top'|'left')} prop - The css property to be changed
+   * @param {({top: number, left: number})} oldPosition - Position during the previous frame
+   * @param {({top: number, left: number})} position - Position during the current frame
+   * @returns {number} - New value for css positioning
+   */
+  calculateNewDrawValue(interp:number, prop:"x"|"y",
+    oldPosition:ObservablePoint, position:ObservablePoint):number {    
+    return oldPosition[prop] + (position[prop] - oldPosition[prop]) * interp;
+  }
+
+  /**
+   * Convert the character's css position to a row-column on the maze array
+   * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @param {number} scaledTileSize - The dimensions of a single tile
+   * @returns {({x: number, y: number})}
+   */
+  determineGridPosition(position:ObservablePoint, scaledTileSize:number,
+    anchor:ObservablePoint, scale:number
+  ):ObservablePoint {
+    return getGridPosition(this,position, scaledTileSize, anchor, scale)
+  }
+
+  /**
+   * Check to see if a character's disired direction results in turning around
+   * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @param {('up'|'down'|'left'|'right')} desiredDirection - Character's desired orientation
+   * @returns {boolean}
+   */
+  turningAround(direction:string, desiredDirection:string):boolean {
+    return desiredDirection === this.getOppositeDirection(direction);
+  }
+
+  /**
+   * Calculate the opposite of a given direction
+   * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @returns {('up'|'down'|'left'|'right')}
+   */
+  getOppositeDirection(direction:string):string {
+    switch (direction) {
+      case this.directions.up:
+        return this.directions.down;
+      case this.directions.down:
+        return this.directions.up;
+      case this.directions.left:
+        return this.directions.right;
+      default:
+        return this.directions.left;
+    }
+  }
+ 
+  /**
+   * Calculate the proper rounding function to assist with collision detection
+   * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @returns {Function}
+   */
+  determineRoundingFunction(direction:string):Function {
+    switch (direction) {
+      case this.directions.up:
+      case this.directions.left:
+        return Math.floor;
+      default:
+        return Math.ceil;
+    }
+  }
+
+  /**
+   * Check to see if the character's next frame results in moving to a new tile on the maze array
+   * @param {({x: number, y: number})} oldPosition - Position during the previous frame
+   * @param {({x: number, y: number})} position - Position during the current frame
+   * @returns {boolean}
+   */
+  changingGridPosition(oldPosition:ObservablePoint, position:ObservablePoint):boolean {
+    return (
+      Math.floor(oldPosition.x) !== Math.floor(position.x)
+            || Math.floor(oldPosition.y) !== Math.floor(position.y)
+    );
+  }
+
+  /**
+   * Check to see if the character is attempting to run into a wall of the maze
+   * @param {({x: number, y: number})} desiredNewGridPosition - Character's target tile
+   * @param {Array} mazeArray - The 2D array representing the game's maze
+   * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @returns {boolean}
+   */
+  checkForWallCollision(desiredNewGridPosition:ObservablePoint, mazeArray:string[][], direction:string):boolean {
+    const roundingFunction = this.determineRoundingFunction(
+      direction,
+    );
+
+    const desiredX = roundingFunction(desiredNewGridPosition.x);
+    const desiredY = roundingFunction(desiredNewGridPosition.y);
+    let newGridValue;
+
+    if (Array.isArray(mazeArray[desiredY])) {
+      newGridValue = mazeArray[desiredY][desiredX];
+    }
+
+    return (newGridValue === 'X');
+  }
+
+  /**
+   * Returns an object containing the new position and grid position based upon a direction
+   * @param {({top: number, left: number})} position - css position during the current frame
+   * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @param {number} velocityPerMs - The distance to travel in a single millisecond
+   * @param {number} elapsedMs - The amount of MS that have passed since the last update
+   * @param {number} scaledTileSize - The dimensions of a single tile
+   * @returns {object}
+   */
+  determineNewPositions(
+    position:ObservablePoint, direction:string, velocityPerMs:number, elapsedMs:number, 
+      scaledTileSize:number, anchor: ObservablePoint, scale:number
+  ):any {
+    const newPosition = copyPosition(this, position)
+    newPosition[this.getPropertyToChange(direction)]
+      += this.getVelocity(direction, velocityPerMs) * elapsedMs;
+    const newGridPosition = this.determineGridPosition(
+      newPosition, scaledTileSize, anchor, scale
+    );
+
+    return {
+      newPosition,
+      newGridPosition,
+    };
+  }
+
+  /**
+   * Calculates the css position when snapping the character to the x-y grid
+   * @param {({x: number, y: number})} gridPosition - The character's grid position during the current frame
+   * @param {('up'|'down'|'left'|'right')} direction - The character's current travel orientation
+   * @param {ObservablePoint x:number,y:number} anchor - The anchor of the sprite (center 0.5,0,5 or top-left 0,0)
+   * @param {number} scaledTileSize - The dimensions of a single tile
+   * @returns {({top: number, left: number})}
+   */
+  snapToGrid(gridPosition:ObservablePoint, direction:string, scaledTileSize:number, 
+    anchor:ObservablePoint, scale:number 
+   ):ObservablePoint {
+    let ax = 0, ay = 0
+    if (anchor) {
+      const axis = getAnchorAxis(this,anchor, scaledTileSize, scale!)
+      ax = axis.x
+      ay = axis.y
+    }
+
+    const newGridPosition = copyPosition(this, gridPosition );
+    const roundingFunction = this.determineRoundingFunction(
+      direction,
+    );
+
+    switch (direction) {
+      case this.directions.up:   
+      case this.directions.down:
+        newGridPosition.y = roundingFunction(newGridPosition.y);
+        break;
+      default:
+        newGridPosition.x = roundingFunction(newGridPosition.x);
+        break;
+    }
+    return createObservablePoint(
+      this,
+      ((newGridPosition.x - 0.5) * scaledTileSize) + ax,
+      ((newGridPosition.y - 0.5) * scaledTileSize) + ay
+    )
+  }
+
+  /**
+   * //TODO: includes anchor and scale to handleWarp
+   * Returns a modified position if the character needs to warp
+   * @param {({top: number, left: number})} position - css position during the current frame
+   * @param {({x: number, y: number})} gridPosition - x-y position during the current frame
+   * @param {number} scaledTileSize - The dimensions of a single tile
+   * @returns {({top: number, left: number})}
+   */
+  handleWarp(direction:string, position:ObservablePoint, scaledTileSize:number, mazeArray:any,
+    anchor:ObservablePoint, scale:number
+  ):ObservablePoint{
+    const newPosition = createObservablePoint(this, position.x, position.y);
+    const gridPosition = this.determineGridPosition(position, scaledTileSize,
+      anchor,scale
+    );
+    const axis = getAnchorAxis(this, anchor,scaledTileSize,scale)    
+    
+   // gridPosition.x < -0.75
+    //direction == "left" && gridPosition.x  <  -0.75-(-0.75 + anchor.x)
+    if (direction == "left" && gridPosition.x  < -0.75 + anchor.x) {
+      //newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75));
+      newPosition.x = (scaledTileSize * (mazeArray[0].length - 0.75)) + 
+        (anchor.x * scaledTileSize * 0.75) ;
+    //} else if (gridPosition.x > (mazeArray[0].length - 0.25)) {
+    //(gridPosition.x  > mazeArray[0].length - 0.25-(-0.25 + anchor.x) )
+    } else if ( direction == "right" && 
+      (gridPosition.x  > mazeArray[0].length - 0.25-anchor.x )) {
+      newPosition.x = (scaledTileSize * -1.25) + (anchor.x * scaledTileSize * 1.25);
+      //newPosition.x = (scaledTileSize * -1.25);
+    }
+    return newPosition;
+  }
+
+  /**
+   * Advances spritesheet by one frame if needed
+   * @param {Object} character - The character which needs to be animated
+   */
+  advanceSpriteSheet(character:MovableEntity):any {
+    const {
+      msSinceLastSprite,
+      frame,
+    } = character;
+    const updatedProperties = {
+      msSinceLastSprite,
+      frame,
+    };
+
+    const ready = (character.msSinceLastSprite > character.msBetweenSprites)
+      && character.animate;
+    if (ready) {
+      updatedProperties.msSinceLastSprite = 0; 
+      if (character.frame < character.spriteFrames - 1) {
+        updatedProperties.frame +=1
+      } else if (character.loopAnimation) {
+        updatedProperties.frame =0
+      }
+    }  
+    return updatedProperties;
+  }
+}
+// removeIf(production)
+  export default CharacterUtil
+// endRemoveIf(production)

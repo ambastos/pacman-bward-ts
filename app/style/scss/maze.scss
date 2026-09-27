@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables' as *;
 
 .maze-cover {
   background: $black;
@@ -28,4 +28,22 @@
   height: 100%;
   position: absolute;
   width: 100%;
+}
+
+.view {
+  /*position: absolute;*/
+  
+}
+
+.row-top-view { 
+  
+  // position: absolute;
+  // left:900px;
+  // top: 20px; 
+} 
+
+.row-bottom-view {
+  // left: 900px; 
+  // top: 570px;
+  // position: absolute;
 }

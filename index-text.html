@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <!--
+      O jogo carrega os assets com caminhos relativos ("app/style/..."), que so
+      resolvem a partir da raiz. Em /text eles virariam /text/app/style/... e
+      dariam 404. O <base> faz a pagina se comportar como se estivesse em /,
+      sem precisar alterar o AssetsManager.
+    -->
+    <base href="/">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Pacman :: Console de Texto</title>
+
+    <!--
+      Esta pagina nao altera index.html: e uma segunda entrada que carrega o
+      mesmo build/app.js e desenha o jogo em caracteres ASCII, num canvas 2D.
+
+      O fluxo real do jogo e preservado. Os assets sao baixados pelo mesmo
+      AssetsManager, o menu principal (e o botao PLAY) so aparece quando eles
+      terminam, e o ENTER no console chama o startButtonClick original -- o
+      GameCoordinator cria Pacman, os fantasmas e os pontos, e o GameEngine
+      assume o laco. O console apenas substitui o desenho.
+    -->
+
+    <!-- O GameCoordinator tambem injeta build/app.css para disparar o preload. -->
+    <link rel="stylesheet" href="build/app.css">
+
+    <!-- O Debugger (ligado por game.debug) usa $, entao o jQuery vem primeiro. -->
+    <script src="build/libraries/jquery-3.7.1.slim.min.js.js"></script>
+    <script src="build/app.js"></script>
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+    <style>
+      html,
+      body {
+        background: #000;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      body {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+      }
+
+      #text-console {
+        display: block;
+        /* Sem suavizacao: cada caractere e um bloco, como num terminal real. */
+        image-rendering: pixelated;
+      }
+
+      /*
+        A interface original e escondida: no console a unica saida visivel e o
+        canvas. display:none tambem zera o scrollWidth dos elementos de
+        carregamento, o que so faz o progressBar original ficar em 0.
+      */
+      #game-ui,
+      #main-menu-container,
+      #loading-container,
+      #preload-div,
+      #movement-buttons,
+      #config-btn-game,
+      #left-cover,
+      #right-cover,
+      #paused-text,
+      #fps-display,
+      #error-message {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Unica saida visivel: cada caractere e desenhado com fillText. -->
+    <canvas id="text-console"></canvas>
+
+    <script>
+      /*
+        Placeholders para a interface original, que o console substitui por
+        completo. Precisam existir antes de window.onload, quando o
+        GameCoordinator e construido, porque ele os dereferencia sem
+        verificar nada:
+
+        game-ui, row-top, maze, maze-cover, main-menu-container, left-cover,
+        right-cover, paused-text, bottom-row, movement-buttons
+                                        -> construtor do GameCoordinator
+        loading-container, loading-pacman, loading-dot-mask, preload-div
+                                        -> AssetsManager.load()
+        fps-display                       -> GameEngine (contador de FPS)
+        button-up/down/left/right         -> GameCoordinator.registerEventListeners()
+        error-message                     -> GameCoordinator.displayErrorMessage()
+
+        game-start, pause-button e sound-button tambem sao buttons porque o
+        jogo escreve .disabled e .innerHTML neles.
+      */
+      (function createPlaceholders() {
+        var GROUPS = [
+          'game-ui', 'row-top', 'maze', 'maze-cover', 'main-menu-container',
+          'left-cover', 'right-cover', 'paused-text', 'bottom-row',
+          'movement-buttons',
+          'loading-container', 'loading-pacman', 'loading-dot-mask', 'preload-div',
+          'fps-display', 'error-message',
+        ]
+
+        var BUTTONS = [
+          'game-start', 'pause-button', 'sound-button',
+          'button-up', 'button-down', 'button-left', 'button-right',
+        ]
+
+        var create = function (id, tag) {
+          var el = document.createElement(tag || 'div')
+          el.id = id
+          document.body.appendChild(el)
+          return el
+        }
+
+        GROUPS.forEach(function (id) { create(id) })
+        BUTTONS.forEach(function (id) { create(id, 'button') })
+      })()
+    </script>
+
+    <script
+      src="build/textRenderer.js"
+      onerror="(function () {
+        // Sem este bundle a pagina ficaria preta e silenciosa. Ele e gerado
+        // pelo `npm run build:text`.
+        var c = document.getElementById('text-console')
+        if (!c) return
+        var x = c.getContext('2d')
+        c.width = 760
+        c.height = 72
+        x.fillStyle = '#000'
+        x.fillRect(0, 0, c.width, c.height)
+        x.fillStyle = '#ff5555'
+        x.font = '14px monospace'
+        x.fillText('build/textRenderer.js nao encontrado.', 16, 20)
+        x.fillText('Execute:  npm run build:text', 16, 44)
+      })()"
+    ></script>
+  </body>
+</html>
