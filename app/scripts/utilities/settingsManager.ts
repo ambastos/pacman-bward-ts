@@ -27,58 +27,123 @@ function parseValue(raw: string): any {
   return raw
 }
 
+function parseConfig(text: string): Record<string, any> {
+  const out: Record<string, any> = {}
+  text.split(/\r?\n/).forEach((line) => {
+    const trimmed = line.trim()
+    if (!trimmed || trimmed.startsWith('#')) return
+    const eq = trimmed.indexOf('=')
+    if (eq <= 0) return
+    const key = trimmed.substring(0, eq).trim()
+    const raw = trimmed.substring(eq + 1).trim()
+    out[key] = parseValue(raw)
+  })
+  return out
+}
+
+async function fetchText(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url)
+    return res.ok ? await res.text() : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Maps a default key like `game.default.lives` onto its applied key
+ * (e.g. `game.pacman.lives`) by stripping the `default.` segment. When
+ * the remaining path has no segment (legacy single-segment defaults), it
+ * falls back to trailing-suffix matching against applied keys. A default
+ * always resolves to a target, so it seeds applied keys that are not
+ * written in the config file.
+ */
+function resolveDefaultKey(
+  defaultKey: string,
+  parsed: Record<string, any>,
+  namespace = 'game',
+): string | undefined {
+  const prefix = `${namespace}.default.`
+  if (!defaultKey.startsWith(prefix)) return undefined
+  const rest = defaultKey.slice(prefix.length)
+  const exact = `${namespace}.${rest}`
+  if (rest.includes('.')) return exact
+  const candidates = Object.keys(parsed).filter(
+    (k) => k.startsWith(`${namespace}.`) && !k.startsWith(`${namespace}.default.`),
+  )
+  if (candidates.includes(exact)) return exact
+  const restSegs = rest.split('.')
+  return (
+    candidates.find((k) => {
+      const segs = k.split('.')
+      return (
+        segs.length >= restSegs.length &&
+        segs.slice(-restSegs.length).join('.') === restSegs.join('.')
+      )
+    }) ?? exact
+  )
+}
+
+function splitDefaultsAndApplied(
+  parsed: Record<string, any>,
+  namespace = 'game',
+): { defaults: Record<string, any>; applied: Record<string, any> } {
+  const defaults: Record<string, any> = {}
+  const applied: Record<string, any> = {}
+  const defaultPrefix = `${namespace}.default.`
+  const appliedPrefix = `${namespace}.`
+  Object.entries(parsed).forEach(([key, value]) => {
+    if (key.startsWith(defaultPrefix)) {
+      const target = resolveDefaultKey(key, parsed, namespace)
+      if (target) defaults[target] = value
+    } else if (key.startsWith(appliedPrefix)) {
+      applied[key] = value
+    }
+  })
+  return { defaults, applied }
+}
+
+/**
+ * Reassembles the merged config from the raw game config text and the
+ * active mod config text (used only as a fallback when the server is gone).
+ */
+function mergeFromSources(
+  gameText: string | null,
+  mods: string[],
+  modTexts: Record<string, string | null>,
+): { defaults: Record<string, any>; config: Record<string, any>; mods: string[] } {
+  const game = splitDefaultsAndApplied(parseConfig(gameText ?? ''), 'game')
+  const defaults: Record<string, any> = { ...game.defaults }
+  const applied: Record<string, any> = { ...game.applied }
+  mods.forEach((name) => {
+    const text = modTexts[name]
+    if (text == null) return
+    const mod = splitDefaultsAndApplied(parseConfig(text), name)
+    Object.assign(defaults, mod.defaults)
+    Object.assign(applied, mod.applied)
+  })
+  return {
+    defaults,
+    config: { ...defaults, ...applied },
+    mods: mods.length ? mods : ['none'],
+  }
+}
+
+interface MergedConfig {
+  defaults: Record<string, any>
+  config: Record<string, any>
+  mods: string[]
+}
+
 class SettingsManager {
   gc: GameCoordinator
   config: Record<string, any> = {}
+  defaults: Record<string, any> = {}
+  mods: string[] = []
   subscribed = false
-
-  private keyOrder = [
-    'game.pacman.lives',
-    'game.pacman.immortality',
-    'game.ghosts.disabled',
-    'game.level',
-    'game.mod',
-    'game.debug',
-    'game.debugBounds',
-    'game.debugGrid',
-    'flood.waveIntervalMin',
-    'flood.waveIntervalMax',
-    'flood.pacmanBreathing',
-    'flood.ghostsBreathing',
-  ]
-
-  private defaults: Record<string, any> = {
-    'game.pacman.lives': 2,
-    'game.pacman.immortality': false,
-    'game.ghosts.disabled': [],
-    'game.level': 1,
-    'game.mod': 'flood',
-    'game.debug': true,
-    'game.debugBounds': false,
-    'game.debugGrid': false,
-    'flood.waveIntervalMin': 10,
-    'flood.waveIntervalMax': 30,
-    'flood.pacmanBreathing': 10,
-    'flood.ghostsBreathing': 10,
-  }
 
   constructor(gameCoordinator: GameCoordinator) {
     this.gc = gameCoordinator
-    this.config = { ...this.defaults }
-  }
-
-  parse(text: string): Record<string, any> {
-    const out: Record<string, any> = {}
-    text.split(/\r?\n/).forEach((line) => {
-      const trimmed = line.trim()
-      if (!trimmed || trimmed.startsWith('#')) return
-      const eq = trimmed.indexOf('=')
-      if (eq <= 0) return
-      const key = trimmed.substring(0, eq).trim()
-      const raw = trimmed.substring(eq + 1).trim()
-      out[key] = parseValue(raw)
-    })
-    return out
   }
 
   serialize(): string {
@@ -88,7 +153,7 @@ class SettingsManager {
       '# Lines starting with # are ignored.',
       '',
     ]
-    this.keyOrder.forEach((key) => {
+    Object.keys(this.config).forEach((key) => {
       const value = this.config[key]
       if (Array.isArray(value)) {
         lines.push(`${key}=[${value.map((v) => (typeof v === 'string' ? `'${v}'` : v)).join(',')}]`)
@@ -102,23 +167,34 @@ class SettingsManager {
   }
 
   async load(): Promise<void> {
-    let text: string | null = null
+    let merged: MergedConfig | null = null
     try {
       const res = await fetch('/api/config')
-      if (res.ok) text = await res.text()
+      if (res.ok) merged = await res.json()
     } catch {
       // server unavailable
     }
-    if (text == null) {
-      try {
-        const res = await fetch('app/configs/game.config')
-        if (res.ok) text = await res.text()
-      } catch {
-        // file unavailable, use defaults
-      }
-    }
-    const parsed = text != null ? this.parse(text) : {}
-    this.config = { ...this.defaults, ...parsed }
+    if (merged == null) merged = await this.loadFromFiles()
+
+    this.defaults = merged.defaults ?? {}
+    this.mods = Array.isArray(merged.mods) ? merged.mods.map(String) : []
+    this.config = { ...this.defaults, ...(merged.config ?? {}) }
+    this.populateModOptions()
+  }
+
+  private async loadFromFiles(): Promise<MergedConfig> {
+    const gameText = await fetchText('app/configs/game.config')
+    const gameParsed = parseConfig(gameText ?? '')
+    const mods = Array.isArray(gameParsed['game.mods'])
+      ? gameParsed['game.mods'].map(String)
+      : []
+    const modTexts: Record<string, string | null> = {}
+    await Promise.all(
+      mods.filter((m) => m !== 'none').map(async (name) => {
+        modTexts[name] = await fetchText(`app/mods/implementations/${name}/app/configs/game.config`)
+      }),
+    )
+    return mergeFromSources(gameText, mods, modTexts)
   }
 
   async save(): Promise<boolean> {
@@ -183,7 +259,7 @@ class SettingsManager {
   }
 
   applyMod() {
-    const name = this.getStr('game.mod') || 'flood'
+    const name = this.getStr('game.mod') || 'none'
     const Ctor = MODS[name] || EmptyMod
     if (this.gc.mod && this.gc.mod.name === name) return
     this.gc.mod?.stop?.()
@@ -284,6 +360,17 @@ class SettingsManager {
     em.on('post-start', handler)
     em.on('post-death', handler)
     em.on('post-advance-level', handler)
+  }
+
+  private populateModOptions() {
+    const sel = $('#cfg-mod')
+    if (!sel.length) return
+    const list = this.mods.length ? this.mods : ['none', 'flood']
+    sel.empty()
+    list.forEach((name) => {
+      const label = name === 'none' ? 'None' : name.charAt(0).toUpperCase() + name.slice(1)
+      $('<option>').val(name).text(label).appendTo(sel)
+    })
   }
 
   private clampLives(n: number): number {
@@ -394,8 +481,9 @@ class SettingsManager {
   }
 
   refreshSettingsPanel() {
+    this.populateModOptions()
     $('#cfg-debug').prop('checked', this.getBool('game.debug'))
-    $('#cfg-mod').val(this.getStr('game.mod') || 'flood')
+    $('#cfg-mod').val(this.getStr('game.mod') || 'none')
     this.refreshModDots()
   }
 

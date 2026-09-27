@@ -31054,10 +31054,10 @@ void main(void)\r
   };
   var mod_default = Mod;
 
-  // app/mods/implementations/mods/flood/app/scripts/core/flood.ts
+  // app/mods/implementations/flood/app/scripts/core/flood.ts
   init_lib38();
 
-  // app/mods/implementations/mods/flood/app/scripts/core/wave.ts
+  // app/mods/implementations/flood/app/scripts/core/wave.ts
   init_lib38();
   var Wave = class extends Sprite {
     speedY = 15;
@@ -31249,7 +31249,7 @@ void main(void)\r
   };
   var wave_default = Wave;
 
-  // app/mods/implementations/mods/flood/app/scripts/states/state.ts
+  // app/mods/implementations/flood/app/scripts/states/state.ts
   var States = {
     IDLE_STATE: 0,
     START_STATE: 1,
@@ -31281,7 +31281,7 @@ void main(void)\r
     }
   };
 
-  // app/mods/implementations/mods/flood/app/scripts/states/idleState.ts
+  // app/mods/implementations/flood/app/scripts/states/idleState.ts
   var IdleState = class extends State2 {
     constructor(wavesManager) {
       super(wavesManager);
@@ -31327,7 +31327,7 @@ void main(void)\r
   };
   var idleState_default = IdleState;
 
-  // app/mods/implementations/mods/flood/app/scripts/states/startState.ts
+  // app/mods/implementations/flood/app/scripts/states/startState.ts
   var StartState = class extends State2 {
     constructor(wavesManager) {
       super(wavesManager);
@@ -31353,7 +31353,7 @@ void main(void)\r
   };
   var startState_default = StartState;
 
-  // app/mods/implementations/mods/flood/app/scripts/states/endState.ts
+  // app/mods/implementations/flood/app/scripts/states/endState.ts
   var EndState = class extends State2 {
     constructor(wavesManager) {
       super(wavesManager);
@@ -31391,7 +31391,7 @@ void main(void)\r
   };
   var endState_default = EndState;
 
-  // app/mods/implementations/mods/flood/app/scripts/states/cancelState.ts
+  // app/mods/implementations/flood/app/scripts/states/cancelState.ts
   var CancelState = class extends State2 {
     constructor(wavesManager) {
       super(wavesManager);
@@ -31438,10 +31438,10 @@ void main(void)\r
   };
   var cancelState_default = CancelState;
 
-  // app/mods/implementations/mods/flood/app/scripts/core/wavesManager.ts
+  // app/mods/implementations/flood/app/scripts/core/wavesManager.ts
   init_lib38();
 
-  // app/mods/implementations/mods/flood/app/scripts/animations/animation.ts
+  // app/mods/implementations/flood/app/scripts/animations/animation.ts
   var Animation = class {
     startTime = 0;
     currentTime = 0;
@@ -31546,7 +31546,7 @@ void main(void)\r
   };
   var animation_default = Animation;
 
-  // app/mods/implementations/mods/flood/app/scripts/animations/animator.ts
+  // app/mods/implementations/flood/app/scripts/animations/animator.ts
   var Animator = class {
     thisClass;
     animations = /* @__PURE__ */ new Map();
@@ -31636,7 +31636,7 @@ void main(void)\r
   };
   var animator_default = Animator;
 
-  // app/mods/implementations/mods/flood/app/scripts/core/breath.ts
+  // app/mods/implementations/flood/app/scripts/core/breath.ts
   var Breath = class {
     stopped = false;
     defaultBreathing = 0;
@@ -35521,7 +35521,7 @@ void main(void)\r
   // node_modules/@pixi/sound/lib/index.mjs
   var sound = setInstance(new SoundLibrary());
 
-  // app/mods/implementations/mods/flood/app/scripts/entities/sonic.ts
+  // app/mods/implementations/flood/app/scripts/entities/sonic.ts
   var Sonic = class extends ghost_default {
     flood;
     animator;
@@ -36031,7 +36031,7 @@ void main(void)\r
   };
   var sonic_default = Sonic;
 
-  // app/mods/implementations/mods/flood/app/scripts/core/entitiesManager.ts
+  // app/mods/implementations/flood/app/scripts/core/entitiesManager.ts
   var EntitiesManager = class {
     gc;
     queuedList = [];
@@ -36160,7 +36160,7 @@ void main(void)\r
   };
   var entitiesManager_default = EntitiesManager;
 
-  // app/mods/implementations/mods/flood/app/scripts/core/wavesManager.ts
+  // app/mods/implementations/flood/app/scripts/core/wavesManager.ts
   var breathNamespace = "breath";
   var WavesManager = class {
     wave;
@@ -36411,7 +36411,7 @@ void main(void)\r
   };
   var wavesManager_default = WavesManager;
 
-  // app/mods/implementations/mods/flood/app/scripts/mod.ts
+  // app/mods/implementations/flood/app/scripts/mod.ts
   var Mod2 = class {
     emitter;
     gc;
@@ -36452,7 +36452,7 @@ void main(void)\r
   };
   var mod_default2 = Mod2;
 
-  // app/mods/implementations/mods/flood/app/scripts/core/assetsManager.ts
+  // app/mods/implementations/flood/app/scripts/core/assetsManager.ts
   init_lib38();
   var AssetsManager = class {
     flood;
@@ -36473,8 +36473,8 @@ void main(void)\r
       ];
     }
     async loadAssets(callbackProgress) {
-      const path2 = "app/mods/implementations/mods/flood/app/sprites/";
-      const pathSound = "app/mods/implementations/mods/flood/app/sounds/";
+      const path2 = "app/mods/implementations/flood/app/sprites/";
+      const pathSound = "app/mods/implementations/flood/app/sounds/";
       Sound.from(`${pathSound}sonic_break_CB.wav`);
       Assets.add({ alias: "bubbles", src: `${path2}bubbles.png` });
       Assets.add({ alias: "sonic", src: `${path2}sonic_sprites.png` });
@@ -36506,7 +36506,7 @@ void main(void)\r
   };
   var assetsManager_default = AssetsManager;
 
-  // app/mods/implementations/mods/flood/app/scripts/core/flood.ts
+  // app/mods/implementations/flood/app/scripts/core/flood.ts
   var Flood = class extends mod_default2 {
     name = "Flood";
     width;
@@ -36741,54 +36741,83 @@ void main(void)\r
     if (raw !== "" && !Number.isNaN(num)) return num;
     return raw;
   }
+  function parseConfig(text) {
+    const out = {};
+    text.split(/\r?\n/).forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) return;
+      const eq = trimmed.indexOf("=");
+      if (eq <= 0) return;
+      const key = trimmed.substring(0, eq).trim();
+      const raw = trimmed.substring(eq + 1).trim();
+      out[key] = parseValue(raw);
+    });
+    return out;
+  }
+  async function fetchText(url2) {
+    try {
+      const res = await fetch(url2);
+      return res.ok ? await res.text() : null;
+    } catch {
+      return null;
+    }
+  }
+  function resolveDefaultKey(defaultKey, parsed, namespace = "game") {
+    const prefix = `${namespace}.default.`;
+    if (!defaultKey.startsWith(prefix)) return void 0;
+    const rest = defaultKey.slice(prefix.length);
+    const exact = `${namespace}.${rest}`;
+    if (rest.includes(".")) return exact;
+    const candidates = Object.keys(parsed).filter(
+      (k2) => k2.startsWith(`${namespace}.`) && !k2.startsWith(`${namespace}.default.`)
+    );
+    if (candidates.includes(exact)) return exact;
+    const restSegs = rest.split(".");
+    return candidates.find((k2) => {
+      const segs = k2.split(".");
+      return segs.length >= restSegs.length && segs.slice(-restSegs.length).join(".") === restSegs.join(".");
+    }) ?? exact;
+  }
+  function splitDefaultsAndApplied(parsed, namespace = "game") {
+    const defaults = {};
+    const applied = {};
+    const defaultPrefix = `${namespace}.default.`;
+    const appliedPrefix = `${namespace}.`;
+    Object.entries(parsed).forEach(([key, value]) => {
+      if (key.startsWith(defaultPrefix)) {
+        const target = resolveDefaultKey(key, parsed, namespace);
+        if (target) defaults[target] = value;
+      } else if (key.startsWith(appliedPrefix)) {
+        applied[key] = value;
+      }
+    });
+    return { defaults, applied };
+  }
+  function mergeFromSources(gameText, mods, modTexts) {
+    const game = splitDefaultsAndApplied(parseConfig(gameText ?? ""), "game");
+    const defaults = { ...game.defaults };
+    const applied = { ...game.applied };
+    mods.forEach((name) => {
+      const text = modTexts[name];
+      if (text == null) return;
+      const mod = splitDefaultsAndApplied(parseConfig(text), name);
+      Object.assign(defaults, mod.defaults);
+      Object.assign(applied, mod.applied);
+    });
+    return {
+      defaults,
+      config: { ...defaults, ...applied },
+      mods: mods.length ? mods : ["none"]
+    };
+  }
   var SettingsManager = class {
     gc;
     config = {};
+    defaults = {};
+    mods = [];
     subscribed = false;
-    keyOrder = [
-      "game.pacman.lives",
-      "game.pacman.immortality",
-      "game.ghosts.disabled",
-      "game.level",
-      "game.mod",
-      "game.debug",
-      "game.debugBounds",
-      "game.debugGrid",
-      "flood.waveIntervalMin",
-      "flood.waveIntervalMax",
-      "flood.pacmanBreathing",
-      "flood.ghostsBreathing"
-    ];
-    defaults = {
-      "game.pacman.lives": 2,
-      "game.pacman.immortality": false,
-      "game.ghosts.disabled": [],
-      "game.level": 1,
-      "game.mod": "flood",
-      "game.debug": true,
-      "game.debugBounds": false,
-      "game.debugGrid": false,
-      "flood.waveIntervalMin": 10,
-      "flood.waveIntervalMax": 30,
-      "flood.pacmanBreathing": 10,
-      "flood.ghostsBreathing": 10
-    };
     constructor(gameCoordinator) {
       this.gc = gameCoordinator;
-      this.config = { ...this.defaults };
-    }
-    parse(text) {
-      const out = {};
-      text.split(/\r?\n/).forEach((line) => {
-        const trimmed = line.trim();
-        if (!trimmed || trimmed.startsWith("#")) return;
-        const eq = trimmed.indexOf("=");
-        if (eq <= 0) return;
-        const key = trimmed.substring(0, eq).trim();
-        const raw = trimmed.substring(eq + 1).trim();
-        out[key] = parseValue(raw);
-      });
-      return out;
     }
     serialize() {
       const lines = [
@@ -36797,7 +36826,7 @@ void main(void)\r
         "# Lines starting with # are ignored.",
         ""
       ];
-      this.keyOrder.forEach((key) => {
+      Object.keys(this.config).forEach((key) => {
         const value = this.config[key];
         if (Array.isArray(value)) {
           lines.push(`${key}=[${value.map((v2) => typeof v2 === "string" ? `'${v2}'` : v2).join(",")}]`);
@@ -36810,21 +36839,29 @@ void main(void)\r
       return lines.join("\n");
     }
     async load() {
-      let text = null;
+      let merged = null;
       try {
         const res = await fetch("/api/config");
-        if (res.ok) text = await res.text();
+        if (res.ok) merged = await res.json();
       } catch {
       }
-      if (text == null) {
-        try {
-          const res = await fetch("app/configs/game.config");
-          if (res.ok) text = await res.text();
-        } catch {
-        }
-      }
-      const parsed = text != null ? this.parse(text) : {};
-      this.config = { ...this.defaults, ...parsed };
+      if (merged == null) merged = await this.loadFromFiles();
+      this.defaults = merged.defaults ?? {};
+      this.mods = Array.isArray(merged.mods) ? merged.mods.map(String) : [];
+      this.config = { ...this.defaults, ...merged.config ?? {} };
+      this.populateModOptions();
+    }
+    async loadFromFiles() {
+      const gameText = await fetchText("app/configs/game.config");
+      const gameParsed = parseConfig(gameText ?? "");
+      const mods = Array.isArray(gameParsed["game.mods"]) ? gameParsed["game.mods"].map(String) : [];
+      const modTexts = {};
+      await Promise.all(
+        mods.filter((m2) => m2 !== "none").map(async (name) => {
+          modTexts[name] = await fetchText(`app/mods/implementations/${name}/app/configs/game.config`);
+        })
+      );
+      return mergeFromSources(gameText, mods, modTexts);
     }
     async save() {
       try {
@@ -36879,7 +36916,7 @@ void main(void)\r
       this.applyDebuggerFlags();
     }
     applyMod() {
-      const name = this.getStr("game.mod") || "flood";
+      const name = this.getStr("game.mod") || "none";
       const Ctor = MODS[name] || empty_mod_default;
       if (this.gc.mod && this.gc.mod.name === name) return;
       this.gc.mod?.stop?.();
@@ -36971,6 +37008,16 @@ void main(void)\r
       em.on("post-start", handler);
       em.on("post-death", handler);
       em.on("post-advance-level", handler);
+    }
+    populateModOptions() {
+      const sel = $("#cfg-mod");
+      if (!sel.length) return;
+      const list = this.mods.length ? this.mods : ["none", "flood"];
+      sel.empty();
+      list.forEach((name) => {
+        const label = name === "none" ? "None" : name.charAt(0).toUpperCase() + name.slice(1);
+        $("<option>").val(name).text(label).appendTo(sel);
+      });
     }
     clampLives(n2) {
       return Math.max(0, Math.floor(n2));
@@ -37069,8 +37116,9 @@ void main(void)\r
       $("#flood-ghosts-breath").on("change", () => this.updateFlood());
     }
     refreshSettingsPanel() {
+      this.populateModOptions();
       $("#cfg-debug").prop("checked", this.getBool("game.debug"));
-      $("#cfg-mod").val(this.getStr("game.mod") || "flood");
+      $("#cfg-mod").val(this.getStr("game.mod") || "none");
       this.refreshModDots();
     }
     refreshModDots() {

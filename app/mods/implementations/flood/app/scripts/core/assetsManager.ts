@@ -11,8 +11,8 @@ class AssetsManager {
             "sonic_drown", "sonic_impact", "sonic_jump", "sonic_attack"]
     }
     async loadAssets(callbackProgress?: ProgressCallback) {
-        const path = 'app/mods/implementations/mods/flood/app/sprites/'
-        const pathSound = 'app/mods/implementations/mods/flood/app/sounds/'        
+        const path = 'app/mods/implementations/flood/app/sprites/'
+        const pathSound = 'app/mods/implementations/flood/app/sounds/'        
         Sound.from(`${pathSound}sonic_break_CB.wav`)
         
         Assets.add({ alias: "bubbles", src: `${path}bubbles.png` })
