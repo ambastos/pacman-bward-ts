@@ -102,3 +102,29 @@ Nota: o `game.config` deste working tree tem
 
 # Histórico
 
+## 2026-09-27 — Mods removidos: o jogo fica "puro"
+
+Decisão de escopo: **todos os mods foram removidos**. O repositório passa a
+conter apenas o Pac-Man original, agora em TypeScript. 
+
+Commit: `a210864` — *"Retirando o módulo flood para deixar esse apenas com o
+jogo original"* (78 arquivos, −3100 linhas).
+
+O que saiu:
+
+| Removido | Detalhe |
+| --- | --- |
+| `app/mods/` inteiro | `mod.ts`, `empty-mod.ts` e todo `implementations/flood/` (sprites do sonic, bubbles, som, waves, breath, states). O diretório não existe mais. |
+| `game.mod="flood"` | chave removida do `app/configs/game.config` |
+| `game.mods=['none','flood']` → `['none']` | config volta ao padrão |
+| `window.f = window.gc.mod?.flood ?? null` | linha removida de `app/scripts/initial.ts` |
+
+O que ficou: o jogo original, o port para TypeScript e a versão em texto/ASCII
+da rota `/text` (que é só uma camada de desenho alternativa sobre o mesmo
+estado — não é um mod).
+
+Único resquício de configuração, e é intencional, não resíduo de mod:
+`game.ghosts.disabled=['pinky','inky','clyde']` continua em `game.config`, então
+só o blinky aparece. `game.pacman.lives` foi de 2 para 3. Se a intenção for
+"puro" também no gameplay, é aí que se ajusta.
+
