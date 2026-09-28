@@ -1,6 +1,6 @@
 # the original pacman-js
 Read me from the original based project:
-[text](https://github.com/bward2/pacman-js/blob/master/README.md)
+[original bward2/pacman-js](https://github.com/bward2/pacman-js/blob/master/README.md)
 
 This projetct was just for fun and learning, so I change it to be in:
 -[text](Typescript);
