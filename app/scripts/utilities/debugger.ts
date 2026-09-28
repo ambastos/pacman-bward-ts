@@ -71,9 +71,7 @@ class Debugger {
             else if (event.key == ' ') //> 
                 dbg.moveEntities() 
             else if (event.key == 'u')    
-                dbg.notifyPacmanMovement()
-            else if (event.key.toLowerCase() == 'f')    
-                dbg.startWave()
+                dbg.notifyPacmanMovement()            
             else if( event.key.toLowerCase() == 'h') {
                 dbg.enableBoundsAndHitBoxes = !dbg.enableBoundsAndHitBoxes
             } else if (event.key.toLowerCase() == 'c') {
@@ -326,15 +324,7 @@ class Debugger {
             ghost.moving = !ghost.moving
         })
     }
-    startWave() {
-        console.log("Key f pressed")
-        //@ts-ignore 
-        if (this.gc.mod.flood)  {
-            //@ts-ignore
-            this.gc.mod.flood.generateWave(0)
-        }
-        
-    }
+   
     drawBoundsAndHitBoxes(onlyMovableEntities:boolean) {        
         if (!this.enableBoundsAndHitBoxes)
             return
@@ -393,12 +383,7 @@ class Debugger {
                 lines.push(`${g.name || 'Ghost'}: x=${Math.round(g.position.x)} y=${Math.round(g.position.y)} dir=${g.direction}`)
             })
         }
-        //@ts-ignore
-        const flood = this.gc.mod?.flood
-        if (flood?.wavesManager?.wave) {
-            const wave = flood.wavesManager.wave
-            lines.push(`Wave: h=${Math.round(wave.height)} y=${Math.round(wave.y)} started=${wave.started}`)
-        }
+                
         lines.push(...this.consoleBuffer)
         return lines
     }

@@ -16,8 +16,8 @@ import CharacterUtil from "../utilities/characterUtil.ts";
 import StaticEntity from "../characters/staticEntity.ts";
 import GameEngine from "./gameEngine.ts";
 import Timer from "../utilities/timer.ts";
-import Mod from "../../mods/mod.ts";
-import EmptyMod from "../../mods/empty-mod.ts";
+import Mod from "../../mods/mod.ts"
+import EmptyMod from "../../mods/mod.ts" 
 import MovableEntity from "../characters/movableEntity.ts";
 import { Mode } from "../characters/types.ts";
 import { sound } from "@pixi/sound";

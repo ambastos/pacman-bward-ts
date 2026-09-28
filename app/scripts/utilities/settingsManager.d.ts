@@ -24,19 +24,19 @@ declare class SettingsManager {
     private syncStore;
     applyPacman(): void;
     applyGhosts(): void;
-    applyFlood(): void;
+    
     applyDebuggerFlags(): void;
     subscribe(emitter?: any): void;
     private clampLives;
     private clampLevel;
     private refreshExtraLives;
     private updateGhostsSelection;
-    private updateFlood;
+    
     initUi(): void;
     refreshSettingsPanel(): void;
     refreshModDots(): void;
     refreshDebugPanel(): void;
-    refreshFloodPanel(): void;
+    
     private show;
     private hide;
     private notify;

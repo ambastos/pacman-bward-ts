@@ -1,12 +1,11 @@
 import GameCoordinator from "../core/gameCoordinator.ts"
 import Debugger from "./debugger.ts"
-import FloodModImp from "../../mods/implementations/flood-mod-imp.ts"
 import EmptyMod from "../../mods/empty-mod.ts"
+
 
 const GHOST_NAMES = ['blinky', 'pinky', 'inky', 'clyde']
 
-const MODS: Record<string, any> = {
-  flood: FloodModImp,
+const MODS: Record<string, any> = {  
   none: EmptyMod,
 }
 
@@ -253,8 +252,7 @@ class SettingsManager {
     this.applyMod()
     this.applyDebug()
     this.applyGame()
-    this.applyGhosts()
-    this.applyFlood()
+    this.applyGhosts()    
     this.applyDebuggerFlags()
   }
 
@@ -329,19 +327,6 @@ class SettingsManager {
     })
   }
 
-  applyFlood() {
-    const flood = (this.gc.mod as any)?.flood
-    if (!flood) return
-    flood.waveIntervalMin = this.getNum('flood.waveIntervalMin') || 10
-    flood.waveIntervalMax = this.getNum('flood.waveIntervalMax') || 30
-    flood.pacmanMaxBreathing = this.getNum('flood.pacmanBreathing') || 10
-    flood.ghostsMaxBreathing = this.getNum('flood.ghostsBreathing') || 10
-    if (flood.wavesManager) {
-      flood.wavesManager.setPacmanMaxBreathing(flood.pacmanMaxBreathing)
-      flood.wavesManager.setGhostsMaxBreathing(flood.ghostsMaxBreathing)
-    }
-  }
-
   applyDebuggerFlags() {
     if (!window.debug) return
     window.debug.shouldPrintGrid = this.getBool('game.debugGrid')
@@ -365,7 +350,7 @@ class SettingsManager {
   private populateModOptions() {
     const sel = $('#cfg-mod')
     if (!sel.length) return
-    const list = this.mods.length ? this.mods : ['none', 'flood']
+    const list = this.mods.length ? this.mods : ['none']
     sel.empty()
     list.forEach((name) => {
       const label = name === 'none' ? 'None' : name.charAt(0).toUpperCase() + name.slice(1)
@@ -396,15 +381,6 @@ class SettingsManager {
     this.save()
   }
 
-  private updateFlood() {
-    this.set('flood.waveIntervalMin', this.clampLives(Number($('#flood-wave-min').val()) || 0))
-    this.set('flood.waveIntervalMax', this.clampLives(Number($('#flood-wave-max').val()) || 0))
-    this.set('flood.pacmanBreathing', this.clampLives(Number($('#flood-pac-breath').val()) || 0))
-    this.set('flood.ghostsBreathing', this.clampLives(Number($('#flood-ghosts-breath').val()) || 0))
-    this.applyFlood()
-    this.save()
-  }
-
   initUi() {
     const openSettings = () => {
       this.refreshSettingsPanel()
@@ -413,8 +389,7 @@ class SettingsManager {
     $('#config-btn-menu').on('click', openSettings)
     $('#config-btn-game').on('click', openSettings)
     $('#settings-close').on('click', () => this.hide('settings-modal'))
-    $('#debug-close').on('click', () => this.hide('debug-modal'))
-    $('#flood-close').on('click', () => this.hide('flood-modal'))
+    $('#debug-close').on('click', () => this.hide('debug-modal'))    
 
     $('#cfg-debug').on('change', (e: JQuery.ChangeEvent) => {
       this.toggleDebug(!!($(e.target) as JQuery<HTMLInputElement>).is(':checked'))
@@ -433,11 +408,7 @@ class SettingsManager {
       this.refreshDebugPanel()
       this.show('debug-modal')
     })
-    $('#cfg-mod-dots').on('click', () => {
-      this.refreshFloodPanel()
-      this.show('flood-modal')
-    })
-
+    
     $('#dbg-lives').on('change', (e: JQuery.ChangeEvent) => {
       const n = this.clampLives(Number($(e.target).val()))
       this.set('game.pacman.lives', n)
@@ -473,11 +444,7 @@ class SettingsManager {
     GHOST_NAMES.forEach((name) => {
       $(`#dbg-ghost-${name}`).on('change', () => this.updateGhostsSelection())
     })
-
-    $('#flood-wave-min').on('change', () => this.updateFlood())
-    $('#flood-wave-max').on('change', () => this.updateFlood())
-    $('#flood-pac-breath').on('change', () => this.updateFlood())
-    $('#flood-ghosts-breath').on('change', () => this.updateFlood())
+    
   }
 
   refreshSettingsPanel() {
@@ -488,8 +455,7 @@ class SettingsManager {
   }
 
   refreshModDots() {
-    $('#cfg-debug-dots').prop('disabled', !this.getBool('game.debug'))
-    $('#cfg-mod-dots').prop('disabled', this.getStr('game.mod') !== 'flood')
+    $('#cfg-debug-dots').prop('disabled', !this.getBool('game.debug'))    
   }
 
   refreshDebugPanel() {
@@ -503,14 +469,7 @@ class SettingsManager {
       $(`#dbg-ghost-${name}`).prop('checked', !disabled.includes(name))
     })
   }
-
-  refreshFloodPanel() {
-    $('#flood-wave-min').val(this.getNum('flood.waveIntervalMin'))
-    $('#flood-wave-max').val(this.getNum('flood.waveIntervalMax'))
-    $('#flood-pac-breath').val(this.getNum('flood.pacmanBreathing'))
-    $('#flood-ghosts-breath').val(this.getNum('flood.ghostsBreathing'))
-  }
-
+  
   private show(id: string) {
     $(`#${id}`).addClass('open')
   }
