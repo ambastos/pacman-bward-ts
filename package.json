@@ -1,5 +1,9 @@
 {
   "type": "module",
+  "name": "pacman-bward-ts",
+  "description": "[![Build Status](https://travis-ci.com/bward2/pacman-js.svg?branch=master)](https://travis-ci.com/bward2/pacman-js) [![Coverage Status](https://coveralls.io/repos/github/bward2/pacman-js/badge.svg?branch=master)](https://coveralls.io/github/bward2/pacman-js?branch=master) [![Code Style](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript)",
+  "version": "1.0.0",
+  "main": "./app/scripts/initial.js",
   "scripts": {
     "test": "jest",
     "test:mocha": "NODE_OPTIONS=--no-experimental-require-module nyc --check-coverage --lines 100 --functions 100 --branches 100 mocha -r ts-node-register app/tests",
@@ -13,6 +17,16 @@
     "build:text": "NODE_NO_WARNINGS=1 gulp --gulpfile gulpfile-text.js --gulpfile-text buildText",
     "watch:text": "NODE_NO_WARNINGS=1 gulp --gulpfile gulpfile-text.js --gulpfile-text watchText"
   },
+ "exports": {
+    ".": "./app/scripts/initial.ts",
+    "./mod": "./app/mods/mod.ts",
+    "./*": "./app/scripts/*.ts"
+  },
+   "files": [
+    "app/scripts",
+    "app/mods",
+    "app/configs"
+  ],
   "browserify": {
     "transform": [
       "babelify"
@@ -21,11 +35,7 @@
   "engines": {
     "node": ">=12.18.3",
     "npm": ">=6.14.6"
-  },
-  "name": "pacman-bward",
-  "description": "[![Build Status](https://travis-ci.com/bward2/pacman-js.svg?branch=master)](https://travis-ci.com/bward2/pacman-js) [![Coverage Status](https://coveralls.io/repos/github/bward2/pacman-js/badge.svg?branch=master)](https://coveralls.io/github/bward2/pacman-js?branch=master) [![Code Style](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript)",
-  "version": "1.0.0",
-  "main": ".eslintrc.js",
+  },  
   "dependencies": {
     "@pixi/devtools": "^2.0.1",
     "@pixi/graphics-extras": "^7.4.3",
