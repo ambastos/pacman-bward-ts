@@ -3,3 +3,13 @@
 /dist
 build
 /docs
+
+# .d.ts e .map gerados pelo tsc. O tsconfig emite em dist/ (outDir),
+# mas restos de execucoes antigas ainda aparecem em app/.
+*.d.ts
+*.d.ts.map
+
+# app/@types e escrito a mao: declara o window.gc, window.debug, etc.
+# Precisa ser versionado e ir no pacote.
+!app/@types/*.d.ts
+

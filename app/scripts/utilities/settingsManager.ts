@@ -1,6 +1,7 @@
 import GameCoordinator from "../core/gameCoordinator.ts"
 import Debugger from "./debugger.ts"
-import EmptyMod from "../../mods/empty-mod.ts"
+import EmptyMod from "../mod/empty-mod.ts"
+import { mods } from "../mod/mod.ts"
 
 
 const GHOST_NAMES = ['blinky', 'pinky', 'inky', 'clyde']
@@ -187,12 +188,10 @@ class SettingsManager {
     const mods = Array.isArray(gameParsed['game.mods'])
       ? gameParsed['game.mods'].map(String)
       : []
+    // Mods nao ficam mais neste repositorio, entao nao ha um caminho de
+    // config previsivel para buscar. Um mod registrado em `mods` traz os
+    // proprios defaults; `modTexts` fica vazio e mergeFromSources ignora.
     const modTexts: Record<string, string | null> = {}
-    await Promise.all(
-      mods.filter((m) => m !== 'none').map(async (name) => {
-        modTexts[name] = await fetchText(`app/mods/implementations/${name}/app/configs/game.config`)
-      }),
-    )
     return mergeFromSources(gameText, mods, modTexts)
   }
 
@@ -258,7 +257,7 @@ class SettingsManager {
 
   applyMod() {
     const name = this.getStr('game.mod') || 'none'
-    const Ctor = MODS[name] || EmptyMod
+    const Ctor = MODS[name] || mods[name] || EmptyMod
     if (this.gc.mod && this.gc.mod.name === name) return
     this.gc.mod?.stop?.()
     this.gc.setMod(new Ctor(this.gc))

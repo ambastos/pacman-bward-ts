@@ -1,4 +1,4 @@
-import GameCoordinator from "../scripts/core/gameCoordinator.ts";
+import type GameCoordinator from "../core/gameCoordinator.ts";
 import Mod from "./mod.ts";
 
 //import Mod from "./mod.ts";

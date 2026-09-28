@@ -1,5 +1,5 @@
 import EventEmitter from "eventemitter3"
-import GameCoordinator from "../scripts/core/gameCoordinator.ts"
+import type GameCoordinator from "../core/gameCoordinator.ts"
 
 /**
  * Module class to pacmam-bward game
@@ -49,3 +49,10 @@ class Mod {
     }
 }
 export default Mod
+
+/**
+ * Registro de mods, para que um mod de outro projeto possa se cadastrar
+ * em runtime. Exposto pelo pacote (pacman-bward-ts/mod) e lido pelo
+ * SettingsManager. O jogo puro nao registra nada aqui.
+ */
+export const mods: Record<string, any> = {}

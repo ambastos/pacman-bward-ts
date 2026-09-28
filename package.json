@@ -19,13 +19,13 @@
   },
  "exports": {
     ".": "./app/scripts/initial.ts",
-    "./mod": "./app/mods/mod.ts",
+    "./mod": "./app/scripts/mod/mod.ts",
     "./*": "./app/scripts/*.ts"
   },
    "files": [
     "app/scripts",
-    "app/mods",
-    "app/configs"
+    "app/configs",
+    "app/@types"
   ],
   "browserify": {
     "transform": [

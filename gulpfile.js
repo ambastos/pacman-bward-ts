@@ -31,7 +31,7 @@ function watch() {
   //gulp.watch('app/scripts/**/*.ts' ,buildTs)
   //gulp.watch('app/style/**/*.scss', styles);
 
-  return gulp.watch(['app/scripts/**/*.ts', 'app/mods/**/*.ts'],
+  return gulp.watch(['app/scripts/**/*.ts'],
     {delay: 300,
       queue:true
     },
